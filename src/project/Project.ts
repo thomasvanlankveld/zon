@@ -27,7 +27,7 @@ export interface File extends ProjectItemBase {
  */
 export interface Folder extends ProjectItemBase {
   type: ProjectItemType.Folder;
-  contents: ProjectItem[];
+  content: ProjectItem[];
 }
 
 /**
