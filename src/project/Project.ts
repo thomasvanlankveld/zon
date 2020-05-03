@@ -1,0 +1,41 @@
+/**
+ * Distinguishes files from folders
+ */
+export enum ProjectItemType {
+  Folder,
+  File,
+}
+
+/**
+ * Things both a folder and a file must have
+ */
+interface ProjectItemBase {
+  type: ProjectItemType;
+  name: string;
+}
+
+/**
+ * A file with code
+ */
+export interface File extends ProjectItemBase {
+  type: ProjectItemType.File;
+  numberOfLines: number;
+}
+
+/**
+ * A folder with code
+ */
+export interface Folder extends ProjectItemBase {
+  type: ProjectItemType.Folder;
+  contents: ProjectItem[];
+}
+
+/**
+ * A file or folder with code
+ */
+export type ProjectItem = File | Folder;
+
+/**
+ * A project is a folder
+ */
+export type Project = Folder;
