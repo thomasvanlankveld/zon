@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "isolatedModules": true,
+    "jsx": "react",
+    "rootDir": "./src",
+    "incremental": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "lib": ["dom", "es2017"],
+    "types": ["react"]
+  },
+  "exclude": ["node_modules"]
+}

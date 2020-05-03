@@ -1,0 +1,82 @@
+{
+  "name": "shamash",
+  "version": "0.0.0",
+  "description": "Shed light on your codebase",
+  "repository": "git@github.com:thomasvanlankveld/shamash.git",
+  "author": "Thomas van Lankveld <5240626+thomasvanlankveld@users.noreply.github.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "develop": "concurrently -r \"npm:type-check:watch\" \"npm:start\"",
+    "start": "parcel ./src/index.html",
+    "build": "yarn run type-check && parcel build ./src/index.html --public-url '/'",
+    "test": "jest",
+    "type-check": "tsc --noEmit --incremental false",
+    "type-check:watch": "tsc --noEmit --watch",
+    "lint": "eslint './src/**/*.{ts,tsx}'",
+    "lint:fix": "yarn lint --fix",
+    "cli": "ts-node src/cli.ts",
+    "verify": "yarn type-check && yarn lint && yarn test",
+    "format": "prettier --write './src/**/*.{ts,tsx}'"
+  },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
+      "pre-commit": "yarn format && yarn verify"
+    }
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "<rootDir>/tsconfig.test.json"
+      }
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleNameMapper": {
+      ".+\\.css$": "<rootDir>/src/assets/test-support/assetMock.ts",
+      "^[./a-zA-Z0-9$_-]+\\.jpg": "<rootDir>/src/assets/test-support/assetMock.ts",
+      "^[./a-zA-Z0-9$_-]+\\.mp4": "<rootDir>/src/assets/test-support/assetMock.ts",
+      "^[./a-zA-Z0-9$_-]+\\.png": "<rootDir>/src/assets/test-support/assetMock.ts",
+      "^[./a-zA-Z0-9$_-]+\\.svg": "<rootDir>/src/assets/test-support/assetMock.ts"
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.1.1",
+    "@types/react": "^16.9.34",
+    "@typescript-eslint/eslint-plugin": "^2.13.0",
+    "@typescript-eslint/parser": "^2.13.0",
+    "commitizen": "^4.0.5",
+    "cz-conventional-changelog": "3.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-jest": "^23.1.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react-hooks": "^4.0.0",
+    "husky": "^4.2.5",
+    "jest": "^25.5.4",
+    "parcel": "^1.12.4",
+    "prettier": "^2.0.5",
+    "ts-jest": "^25.4.0",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {},
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
