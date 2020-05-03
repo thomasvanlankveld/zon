@@ -9,6 +9,7 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:import/typescript",
     "plugin:jest/all",
+    "plugin:react/recommended",
     "plugin:prettier/recommended"
   ],
   "globals": {
@@ -23,8 +24,21 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["react", "jest", "@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "react", "jest"],
   "rules": {
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".tsx"]
+      }
+    ],
+    "react/prop-types": "off",
+    "jest/lowercase-name": [
+      "error",
+      {
+        "ignore": ["describe"]
+      }
+    ],
     "import/extensions": [
       "error",
       "ignorePackages",
