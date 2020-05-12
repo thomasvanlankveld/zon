@@ -12,6 +12,7 @@ export enum ProjectItemType {
 interface ProjectItemBase {
   type: ProjectItemType;
   name: string;
+  numberOfLines: number;
 }
 
 /**
@@ -19,7 +20,6 @@ interface ProjectItemBase {
  */
 export interface File extends ProjectItemBase {
   type: ProjectItemType.File;
-  numberOfLines: number;
 }
 
 /**
