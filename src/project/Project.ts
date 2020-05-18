@@ -13,6 +13,7 @@ interface ProjectItemBase {
   type: ProjectItemType;
   name: string;
   numberOfLines: number;
+  medianLineFromZero: number;
 }
 
 /**

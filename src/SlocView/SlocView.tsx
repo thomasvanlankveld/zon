@@ -1,5 +1,5 @@
 import React, { SFC, useState } from 'react';
-import { pie, arc, interpolateHcl, DefaultArcObject, scaleOrdinal, quantize } from 'd3';
+import { pie, arc, interpolateRainbow, DefaultArcObject, scaleLinear } from 'd3';
 import styled from 'styled-components';
 
 import { Project, File, ProjectItemType } from '../project/Project';
@@ -82,12 +82,11 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   });
 
   // Color from project item name
-  // https://observablehq.com/@d3/working-with-color?collection=@d3/d3-color
-  // const colors = quantize(interpolateHcl('#f4e153', '#362142'), files.length);
-  // const colors = quantize(interpolateHcl('#f4e153', '#6c3d8c'), files.length);
-  const colors = quantize(interpolateHcl('#f4e153', '#6c3d8c'), files.length);
-  const color = scaleOrdinal(colors).domain(files.map((file) => file.name));
+  // https://observablehq.com/@d3/working-with-color
+  const color = (lineNumber: number): string =>
+    interpolateRainbow(scaleLinear().domain([0, root.numberOfLines]).range([0, 1])(lineNumber));
 
+  // Make arcs from the files
   const arcs = slocPie(files);
 
   return (
@@ -101,7 +100,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
           <path
             style={{ cursor: 'pointer' }}
             key={fileArc.data.name}
-            fill={color(fileArc.data.name)}
+            fill={color(fileArc.data.medianLineFromZero)}
             d={slocViewArc(fileArc)}
             // onClick={(): void => setSelectedFileName(fileArc.data.name)}
             onMouseEnter={(): void => setHoveredFileName(fileArc.data.name)}
@@ -123,7 +122,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         <p key={file.name}>
           <Button
             style={{
-              color: color(file.name),
+              color: color(file.medianLineFromZero),
               cursor: 'pointer',
               textDecoration: hoveredFileName === file.name ? 'underline' : 'none',
             }}
