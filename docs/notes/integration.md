@@ -1,6 +1,8 @@
 # Integration
 
-## Antora
+## Full integration
+
+### Antora
 
 Not immediately clear what 3rd party integration would look like for Antora. A simple integration might be generating an image during a build step and linking it from a document, but not sure how interaction could be made possible.
 
@@ -9,7 +11,7 @@ Not immediately clear what 3rd party integration would look like for Antora. A s
 - [asciidoctor extension development at DuckDuckGo](https://duckduckgo.com/?q=asciidoctor+extension+development&atb=v195-1&ia=web)
 - [List of Asciidoctor Extensions | Asciidoctor](https://asciidoctor.org/docs/extensions/)
 
-## VSCode
+### VSCode
 
 Docs on extension development for VSCode looks pretty good!
 
@@ -29,3 +31,15 @@ Sources:
 - [Custom Editor API | Visual Studio Code Extension API](https://code.visualstudio.com/api/extension-guides/custom-editors)
 - [vscode extension development react at DuckDuckGo](https://duckduckgo.com/?q=vscode+extension+development+react&atb=v195-1&ia=web)
 - [React JavaScript Tutorial in Visual Studio Code](https://code.visualstudio.com/docs/nodejs/reactjs-tutorial)
+
+## Input integration
+
+### GitHub
+
+To use with Rust, maybe use a Rust zip parsing library and pass the result to Tokei.
+
+- [github api at DuckDuckGo](https://duckduckgo.com/?t=ffab&q=github+api&atb=v171-1&ia=web)
+- [Repositories | GitHub Developer Guide](https://developer.github.com/v3/repos/#get-a-repository)
+- [github api lines of code at DuckDuckGo](https://duckduckgo.com/?t=ffab&q=github+api+lines+of+code&atb=v171-1&ia=web)
+- [git - Can you get the number of lines of code from a GitHub repository? - Stack Overflow](https://stackoverflow.com/questions/26881441/can-you-get-the-number-of-lines-of-code-from-a-github-repository)
+- [GitHub - AlDanial/cloc: cloc counts blank lines, comment lines, and physical lines of source code in many programming languages.](https://github.com/AlDanial/cloc)
