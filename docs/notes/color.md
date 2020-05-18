@@ -9,6 +9,8 @@
 - [Affective Colour in Visualization - YouTube](https://www.youtube.com/watch?v=naGY0LWiXL0)
 - [Using Color in Visualization - YouTube](https://www.youtube.com/watch?v=bbAC3p2nZK0)
 - [Practical Rules for Using Color in Charts - Perceptual Edge](http://www.perceptualedge.com/articles/visual_business_intelligence/rules_for_using_color.pdf)
+- [Perceptual rainbow palette – the method | MyCarta](https://mycarta.wordpress.com/2013/02/21/perceptual-rainbow-palette-the-method/)
+- [Google AI Blog: Turbo, An Improved Rainbow Colormap for Visualization](https://ai.googleblog.com/2019/08/turbo-improved-rainbow-colormap-for.html)
 
 ### 2D color maps
 
