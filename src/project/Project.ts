@@ -11,7 +11,8 @@ export enum ProjectItemType {
  */
 interface ProjectItemBase {
   type: ProjectItemType;
-  name: string;
+  filename: string;
+  path: string;
   numberOfLines: number;
   medianLineFromZero: number;
 }

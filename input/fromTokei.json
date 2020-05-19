@@ -1,0 +1,164 @@
+{
+  "inner": {
+    "Json": {
+      "blanks": 0,
+      "code": 124,
+      "comments": 0,
+      "lines": 124,
+      "stats": [
+        {
+          "blanks": 0,
+          "code": 7,
+          "comments": 0,
+          "lines": 7,
+          "name": "./tsconfig.test.json"
+        },
+        {
+          "blanks": 0,
+          "code": 19,
+          "comments": 0,
+          "lines": 19,
+          "name": "./tsconfig.base.json"
+        },
+        {
+          "blanks": 0,
+          "code": 90,
+          "comments": 0,
+          "lines": 90,
+          "name": "./package.json"
+        },
+        {
+          "blanks": 0,
+          "code": 8,
+          "comments": 0,
+          "lines": 8,
+          "name": "./tsconfig.json"
+        }
+      ],
+      "inaccurate": false
+    },
+    "Markdown": {
+      "blanks": 0,
+      "code": 263,
+      "comments": 0,
+      "lines": 263,
+      "stats": [
+        {
+          "blanks": 0,
+          "code": 3,
+          "comments": 0,
+          "lines": 3,
+          "name": "./README.md"
+        },
+        {
+          "blanks": 0,
+          "code": 45,
+          "comments": 0,
+          "lines": 45,
+          "name": "./docs/notes/integration.md"
+        },
+        {
+          "blanks": 0,
+          "code": 18,
+          "comments": 0,
+          "lines": 18,
+          "name": "./docs/notes/rust.md"
+        },
+        {
+          "blanks": 0,
+          "code": 61,
+          "comments": 0,
+          "lines": 61,
+          "name": "./docs/notes/line-counting.md"
+        },
+        {
+          "blanks": 0,
+          "code": 20,
+          "comments": 0,
+          "lines": 20,
+          "name": "./docs/notes/color.md"
+        },
+        {
+          "blanks": 0,
+          "code": 8,
+          "comments": 0,
+          "lines": 8,
+          "name": "./docs/notes/style.md"
+        },
+        {
+          "blanks": 0,
+          "code": 68,
+          "comments": 0,
+          "lines": 68,
+          "name": "./docs/notes/d3.md"
+        },
+        {
+          "blanks": 0,
+          "code": 22,
+          "comments": 0,
+          "lines": 22,
+          "name": "./docs/notes/project-name.md"
+        },
+        {
+          "blanks": 0,
+          "code": 14,
+          "comments": 0,
+          "lines": 14,
+          "name": "./docs/notes/interaction.md"
+        },
+        {
+          "blanks": 0,
+          "code": 4,
+          "comments": 0,
+          "lines": 4,
+          "name": "./docs/notes/prior-art.md"
+        }
+      ],
+      "inaccurate": false
+    },
+    "TypeScript": {
+      "blanks": 34,
+      "code": 156,
+      "comments": 47,
+      "lines": 237,
+      "stats": [
+        {
+          "blanks": 2,
+          "code": 4,
+          "comments": 1,
+          "lines": 7,
+          "name": "./src/index.tsx"
+        },
+        {
+          "blanks": 5,
+          "code": 24,
+          "comments": 3,
+          "lines": 32,
+          "name": "./src/App/App.tsx"
+        },
+        {
+          "blanks": 3,
+          "code": 9,
+          "comments": 4,
+          "lines": 16,
+          "name": "./src/App/App.test.tsx"
+        },
+        {
+          "blanks": 5,
+          "code": 19,
+          "comments": 18,
+          "lines": 42,
+          "name": "./src/project/Project.ts"
+        },
+        {
+          "blanks": 19,
+          "code": 100,
+          "comments": 21,
+          "lines": 140,
+          "name": "./src/SlocView/SlocView.tsx"
+        }
+      ],
+      "inaccurate": false
+    }
+  }
+}

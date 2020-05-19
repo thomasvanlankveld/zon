@@ -7,16 +7,47 @@ function sumLines(content: ProjectItem[]): number {
 }
 
 const content: ProjectItem[] = [
-  { type: ProjectItemType.File, name: 'foo.js', numberOfLines: 14, medianLineFromZero: 7 },
-  { type: ProjectItemType.File, name: 'bar.js', numberOfLines: 75, medianLineFromZero: 51 },
-  { type: ProjectItemType.File, name: 'baz.js', numberOfLines: 35, medianLineFromZero: 106 },
-  { type: ProjectItemType.File, name: 'qux.js', numberOfLines: 97, medianLineFromZero: 172 },
-  { type: ProjectItemType.File, name: 'quux.js', numberOfLines: 54, medianLineFromZero: 248 },
+  {
+    type: ProjectItemType.File,
+    filename: 'foo.js',
+    path: './foo.js',
+    numberOfLines: 14,
+    medianLineFromZero: 7,
+  },
+  {
+    type: ProjectItemType.File,
+    filename: 'bar.js',
+    path: './bar.js',
+    numberOfLines: 75,
+    medianLineFromZero: 51,
+  },
+  {
+    type: ProjectItemType.File,
+    filename: 'baz.js',
+    path: './baz.js',
+    numberOfLines: 35,
+    medianLineFromZero: 106,
+  },
+  {
+    type: ProjectItemType.File,
+    filename: 'qux.js',
+    path: './qux.js',
+    numberOfLines: 97,
+    medianLineFromZero: 172,
+  },
+  {
+    type: ProjectItemType.File,
+    filename: 'quux.js',
+    path: './quux.js',
+    numberOfLines: 54,
+    medianLineFromZero: 248,
+  },
 ];
 
 const data: Project = {
   type: ProjectItemType.Folder,
-  name: 'my-project',
+  filename: 'my-project',
+  path: '.',
   numberOfLines: sumLines(content),
   medianLineFromZero: Math.floor(sumLines(content) / 2),
   content,

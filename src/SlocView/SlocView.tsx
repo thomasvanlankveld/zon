@@ -99,36 +99,36 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         {arcs.map((fileArc) => (
           <path
             style={{ cursor: 'pointer' }}
-            key={fileArc.data.name}
+            key={fileArc.data.filename}
             fill={color(fileArc.data.medianLineFromZero)}
             d={slocViewArc(fileArc)}
-            // onClick={(): void => setSelectedFileName(fileArc.data.name)}
-            onMouseEnter={(): void => setHoveredFileName(fileArc.data.name)}
+            // onClick={(): void => setSelectedFileName(fileArc.data.filename)}
+            onMouseEnter={(): void => setHoveredFileName(fileArc.data.filename)}
             onMouseLeave={(): void => {
-              if (hoveredFileName === fileArc.data.name) setHoveredFileName(null);
+              if (hoveredFileName === fileArc.data.filename) setHoveredFileName(null);
             }}
           />
         ))}
       </svg>
       <h4 style={{ color: 'white' }}>
-        <strong>{hoveredFileName || root.name}</strong>
+        <strong>{hoveredFileName || root.filename}</strong>
         {`: ${
           hoveredFileName
-            ? files.filter((file) => file.name === hoveredFileName)[0].numberOfLines
+            ? files.filter((file) => file.filename === hoveredFileName)[0].numberOfLines
             : root.numberOfLines
         }`}
       </h4>
       {files.map((file) => (
-        <p key={file.name}>
+        <p key={file.filename}>
           <Button
             style={{
               color: color(file.medianLineFromZero),
               cursor: 'pointer',
-              textDecoration: hoveredFileName === file.name ? 'underline' : 'none',
+              textDecoration: hoveredFileName === file.filename ? 'underline' : 'none',
             }}
-            // onClick={(): void => setHoveredFileName(file.name)}
+            // onClick={(): void => setHoveredFileName(file.filename)}
           >
-            <strong>{file.name}</strong>
+            <strong>{file.filename}</strong>
             {`: ${file.numberOfLines} lines`}
           </Button>
         </p>
