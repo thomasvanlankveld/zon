@@ -1,65 +1,75 @@
-import { Leaf, Branch, Node, NodeType } from '../utility/tree';
+import {
+  FileSystemNodeTypeFile,
+  FileSystemNodeTypeFolder,
+  FileSystemNodeBase,
+  File,
+  Folder,
+  FileSystemNode,
+} from '../utility/file-tree';
 
 /**
  * Denotes an item as file
  */
-export type ItemTypeFile = typeof NodeType.Leaf;
+export type ProjectItemTypeFile = FileSystemNodeTypeFile;
 
 /**
  * Denotes an item as file
  */
-export const ItemTypeFile = NodeType.Leaf;
+export const ProjectItemTypeFile = FileSystemNodeTypeFile;
 
 /**
  * Denotes an item as folder
  */
-export type ItemTypeFolder = typeof NodeType.Branch;
+export type ProjectItemTypeFolder = FileSystemNodeTypeFolder;
 
 /**
  * Denotes an item as folder
  */
-export const ItemTypeFolder = NodeType.Branch;
+export const ProjectItemTypeFolder = FileSystemNodeTypeFolder;
+
+/**
+ * Types a project item can be
+ */
+export type ProjectItemType = ProjectItemTypeFile | ProjectItemTypeFolder;
 
 /**
  * Things both a folder and a file must have
  */
-interface ProjectItemBase {
-  filename: string;
-  path: string;
+export interface ProjectItemBase extends FileSystemNodeBase {
   numberOfLines: number;
-  medianLineFromZero: number;
+  middleLineFromZero: number;
 }
 
 /**
  * A file with code
  */
-export type File = Leaf<ProjectItemBase>;
+export type ProjectFile = File<ProjectItemBase>;
 
 /**
  * A folder with code
  */
-export type Folder = Branch<ProjectItemBase>;
+export type ProjectFolder = Folder<ProjectItemBase>;
 
 /**
  * A file or folder with code
  */
-export type ProjectItem = Node<ProjectItemBase>;
+export type ProjectItem = FileSystemNode<ProjectItemBase>;
 
 /**
  * A project is a folder
  */
-export type Project = Folder;
+export type Project = ProjectItem;
 
 /**
  * Whether the given item is a folder
  */
-export function isFile(item: { type: NodeType }): item is File {
-  return item.type === NodeType.Leaf;
+export function isFile(item: ProjectItem): item is ProjectFile {
+  return item.type === ProjectItemTypeFile;
 }
 
 /**
  * Whether the given item is a folder
  */
-export function isFolder(item: { type: NodeType }): item is Folder {
-  return item.type === NodeType.Branch;
+export function isFolder(item: ProjectItem): item is ProjectFolder {
+  return item.type === ProjectItemTypeFolder;
 }

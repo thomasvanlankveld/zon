@@ -2,7 +2,7 @@ import React, { SFC, useState } from 'react';
 import { pie, arc, interpolateRainbow, DefaultArcObject, scaleLinear } from 'd3';
 import styled from 'styled-components';
 
-import { Project, File, isFolder } from '../project/Project';
+import { Project, ProjectFile, isFolder, ProjectItem } from '../project/Project';
 
 interface SlocViewProps {
   data: Project;
@@ -28,7 +28,7 @@ function slocViewArc(
 /**
  *
  */
-const slocPie = pie<File>()
+const slocPie = pie<ProjectItem>()
   .padAngle(0.005)
   .sort(null)
   .value((d) => d.numberOfLines);
@@ -74,12 +74,13 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   const [hoveredFileName, setHoveredFileName] = useState<string | null>(null);
 
   // Bail if any of the project items is not a file
-  const files = data.children.map((file) => {
-    if (isFolder(file)) {
-      throw new Error('SlocView does not support nested files yet');
-    }
-    return file;
-  });
+  const files = isFolder(data) ? data.children : [];
+  // const files = data.children.map((file) => {
+  //   if (isFolder(file)) {
+  //     throw new Error('SlocView does not support nested files yet');
+  //   }
+  //   return file;
+  // });
 
   // Color from project item name
   // https://observablehq.com/@d3/working-with-color
@@ -100,7 +101,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
           <path
             style={{ cursor: 'pointer' }}
             key={fileArc.data.filename}
-            fill={color(fileArc.data.medianLineFromZero)}
+            fill={color(fileArc.data.middleLineFromZero)}
             d={slocViewArc(fileArc)}
             // onClick={(): void => setSelectedFileName(fileArc.data.filename)}
             onMouseEnter={(): void => setHoveredFileName(fileArc.data.filename)}
@@ -122,7 +123,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         <p key={file.filename}>
           <Button
             style={{
-              color: color(file.medianLineFromZero),
+              color: color(file.middleLineFromZero),
               cursor: 'pointer',
               textDecoration: hoveredFileName === file.filename ? 'underline' : 'none',
             }}
