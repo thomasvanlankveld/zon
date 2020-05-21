@@ -1,16 +1,29 @@
+import { Leaf, Branch, Node, NodeType } from '../utility/tree';
+
 /**
- * Distinguishes files from folders
+ * Denotes an item as file
  */
-export enum ProjectItemType {
-  Folder,
-  File,
-}
+export type ItemTypeFile = typeof NodeType.Leaf;
+
+/**
+ * Denotes an item as file
+ */
+export const ItemTypeFile = NodeType.Leaf;
+
+/**
+ * Denotes an item as folder
+ */
+export type ItemTypeFolder = typeof NodeType.Branch;
+
+/**
+ * Denotes an item as folder
+ */
+export const ItemTypeFolder = NodeType.Branch;
 
 /**
  * Things both a folder and a file must have
  */
 interface ProjectItemBase {
-  type: ProjectItemType;
   filename: string;
   path: string;
   numberOfLines: number;
@@ -20,24 +33,33 @@ interface ProjectItemBase {
 /**
  * A file with code
  */
-export interface File extends ProjectItemBase {
-  type: ProjectItemType.File;
-}
+export type File = Leaf<ProjectItemBase>;
 
 /**
  * A folder with code
  */
-export interface Folder extends ProjectItemBase {
-  type: ProjectItemType.Folder;
-  content: ProjectItem[];
-}
+export type Folder = Branch<ProjectItemBase>;
 
 /**
  * A file or folder with code
  */
-export type ProjectItem = File | Folder;
+export type ProjectItem = Node<ProjectItemBase>;
 
 /**
  * A project is a folder
  */
 export type Project = Folder;
+
+/**
+ * Whether the given item is a folder
+ */
+export function isFile(item: { type: NodeType }): item is File {
+  return item.type === NodeType.Leaf;
+}
+
+/**
+ * Whether the given item is a folder
+ */
+export function isFolder(item: { type: NodeType }): item is Folder {
+  return item.type === NodeType.Branch;
+}

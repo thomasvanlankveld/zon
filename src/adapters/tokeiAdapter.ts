@@ -1,9 +1,8 @@
 import t from 'io-ts';
 import { isLeft } from 'fp-ts/lib/Either';
 import { flatMap } from 'lodash';
-import { DeepPartial } from 'utility-types';
 
-import { Project, ProjectItemType, Folder } from '../project/Project';
+import { Project, Folder, isFile, ItemTypeFile, ItemTypeFolder } from '../project/Project';
 
 const tokeiLanguageType = t.string;
 
@@ -26,8 +25,6 @@ const tokeiJsonType = t.type({
     ])
   ),
 });
-
-type TokeiJson = t.TypeOf<typeof tokeiJsonType>;
 
 // type TokeiLanguage = string;
 
@@ -61,12 +58,12 @@ export default function tokeiAdapter(input: unknown): Project {
 
   // Create a project root
   const root: Project = {
-    type: ProjectItemType.Folder,
+    type: ItemTypeFolder,
     filename: '.',
     path: '.',
     numberOfLines: -1,
     medianLineFromZero: -1,
-    content: [],
+    children: [],
   };
 
   // Construct the file tree
@@ -80,25 +77,25 @@ export default function tokeiAdapter(input: unknown): Project {
 
     // For every path element, add a folder to the tree if necessary
     path.forEach((elem, i) => {
-      let nextNode = currentNode.content.find((node) => node.filename === elem);
+      let nextNode = currentNode.children.find((node) => node.filename === elem);
       if (nextNode == null) {
         nextNode = {
-          type: ProjectItemType.Folder,
+          type: ItemTypeFolder,
           filename: elem,
           path: path.slice(0, i + 1).join('/'),
           numberOfLines: -1,
           medianLineFromZero: -1,
-          content: [],
+          children: [],
         };
-        currentNode.content.push(nextNode);
+        currentNode.children.push(nextNode);
       }
-      if (nextNode.type !== ProjectItemType.Folder) throw new Error(tokeiParseErrorMessage);
+      if (isFile(nextNode)) throw new Error(tokeiParseErrorMessage);
       currentNode = nextNode;
     });
 
     // Add the file to its direct parent folder
-    currentNode.content.push({
-      type: ProjectItemType.File,
+    currentNode.children.push({
+      type: ItemTypeFile,
       filename,
       path: file.name,
       numberOfLines: -1,
@@ -115,19 +112,19 @@ export default function tokeiAdapter(input: unknown): Project {
 
 function withNumberOfLines(folder: Folder): Folder {
   // Compute number of lines for every subfolder
-  const contentWithNumberOfLines = folder.content.map((item) => {
-    if (item.type === ProjectItemType.File) return item;
+  const childrenWithNumberOfLines = folder.children.map((item) => {
+    if (isFile(item)) return item;
     return withNumberOfLines(item);
   });
 
   // Compute number of lines for this folder
-  const numberOfLines = contentWithNumberOfLines.reduce(
+  const numberOfLines = childrenWithNumberOfLines.reduce(
     (total, item) => total + item.numberOfLines,
     0
   );
 
   // let total = 0;
-  // folder.content.forEach((item) => {
+  // folder.children.forEach((item) => {
   //   if (item.type === ProjectItemType.File) {
   //     total += item.numberOfLines;
   //   } else {
@@ -136,7 +133,7 @@ function withNumberOfLines(folder: Folder): Folder {
   // });
 
   // // Compute number of lines for the folder
-  // const numberOfLines = folder.content.reduce((total, item) => {
+  // const numberOfLines = folder.children.reduce((total, item) => {
   //   if (item.type === ProjectItemType.File) return item.numberOfLines;
   //   return total + withNumberOfLines(item).numberOfLines;
   // }, 0);
@@ -150,17 +147,17 @@ function withNumberOfLines(folder: Folder): Folder {
 
 function sortedByNumberOfLines(folder: Folder): Folder {
   // Sort any folders within this folder
-  const content = folder.content.map((item) => {
-    if (item.type === ProjectItemType.File) return item;
+  const children = folder.children.map((item) => {
+    if (isFile(item)) return item;
     return sortedByNumberOfLines(item);
   });
 
-  // Sort this folder's content by number of lines
-  const sortedContent = content.sort((a, b) => (a.numberOfLines < b.numberOfLines ? -1 : 1));
+  // Sort this folder's children by number of lines
+  const sortedChildren = children.sort((a, b) => (a.numberOfLines < b.numberOfLines ? -1 : 1));
 
-  // Return the folder with sorted contents
+  // Return the folder with sorted childrens
   return {
-    content: sortedContent,
+    children: sortedChildren,
     ...folder,
   };
 }

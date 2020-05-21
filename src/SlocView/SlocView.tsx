@@ -2,7 +2,7 @@ import React, { SFC, useState } from 'react';
 import { pie, arc, interpolateRainbow, DefaultArcObject, scaleLinear } from 'd3';
 import styled from 'styled-components';
 
-import { Project, File, ProjectItemType } from '../project/Project';
+import { Project, File, isFolder } from '../project/Project';
 
 interface SlocViewProps {
   data: Project;
@@ -74,8 +74,8 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   const [hoveredFileName, setHoveredFileName] = useState<string | null>(null);
 
   // Bail if any of the project items is not a file
-  const files = data.content.map((file) => {
-    if (file.type !== ProjectItemType.File) {
+  const files = data.children.map((file) => {
+    if (isFolder(file)) {
       throw new Error('SlocView does not support nested files yet');
     }
     return file;
