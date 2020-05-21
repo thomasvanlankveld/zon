@@ -60,16 +60,4 @@ export type ProjectItem = FileSystemNode<ProjectItemBase>;
  */
 export type Project = ProjectItem;
 
-/**
- * Whether the given item is a folder
- */
-export function isFile(item: ProjectItem): item is ProjectFile {
-  return item.type === ProjectItemTypeFile;
-}
-
-/**
- * Whether the given item is a folder
- */
-export function isFolder(item: ProjectItem): item is ProjectFolder {
-  return item.type === ProjectItemTypeFolder;
-}
+export { isFile, isFolder } from '../utility/file-tree';
