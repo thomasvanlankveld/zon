@@ -2,38 +2,15 @@
   "inner": {
     "Json": {
       "blanks": 0,
-      "code": 124,
+      "code": 292,
       "comments": 0,
-      "lines": 124,
+      "lines": 292,
       "stats": [
-        {
-          "blanks": 0,
-          "code": 7,
-          "comments": 0,
-          "lines": 7,
-          "name": "./tsconfig.test.json"
-        },
-        {
-          "blanks": 0,
-          "code": 19,
-          "comments": 0,
-          "lines": 19,
-          "name": "./tsconfig.base.json"
-        },
-        {
-          "blanks": 0,
-          "code": 90,
-          "comments": 0,
-          "lines": 90,
-          "name": "./package.json"
-        },
-        {
-          "blanks": 0,
-          "code": 8,
-          "comments": 0,
-          "lines": 8,
-          "name": "./tsconfig.json"
-        }
+        { "blanks": 0, "code": 19, "comments": 0, "lines": 19, "name": "./tsconfig.base.json" },
+        { "blanks": 0, "code": 94, "comments": 0, "lines": 94, "name": "./package.json" },
+        { "blanks": 0, "code": 7, "comments": 0, "lines": 7, "name": "./tsconfig.test.json" },
+        { "blanks": 0, "code": 8, "comments": 0, "lines": 8, "name": "./tsconfig.json" },
+        { "blanks": 0, "code": 164, "comments": 0, "lines": 164, "name": "./input/fromTokei.json" }
       ],
       "inaccurate": false
     },
@@ -43,13 +20,7 @@
       "comments": 0,
       "lines": 263,
       "stats": [
-        {
-          "blanks": 0,
-          "code": 3,
-          "comments": 0,
-          "lines": 3,
-          "name": "./README.md"
-        },
+        { "blanks": 0, "code": 3, "comments": 0, "lines": 3, "name": "./README.md" },
         {
           "blanks": 0,
           "code": 45,
@@ -57,13 +28,7 @@
           "lines": 45,
           "name": "./docs/notes/integration.md"
         },
-        {
-          "blanks": 0,
-          "code": 18,
-          "comments": 0,
-          "lines": 18,
-          "name": "./docs/notes/rust.md"
-        },
+        { "blanks": 0, "code": 18, "comments": 0, "lines": 18, "name": "./docs/notes/rust.md" },
         {
           "blanks": 0,
           "code": 61,
@@ -71,34 +36,7 @@
           "lines": 61,
           "name": "./docs/notes/line-counting.md"
         },
-        {
-          "blanks": 0,
-          "code": 20,
-          "comments": 0,
-          "lines": 20,
-          "name": "./docs/notes/color.md"
-        },
-        {
-          "blanks": 0,
-          "code": 8,
-          "comments": 0,
-          "lines": 8,
-          "name": "./docs/notes/style.md"
-        },
-        {
-          "blanks": 0,
-          "code": 68,
-          "comments": 0,
-          "lines": 68,
-          "name": "./docs/notes/d3.md"
-        },
-        {
-          "blanks": 0,
-          "code": 22,
-          "comments": 0,
-          "lines": 22,
-          "name": "./docs/notes/project-name.md"
-        },
+        { "blanks": 0, "code": 20, "comments": 0, "lines": 20, "name": "./docs/notes/color.md" },
         {
           "blanks": 0,
           "code": 14,
@@ -106,56 +44,56 @@
           "lines": 14,
           "name": "./docs/notes/interaction.md"
         },
+        { "blanks": 0, "code": 68, "comments": 0, "lines": 68, "name": "./docs/notes/d3.md" },
+        { "blanks": 0, "code": 8, "comments": 0, "lines": 8, "name": "./docs/notes/style.md" },
         {
           "blanks": 0,
-          "code": 4,
+          "code": 22,
           "comments": 0,
-          "lines": 4,
-          "name": "./docs/notes/prior-art.md"
-        }
+          "lines": 22,
+          "name": "./docs/notes/project-name.md"
+        },
+        { "blanks": 0, "code": 4, "comments": 0, "lines": 4, "name": "./docs/notes/prior-art.md" }
       ],
       "inaccurate": false
     },
     "TypeScript": {
-      "blanks": 34,
-      "code": 156,
-      "comments": 47,
-      "lines": 237,
+      "blanks": 108,
+      "code": 346,
+      "comments": 315,
+      "lines": 769,
       "stats": [
+        { "blanks": 2, "code": 4, "comments": 1, "lines": 7, "name": "./src/index.tsx" },
+        { "blanks": 3, "code": 9, "comments": 4, "lines": 16, "name": "./src/App/App.test.tsx" },
+        { "blanks": 7, "code": 16, "comments": 51, "lines": 74, "name": "./src/App/App.tsx" },
         {
-          "blanks": 2,
-          "code": 4,
-          "comments": 1,
-          "lines": 7,
-          "name": "./src/index.tsx"
-        },
-        {
-          "blanks": 5,
-          "code": 24,
-          "comments": 3,
-          "lines": 32,
-          "name": "./src/App/App.tsx"
-        },
-        {
-          "blanks": 3,
-          "code": 9,
-          "comments": 4,
-          "lines": 16,
-          "name": "./src/App/App.test.tsx"
-        },
-        {
-          "blanks": 5,
-          "code": 19,
-          "comments": 18,
-          "lines": 42,
+          "blanks": 12,
+          "code": 27,
+          "comments": 36,
+          "lines": 75,
           "name": "./src/project/Project.ts"
         },
         {
+          "blanks": 33,
+          "code": 99,
+          "comments": 111,
+          "lines": 243,
+          "name": "./src/adapters/tokeiAdapter.ts"
+        },
+        {
           "blanks": 19,
-          "code": 100,
-          "comments": 21,
-          "lines": 140,
+          "code": 95,
+          "comments": 27,
+          "lines": 141,
           "name": "./src/SlocView/SlocView.tsx"
+        },
+        { "blanks": 8, "code": 13, "comments": 16, "lines": 37, "name": "./src/utility/tree.ts" },
+        {
+          "blanks": 24,
+          "code": 83,
+          "comments": 69,
+          "lines": 176,
+          "name": "./src/utility/file-tree.ts"
         }
       ],
       "inaccurate": false
