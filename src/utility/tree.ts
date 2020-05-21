@@ -1,19 +1,26 @@
-// /**
-//  * Type of a node
-//  */
-// export enum NodeType {
-//   Branch,
-//   Leaf,
-// }
-
+/**
+ * Denotes a node as a leaf
+ */
 export const NodeTypeLeaf = 'NodeTypeLeaf';
 
+/**
+ * Denotes a node as a leaf
+ */
 export type NodeTypeLeaf = 'NodeTypeLeaf';
 
+/**
+ * Denotes a node as a branch
+ */
 export const NodeTypeBranch = 'NodeTypeBranch';
 
+/**
+ * Denotes a node as a branch
+ */
 export type NodeTypeBranch = 'NodeTypeBranch';
 
+/**
+ * Types a node can be
+ */
 export type NodeType = NodeTypeLeaf | NodeTypeBranch;
 
 /**

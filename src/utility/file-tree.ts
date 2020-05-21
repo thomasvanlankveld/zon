@@ -1,25 +1,5 @@
 import { Leaf, Branch, Node, NodeTypeLeaf, NodeTypeBranch } from './tree';
 
-// /**
-//  * Denotes a node as file
-//  */
-// export type FileSystemNodeTypeFile = typeof NodeType.Leaf;
-
-// /**
-//  * Denotes a node as file
-//  */
-// export const FileSystemNodeTypeFile = NodeType.Leaf;
-
-// /**
-//  * Denotes a node as folder
-//  */
-// export type FileSystemNodeTypeFolder = typeof NodeType.Branch;
-
-// /**
-//  * Denotes a node as folder
-//  */
-// export const FileSystemNodeTypeFolder = NodeType.Branch;
-
 /**
  * Denotes a node as file
  */
@@ -98,7 +78,7 @@ export function filenameFromPath(path: string): string {
 }
 
 /**
- *
+ * Adds a node to a file tree using its path as a location specifier
  */
 export function addNodeByPath(root: Folder, path: string, node: FileSystemNode): void {
   let lastKnownFolder = root;

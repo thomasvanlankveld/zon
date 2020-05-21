@@ -2,7 +2,7 @@ import React, { SFC, useState } from 'react';
 import { pie, arc, interpolateRainbow, DefaultArcObject, scaleLinear } from 'd3';
 import styled from 'styled-components';
 
-import { Project, ProjectFile, isFolder, ProjectItem } from '../project/Project';
+import { Project, isFolder, ProjectItem } from '../project/Project';
 
 interface SlocViewProps {
   data: Project;
@@ -73,14 +73,8 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   //
   const [hoveredFileName, setHoveredFileName] = useState<string | null>(null);
 
-  // Bail if any of the project items is not a file
+  // Extract any files
   const files = isFolder(data) ? data.children : [];
-  // const files = data.children.map((file) => {
-  //   if (isFolder(file)) {
-  //     throw new Error('SlocView does not support nested files yet');
-  //   }
-  //   return file;
-  // });
 
   // Color from project item name
   // https://observablehq.com/@d3/working-with-color
