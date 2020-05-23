@@ -28,3 +28,16 @@ A web search is not much better:
 - [typescript tree at DuckDuckGo](https://duckduckgo.com/?t=ffab&q=typescript+tree&atb=v171-1&ia=web)
 - [Data Structures With JavaScript: Tree](https://code.tutsplus.com/articles/data-structures-with-javascript-tree--cms-23393)
 - [typescript-collections - npm](https://www.npmjs.com/package/typescript-collections)
+
+## D3 Hierarchy
+
+Apparently D3 has a module for handling hierarchical data:
+
+- [d3/d3-hierarchy: 2D layout algorithms for visualizing hierarchical data.](https://github.com/d3/d3-hierarchy)
+- Partition @ [d3/d3-hierarchy: 2D layout algorithms for visualizing hierarchical data.](https://github.com/d3/d3-hierarchy#partition)
+- [d3.hierarchy / D3 / Observable](https://observablehq.com/@d3/d3-hierarchy)
+- [d3-hierarchy / D3 / Observable](https://observablehq.com/collection/@d3/d3-hierarchy)
+- [Hierarchical Edge Bundling / D3 / Observable](https://observablehq.com/@d3/hierarchical-edge-bundling/2?collection=@d3/d3-hierarchy)
+- [Icicle / D3 / Observable](https://observablehq.com/@d3/icicle?collection=@d3/d3-hierarchy)
+- [Sunburst / D3 / Observable](https://observablehq.com/@d3/sunburst?collection=@d3/d3-hierarchy)
+- [Circle Packing / D3 / Observable](https://observablehq.com/@d3/circle-packing?collection=@d3/d3-hierarchy)
