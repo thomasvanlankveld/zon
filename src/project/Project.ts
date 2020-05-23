@@ -36,8 +36,11 @@ export type ProjectItemType = ProjectItemTypeFile | ProjectItemTypeFolder;
  * Things both a folder and a file must have
  */
 export interface ProjectItemBase extends FileSystemNodeBase {
+  layer: number;
   numberOfLines: number;
-  middleLineFromZero: number;
+  bottomLine: number;
+  middleLine: number;
+  topLine: number;
 }
 
 /**

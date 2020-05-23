@@ -95,7 +95,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
           <path
             style={{ cursor: 'pointer' }}
             key={fileArc.data.filename}
-            fill={color(fileArc.data.middleLineFromZero)}
+            fill={color(fileArc.data.middleLine)}
             d={slocViewArc(fileArc)}
             // onClick={(): void => setSelectedFileName(fileArc.data.filename)}
             onMouseEnter={(): void => setHoveredFileName(fileArc.data.filename)}
@@ -117,7 +117,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         <p key={file.filename}>
           <Button
             style={{
-              color: color(file.middleLineFromZero),
+              color: color(file.middleLine),
               cursor: 'pointer',
               textDecoration: hoveredFileName === file.filename ? 'underline' : 'none',
             }}

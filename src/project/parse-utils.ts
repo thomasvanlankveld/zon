@@ -2,14 +2,21 @@ import { isFile, FileSystemNode } from '../utility/file-tree';
 import { ProjectItem } from './Project';
 
 /**
+ * A file system node with the number of lines on every leaf (but not necessarily on the branches)
+ */
+type FSNodeWithNumberOfLinesOnLeaves = FileSystemNode<{}, { numberOfLines: number }>;
+
+/**
  * A file system node with the number of lines on every node
  */
 type FSNodeWithNumberOfLines = FileSystemNode<{ numberOfLines: number }>;
 
 /**
- * A file system node with the number of lines on every leaf (but not necessarily on the branches)
+ * A file system node with indications for the bottom, middle and top line on every node
  */
-type FSNodeWithNumberOfLinesOnLeaves = FileSystemNode<{}, { numberOfLines: number }>;
+type FSNodeWithLineIndications = FileSystemNode<
+  Pick<ProjectItem, 'numberOfLines' | 'bottomLine' | 'middleLine' | 'topLine'>
+>;
 
 /**
  * Get a copy of a node, with the number of lines for the node and all its descendants
@@ -60,27 +67,44 @@ function half(num: number): number {
 }
 
 /**
- * Get a copy of a node, with the middle line from zero for the node and all its descendants
+ * Get a copy of a node, with the bottom, middle and top lines from the project's zero for the node
+ * and all its descendants
  */
-export function withMiddleLineFromZero(
+export function withLineIndications(
   node: FSNodeWithNumberOfLines,
   baseline: number
-): ProjectItem {
-  // For files, simply add the middle line from zero
-  if (isFile(node)) return { ...node, middleLineFromZero: baseline + half(node.numberOfLines) };
+): FSNodeWithLineIndications {
+  // Calculate lines
+  const bottomLine = baseline;
+  const middleLine = baseline + half(node.numberOfLines);
+  const topLine = baseline + node.numberOfLines;
+  const lines = { bottomLine, middleLine, topLine };
 
-  // For folders, add middle to all children, moving up the baseline appropriately
+  // For files, simply add the line indications
+  if (isFile(node)) return { ...node, ...lines };
+
+  // For folders, add indications to all children, moving up the baseline appropriately
   let childBaseline = baseline;
   const children = node.children.map((child) => {
-    const childWithMiddle = withMiddleLineFromZero(child, childBaseline);
+    const childWithMiddle = withLineIndications(child, childBaseline);
     childBaseline += child.numberOfLines;
     return childWithMiddle;
   });
 
-  // Return the folder with the accurate middle, and all its children with middles
-  return {
-    ...node,
-    middleLineFromZero: baseline + half(node.numberOfLines),
-    children,
-  };
+  // Return the folder with the accurate indications, and all its children with middles
+  return { ...node, ...lines, children };
+}
+
+/**
+ * Add layer number to every node
+ */
+export function withLayer(node: FSNodeWithLineIndications, layer: number): ProjectItem {
+  // For files, simply add the layer number
+  if (isFile(node)) return { ...node, layer };
+
+  // For folders, add layer numbers to all children
+  const children = node.children.map((child) => withLayer(child, layer + 1));
+
+  // Return the folder with the right layer, and all its children with layers
+  return { ...node, children, layer };
 }

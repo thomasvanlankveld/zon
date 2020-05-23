@@ -7,7 +7,8 @@ import { Folder, addFileByPath, createTree } from '../utility/file-tree';
 import {
   withNumberOfLines,
   sortedByNumberOfLines,
-  withMiddleLineFromZero,
+  withLineIndications,
+  withLayer,
 } from '../project/parse-utils';
 
 /**
@@ -82,8 +83,11 @@ export default function tokeiAdapter(input: unknown, projectName: string): Proje
   // Sort tree by number of lines
   const rootSortedByNumberOfLines = sortedByNumberOfLines(rootWithNumberOfLines);
 
-  // Add a number denoting the middle line from the project's "zero" to every node
-  const project = withMiddleLineFromZero(rootSortedByNumberOfLines, 0);
+  // Add indications of every node's bottom, middle and top line from the project's "zero"
+  const rootWithLineIndications = withLineIndications(rootSortedByNumberOfLines, 0);
+
+  // Finish by adding layer numbers
+  const project = withLayer(rootWithLineIndications, 0);
 
   // Return the result
   return project;
