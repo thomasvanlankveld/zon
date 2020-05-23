@@ -1,5 +1,5 @@
 import { isFile, FileSystemNode } from '../utility/file-tree';
-import { ProjectItem } from '../project/Project';
+import { ProjectItem } from './Project';
 
 /**
  * A file system node with the number of lines on every node

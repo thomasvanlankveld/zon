@@ -4,7 +4,11 @@ import { flatMap } from 'lodash';
 
 import { Project } from '../project/Project';
 import { Folder, addFileByPath, createTree } from '../utility/file-tree';
-import { withNumberOfLines, sortedByNumberOfLines, withMiddleLineFromZero } from './parse-utils';
+import {
+  withNumberOfLines,
+  sortedByNumberOfLines,
+  withMiddleLineFromZero,
+} from '../project/parse-utils';
 
 /**
  * Allows us to parse Tokei languages
