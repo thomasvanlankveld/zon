@@ -54,7 +54,7 @@ const tokeiJsonType = t.type({
 const tokeiParseErrorMessage = 'Could not parse Tokei json';
 
 /**
- * Parse Tokei JSON ouput as a Shamash project
+ * Parse Tokei JSON ouput as a Zon project
  */
 export default function tokeiAdapter(input: unknown, projectName: string): Project {
   // Parse Tokei JSON

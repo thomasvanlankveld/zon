@@ -4,7 +4,7 @@ import tokeiAdapter from '../adapters/tokeiAdapter';
 import fromTokei from '../../input/fromTokei.json';
 
 // Get demo input data
-const data = tokeiAdapter(fromTokei, 'shamash');
+const data = tokeiAdapter(fromTokei, 'zon');
 
 /**
  *
