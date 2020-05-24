@@ -77,18 +77,20 @@ export default function tokeiAdapter(input: unknown, projectName: string): Proje
     addFileByPath(root, file.name, { numberOfLines: file.code });
   });
 
-  // Get number of lines on every node
-  const rootWithNumberOfLines = withNumberOfLines(root);
+  return root;
 
-  // Sort tree by number of lines
-  const rootSortedByNumberOfLines = sortedByNumberOfLines(rootWithNumberOfLines);
+  // // Get number of lines on every node
+  // const rootWithNumberOfLines = withNumberOfLines(root);
 
-  // Add indications of every node's bottom, middle and top line from the project's "zero"
-  const rootWithLineIndications = withLineIndications(rootSortedByNumberOfLines, 0);
+  // // Sort tree by number of lines
+  // const rootSortedByNumberOfLines = sortedByNumberOfLines(rootWithNumberOfLines);
 
-  // Finish by adding layer numbers
-  const project = withLayer(rootWithLineIndications, 0);
+  // // Add indications of every node's bottom, middle and top line from the project's "zero"
+  // const rootWithLineIndications = withLineIndications(rootSortedByNumberOfLines, 0);
 
-  // Return the result
-  return project;
+  // // Finish by adding layer numbers
+  // const project = withLayer(rootWithLineIndications, 0);
+
+  // // Return the result
+  // return project;
 }

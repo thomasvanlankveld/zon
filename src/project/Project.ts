@@ -58,9 +58,14 @@ export type ProjectFolder = Folder<ProjectItemBase>;
  */
 export type ProjectItem = FileSystemNode<ProjectItemBase>;
 
+// /**
+//  * A project is a folder
+//  */
+// export type Project = ProjectItem;
+
 /**
- * A project is a folder
+ * A file system node with the number of lines on every leaf (but not necessarily on the branches)
  */
-export type Project = ProjectItem;
+export type Project = FileSystemNode<{}, { numberOfLines: number }>;
 
 export { isFile, isFolder } from '../utility/file-tree';
