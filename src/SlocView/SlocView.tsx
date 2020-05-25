@@ -33,6 +33,13 @@ function zonPartition(data: Project): HierarchyRectangularNode<Project> {
 /**
  *
  */
+function colorNode(d: HierarchyRectangularNode<Project>): string {
+  return interpolateRainbow(d.x0 + (d.x1 - d.x0) / 2);
+}
+
+/**
+ *
+ */
 function slocViewArc(d: HierarchyRectangularNode<Project>): string | undefined {
   const radius = Math.min(width, height) / 2;
   const padding = 0.005;
@@ -45,6 +52,17 @@ function slocViewArc(d: HierarchyRectangularNode<Project>): string | undefined {
       padAngle: padding,
     }) || undefined
   );
+}
+
+/**
+ *
+ */
+function selectFileByPath(
+  files: HierarchyRectangularNode<Project>[],
+  path: string
+): HierarchyRectangularNode<Project> | null {
+  const selectedFile = files.find((file) => file.data.path === path);
+  return selectedFile != null ? selectedFile : null;
 }
 
 // /**
@@ -99,17 +117,6 @@ const Button = styled.button`
 /**
  *
  */
-function selectFileByPath(
-  files: HierarchyRectangularNode<Project>[],
-  path: string
-): HierarchyRectangularNode<Project> | null {
-  const selectedFile = files.find((file) => file.data.path === path);
-  return selectedFile != null ? selectedFile : null;
-}
-
-/**
- *
- */
 const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   const { data } = props;
   // const root = data;
@@ -126,9 +133,11 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   const files = root.descendants();
 
   // Select the hovered file
-  const hoveredFile = useMemo(() => {
-    if (!hoveredFilePath) return null;
-    return selectFileByPath(files, hoveredFilePath);
+  const listRoot = useMemo(() => {
+    if (!hoveredFilePath) return root;
+    const selectedFile = selectFileByPath(files, hoveredFilePath);
+    if (!selectedFile) return root;
+    return selectedFile;
   }, [files, hoveredFilePath]);
   // console.log(files);
   // // Extract any files
@@ -160,7 +169,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
             <path
               style={{ cursor: 'pointer' }}
               key={d.data.path}
-              fill={interpolateRainbow(d.x0 + (d.x1 - d.x0) / 2)}
+              fill={colorNode(d)}
               d={slocViewArc(d)}
               onMouseEnter={(): void => setHoveredFilePath(d.data.path)}
               onMouseLeave={(): void => {
@@ -183,24 +192,27 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         ))} */}
       </svg>
       <h4 style={{ color: 'white' }}>
-        <strong>{hoveredFile != null ? hoveredFile.data.filename : root.data.filename}</strong>
-        {`: ${hoveredFile != null ? hoveredFile.value : root.value}`}
+        <strong>{listRoot.data.filename}</strong>
+        {`: ${listRoot.value}`}
       </h4>
-      {/* {files.map((file) => (
-        <p key={file.filename}>
-          <Button
-            style={{
-              color: color(file.middleLine),
-              cursor: 'pointer',
-              textDecoration: hoveredFileName === file.filename ? 'underline' : 'none',
-            }}
-            // onClick={(): void => setHoveredFileName(file.filename)}
-          >
-            <strong>{file.filename}</strong>
-            {`: ${file.numberOfLines} lines`}
-          </Button>
-        </p>
-      ))} */}
+      {listRoot
+        .descendants()
+        .filter((node) => node.depth === listRoot.depth + 1)
+        .map((d) => (
+          <p key={d.data.path}>
+            <Button
+              style={{
+                color: colorNode(d),
+                cursor: 'pointer',
+                // textDecoration: hoveredFileName === d.filename ? 'underline' : 'none',
+              }}
+              // onClick={(): void => setHoveredFileName(file.filename)}
+            >
+              <strong>{d.data.filename}</strong>
+              {`: ${d.value} lines`}
+            </Button>
+          </p>
+        ))}
     </div>
   );
 };
