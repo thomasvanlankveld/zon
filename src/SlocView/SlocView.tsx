@@ -1,17 +1,8 @@
 import React, { SFC, useState, useMemo } from 'react';
-import {
-  pie,
-  arc,
-  interpolateRainbow,
-  DefaultArcObject,
-  scaleLinear,
-  hierarchy,
-  partition,
-  HierarchyRectangularNode,
-} from 'd3';
+import { arc, interpolateRainbow, hierarchy, partition, HierarchyRectangularNode } from 'd3';
 import styled from 'styled-components';
 
-import { Project, isFolder, ProjectItem } from '../project/Project';
+import { Project } from '../project/Project';
 
 interface SlocViewProps {
   data: Project;
@@ -65,28 +56,6 @@ function selectFileByPath(
   return selectedFile != null ? selectedFile : null;
 }
 
-// /**
-//  *
-//  */
-// function slocViewArc(
-//   datum: Omit<DefaultArcObject, 'innerRadius' | 'outerRadius'>
-// ): string | undefined {
-//   const radius = Math.min(width, height) / 2;
-//   const innerRadius = radius * 0.67;
-//   const outerRadius = radius - 1;
-//   const result = arc()({ innerRadius, outerRadius, ...datum });
-//   if (!result) return undefined;
-//   return result;
-// }
-
-/**
- *
- */
-const slocPie = pie<ProjectItem>()
-  .padAngle(0.005)
-  .sort(null)
-  .value((d) => d.numberOfLines);
-
 /**
  *
  */
@@ -119,45 +88,27 @@ const Button = styled.button`
  */
 const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   const { data } = props;
-  // const root = data;
 
   // //
   // const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
-  //
+  // Path of the hovered file
   const [hoveredFilePath, setHoveredFilePath] = useState<string | null>(null);
 
-  // Get files as array
+  // Get partitioned file datums as array
   const root = zonPartition(data);
-  // console.log(root);
   const files = root.descendants();
 
-  // Select the hovered file
+  // Select root node for the list view (either root or the hovered file)
   const listRoot = useMemo(() => {
     if (!hoveredFilePath) return root;
     const selectedFile = selectFileByPath(files, hoveredFilePath);
     if (!selectedFile) return root;
     return selectedFile;
   }, [files, hoveredFilePath]);
-  // console.log(files);
-  // // Extract any files
-  // const files = isFolder(data) ? data.children : [];
-
-  // // Color from project item name
-  // // https://observablehq.com/@d3/working-with-color
-  // const color = (lineNumber: number): string =>
-  //   interpolateRainbow(scaleLinear().domain([0, root.numberOfLines]).range([0, 1])(lineNumber));
-
-  // // Make arcs from the files
-  // const arcs = slocPie(files);
 
   return (
     <div>
-      {/* {partitioned.descendants().map((datum) => (
-        <p key={datum.data.path}>
-          {datum.data.path}: {datum.data.numberOfLines}
-        </p>
-      ))} */}
       <svg
         width={width}
         height={height}
@@ -171,48 +122,33 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
               key={d.data.path}
               fill={colorNode(d)}
               d={slocViewArc(d)}
+              // onClick={(): void => setSelectedFileName(fileArc.data.filename)}
               onMouseEnter={(): void => setHoveredFilePath(d.data.path)}
               onMouseLeave={(): void => {
                 if (hoveredFilePath === d.data.path) setHoveredFilePath(null);
               }}
             />
           ))}
-        {/* {arcs.map((fileArc) => (
-          <path
-            style={{ cursor: 'pointer' }}
-            key={fileArc.data.filename}
-            fill={color(fileArc.data.middleLine)}
-            d={slocViewArc(fileArc)}
-            // onClick={(): void => setSelectedFileName(fileArc.data.filename)}
-            onMouseEnter={(): void => setHoveredFileName(fileArc.data.filename)}
-            onMouseLeave={(): void => {
-              if (hoveredFileName === fileArc.data.filename) setHoveredFileName(null);
-            }}
-          />
-        ))} */}
       </svg>
       <h4 style={{ color: 'white' }}>
         <strong>{listRoot.data.filename}</strong>
         {`: ${listRoot.value}`}
       </h4>
-      {listRoot
-        .descendants()
-        .filter((node) => node.depth === listRoot.depth + 1)
-        .map((d) => (
-          <p key={d.data.path}>
-            <Button
-              style={{
-                color: colorNode(d),
-                cursor: 'pointer',
-                // textDecoration: hoveredFileName === d.filename ? 'underline' : 'none',
-              }}
-              // onClick={(): void => setHoveredFileName(file.filename)}
-            >
-              <strong>{d.data.filename}</strong>
-              {`: ${d.value} lines`}
-            </Button>
-          </p>
-        ))}
+      {(listRoot.children || []).map((d) => (
+        <p key={d.data.path}>
+          <Button
+            style={{
+              color: colorNode(d),
+              cursor: 'pointer',
+              // textDecoration: hoveredFileName === d.filename ? 'underline' : 'none',
+            }}
+            // onClick={(): void => setHoveredFileName(file.filename)}
+          >
+            <strong>{d.data.filename}</strong>
+            {`: ${d.value} lines`}
+          </Button>
+        </p>
+      ))}
     </div>
   );
 };
