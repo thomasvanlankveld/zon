@@ -4,12 +4,6 @@ import { flatMap } from 'lodash';
 
 import { Project } from '../project/Project';
 import { Folder, addFileByPath, createTree } from '../utility/file-tree';
-import {
-  withNumberOfLines,
-  sortedByNumberOfLines,
-  withLineIndications,
-  withLayer,
-} from '../project/parse-utils';
 
 /**
  * Allows us to parse Tokei languages
@@ -78,19 +72,4 @@ export default function tokeiAdapter(input: unknown, projectName: string): Proje
   });
 
   return root;
-
-  // // Get number of lines on every node
-  // const rootWithNumberOfLines = withNumberOfLines(root);
-
-  // // Sort tree by number of lines
-  // const rootSortedByNumberOfLines = sortedByNumberOfLines(rootWithNumberOfLines);
-
-  // // Add indications of every node's bottom, middle and top line from the project's "zero"
-  // const rootWithLineIndications = withLineIndications(rootSortedByNumberOfLines, 0);
-
-  // // Finish by adding layer numbers
-  // const project = withLayer(rootWithLineIndications, 0);
-
-  // // Return the result
-  // return project;
 }
