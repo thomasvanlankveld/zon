@@ -1,4 +1,4 @@
-import React, { SFC, useState } from 'react';
+import React, { SFC, useState, useMemo } from 'react';
 import {
   pie,
   arc,
@@ -35,16 +35,14 @@ function zonPartition(data: Project): HierarchyRectangularNode<Project> {
  */
 function slocViewArc(d: HierarchyRectangularNode<Project>): string | undefined {
   const radius = Math.min(width, height) / 2;
-  // const innerRadius = radius * 0.67;
-  // const outerRadius = radius - 1;
-  // return arc()({ innerRadius, outerRadius, ...datum });
+  const padding = 0.005;
   return (
-    arc().padRadius(0.005)({
+    arc().padRadius(padding)({
       innerRadius: radius * d.y0,
       outerRadius: radius * d.y1,
       startAngle: 2 * Math.PI * d.x0,
       endAngle: 2 * Math.PI * d.x1,
-      padAngle: 0.005,
+      padAngle: padding,
     }) || undefined
   );
 }
@@ -101,19 +99,38 @@ const Button = styled.button`
 /**
  *
  */
+function selectFileByPath(
+  files: HierarchyRectangularNode<Project>[],
+  path: string
+): HierarchyRectangularNode<Project> | null {
+  const selectedFile = files.find((file) => file.data.path === path);
+  return selectedFile != null ? selectedFile : null;
+}
+
+/**
+ *
+ */
 const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   const { data } = props;
-  const root = data;
-
-  const partitioned = zonPartition(root);
-  console.log(partitioned);
+  // const root = data;
 
   // //
   // const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
   //
-  const [hoveredFileName, setHoveredFileName] = useState<string | null>(null);
+  const [hoveredFilePath, setHoveredFilePath] = useState<string | null>(null);
 
+  // Get files as array
+  const root = zonPartition(data);
+  // console.log(root);
+  const files = root.descendants();
+
+  // Select the hovered file
+  const hoveredFile = useMemo(() => {
+    if (!hoveredFilePath) return null;
+    return selectFileByPath(files, hoveredFilePath);
+  }, [files, hoveredFilePath]);
+  // console.log(files);
   // // Extract any files
   // const files = isFolder(data) ? data.children : [];
 
@@ -137,8 +154,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         height={height}
         viewBox={`${-width / 2} ${-height / 2} ${width} ${height}`}
       >
-        {partitioned
-          .descendants()
+        {files
           .filter((d) => d.depth > 0)
           .map((d) => (
             <path
@@ -146,18 +162,9 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
               key={d.data.path}
               fill={interpolateRainbow(d.x0 + (d.x1 - d.x0) / 2)}
               d={slocViewArc(d)}
-              // d={
-              //   arc()({
-              //     innerRadius: d.y0,
-              //     outerRadius: d.y1,
-              //     startAngle: d.x0,
-              //     endAngle: d.x1,
-              //     padAngle: 0.005,
-              //   }) || undefined
-              // }
-              onMouseEnter={(): void => setHoveredFileName(d.data.filename)}
+              onMouseEnter={(): void => setHoveredFilePath(d.data.path)}
               onMouseLeave={(): void => {
-                if (hoveredFileName === d.data.filename) setHoveredFileName(null);
+                if (hoveredFilePath === d.data.path) setHoveredFilePath(null);
               }}
             />
           ))}
@@ -175,14 +182,10 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
           />
         ))} */}
       </svg>
-      {/* <h4 style={{ color: 'white' }}>
-        <strong>{hoveredFileName || root.filename}</strong>
-        {`: ${
-          hoveredFileName
-            ? files.filter((file) => file.filename === hoveredFileName)[0].numberOfLines
-            : root.numberOfLines
-        }`}
-      </h4> */}
+      <h4 style={{ color: 'white' }}>
+        <strong>{hoveredFile != null ? hoveredFile.data.filename : root.data.filename}</strong>
+        {`: ${hoveredFile != null ? hoveredFile.value : root.value}`}
+      </h4>
       {/* {files.map((file) => (
         <p key={file.filename}>
           <Button
