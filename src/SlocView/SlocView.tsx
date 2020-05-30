@@ -1,5 +1,5 @@
 import React, { SFC, useState, useMemo } from 'react';
-import { arc, interpolateRainbow, hierarchy, partition, HierarchyRectangularNode } from 'd3';
+import { arc, interpolateRainbow, hierarchy, partition, HierarchyRectangularNode, lab } from 'd3';
 import styled from 'styled-components';
 
 import { Project } from '../project/Project';
@@ -8,13 +8,15 @@ interface SlocViewProps {
   data: Project;
 }
 
+type SlocViewNode = HierarchyRectangularNode<Project>;
+
 const width = 500;
 const height = 500;
 
 /**
  *
  */
-function zonPartition(data: Project): HierarchyRectangularNode<Project> {
+function zonPartition(data: Project): SlocViewNode {
   const root = hierarchy(data)
     .sum((d) => (d as { numberOfLines: number }).numberOfLines)
     .sort((a, b) => (a.value && b.value ? b.value - a.value : 0));
@@ -24,14 +26,16 @@ function zonPartition(data: Project): HierarchyRectangularNode<Project> {
 /**
  *
  */
-function colorNode(d: HierarchyRectangularNode<Project>): string {
-  return interpolateRainbow(d.x0 + (d.x1 - d.x0) / 2);
+function colorNode(d: SlocViewNode, isHovered = false): string {
+  const rainbowValue = interpolateRainbow(d.x0 + (d.x1 - d.x0) / 2);
+  if (!isHovered) return rainbowValue;
+  return lab(rainbowValue).brighter(1).toString();
 }
 
 /**
  *
  */
-function slocViewArc(d: HierarchyRectangularNode<Project>): string | undefined {
+function slocViewArc(d: SlocViewNode): string | undefined {
   const radius = Math.min(width, height) / 2;
   const padding = 0.005;
   return (
@@ -48,10 +52,7 @@ function slocViewArc(d: HierarchyRectangularNode<Project>): string | undefined {
 /**
  *
  */
-function selectFileByPath(
-  files: HierarchyRectangularNode<Project>[],
-  path: string
-): HierarchyRectangularNode<Project> | null {
+function selectFileByPath(files: SlocViewNode[], path: string): SlocViewNode | null {
   const selectedFile = files.find((file) => file.data.path === path);
   return selectedFile != null ? selectedFile : null;
 }
@@ -82,6 +83,32 @@ const Button = styled.button`
   /* Correct the inability to style clickable types in iOS and Safari. */
   -webkit-appearance: button;
 `;
+
+interface SlocViewPathProps {
+  d: SlocViewNode;
+  isHovered: boolean;
+  setHoveredFilePath: (path: string | null) => void;
+}
+
+/**
+ *
+ */
+const SlocViewPath: SFC<SlocViewPathProps> = function SlocViewPath(props) {
+  const { d, isHovered, setHoveredFilePath } = props;
+
+  return (
+    <path
+      style={{ cursor: 'pointer' }}
+      fill={colorNode(d, isHovered)}
+      d={slocViewArc(d)}
+      // onClick={(): void => setSelectedFileName(fileArc.data.filename)}
+      onMouseEnter={(): void => setHoveredFilePath(d.data.path)}
+      onMouseLeave={(): void => {
+        if (isHovered) setHoveredFilePath(null);
+      }}
+    />
+  );
+};
 
 /**
  *
@@ -117,16 +144,11 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         {files
           .filter((d) => d.depth > 0)
           .map((d) => (
-            <path
-              style={{ cursor: 'pointer' }}
+            <SlocViewPath
               key={d.data.path}
-              fill={colorNode(d)}
-              d={slocViewArc(d)}
-              // onClick={(): void => setSelectedFileName(fileArc.data.filename)}
-              onMouseEnter={(): void => setHoveredFilePath(d.data.path)}
-              onMouseLeave={(): void => {
-                if (hoveredFilePath === d.data.path) setHoveredFilePath(null);
-              }}
+              d={d}
+              isHovered={hoveredFilePath === d.data.path}
+              setHoveredFilePath={setHoveredFilePath}
             />
           ))}
       </svg>
