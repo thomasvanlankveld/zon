@@ -1,4 +1,4 @@
-import React, { SFC, useState, useMemo } from 'react';
+import React, { SFC, useState, useMemo, useCallback } from 'react';
 import { arc, interpolateRainbow, hierarchy, partition, HierarchyRectangularNode, lab } from 'd3';
 import styled from 'styled-components';
 
@@ -126,12 +126,13 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   // Path of the file for the hovered list item
   const [hoveredListItemFilePath, setHoveredListItemFilePath] = useState<string | null>(null);
 
-  /**
-   *
-   */
-  function isHighlighted(d: SlocViewNode): boolean {
-    return hoveredArcFilePath === d.data.path || hoveredListItemFilePath === d.data.path;
-  }
+  // Whether a node should be highlighted
+  const isHighlighted = useCallback(
+    function isHighlighted(d: SlocViewNode): boolean {
+      return hoveredArcFilePath === d.data.path || hoveredListItemFilePath === d.data.path;
+    },
+    [hoveredArcFilePath, hoveredListItemFilePath]
+  );
 
   // Get partitioned file datums as array
   const root = zonPartition(data);
