@@ -26,9 +26,9 @@ function zonPartition(data: Project): SlocViewNode {
 /**
  *
  */
-function colorNode(d: SlocViewNode, isHovered = false): string {
+function colorNode(d: SlocViewNode, isHighlighted = false): string {
   const rainbowValue = interpolateRainbow(d.x0 + (d.x1 - d.x0) / 2);
-  if (!isHovered) return rainbowValue;
+  if (!isHighlighted) return rainbowValue;
   return lab(rainbowValue).brighter(1).toString();
 }
 
@@ -86,7 +86,8 @@ const Button = styled.button`
 
 interface SlocViewPathProps {
   d: SlocViewNode;
-  isHovered: boolean;
+  isHighlighted: boolean;
+  hoveredFilePath: string | null;
   setHoveredFilePath: (path: string | null) => void;
 }
 
@@ -94,17 +95,17 @@ interface SlocViewPathProps {
  *
  */
 const SlocViewPath: SFC<SlocViewPathProps> = function SlocViewPath(props) {
-  const { d, isHovered, setHoveredFilePath } = props;
+  const { d, isHighlighted, hoveredFilePath, setHoveredFilePath } = props;
 
   return (
     <path
       style={{ cursor: 'pointer' }}
-      fill={colorNode(d, isHovered)}
+      fill={colorNode(d, isHighlighted)}
       d={slocViewArc(d)}
       // onClick={(): void => setSelectedFileName(fileArc.data.filename)}
       onMouseEnter={(): void => setHoveredFilePath(d.data.path)}
       onMouseLeave={(): void => {
-        if (isHovered) setHoveredFilePath(null);
+        if (hoveredFilePath === d.data.path) setHoveredFilePath(null);
       }}
     />
   );
@@ -119,20 +120,23 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   // //
   // const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
-  // Path of the hovered file
-  const [hoveredFilePath, setHoveredFilePath] = useState<string | null>(null);
+  // Path of the file for the hovered arc
+  const [hoveredArcFilePath, setHoveredArcFilePath] = useState<string | null>(null);
+
+  // // Path of the file for the hovered list item
+  // const [hoveredListItemFilePath, setHoveredListItemFilePath] = useState<string | null>(null);
 
   // Get partitioned file datums as array
   const root = zonPartition(data);
   const files = root.descendants();
 
-  // Select root node for the list view (either root or the hovered file)
+  // Select root node for the list view (either root or the file of the hovered arc)
   const listRoot = useMemo(() => {
-    if (!hoveredFilePath) return root;
-    const selectedFile = selectFileByPath(files, hoveredFilePath);
+    if (!hoveredArcFilePath) return root;
+    const selectedFile = selectFileByPath(files, hoveredArcFilePath);
     if (!selectedFile) return root;
     return selectedFile;
-  }, [files, hoveredFilePath]);
+  }, [files, hoveredArcFilePath]);
 
   return (
     <div>
@@ -147,8 +151,9 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
             <SlocViewPath
               key={d.data.path}
               d={d}
-              isHovered={hoveredFilePath === d.data.path}
-              setHoveredFilePath={setHoveredFilePath}
+              isHighlighted={hoveredArcFilePath === d.data.path}
+              hoveredFilePath={hoveredArcFilePath}
+              setHoveredFilePath={setHoveredArcFilePath}
             />
           ))}
       </svg>
@@ -165,6 +170,10 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
               // textDecoration: hoveredFileName === d.filename ? 'underline' : 'none',
             }}
             // onClick={(): void => setHoveredFileName(file.filename)}
+            // onMouseEnter={(): void => setHoveredListItemFilePath(d.data.path)}
+            // onMouseLeave={(): void => {
+            //   if (hoveredListItemFilePath === d.data.path) setHoveredListItemFilePath(null);
+            // }}
           >
             <strong>{d.data.filename}</strong>
             {`: ${d.value} lines`}
