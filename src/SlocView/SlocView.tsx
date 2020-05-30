@@ -123,8 +123,15 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   // Path of the file for the hovered arc
   const [hoveredArcFilePath, setHoveredArcFilePath] = useState<string | null>(null);
 
-  // // Path of the file for the hovered list item
-  // const [hoveredListItemFilePath, setHoveredListItemFilePath] = useState<string | null>(null);
+  // Path of the file for the hovered list item
+  const [hoveredListItemFilePath, setHoveredListItemFilePath] = useState<string | null>(null);
+
+  /**
+   *
+   */
+  function isHighlighted(d: SlocViewNode): boolean {
+    return hoveredArcFilePath === d.data.path || hoveredListItemFilePath === d.data.path;
+  }
 
   // Get partitioned file datums as array
   const root = zonPartition(data);
@@ -151,7 +158,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
             <SlocViewPath
               key={d.data.path}
               d={d}
-              isHighlighted={hoveredArcFilePath === d.data.path}
+              isHighlighted={isHighlighted(d)}
               hoveredFilePath={hoveredArcFilePath}
               setHoveredFilePath={setHoveredArcFilePath}
             />
@@ -165,15 +172,15 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         <p key={d.data.path}>
           <Button
             style={{
-              color: colorNode(d),
+              color: colorNode(d, isHighlighted(d)),
               cursor: 'pointer',
               // textDecoration: hoveredFileName === d.filename ? 'underline' : 'none',
             }}
             // onClick={(): void => setHoveredFileName(file.filename)}
-            // onMouseEnter={(): void => setHoveredListItemFilePath(d.data.path)}
-            // onMouseLeave={(): void => {
-            //   if (hoveredListItemFilePath === d.data.path) setHoveredListItemFilePath(null);
-            // }}
+            onMouseEnter={(): void => setHoveredListItemFilePath(d.data.path)}
+            onMouseLeave={(): void => {
+              if (hoveredListItemFilePath === d.data.path) setHoveredListItemFilePath(null);
+            }}
           >
             <strong>{d.data.filename}</strong>
             {`: ${d.value} lines`}
