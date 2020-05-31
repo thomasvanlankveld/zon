@@ -16,62 +16,74 @@ interface SlocViewProps {
   data: Project;
 }
 
-type ColoredProject = Project & { baseColor: string; highlightedColor: string };
+interface NodeColors {
+  baseColor: string;
+  highlightedColor: string;
+  pressedColor: string;
+}
+
+type ColoredProject = Project & NodeColors;
 
 type SlocViewNode = HierarchyRectangularNode<ColoredProject>;
 
 const width = 500;
 const height = 500;
 
-// /**
-//  *
-//  */
-// function zonHierarchy(data: Project): HierarchyNode<Project> {
-//   return hierarchy(data)
-//     .sum((d) => (d as { numberOfLines: number }).numberOfLines)
-//     .sort((a, b) => (a.value && b.value ? b.value - a.value : 0));
-// }
-
-// /**
-//  *
-//  */
-// function zonPartition(data: Project): HierarchyRectangularNode<Project> {
-//   const root = zonHierarchy(data);
-//   return partition<Project>()(root);
-// }
-
 /**
  *
  */
 function zonPartition<T extends Project>(data: T): HierarchyRectangularNode<T> {
+  // Add hierarchical helper methods and data
   const root = hierarchy(data)
+    // Compute the number of lines of every branch as the sum of the number of lines of all its children
     .sum((d) => (d as { numberOfLines: number }).numberOfLines)
+    // Sort hierarchy by number of lines, high to low
     .sort((a, b) => (a.value && b.value ? b.value - a.value : 0));
+
+  // Add x0, x1, y0 and y1
   return partition<T>()(root);
 }
-
-function zonColoredPartition(data: Project): SlocViewNode {
-  const root = zonPartition(data);
-  /* eslint no-param-reassign: ["error", { "props": false }] */
-  root.each((d) => {
-    const baseColor = interpolateRainbow(d.x0 + (d.x1 - d.x0) / 2);
-    (d as SlocViewNode).data.baseColor = baseColor;
-    (d as SlocViewNode).data.highlightedColor = lab(baseColor).brighter(1).toString();
-  });
-
-  return root as SlocViewNode;
-}
-
-// function nodeBaseColor(d: HierarchyRectangularNode<Project>): string {}
 
 /**
  *
  */
-function colorNode(d: SlocViewNode, isHighlighted = false): string {
-  return isHighlighted ? d.data.highlightedColor : d.data.baseColor;
-  // const rainbowValue = interpolateRainbow(d.x0 + (d.x1 - d.x0) / 2);
-  // if (!isHighlighted) return rainbowValue;
-  // return lab(rainbowValue).brighter(1).toString();
+function zonColoredPartition(data: Project): SlocViewNode {
+  // Partition the data
+  const root = zonPartition(data);
+
+  // Add color values to each node
+  /* eslint-disable no-param-reassign */
+  root.each((d) => {
+    // The base color is based on the node's center within the partition
+    const baseColor = interpolateRainbow(d.x0 + (d.x1 - d.x0) / 2);
+    (d as SlocViewNode).data.baseColor = baseColor;
+
+    // The highlighted color is a brighter version of the base color
+    const highlightedColor = lab(baseColor).brighter(0.5).toString();
+    (d as SlocViewNode).data.highlightedColor = highlightedColor;
+
+    // The pressed color is an even brighter version of the base color
+    const pressedColor = lab(baseColor).brighter(1).toString();
+    (d as SlocViewNode).data.pressedColor = pressedColor;
+  });
+  /* eslint-enable no-param-reassign */
+
+  return root as SlocViewNode;
+}
+
+/**
+ *
+ */
+function colorNode(
+  d: SlocViewNode,
+  {
+    isHighlighted = false,
+    isPressed = false,
+  }: { isHighlighted?: boolean; isPressed?: boolean } = {}
+): string {
+  if (isPressed) return d.data.pressedColor;
+  if (isHighlighted) return d.data.highlightedColor;
+  return d.data.baseColor;
 }
 
 /**
@@ -143,7 +155,7 @@ const SlocViewPath: SFC<SlocViewPathProps> = function SlocViewPath(props) {
   return (
     <path
       style={{ cursor: 'pointer' }}
-      fill={colorNode(d, isHighlighted)}
+      fill={colorNode(d, { isHighlighted })}
       d={slocViewArc(d)}
       onMouseEnter={(): void => {
         console.log(d.data.path);
@@ -257,7 +269,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         <p key={d.data.path}>
           <Button
             style={{
-              color: colorNode(d, isHighlighted(d)),
+              color: colorNode(d, { isHighlighted: isHighlighted(d) }),
               cursor: 'pointer',
               // textDecoration: hoveredFileName === d.filename ? 'underline' : 'none',
             }}
