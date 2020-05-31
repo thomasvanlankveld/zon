@@ -146,6 +146,25 @@ interface SlocViewPathProps {
   setDiagramRootFilePath: (path: string) => void;
 }
 
+interface PathProps {
+  datum: SlocViewNode;
+  isHighlighted: boolean;
+}
+
+/**
+ *
+ */
+const Path = styled.path<PathProps>`
+  cursor: pointer;
+  fill: ${(props): string => {
+    const { datum, isHighlighted } = props;
+    return colorNode(datum, { isHighlighted });
+  }};
+  &:active {
+    fill: ${(props): string => colorNode(props.datum, { isPressed: true })};
+  }
+`;
+
 /**
  *
  */
@@ -153,14 +172,11 @@ const SlocViewPath: SFC<SlocViewPathProps> = function SlocViewPath(props) {
   const { d, isHighlighted, hoveredFilePath, setHoveredFilePath, setDiagramRootFilePath } = props;
 
   return (
-    <path
-      style={{ cursor: 'pointer' }}
-      fill={colorNode(d, { isHighlighted })}
+    <Path
       d={slocViewArc(d)}
-      onMouseEnter={(): void => {
-        console.log(d.data.path);
-        setHoveredFilePath(d.data.path);
-      }}
+      datum={d}
+      isHighlighted={isHighlighted}
+      onMouseEnter={(): void => setHoveredFilePath(d.data.path)}
       onMouseLeave={(): void => {
         if (hoveredFilePath === d.data.path) setHoveredFilePath(null);
       }}
@@ -177,6 +193,9 @@ interface SlocDiagramProps {
   setDiagramRootFilePath: (path: string) => void;
 }
 
+/**
+ *
+ */
 const SlocDiagram: SFC<SlocDiagramProps> = function SlocDiagram(props) {
   const {
     root,
