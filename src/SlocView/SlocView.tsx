@@ -224,6 +224,48 @@ const SlocDiagram: SFC<SlocDiagramProps> = function SlocDiagram(props) {
   );
 };
 
+interface SlocListProps {
+  root: SlocViewNode;
+  isHighlighted: (d: SlocViewNode) => boolean;
+  hoveredListItemFilePath: string | null;
+  setHoveredListItemFilePath: (path: string | null) => void;
+}
+
+/**
+ *
+ */
+const SlocList: SFC<SlocListProps> = function SlocList(props) {
+  const { root, isHighlighted, hoveredListItemFilePath, setHoveredListItemFilePath } = props;
+
+  return (
+    <>
+      <h4 style={{ color: 'white' }}>
+        <strong>{root.data.filename}</strong>
+        {`: ${root.value}`}
+      </h4>
+      {(root.children || []).map((d) => (
+        <p key={d.data.path}>
+          <Button
+            style={{
+              color: colorNode(d, { isHighlighted: isHighlighted(d) }),
+              cursor: 'pointer',
+              // textDecoration: hoveredFileName === d.filename ? 'underline' : 'none',
+            }}
+            // onClick={(): void => setHoveredFileName(file.filename)}
+            onMouseEnter={(): void => setHoveredListItemFilePath(d.data.path)}
+            onMouseLeave={(): void => {
+              if (hoveredListItemFilePath === d.data.path) setHoveredListItemFilePath(null);
+            }}
+          >
+            <strong>{d.data.filename}</strong>
+            {`: ${d.value} lines`}
+          </Button>
+        </p>
+      ))}
+    </>
+  );
+};
+
 /**
  *
  */
@@ -247,10 +289,8 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
     [hoveredArcFilePath, hoveredListItemFilePath]
   );
 
-  // Construct a Zon-specific hierarc
+  // Construct a Zon-specific hierarchy
   const root = useMemo(() => zonColoredPartition(data), [data]);
-  // const root = useMemo(() => zonPartition(data), [data]);
-  // root.each((d) => (d.baseColor = interpolateRainbow()));
 
   // Select root node for the diagram (either root or the selected file)
   const diagramRoot = useMemo(() => {
@@ -280,29 +320,12 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         setHoveredArcFilePath={setHoveredArcFilePath}
         setDiagramRootFilePath={setDiagramRootFilePath}
       />
-      <h4 style={{ color: 'white' }}>
-        <strong>{listRoot.data.filename}</strong>
-        {`: ${listRoot.value}`}
-      </h4>
-      {(listRoot.children || []).map((d) => (
-        <p key={d.data.path}>
-          <Button
-            style={{
-              color: colorNode(d, { isHighlighted: isHighlighted(d) }),
-              cursor: 'pointer',
-              // textDecoration: hoveredFileName === d.filename ? 'underline' : 'none',
-            }}
-            // onClick={(): void => setHoveredFileName(file.filename)}
-            onMouseEnter={(): void => setHoveredListItemFilePath(d.data.path)}
-            onMouseLeave={(): void => {
-              if (hoveredListItemFilePath === d.data.path) setHoveredListItemFilePath(null);
-            }}
-          >
-            <strong>{d.data.filename}</strong>
-            {`: ${d.value} lines`}
-          </Button>
-        </p>
-      ))}
+      <SlocList
+        root={listRoot}
+        isHighlighted={isHighlighted}
+        hoveredListItemFilePath={hoveredListItemFilePath}
+        setHoveredListItemFilePath={setHoveredListItemFilePath}
+      />
     </div>
   );
 };
