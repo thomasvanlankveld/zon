@@ -138,14 +138,6 @@ const Button = styled.button`
   -webkit-appearance: button;
 `;
 
-interface SlocViewPathProps {
-  d: SlocViewNode;
-  isHighlighted: boolean;
-  hoveredFilePath: string | null;
-  setHoveredFilePath: (path: string | null) => void;
-  setDiagramRootFilePath: (path: string) => void;
-}
-
 interface PathProps {
   datum: SlocViewNode;
   isHighlighted: boolean;
@@ -165,11 +157,19 @@ const Path = styled.path<PathProps>`
   }
 `;
 
+interface SlocViewPathProps {
+  d: SlocViewNode;
+  isHighlighted: boolean;
+  hoveredFilePath: string | null;
+  setHoveredFilePath: (path: string | null) => void;
+  onClick: (path: string) => void;
+}
+
 /**
  *
  */
 const SlocViewPath: SFC<SlocViewPathProps> = function SlocViewPath(props) {
-  const { d, isHighlighted, hoveredFilePath, setHoveredFilePath, setDiagramRootFilePath } = props;
+  const { d, isHighlighted, hoveredFilePath, setHoveredFilePath, onClick } = props;
 
   return (
     <Path
@@ -180,17 +180,18 @@ const SlocViewPath: SFC<SlocViewPathProps> = function SlocViewPath(props) {
       onMouseLeave={(): void => {
         if (hoveredFilePath === d.data.path) setHoveredFilePath(null);
       }}
-      onClick={(): void => setDiagramRootFilePath(d.data.path)}
+      onClick={(): void => onClick(d.data.path)}
     />
   );
 };
 
 interface SlocDiagramProps {
   root: SlocViewNode;
+  rootParentPath: string | null;
   isHighlighted: (d: SlocViewNode) => boolean;
   hoveredArcFilePath: string | null;
   setHoveredArcFilePath: (path: string | null) => void;
-  setDiagramRootFilePath: (path: string) => void;
+  setDiagramRootFilePath: (path: string | null) => void;
 }
 
 /**
@@ -199,11 +200,23 @@ interface SlocDiagramProps {
 const SlocDiagram: SFC<SlocDiagramProps> = function SlocDiagram(props) {
   const {
     root,
+    rootParentPath,
     isHighlighted,
     hoveredArcFilePath,
     setHoveredArcFilePath,
     setDiagramRootFilePath,
   } = props;
+
+  // Use the path of the clicked item to navigate up or down
+  function navigateFromPathClick(path: string): void {
+    // If the root arc was clicked, move up to the parent node
+    if (path === root.data.path) {
+      setDiagramRootFilePath(rootParentPath);
+    } else {
+      // Otherwise move to the specified node
+      setDiagramRootFilePath(path);
+    }
+  }
 
   return (
     <svg width={width} height={height} viewBox={`${-width / 2} ${-height / 2} ${width} ${height}`}>
@@ -217,7 +230,7 @@ const SlocDiagram: SFC<SlocDiagramProps> = function SlocDiagram(props) {
             isHighlighted={isHighlighted(d)}
             hoveredFilePath={hoveredArcFilePath}
             setHoveredFilePath={setHoveredArcFilePath}
-            setDiagramRootFilePath={setDiagramRootFilePath}
+            onClick={navigateFromPathClick}
           />
         ))}
     </svg>
@@ -293,14 +306,23 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   const root = useMemo(() => zonColoredPartition(data), [data]);
 
   // Select root node for the diagram (either root or the selected file)
-  const diagramRoot = useMemo(() => {
+  const { diagramRoot, diagramRootParentPath } = useMemo(() => {
+    // Get the diagram root
     const unpartitionedDiagramRoot = ((): HierarchyNode<ColoredProject> => {
       if (!diagramRootFilePath) return root;
       const selectedFile = selectNodeByPath(root.descendants(), diagramRootFilePath);
       if (!selectedFile) return root;
       return selectedFile;
     })();
-    return zonPartition(unpartitionedDiagramRoot.data);
+
+    // Get the path to the parent of the diagram root
+    const parentPath = unpartitionedDiagramRoot.parent?.data.path || null;
+
+    // Repartition the data so the diagram root spans 360 degrees
+    const partitionedDiagramRoot = zonPartition(unpartitionedDiagramRoot.data);
+
+    // Return data
+    return { diagramRoot: partitionedDiagramRoot, diagramRootParentPath: parentPath };
   }, [root, diagramRootFilePath]);
 
   // Select root node for the list view (either root or the file of the hovered arc)
@@ -315,6 +337,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
     <div>
       <SlocDiagram
         root={diagramRoot}
+        rootParentPath={diagramRootParentPath}
         isHighlighted={isHighlighted}
         hoveredArcFilePath={hoveredArcFilePath}
         setHoveredArcFilePath={setHoveredArcFilePath}
