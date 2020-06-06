@@ -21,7 +21,7 @@ indent_style = space
 indent_size = 2
 
 # Rust code should be handled by a Rust formatter
-[*.rs]
+[**/*.rs]
 charset = unset
 end_of_line = unset
 insert_final_newline = unset
