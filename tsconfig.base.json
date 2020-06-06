@@ -8,7 +8,7 @@
     "noImplicitReturns": true,
     "isolatedModules": true,
     "jsx": "react",
-    "rootDir": "./src",
+    "rootDir": "./src-ui",
     "incremental": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,

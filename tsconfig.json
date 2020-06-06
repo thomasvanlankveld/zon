@@ -3,6 +3,6 @@
   "compilerOptions": {
     "jsx": "react"
   },
-  "include": ["src/**/*"],
+  "include": ["src-ui/**/*"],
   "exclude": ["**/test-support/**", "**/*.test.ts", "**/*.test.tsx"]
 }

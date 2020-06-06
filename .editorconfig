@@ -19,3 +19,12 @@ trim_trailing_whitespace = true
 [{package.json,.eslintrc.json,tsconfig.json,yarn.lock}]
 indent_style = space
 indent_size = 2
+
+# Rust code should be handled by a Rust formatter
+[*.rs]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+indent_size = unset

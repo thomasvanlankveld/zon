@@ -8,16 +8,16 @@
   "private": true,
   "scripts": {
     "develop": "concurrently -r \"npm:type-check:watch\" \"npm:start\"",
-    "start": "parcel ./src/index.html",
-    "build": "yarn run type-check && parcel build ./src/index.html --public-url '/'",
+    "start": "parcel ./src-ui/index.html",
+    "build": "yarn run type-check && parcel build ./src-ui/index.html --public-url '/'",
     "test": "jest",
     "type-check": "tsc --noEmit --incremental false",
     "type-check:watch": "tsc --noEmit --watch",
-    "lint": "eslint './src/**/*.{ts,tsx}'",
+    "lint": "eslint './src-ui/**/*.{ts,tsx}'",
     "lint:fix": "yarn lint --fix",
-    "cli": "ts-node src/cli.ts",
+    "cli": "ts-node src-ui/cli.ts",
     "verify": "yarn type-check && yarn lint && yarn test",
-    "format": "prettier --write './src/**/*.{ts,tsx}'"
+    "format": "prettier --write './src-ui/**/*.{ts,tsx}'"
   },
   "husky": {
     "hooks": {
@@ -38,14 +38,14 @@
       "js"
     ],
     "moduleNameMapper": {
-      ".+\\.css$": "<rootDir>/src/assets/test-support/assetMock.ts",
-      "^[./a-zA-Z0-9$_-]+\\.jpg": "<rootDir>/src/assets/test-support/assetMock.ts",
-      "^[./a-zA-Z0-9$_-]+\\.mp4": "<rootDir>/src/assets/test-support/assetMock.ts",
-      "^[./a-zA-Z0-9$_-]+\\.png": "<rootDir>/src/assets/test-support/assetMock.ts",
-      "^[./a-zA-Z0-9$_-]+\\.svg": "<rootDir>/src/assets/test-support/assetMock.ts"
+      ".+\\.css$": "<rootDir>/src-ui/assets/test-support/assetMock.ts",
+      "^[./a-zA-Z0-9$_-]+\\.jpg": "<rootDir>/src-ui/assets/test-support/assetMock.ts",
+      "^[./a-zA-Z0-9$_-]+\\.mp4": "<rootDir>/src-ui/assets/test-support/assetMock.ts",
+      "^[./a-zA-Z0-9$_-]+\\.png": "<rootDir>/src-ui/assets/test-support/assetMock.ts",
+      "^[./a-zA-Z0-9$_-]+\\.svg": "<rootDir>/src-ui/assets/test-support/assetMock.ts"
     },
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
+      "src-ui/**/*.{js,jsx,ts,tsx}"
     ]
   },
   "devDependencies": {

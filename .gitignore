@@ -120,3 +120,8 @@ temp/
 .history
 
 # End of https://www.gitignore.io/api/node,visualstudiocode
+
+
+#Added by cargo
+
+/target
