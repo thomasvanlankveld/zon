@@ -1,6 +1,6 @@
 {
   "name": "zon",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Shed light on your codebase",
   "repository": "git@github.com:thomasvanlankveld/zon.git",
   "author": "Thomas van Lankveld <5240626+thomasvanlankveld@users.noreply.github.com>",
@@ -8,8 +8,8 @@
   "private": true,
   "scripts": {
     "develop": "concurrently -r \"npm:type-check:watch\" \"npm:start\"",
-    "start": "parcel ./src-ui/index.html",
-    "build": "yarn run type-check && parcel build ./src-ui/index.html --public-url '/'",
+    "start": "parcel watch ./src-ui/index.html --public-url '/ui'",
+    "build": "yarn run type-check && parcel build ./src-ui/index.html --public-url '/ui'",
     "test": "jest",
     "type-check": "tsc --noEmit --incremental false",
     "type-check:watch": "tsc --noEmit --watch",
