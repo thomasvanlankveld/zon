@@ -1,6 +1,5 @@
 import React, { SFC, useEffect, useState } from 'react';
 
-import reduxData from '../../input/redux.json';
 import SlocView from '../SlocView/SlocView';
 import { Project } from '../project/Project';
 import zonAdapter from '../adapters/zonAdapter';
@@ -15,7 +14,14 @@ const App: SFC = function App() {
   useEffect(() => {
     if (data == null) {
       if (process.env.NODE_ENV === 'development') {
-        setData(tokeiAdapter(reduxData, 'redux'));
+        import('../../input/redux.json')
+          .then(async (reduxData) => {
+            const parsed = tokeiAdapter(reduxData, 'redux');
+            setData(parsed);
+          })
+          .catch((errr) => {
+            throw errr;
+          });
       } else {
         fetch('http://localhost:3030/input')
           .then(async (response) => {
