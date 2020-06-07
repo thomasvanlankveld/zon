@@ -242,13 +242,20 @@ interface SlocListProps {
   isHighlighted: (d: SlocViewNode) => boolean;
   hoveredListItemFilePath: string | null;
   setHoveredListItemFilePath: (path: string | null) => void;
+  setDiagramRootFilePath: (path: string | null) => void;
 }
 
 /**
  *
  */
 const SlocList: SFC<SlocListProps> = function SlocList(props) {
-  const { root, isHighlighted, hoveredListItemFilePath, setHoveredListItemFilePath } = props;
+  const {
+    root,
+    isHighlighted,
+    hoveredListItemFilePath,
+    setHoveredListItemFilePath,
+    setDiagramRootFilePath,
+  } = props;
 
   return (
     <div>
@@ -264,7 +271,7 @@ const SlocList: SFC<SlocListProps> = function SlocList(props) {
               cursor: 'pointer',
               // textDecoration: hoveredFileName === d.filename ? 'underline' : 'none',
             }}
-            // onClick={(): void => setHoveredFileName(file.filename)}
+            onClick={(): void => setDiagramRootFilePath(d.data.path)}
             onMouseEnter={(): void => setHoveredListItemFilePath(d.data.path)}
             onMouseLeave={(): void => {
               if (hoveredListItemFilePath === d.data.path) setHoveredListItemFilePath(null);
@@ -353,6 +360,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         isHighlighted={isHighlighted}
         hoveredListItemFilePath={hoveredListItemFilePath}
         setHoveredListItemFilePath={setHoveredListItemFilePath}
+        setDiagramRootFilePath={setDiagramRootFilePath}
       />
     </SlocViewGrid>
   );
