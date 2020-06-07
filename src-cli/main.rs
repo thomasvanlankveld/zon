@@ -9,13 +9,10 @@ include!(concat!(env!("OUT_DIR"), "/loader.rs"));
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    // Get path of the project to analyse
-    let project_path = env::current_dir()?;
-
     // Get analysis as json
     let mut languages = Languages::new();
     let config = Config::default();
-    languages.get_statistics(&[project_path], &[], &config);
+    languages.get_statistics(&["./"], &[], &config);
     let tokei_json = serde_json::to_string(&languages)?;
 
     // Get html contents and headers
