@@ -3,6 +3,7 @@ use std::error::Error;
 use std::fs;
 use std::path::Path;
 
+// Generate a loader program to include the UI into the binary as static strings
 fn main() -> Result<(), Box<dyn Error>> {
     // Get destination paths
     let out_dir = env::var_os("OUT_DIR").unwrap();

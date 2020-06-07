@@ -1,6 +1,7 @@
 use std::env;
 use std::error::Error;
 
+use serde_json::json;
 use tokei::{Config, Languages};
 use warp::Filter;
 
@@ -9,11 +10,24 @@ include!(concat!(env!("OUT_DIR"), "/loader.rs"));
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    // Get analysis as json
+    // Get project name
+    let project_path = env::current_dir()?;
+    let project_name = project_path
+        .file_name()
+        .and_then(|p| p.to_str())
+        .unwrap_or("Project");
+
+    // Get analysis
     let mut languages = Languages::new();
     let config = Config::default();
     languages.get_statistics(&["./"], &[], &config);
-    let tokei_json = serde_json::to_string(&languages)?;
+
+    // Construct project analysis JSON string
+    let zon_json = json!({
+        "projectName": project_name,
+        "languages": languages,
+    })
+    .to_string();
 
     // Get html contents and headers
     let served_zon_ui_index_html = warp::path!("ui")
@@ -34,8 +48,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // Serve UI and analysis json
     let served_zon_ui = served_zon_ui_index_html.or(served_zon_ui_index_js);
-    let served_tokei_json = warp::path("input").map(move || format!("{}", tokei_json));
-    let served = served_zon_ui.or(served_tokei_json);
+    let served_zon_json = warp::path("input").map(move || format!("{}", zon_json));
+    let served = served_zon_ui.or(served_zon_json);
     warp::serve(served).run(([127, 0, 0, 1], 3030)).await;
 
     // Close

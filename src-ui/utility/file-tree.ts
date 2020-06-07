@@ -1,6 +1,16 @@
 import { Leaf, Branch, Node, NodeTypeLeaf, NodeTypeBranch } from './tree';
 
 /**
+ * Path as strings
+ */
+export type PathString = string;
+
+/**
+ * Path as array of path segments
+ */
+export type PathArray = string[];
+
+/**
  * Denotes a node as file
  */
 export type FileSystemNodeTypeFile = NodeTypeLeaf;
@@ -30,7 +40,7 @@ export type FileSystemNodeType = FileSystemNodeTypeFile | FileSystemNodeTypeFold
  */
 export interface FileSystemNodeBase {
   filename: string;
-  path: string;
+  path: PathString;
 }
 
 /**
@@ -55,6 +65,20 @@ export type FileSystemNode<T extends object = {}, U extends object = T> = Node<
 >;
 
 /**
+ * Convert path string to array of path segments
+ */
+export function toPathArray(pathString: PathString): PathArray {
+  return pathString.split('/');
+}
+
+/**
+ * Convert array of path segments to path string
+ */
+export function toPathString(pathArray: PathArray): PathString {
+  return pathArray.join('/');
+}
+
+/**
  * Whether the given item is a folder
  */
 export function isFile(item: FileSystemNode): item is File {
@@ -74,7 +98,7 @@ export function isFolder<T extends object, U extends object>(
  * Get the name of a file from its path
  */
 export function filenameFromPath(path: string): string {
-  return path.split('/').slice(-1)[0];
+  return toPathArray(path).slice(-1)[0];
 }
 
 /**
@@ -82,13 +106,13 @@ export function filenameFromPath(path: string): string {
  */
 export function addNodeByPath(root: Folder, path: string, node: FileSystemNode): void {
   let lastKnownFolder = root;
-  const pathSegments = path.split('/').slice(0, -1);
+  const pathSegments = toPathArray(path).slice(0, -1);
 
   // For every path element, add a folder to the tree if necessary
   pathSegments.forEach((elem, i) => {
     // Try to find the next folder
     let nextFolder = lastKnownFolder.children.find((childNode) => childNode.filename === elem);
-    const nextFolderPath = pathSegments.slice(0, i + 1).join('/');
+    const nextFolderPath = toPathString(pathSegments.slice(0, i + 1));
 
     // If it does not exist, create it and append it to the previous folder
     if (nextFolder == null) {

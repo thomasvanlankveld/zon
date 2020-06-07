@@ -1,11 +1,7 @@
 import React, { SFC, useEffect, useState } from 'react';
 import SlocView from '../SlocView/SlocView';
-import tokeiAdapter from '../adapters/tokeiAdapter';
-// import fromTokei from '../../input/fromTokei.json';
 import { Project } from '../project/Project';
-
-// // Get demo input data
-// const data = tokeiAdapter(fromTokei, 'zon');
+import zonAdapter from '../adapters/zonAdapter';
 
 /**
  *
@@ -18,7 +14,7 @@ const App: SFC = function App() {
       fetch('http://localhost:3030/input')
         .then(async (response) => {
           const json = await response.json();
-          const parsed = tokeiAdapter(json, 'zon');
+          const parsed = zonAdapter(json);
           setData(parsed);
         })
         .catch((errr) => {

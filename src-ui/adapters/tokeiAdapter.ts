@@ -3,7 +3,7 @@ import { isLeft } from 'fp-ts/lib/Either';
 import { flatMap } from 'lodash';
 
 import { Project } from '../project/Project';
-import { Folder, addFileByPath, createTree } from '../utility/file-tree';
+import { Folder, addFileByPath, createTree, toPathArray, toPathString } from '../utility/file-tree';
 
 /**
  * Allows us to parse Tokei languages
@@ -60,9 +60,9 @@ export default function tokeiAdapter(input: unknown, projectName: string): Proje
   const languages = Object.values(parsed.inner);
   const files = flatMap(languages, (language) => language.stats).map((file) => {
     // Swap any "current folder" specifiers in the file paths with the project name
-    const path = file.name.split('/');
+    const path = toPathArray(file.name);
     if (path[0] === '.') path.splice(0, 1);
-    return { ...file, name: path.join('/') };
+    return { ...file, name: toPathString(path) };
   });
 
   // Construct the file tree
