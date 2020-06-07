@@ -1,6 +1,7 @@
 use std::env;
 use std::error::Error;
 
+use colored::*;
 use serde_json::json;
 use tokei::{Config, Languages};
 use warp::Filter;
@@ -50,6 +51,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let served_zon_ui = served_zon_ui_index_html.or(served_zon_ui_index_js);
     let served_zon_json = warp::path("input").map(move || format!("{}", zon_json));
     let served = served_zon_ui.or(served_zon_json);
+    println!(
+        "{}{}",
+        "Shining light on your project at ",
+        "http://localhost:3030/ui".cyan()
+    );
     warp::serve(served).run(([127, 0, 0, 1], 3030)).await;
 
     // Close
