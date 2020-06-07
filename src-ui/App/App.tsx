@@ -36,7 +36,7 @@ const App: SFC = function App() {
     }
   }, [data]);
 
-  return data == null ? <p>Loading...</p> : <SlocView data={data} />;
+  return data == null ? <h3 style={{ color: 'white' }}>Loading...</h3> : <SlocView data={data} />;
 };
 
 export default App;

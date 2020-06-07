@@ -259,10 +259,10 @@ const SlocList: SFC<SlocListProps> = function SlocList(props) {
 
   return (
     <div>
-      <h4 style={{ color: 'white' }}>
+      <h3 style={{ color: 'white' }}>
         <strong>{root.data.filename}</strong>
         {`: ${root.value}`}
-      </h4>
+      </h3>
       {(root.children || []).map((d) => (
         <p key={d.data.path}>
           <Button
@@ -289,6 +289,8 @@ const SlocList: SFC<SlocListProps> = function SlocList(props) {
 const SlocViewGrid = styled.div`
   display: grid;
   grid-auto-flow: column;
+  column-gap: 20px;
+  justify-content: start;
 `;
 
 /**
