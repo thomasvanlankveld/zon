@@ -251,7 +251,7 @@ const SlocList: SFC<SlocListProps> = function SlocList(props) {
   const { root, isHighlighted, hoveredListItemFilePath, setHoveredListItemFilePath } = props;
 
   return (
-    <>
+    <div>
       <h4 style={{ color: 'white' }}>
         <strong>{root.data.filename}</strong>
         {`: ${root.value}`}
@@ -275,9 +275,14 @@ const SlocList: SFC<SlocListProps> = function SlocList(props) {
           </Button>
         </p>
       ))}
-    </>
+    </div>
   );
 };
+
+const SlocViewGrid = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+`;
 
 /**
  *
@@ -334,7 +339,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   }, [diagramRoot, hoveredArcFilePath]);
 
   return (
-    <div>
+    <SlocViewGrid>
       <SlocDiagram
         root={diagramRoot}
         rootParentPath={diagramRootParentPath}
@@ -349,7 +354,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         hoveredListItemFilePath={hoveredListItemFilePath}
         setHoveredListItemFilePath={setHoveredListItemFilePath}
       />
-    </div>
+    </SlocViewGrid>
   );
 };
 
