@@ -17,10 +17,11 @@ For now, using Zon requires building it from source.
 ### Installation steps
 
 1. Clone the repo and `cd` into it.
-2. `yarn build`
-3. `cargo build`
-4. Copy the binary from `target/debug/zon` to some place in your `PATH`.
+2. `yarn`
+3. `yarn build`
+4. `cargo build`
+5. Copy the binary from `target/debug/zon` to some place in your `PATH`. Usage will require opening a new terminal window.
 
 ## How to use
 
-Navigate to a codebase you wish to inspect, and run `zon`. Open a browser and go to `http://localhost/ui`. That's it!
+Navigate to a codebase you wish to inspect, and run `zon`. Open a browser and go to `http://localhost/ui` to see the result!
