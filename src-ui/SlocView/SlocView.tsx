@@ -114,14 +114,17 @@ function selectNodeByPath<T extends HierarchyNode<Project>>(files: T[], path: st
 interface SlocViewBreadCrumbsProps {
   projectRoot: SlocViewNode;
   path: string;
+  isHighlighted: (d: SlocViewNode) => boolean;
+  setDiagramRootFilePath: (path: string) => void;
 }
 
 /**
  *
  */
 const SlocViewBreadCrumbs: SFC<SlocViewBreadCrumbsProps> = function SlocViewBreadCrumbs(props) {
-  const { projectRoot, path } = props;
+  const { projectRoot, path, isHighlighted, setDiagramRootFilePath } = props;
 
+  // Get breadcrumb node
   const breadCrumbNode = projectRoot.descendants().find((node) => node.data.path === path);
   if (breadCrumbNode == null)
     throw new Error(`No node in ${projectRoot.data.path} with path ${path}`);
@@ -132,9 +135,16 @@ const SlocViewBreadCrumbs: SFC<SlocViewBreadCrumbsProps> = function SlocViewBrea
         .ancestors()
         .reverse()
         .flatMap((d) => [
-          <span style={{ color: d.data.baseColor }} key={d.data.path}>
-            {d.data.filename}
-          </span>,
+          <Button
+            style={{
+              color: colorNode(d, { isHighlighted: isHighlighted(d) }),
+              cursor: 'pointer',
+            }}
+            key={d.data.path}
+            onClick={(): void => setDiagramRootFilePath(d.data.path)}
+          >
+            <span>{d.data.filename}</span>
+          </Button>,
           <span style={{ color: 'white' }} key={`${d.data.path}-/`}>
             {' / '}
           </span>,
@@ -382,7 +392,12 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
 
   return (
     <>
-      <SlocViewBreadCrumbs projectRoot={root} path={listRoot.data.path} />
+      <SlocViewBreadCrumbs
+        projectRoot={root}
+        path={listRoot.data.path}
+        isHighlighted={isHighlighted}
+        setDiagramRootFilePath={setDiagramRootFilePath}
+      />
       <SlocViewGrid>
         <SlocDiagram
           root={diagramRoot}
