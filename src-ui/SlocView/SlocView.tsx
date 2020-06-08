@@ -111,6 +111,39 @@ function selectNodeByPath<T extends HierarchyNode<Project>>(files: T[], path: st
   return selectedFile != null ? selectedFile : null;
 }
 
+interface SlocViewBreadCrumbsProps {
+  projectRoot: SlocViewNode;
+  path: string;
+}
+
+/**
+ *
+ */
+const SlocViewBreadCrumbs: SFC<SlocViewBreadCrumbsProps> = function SlocViewBreadCrumbs(props) {
+  const { projectRoot, path } = props;
+
+  const breadCrumbNode = projectRoot.descendants().find((node) => node.data.path === path);
+  if (breadCrumbNode == null)
+    throw new Error(`No node in ${projectRoot.data.path} with path ${path}`);
+
+  return (
+    <div style={{ marginBottom: '20px' }}>
+      {breadCrumbNode
+        .ancestors()
+        .reverse()
+        .flatMap((d) => [
+          <span style={{ color: d.data.baseColor }} key={d.data.path}>
+            {d.data.filename}
+          </span>,
+          <span style={{ color: 'white' }} key={`${d.data.path}-/`}>
+            {' / '}
+          </span>,
+        ])
+        .slice(0, -1)}
+    </div>
+  );
+};
+
 /**
  *
  */
@@ -187,11 +220,11 @@ const SlocViewPath: SFC<SlocViewPathProps> = function SlocViewPath(props) {
 
 interface SlocDiagramProps {
   root: SlocViewNode;
-  rootParentPath: string | null;
+  rootParentPath: string;
   isHighlighted: (d: SlocViewNode) => boolean;
   hoveredArcFilePath: string | null;
   setHoveredArcFilePath: (path: string | null) => void;
-  setDiagramRootFilePath: (path: string | null) => void;
+  setDiagramRootFilePath: (path: string) => void;
 }
 
 /**
@@ -242,7 +275,7 @@ interface SlocListProps {
   isHighlighted: (d: SlocViewNode) => boolean;
   hoveredListItemFilePath: string | null;
   setHoveredListItemFilePath: (path: string | null) => void;
-  setDiagramRootFilePath: (path: string | null) => void;
+  setDiagramRootFilePath: (path: string) => void;
 }
 
 /**
@@ -298,9 +331,10 @@ const SlocViewGrid = styled.div`
  */
 const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   const { data } = props;
+  const projectRootPath = data.path;
 
   // Path of the selected file
-  const [diagramRootFilePath, setDiagramRootFilePath] = useState<string | null>(null);
+  const [diagramRootFilePath, setDiagramRootFilePath] = useState<string>(projectRootPath);
 
   // Path of the file for the hovered arc
   const [hoveredArcFilePath, setHoveredArcFilePath] = useState<string | null>(null);
@@ -323,14 +357,13 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   const { diagramRoot, diagramRootParentPath } = useMemo(() => {
     // Get the diagram root
     const unpartitionedDiagramRoot = ((): HierarchyNode<ColoredProject> => {
-      if (!diagramRootFilePath) return root;
       const selectedFile = selectNodeByPath(root.descendants(), diagramRootFilePath);
       if (!selectedFile) return root;
       return selectedFile;
     })();
 
     // Get the path to the parent of the diagram root
-    const parentPath = unpartitionedDiagramRoot.parent?.data.path || null;
+    const parentPath = unpartitionedDiagramRoot.parent?.data.path || projectRootPath;
 
     // Repartition the data so the diagram root spans 360 degrees
     const partitionedDiagramRoot = zonPartition(unpartitionedDiagramRoot.data);
@@ -348,23 +381,26 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   }, [diagramRoot, hoveredArcFilePath]);
 
   return (
-    <SlocViewGrid>
-      <SlocDiagram
-        root={diagramRoot}
-        rootParentPath={diagramRootParentPath}
-        isHighlighted={isHighlighted}
-        hoveredArcFilePath={hoveredArcFilePath}
-        setHoveredArcFilePath={setHoveredArcFilePath}
-        setDiagramRootFilePath={setDiagramRootFilePath}
-      />
-      <SlocList
-        root={listRoot}
-        isHighlighted={isHighlighted}
-        hoveredListItemFilePath={hoveredListItemFilePath}
-        setHoveredListItemFilePath={setHoveredListItemFilePath}
-        setDiagramRootFilePath={setDiagramRootFilePath}
-      />
-    </SlocViewGrid>
+    <>
+      <SlocViewBreadCrumbs projectRoot={root} path={listRoot.data.path} />
+      <SlocViewGrid>
+        <SlocDiagram
+          root={diagramRoot}
+          rootParentPath={diagramRootParentPath}
+          isHighlighted={isHighlighted}
+          hoveredArcFilePath={hoveredArcFilePath}
+          setHoveredArcFilePath={setHoveredArcFilePath}
+          setDiagramRootFilePath={setDiagramRootFilePath}
+        />
+        <SlocList
+          root={listRoot}
+          isHighlighted={isHighlighted}
+          hoveredListItemFilePath={hoveredListItemFilePath}
+          setHoveredListItemFilePath={setHoveredListItemFilePath}
+          setDiagramRootFilePath={setDiagramRootFilePath}
+        />
+      </SlocViewGrid>
+    </>
   );
 };
 

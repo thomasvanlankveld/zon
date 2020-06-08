@@ -59,10 +59,10 @@ export default function tokeiAdapter(input: unknown, projectName: string): Proje
   // Extract a list of file stats
   const languages = Object.values(parsed.inner);
   const files = flatMap(languages, (language) => language.stats).map((file) => {
-    // Swap any "current folder" specifiers in the file paths with the project name
+    // Drop any "current folder" specifiers in the file paths and prepend the project name
     const path = toPathArray(file.name);
     if (path[0] === '.') path.splice(0, 1);
-    return { ...file, name: toPathString(path) };
+    return { ...file, name: toPathString([projectName].concat(path)) };
   });
 
   // Construct the file tree

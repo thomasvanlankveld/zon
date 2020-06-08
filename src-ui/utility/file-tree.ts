@@ -105,14 +105,20 @@ export function filenameFromPath(path: string): string {
  * Adds a node to a file tree using its path as a location specifier
  */
 export function addNodeByPath(root: Folder, path: string, node: FileSystemNode): void {
+  // Check that node path fits in root
+  if (root.filename !== toPathArray(path)[0]) {
+    throw new Error(`Can't add node with path ${path} to a tree with root path ${root.path}`);
+  }
+
+  // Initialize parent and path segments
   let lastKnownFolder = root;
-  const pathSegments = toPathArray(path).slice(0, -1);
+  const pathSegments = toPathArray(path).slice(1, -1);
 
   // For every path element, add a folder to the tree if necessary
   pathSegments.forEach((elem, i) => {
     // Try to find the next folder
     let nextFolder = lastKnownFolder.children.find((childNode) => childNode.filename === elem);
-    const nextFolderPath = toPathString(pathSegments.slice(0, i + 1));
+    const nextFolderPath = toPathString([root.filename].concat(pathSegments.slice(0, i + 1)));
 
     // If it does not exist, create it and append it to the previous folder
     if (nextFolder == null) {
