@@ -24,4 +24,4 @@ For now, using Zon requires building it from source.
 
 ## How to use
 
-Navigate to a codebase you wish to inspect, and run `zon`. Open a browser and go to `http://localhost/ui` to see the result!
+Navigate to a codebase you wish to inspect, and run `zon`. Open a browser and go to `http://localhost:3030/ui` to see the result!
