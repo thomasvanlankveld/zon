@@ -1,25 +1,13 @@
 import React, { SFC, useState, useMemo, useCallback } from 'react';
-import {
-  arc,
-  interpolateRainbow,
-  hierarchy,
-  partition,
-  HierarchyRectangularNode,
-  lab,
-  HierarchyNode,
-} from 'd3';
+import { arc, HierarchyRectangularNode, HierarchyNode } from 'd3';
 import styled from 'styled-components';
 
 import { Project } from '../project/Project';
+import zonPartition from './zonPartition';
+import zonColoredHierarchy, { NodeColors, colorNode } from './zonColoredHierarchy';
 
 interface SlocViewProps {
   data: Project;
-}
-
-interface NodeColors {
-  baseColor: string;
-  highlightedColor: string;
-  pressedColor: string;
 }
 
 type ColoredProject = Project & NodeColors;
@@ -28,63 +16,6 @@ type SlocViewNode = HierarchyRectangularNode<ColoredProject>;
 
 const width = 500;
 const height = 500;
-
-/**
- *
- */
-function zonPartition<T extends Project>(data: T): HierarchyRectangularNode<T> {
-  // Add hierarchical helper methods and data
-  const root = hierarchy(data)
-    // Compute the number of lines of every branch as the sum of the number of lines of all its children
-    .sum((d) => (d as { numberOfLines: number }).numberOfLines)
-    // Sort hierarchy by number of lines, high to low
-    .sort((a, b) => (a.value && b.value ? b.value - a.value : 0));
-
-  // Add x0, x1, y0 and y1
-  return partition<T>()(root);
-}
-
-/**
- *
- */
-function zonColoredPartition(data: Project): SlocViewNode {
-  // Partition the data
-  const root = zonPartition(data);
-
-  // Add color values to each node
-  /* eslint-disable no-param-reassign */
-  root.each((d) => {
-    // The base color is based on the node's center within the partition
-    const baseColor = interpolateRainbow(d.x0 + (d.x1 - d.x0) / 2);
-    (d as SlocViewNode).data.baseColor = baseColor;
-
-    // The highlighted color is a brighter version of the base color
-    const highlightedColor = lab(baseColor).brighter(0.5).toString();
-    (d as SlocViewNode).data.highlightedColor = highlightedColor;
-
-    // The pressed color is an even brighter version of the base color
-    const pressedColor = lab(baseColor).brighter(1).toString();
-    (d as SlocViewNode).data.pressedColor = pressedColor;
-  });
-  /* eslint-enable no-param-reassign */
-
-  return root as SlocViewNode;
-}
-
-/**
- *
- */
-function colorNode(
-  d: SlocViewNode,
-  {
-    isHighlighted = false,
-    isPressed = false,
-  }: { isHighlighted?: boolean; isPressed?: boolean } = {}
-): string {
-  if (isPressed) return d.data.pressedColor;
-  if (isHighlighted) return d.data.highlightedColor;
-  return d.data.baseColor;
-}
 
 /**
  *
@@ -361,7 +292,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   );
 
   // Construct a Zon-specific hierarchy
-  const root = useMemo(() => zonColoredPartition(data), [data]);
+  const root = useMemo(() => zonColoredHierarchy(data), [data]);
 
   // Select root node for the diagram (either root or the selected file)
   const { diagramRoot, diagramRootParentPath } = useMemo(() => {
