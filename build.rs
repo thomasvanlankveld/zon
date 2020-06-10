@@ -1,10 +1,11 @@
 use std::env;
-use std::error::Error;
 use std::fs;
 use std::path::Path;
 
+use anyhow::Result;
+
 // Generate a loader program to include the UI into the binary as static strings
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() -> Result<()> {
     // Get destination paths
     let out_dir = env::var_os("OUT_DIR").unwrap();
     let loader_dest_path = Path::new(&out_dir).join("loader.rs");

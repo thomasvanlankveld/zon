@@ -1,6 +1,6 @@
 use std::env;
-use std::error::Error;
 
+use anyhow::Result;
 use colored::*;
 use serde_json::json;
 use tokei::{Config, Languages};
@@ -10,7 +10,7 @@ use warp::Filter;
 include!(concat!(env!("OUT_DIR"), "/loader.rs"));
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>> {
+async fn main() -> Result<()> {
     // Get project name
     let project_path = env::current_dir()?;
     let project_name = project_path
