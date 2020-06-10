@@ -1,37 +1,18 @@
 import React, { SFC, useState, useMemo, useCallback } from 'react';
-import { arc, HierarchyRectangularNode, HierarchyNode } from 'd3';
+import { HierarchyNode } from 'd3';
 import styled from 'styled-components';
 
 import { Project } from '../project/Project';
 import zonPartition from './zonPartition';
-import zonColoredHierarchy, { NodeColors, colorNode } from './zonColoredHierarchy';
+import zonColoredHierarchy, { colorNode } from './zonColoredHierarchy';
+import SlocViewBreadCrumbs from './SlocViewBreadCrumbs';
+import { SlocViewNode, ColoredProject } from './SlocViewNode';
+import Button from '../component-lib/Button';
+import SlocViewPath from './Diagram/SlocViewPath';
+import { width, height } from './config';
 
 interface SlocViewProps {
   data: Project;
-}
-
-type ColoredProject = Project & NodeColors;
-
-type SlocViewNode = HierarchyRectangularNode<ColoredProject>;
-
-const width = 500;
-const height = 500;
-
-/**
- *
- */
-function slocViewArc(d: SlocViewNode): string | undefined {
-  const radius = Math.min(width, height) / 2;
-  const padding = 0.005;
-  return (
-    arc().padRadius(padding)({
-      innerRadius: radius * d.y0,
-      outerRadius: radius * d.y1,
-      startAngle: 2 * Math.PI * d.x0,
-      endAngle: 2 * Math.PI * d.x1,
-      padAngle: padding,
-    }) || undefined
-  );
 }
 
 /**
@@ -41,123 +22,6 @@ function selectNodeByPath<T extends HierarchyNode<Project>>(files: T[], path: st
   const selectedFile = files.find((file) => file.data.path === path);
   return selectedFile != null ? selectedFile : null;
 }
-
-interface SlocViewBreadCrumbsProps {
-  projectRoot: SlocViewNode;
-  path: string;
-  isHighlighted: (d: SlocViewNode) => boolean;
-  setDiagramRootFilePath: (path: string) => void;
-}
-
-/**
- *
- */
-const SlocViewBreadCrumbs: SFC<SlocViewBreadCrumbsProps> = function SlocViewBreadCrumbs(props) {
-  const { projectRoot, path, isHighlighted, setDiagramRootFilePath } = props;
-
-  // Get breadcrumb node
-  const breadCrumbNode = projectRoot.descendants().find((node) => node.data.path === path);
-  if (breadCrumbNode == null)
-    throw new Error(`No node in ${projectRoot.data.path} with path ${path}`);
-
-  return (
-    <div style={{ marginBottom: '20px' }}>
-      {breadCrumbNode
-        .ancestors()
-        .reverse()
-        .flatMap((d) => [
-          <Button
-            style={{
-              color: colorNode(d, { isHighlighted: isHighlighted(d) }),
-              cursor: 'pointer',
-            }}
-            key={d.data.path}
-            onClick={(): void => setDiagramRootFilePath(d.data.path)}
-          >
-            <span>{d.data.filename}</span>
-          </Button>,
-          <span style={{ color: 'white' }} key={`${d.data.path}-/`}>
-            {' / '}
-          </span>,
-        ])
-        .slice(0, -1)}
-    </div>
-  );
-};
-
-/**
- *
- */
-const Button = styled.button`
-  /* Basics */
-  padding: 0;
-  border: none;
-  background-color: transparent;
-
-  /* Change the font styles in all browsers. */
-  font: inherit; /* 1 */
-  color: inherit;
-  line-height: 1.15; /* 1 */
-
-  /* Remove the margin in Firefox and Safari. */
-  margin: 0; /* 2 */
-
-  /* Show the overflow in Edge. */
-  overflow: visible;
-
-  /* Remove the inheritance of text transform in Firefox. */
-  text-transform: none;
-
-  /* Correct the inability to style clickable types in iOS and Safari. */
-  -webkit-appearance: button;
-`;
-
-interface PathProps {
-  datum: SlocViewNode;
-  isHighlighted: boolean;
-}
-
-/**
- *
- */
-const Path = styled.path<PathProps>`
-  cursor: pointer;
-  fill: ${(props): string => {
-    const { datum, isHighlighted } = props;
-    return colorNode(datum, { isHighlighted });
-  }};
-  &:active {
-    fill: ${(props): string => colorNode(props.datum, { isPressed: true })};
-  }
-`;
-
-interface SlocViewPathProps {
-  d: SlocViewNode;
-  isHighlighted: boolean;
-  hoveredFilePath: string | null;
-  setHoveredFilePath: (path: string | null) => void;
-  onClick: (path: string) => void;
-}
-
-/**
- *
- */
-const SlocViewPath: SFC<SlocViewPathProps> = function SlocViewPath(props) {
-  const { d, isHighlighted, hoveredFilePath, setHoveredFilePath, onClick } = props;
-
-  return (
-    <Path
-      d={slocViewArc(d)}
-      datum={d}
-      isHighlighted={isHighlighted}
-      onMouseEnter={(): void => setHoveredFilePath(d.data.path)}
-      onMouseLeave={(): void => {
-        if (hoveredFilePath === d.data.path) setHoveredFilePath(null);
-      }}
-      onClick={(): void => onClick(d.data.path)}
-    />
-  );
-};
 
 interface SlocDiagramProps {
   root: SlocViewNode;
