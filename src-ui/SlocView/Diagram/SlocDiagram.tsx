@@ -11,6 +11,7 @@ interface SlocDiagramProps {
   setHoveredArcFilePath: (path: string | null) => void;
   setDiagramRootFilePath: (path: string) => void;
 }
+
 /**
  *
  */

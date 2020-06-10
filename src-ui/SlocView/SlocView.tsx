@@ -4,11 +4,11 @@ import styled from 'styled-components';
 
 import { Project } from '../project/Project';
 import zonPartition from './zonPartition';
-import zonColoredHierarchy, { colorNode } from './zonColoredHierarchy';
+import zonColoredHierarchy from './zonColoredHierarchy';
 import SlocViewBreadCrumbs from './SlocViewBreadCrumbs';
-import { SlocViewNode, ColoredProject } from './SlocViewNode';
-import Button from '../component-lib/Button';
+import { ColoredProject } from './SlocViewNode';
 import SlocDiagram from './Diagram/SlocDiagram';
+import SlocList from './SlocList';
 
 interface SlocViewProps {
   data: Project;
@@ -21,55 +21,6 @@ function selectNodeByPath<T extends HierarchyNode<Project>>(files: T[], path: st
   const selectedFile = files.find((file) => file.data.path === path);
   return selectedFile != null ? selectedFile : null;
 }
-
-interface SlocListProps {
-  root: SlocViewNode;
-  isHighlighted: (d: SlocViewNode) => boolean;
-  hoveredListItemFilePath: string | null;
-  setHoveredListItemFilePath: (path: string | null) => void;
-  setDiagramRootFilePath: (path: string) => void;
-}
-
-/**
- *
- */
-const SlocList: SFC<SlocListProps> = function SlocList(props) {
-  const {
-    root,
-    isHighlighted,
-    hoveredListItemFilePath,
-    setHoveredListItemFilePath,
-    setDiagramRootFilePath,
-  } = props;
-
-  return (
-    <div>
-      <h3 style={{ color: 'white' }}>
-        <strong>{root.data.filename}</strong>
-        {`: ${root.value}`}
-      </h3>
-      {(root.children || []).map((d) => (
-        <p key={d.data.path}>
-          <Button
-            style={{
-              color: colorNode(d, { isHighlighted: isHighlighted(d) }),
-              cursor: 'pointer',
-              // textDecoration: hoveredFileName === d.filename ? 'underline' : 'none',
-            }}
-            onClick={(): void => setDiagramRootFilePath(d.data.path)}
-            onMouseEnter={(): void => setHoveredListItemFilePath(d.data.path)}
-            onMouseLeave={(): void => {
-              if (hoveredListItemFilePath === d.data.path) setHoveredListItemFilePath(null);
-            }}
-          >
-            <strong>{d.data.filename}</strong>
-            {`: ${d.value} lines`}
-          </Button>
-        </p>
-      ))}
-    </div>
-  );
-};
 
 const SlocViewGrid = styled.div`
   display: grid;
