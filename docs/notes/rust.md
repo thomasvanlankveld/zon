@@ -17,9 +17,13 @@ Rust zip libraries are looking pretty bleak:
 - [GitHub - lifthrasiir/rust-zip: A simple rust library for working with ZIP archives](https://github.com/lifthrasiir/rust-zip)
 - [GitHub - slackito/zip: A simple rust library for working with ZIP archives](https://github.com/slackito/zip)
 
+## Errors
+
+- [thiserror - Rust](https://docs.rs/thiserror/1.0.19/thiserror/)
+
 ## Server
 
-## Warp
+### Warp
 
 - [rust warp at DuckDuckGo](https://duckduckgo.com/?q=rust+warp&t=ffab&atb=v171-1&ia=software)
 - [seanmonstar/warp: A super-easy, composable, web server framework for warp speeds.](https://github.com/seanmonstar/warp)
