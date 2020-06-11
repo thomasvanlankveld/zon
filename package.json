@@ -8,8 +8,8 @@
   "private": true,
   "scripts": {
     "develop": "concurrently -r \"npm:type-check:watch\" \"npm:start\"",
-    "start": "parcel ./src-ui/index.html --public-url '/ui'",
-    "build": "yarn run type-check && parcel build ./src-ui/index.html --public-url '/ui'",
+    "start": "parcel ./src-ui/index.html",
+    "build": "yarn run type-check && parcel build ./src-ui/index.html",
     "test": "jest",
     "type-check": "tsc --noEmit --incremental false",
     "type-check:watch": "tsc --noEmit --watch",

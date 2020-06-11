@@ -18,7 +18,7 @@ fn main() -> Result<()> {
     let html = String::from_utf8_lossy(&html_u8);
 
     // Get js file contents
-    let js_filename = html.split("<script src=\"/ui/").collect::<Vec<&str>>()[1]
+    let js_filename = html.split("<script src=\"/").collect::<Vec<&str>>()[1]
         .split("\"></script>")
         .collect::<Vec<&str>>()[0];
     let js_dist_filename = format!("{}{}", "dist/", &js_filename);

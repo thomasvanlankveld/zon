@@ -31,14 +31,14 @@ async fn main() -> Result<()> {
     .to_string();
 
     // Get html contents and headers
-    let served_zon_ui_index_html = warp::path!("ui")
+    let served_zon_ui_index_html = warp::path::end()
         .map(|| html())
         .with(warp::reply::with::header("content-type", "text/html"))
         .with(warp::reply::with::header("content-length", html().len()))
         .with(warp::reply::with::header("accept-ranges", "bytes"));
 
     // Get js contents and headers
-    let served_zon_ui_index_js = warp::path!("ui" / "index.js")
+    let served_zon_ui_index_js = warp::path!("index.js")
         .map(|| js())
         .with(warp::reply::with::header(
             "content-type",
@@ -54,7 +54,7 @@ async fn main() -> Result<()> {
     println!(
         "{}{}",
         "Shining light on your project at ",
-        "http://localhost:3030/ui".cyan()
+        "http://localhost:3030".cyan()
     );
     warp::serve(served).run(([127, 0, 0, 1], 3030)).await;
 
