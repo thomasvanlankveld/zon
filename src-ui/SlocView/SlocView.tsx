@@ -3,8 +3,8 @@ import { HierarchyNode } from 'd3';
 import styled from 'styled-components';
 
 import { Project } from '../project/Project';
-import zonPartition from './zonPartition';
-import zonColoredHierarchy from './zonColoredHierarchy';
+import zonPartition from './partition';
+import zonColoredHierarchy from './color';
 import SlocViewBreadCrumbs from './SlocViewBreadCrumbs';
 import { ColoredProject } from './SlocViewNode';
 import SlocDiagram from './Diagram/SlocDiagram';

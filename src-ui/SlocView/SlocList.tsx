@@ -1,5 +1,5 @@
 import React, { SFC } from 'react';
-import { colorNode } from './zonColoredHierarchy';
+import { colorNode } from './color';
 import { SlocViewNode } from './SlocViewNode';
 import Button from '../component-lib/Button';
 
@@ -22,6 +22,7 @@ const SlocList: SFC<SlocListProps> = function SlocList(props) {
     setHoveredListItemFilePath,
     setDiagramRootFilePath,
   } = props;
+
   return (
     <div>
       <h3 style={{ color: 'white' }}>

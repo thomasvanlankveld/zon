@@ -1,7 +1,7 @@
 import { HierarchyRectangularNode, interpolateRainbow, lab } from 'd3';
 
 import { Project } from '../project/Project';
-import zonPartition from './zonPartition';
+import zonPartition from './partition';
 
 export interface NodeColors {
   baseColor: string;

@@ -1,5 +1,5 @@
 import React, { SFC } from 'react';
-import { colorNode } from './zonColoredHierarchy';
+import { colorNode } from './color';
 import Button from '../component-lib/Button';
 import { SlocViewNode } from './SlocViewNode';
 

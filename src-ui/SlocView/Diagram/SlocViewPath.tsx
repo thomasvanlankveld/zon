@@ -2,7 +2,7 @@ import React, { SFC } from 'react';
 import styled from 'styled-components';
 import { arc } from 'd3';
 
-import { colorNode } from '../zonColoredHierarchy';
+import { colorNode } from '../color';
 import { SlocViewNode } from '../SlocViewNode';
 import { width, height } from '../config';
 
@@ -41,6 +41,7 @@ const Path = styled.path<PathProps>`
     fill: ${(props): string => colorNode(props.datum, { isPressed: true })};
   }
 `;
+
 interface SlocViewPathProps {
   d: SlocViewNode;
   isHighlighted: boolean;
@@ -48,11 +49,13 @@ interface SlocViewPathProps {
   setHoveredFilePath: (path: string | null) => void;
   onClick: (path: string) => void;
 }
+
 /**
  *
  */
 const SlocViewPath: SFC<SlocViewPathProps> = function SlocViewPath(props) {
   const { d, isHighlighted, hoveredFilePath, setHoveredFilePath, onClick } = props;
+
   return (
     <Path
       d={slocViewArc(d)}
