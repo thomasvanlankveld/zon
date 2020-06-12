@@ -10,7 +10,7 @@
     "develop": "concurrently -r \"npm:type-check:watch\" \"npm:start\"",
     "start": "parcel ./src-ui/index.html",
     "build": "yarn run type-check && parcel build ./src-ui/index.html",
-    "test": "jest",
+    "test": "jest --coverage",
     "type-check": "tsc --noEmit --incremental false",
     "type-check:watch": "tsc --noEmit --watch",
     "lint": "eslint './src-ui/**/*.{ts,tsx}'",
