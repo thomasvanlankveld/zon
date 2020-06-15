@@ -1,4 +1,4 @@
-import { hierarchy, partition, HierarchyRectangularNode } from 'd3';
+import { hierarchy, partition, HierarchyRectangularNode, HierarchyNode } from 'd3';
 import { Project } from '../project/Project';
 
 /**
@@ -14,4 +14,15 @@ export default function zonPartition<T extends Project>(data: T): HierarchyRecta
 
   // Add x0, x1, y0 and y1
   return partition<T>()(root);
+}
+
+/**
+ *
+ */
+export function selectNodeByPath<T extends HierarchyNode<Project>>(
+  files: T[],
+  path: string
+): T | null {
+  const selectedFile = files.find((file) => file.data.path === path);
+  return selectedFile != null ? selectedFile : null;
 }

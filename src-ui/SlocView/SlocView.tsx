@@ -3,7 +3,7 @@ import { HierarchyNode } from 'd3';
 import styled from 'styled-components';
 
 import { Project } from '../project/Project';
-import zonPartition from './partition';
+import zonPartition, { selectNodeByPath } from './partition';
 import zonColoredHierarchy from './color';
 import SlocViewBreadCrumbs from './SlocViewBreadCrumbs';
 import { ColoredProject } from './SlocViewNode';
@@ -17,11 +17,6 @@ interface SlocViewProps {
 /**
  *
  */
-function selectNodeByPath<T extends HierarchyNode<Project>>(files: T[], path: string): T | null {
-  const selectedFile = files.find((file) => file.data.path === path);
-  return selectedFile != null ? selectedFile : null;
-}
-
 const SlocViewGrid = styled.div`
   display: grid;
   grid-auto-flow: column;
@@ -77,11 +72,11 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
 
   // Select root node for the list view (either root or the file of the hovered arc)
   const listRoot = useMemo(() => {
-    if (!hoveredArcFilePath) return diagramRoot;
-    const selectedFile = selectNodeByPath(diagramRoot.descendants(), hoveredArcFilePath);
-    if (!selectedFile) return diagramRoot;
+    if (!hoveredArcFilePath) return root;
+    const selectedFile = selectNodeByPath(root.descendants(), hoveredArcFilePath);
+    if (!selectedFile) return root;
     return selectedFile;
-  }, [diagramRoot, hoveredArcFilePath]);
+  }, [root, hoveredArcFilePath]);
 
   return (
     <>
