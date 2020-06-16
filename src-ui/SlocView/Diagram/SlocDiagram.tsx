@@ -7,7 +7,7 @@ import { width, height } from '../config';
 import zonPartition, { selectNodeByPath } from '../partition';
 
 interface SlocDiagramProps {
-  root: SlocViewNode;
+  projectRoot: SlocViewNode;
   diagramRootFilePath: string;
   isHighlighted: (d: SlocViewNode) => boolean;
   hoveredArcFilePath: string | null;
@@ -20,7 +20,7 @@ interface SlocDiagramProps {
  */
 const SlocDiagram: SFC<SlocDiagramProps> = function SlocDiagram(props) {
   const {
-    root,
+    projectRoot,
     diagramRootFilePath,
     isHighlighted,
     hoveredArcFilePath,
@@ -32,20 +32,20 @@ const SlocDiagram: SFC<SlocDiagramProps> = function SlocDiagram(props) {
   const { diagramRoot, diagramRootParentPath } = useMemo(() => {
     // Get the diagram root
     const unpartitionedDiagramRoot = ((): HierarchyNode<ColoredProject> => {
-      const selectedFile = selectNodeByPath(root.descendants(), diagramRootFilePath);
-      if (!selectedFile) return root;
+      const selectedFile = selectNodeByPath(projectRoot.descendants(), diagramRootFilePath);
+      if (!selectedFile) return projectRoot;
       return selectedFile;
     })();
 
     // Get the path to the parent of the diagram root
-    const parentPath = unpartitionedDiagramRoot.parent?.data.path || root.data.path;
+    const parentPath = unpartitionedDiagramRoot.parent?.data.path || projectRoot.data.path;
 
     // Repartition the data so the diagram root spans 360 degrees
     const partitionedDiagramRoot = zonPartition(unpartitionedDiagramRoot.data);
 
     // Return data
     return { diagramRoot: partitionedDiagramRoot, diagramRootParentPath: parentPath };
-  }, [root, diagramRootFilePath]);
+  }, [projectRoot, diagramRootFilePath]);
 
   // Use the path of the clicked item to navigate up or down
   function navigateFromPathClick(path: string): void {

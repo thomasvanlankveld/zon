@@ -3,7 +3,6 @@ import { HierarchyNode } from 'd3';
 import styled from 'styled-components';
 
 import { Project } from '../project/Project';
-import { selectNodeByPath } from './partition';
 import zonColoredHierarchy from './color';
 import SlocViewBreadCrumbs from './SlocViewBreadCrumbs';
 import SlocDiagram from './Diagram/SlocDiagram';
@@ -47,28 +46,20 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
     [hoveredArcFilePath, hoveredListItemFilePath]
   );
 
-  // Construct a Zon-specific hierarchy
-  const root = useMemo(() => zonColoredHierarchy(data), [data]);
-
-  // Select root node for the list view (either root or the file of the hovered arc)
-  const listRoot = useMemo(() => {
-    if (!hoveredArcFilePath) return root;
-    const selectedFile = selectNodeByPath(root.descendants(), hoveredArcFilePath);
-    if (!selectedFile) return root;
-    return selectedFile;
-  }, [root, hoveredArcFilePath]);
+  // Get hierarchy with colors
+  const projectRoot = useMemo(() => zonColoredHierarchy(data), [data]);
 
   return (
     <>
       <SlocViewBreadCrumbs
-        projectRoot={root}
-        path={listRoot.data.path}
+        projectRoot={projectRoot}
+        path={hoveredArcFilePath}
         isHighlighted={isHighlighted}
         setDiagramRootFilePath={setDiagramRootFilePath}
       />
       <SlocViewGrid>
         <SlocDiagram
-          root={root}
+          projectRoot={projectRoot}
           diagramRootFilePath={diagramRootFilePath}
           isHighlighted={isHighlighted}
           hoveredArcFilePath={hoveredArcFilePath}
@@ -76,7 +67,8 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
           setDiagramRootFilePath={setDiagramRootFilePath}
         />
         <SlocList
-          root={listRoot}
+          projectRoot={projectRoot}
+          listRootFilePath={hoveredArcFilePath}
           isHighlighted={isHighlighted}
           hoveredListItemFilePath={hoveredListItemFilePath}
           setHoveredListItemFilePath={setHoveredListItemFilePath}

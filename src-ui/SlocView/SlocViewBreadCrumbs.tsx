@@ -5,7 +5,7 @@ import { SlocViewNode } from './SlocViewNode';
 
 interface SlocViewBreadCrumbsProps {
   projectRoot: SlocViewNode;
-  path: string;
+  path: string | null;
   isHighlighted: (d: SlocViewNode) => boolean;
   setDiagramRootFilePath: (path: string) => void;
 }
@@ -14,10 +14,11 @@ interface SlocViewBreadCrumbsProps {
  */
 const SlocViewBreadCrumbs: SFC<SlocViewBreadCrumbsProps> = function SlocViewBreadCrumbs(props) {
   const { projectRoot, path, isHighlighted, setDiagramRootFilePath } = props;
-  // Get breadcrumb node
-  const breadCrumbNode = projectRoot.descendants().find((node) => node.data.path === path);
-  if (breadCrumbNode == null)
-    throw new Error(`No node in ${projectRoot.data.path} with path ${path}`);
+
+  // Get breadcrumb node (project root if none matches path)
+  const breadCrumbNode =
+    projectRoot.descendants().find((node) => node.data.path === path) || projectRoot;
+
   return (
     <div style={{ marginBottom: '20px' }}>
       {breadCrumbNode
