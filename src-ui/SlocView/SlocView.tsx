@@ -3,10 +3,9 @@ import { HierarchyNode } from 'd3';
 import styled from 'styled-components';
 
 import { Project } from '../project/Project';
-import zonPartition, { selectNodeByPath } from './partition';
+import { selectNodeByPath } from './partition';
 import zonColoredHierarchy from './color';
 import SlocViewBreadCrumbs from './SlocViewBreadCrumbs';
-import { ColoredProject } from './SlocViewNode';
 import SlocDiagram from './Diagram/SlocDiagram';
 import SlocList from './SlocList';
 
@@ -51,25 +50,6 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
   // Construct a Zon-specific hierarchy
   const root = useMemo(() => zonColoredHierarchy(data), [data]);
 
-  // Select root node for the diagram (either root or the selected file)
-  const { diagramRoot, diagramRootParentPath } = useMemo(() => {
-    // Get the diagram root
-    const unpartitionedDiagramRoot = ((): HierarchyNode<ColoredProject> => {
-      const selectedFile = selectNodeByPath(root.descendants(), diagramRootFilePath);
-      if (!selectedFile) return root;
-      return selectedFile;
-    })();
-
-    // Get the path to the parent of the diagram root
-    const parentPath = unpartitionedDiagramRoot.parent?.data.path || projectRootPath;
-
-    // Repartition the data so the diagram root spans 360 degrees
-    const partitionedDiagramRoot = zonPartition(unpartitionedDiagramRoot.data);
-
-    // Return data
-    return { diagramRoot: partitionedDiagramRoot, diagramRootParentPath: parentPath };
-  }, [root, diagramRootFilePath]);
-
   // Select root node for the list view (either root or the file of the hovered arc)
   const listRoot = useMemo(() => {
     if (!hoveredArcFilePath) return root;
@@ -88,8 +68,8 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
       />
       <SlocViewGrid>
         <SlocDiagram
-          root={diagramRoot}
-          rootParentPath={diagramRootParentPath}
+          root={root}
+          diagramRootFilePath={diagramRootFilePath}
           isHighlighted={isHighlighted}
           hoveredArcFilePath={hoveredArcFilePath}
           setHoveredArcFilePath={setHoveredArcFilePath}
