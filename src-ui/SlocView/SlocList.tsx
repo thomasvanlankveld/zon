@@ -1,12 +1,12 @@
-import React, { SFC, useMemo } from 'react';
+import React, { SFC } from 'react';
 import { colorNode } from './color';
 import { SlocViewNode } from './SlocViewNode';
 import Button from '../component-lib/Button';
-import { selectNodeByPath } from './partition';
+import { useSelectNode } from './partition';
 
 interface SlocListProps {
   projectRoot: SlocViewNode;
-  listRootFilePath: string | null;
+  listRootFilePath: string;
   isHighlighted: (d: SlocViewNode) => boolean;
   hoveredListItemFilePath: string | null;
   setHoveredListItemFilePath: (path: string | null) => void;
@@ -27,12 +27,7 @@ const SlocList: SFC<SlocListProps> = function SlocList(props) {
   } = props;
 
   // Select root node for the list view (either root or the file of the hovered arc)
-  const listRoot = useMemo(() => {
-    if (!listRootFilePath) return projectRoot;
-    const selectedFile = selectNodeByPath(projectRoot.descendants(), listRootFilePath);
-    if (!selectedFile) return projectRoot;
-    return selectedFile;
-  }, [projectRoot, listRootFilePath]);
+  const listRoot = useSelectNode(projectRoot, listRootFilePath);
 
   return (
     <div>

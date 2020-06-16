@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { hierarchy, partition, HierarchyRectangularNode, HierarchyNode } from 'd3';
 import { Project } from '../project/Project';
 
@@ -19,10 +20,14 @@ export default function zonPartition<T extends Project>(data: T): HierarchyRecta
 /**
  *
  */
-export function selectNodeByPath<T extends HierarchyNode<Project>>(
-  files: T[],
-  path: string
-): T | null {
-  const selectedFile = files.find((file) => file.data.path === path);
+export function selectNode<T extends HierarchyNode<Project>>(root: T, path: string): T | null {
+  const selectedFile = root.descendants().find((file) => file.data.path === path);
   return selectedFile != null ? selectedFile : null;
+}
+
+/**
+ *
+ */
+export function useSelectNode<T extends HierarchyNode<Project>>(root: T, path: string): T {
+  return useMemo(() => selectNode(root, path) || root, [root, path]);
 }

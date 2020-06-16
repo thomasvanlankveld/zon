@@ -2,10 +2,11 @@ import React, { SFC } from 'react';
 import { colorNode } from './color';
 import Button from '../component-lib/Button';
 import { SlocViewNode } from './SlocViewNode';
+import { useSelectNode } from './partition';
 
 interface SlocViewBreadCrumbsProps {
   projectRoot: SlocViewNode;
-  path: string | null;
+  path: string;
   isHighlighted: (d: SlocViewNode) => boolean;
   setDiagramRootFilePath: (path: string) => void;
 }
@@ -16,8 +17,7 @@ const SlocViewBreadCrumbs: SFC<SlocViewBreadCrumbsProps> = function SlocViewBrea
   const { projectRoot, path, isHighlighted, setDiagramRootFilePath } = props;
 
   // Get breadcrumb node (project root if none matches path)
-  const breadCrumbNode =
-    projectRoot.descendants().find((node) => node.data.path === path) || projectRoot;
+  const breadCrumbNode = useSelectNode(projectRoot, path);
 
   return (
     <div style={{ marginBottom: '20px' }}>

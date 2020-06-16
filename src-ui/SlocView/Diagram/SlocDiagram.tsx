@@ -1,10 +1,9 @@
 import React, { SFC, useMemo } from 'react';
-import { HierarchyNode } from 'd3';
 
-import { SlocViewNode, ColoredProject } from '../SlocViewNode';
+import { SlocViewNode } from '../SlocViewNode';
 import SlocViewPath from './SlocViewPath';
 import { width, height } from '../config';
-import zonPartition, { selectNodeByPath } from '../partition';
+import zonPartition, { selectNode } from '../partition';
 
 interface SlocDiagramProps {
   projectRoot: SlocViewNode;
@@ -31,11 +30,7 @@ const SlocDiagram: SFC<SlocDiagramProps> = function SlocDiagram(props) {
   // Select root node for the diagram (either root or the selected file)
   const { diagramRoot, diagramRootParentPath } = useMemo(() => {
     // Get the diagram root
-    const unpartitionedDiagramRoot = ((): HierarchyNode<ColoredProject> => {
-      const selectedFile = selectNodeByPath(projectRoot.descendants(), diagramRootFilePath);
-      if (!selectedFile) return projectRoot;
-      return selectedFile;
-    })();
+    const unpartitionedDiagramRoot = selectNode(projectRoot, diagramRootFilePath) || projectRoot;
 
     // Get the path to the parent of the diagram root
     const parentPath = unpartitionedDiagramRoot.parent?.data.path || projectRoot.data.path;

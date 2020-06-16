@@ -53,7 +53,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
     <>
       <SlocViewBreadCrumbs
         projectRoot={projectRoot}
-        path={hoveredArcFilePath}
+        path={hoveredArcFilePath || diagramRootFilePath}
         isHighlighted={isHighlighted}
         setDiagramRootFilePath={setDiagramRootFilePath}
       />
@@ -68,7 +68,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
         />
         <SlocList
           projectRoot={projectRoot}
-          listRootFilePath={hoveredArcFilePath}
+          listRootFilePath={hoveredArcFilePath || diagramRootFilePath}
           isHighlighted={isHighlighted}
           hoveredListItemFilePath={hoveredListItemFilePath}
           setHoveredListItemFilePath={setHoveredListItemFilePath}
