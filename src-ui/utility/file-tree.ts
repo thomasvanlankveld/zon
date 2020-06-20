@@ -97,8 +97,23 @@ export function isFolder<T extends object, U extends object>(
 /**
  * Get the name of a file from its path
  */
-export function filenameFromPath(path: string): string {
+export function pathTip(path: string): string {
   return toPathArray(path).slice(-1)[0];
+}
+
+/**
+ * Create file node
+ */
+export function createFile(path: string): File<{}>;
+export function createFile(path: string, fileProps: undefined): File<{}>;
+export function createFile<U extends object>(path: string, fileProps: U): File<U>;
+export function createFile<U extends object>(path: string, fileProps?: U): File<U | {}> {
+  return {
+    ...fileProps,
+    type: FileSystemNodeTypeFile,
+    filename: pathTip(path),
+    path,
+  };
 }
 
 /**
@@ -147,13 +162,8 @@ export function addNodeByPath(root: Folder, path: string, node: FileSystemNode):
 /**
  * Adds a file to a file tree using its path as a location specifier
  */
-export function addFileByPath(root: Folder, path: string, fileProps?: object): void {
-  addNodeByPath(root, path, {
-    ...fileProps,
-    type: FileSystemNodeTypeFile,
-    filename: filenameFromPath(path),
-    path,
-  });
+export function addFileByPath(root: Folder, path: string, fileProps: object): void {
+  addNodeByPath(root, path, createFile(path, fileProps));
 }
 
 /**
@@ -163,23 +173,23 @@ export function addFolderByPath(root: Folder, path: string, folderProps?: object
   addNodeByPath(root, path, {
     ...folderProps,
     type: FileSystemNodeTypeFolder,
-    filename: filenameFromPath(path),
+    filename: pathTip(path),
     path,
     children: [],
   });
 }
 
 /**
- * Create a file tree
+ * Create a file tree root
  */
-export function createTree<T extends object, U extends object>(
+export function createRoot<T extends object, U extends object>(
   rootFilename: string,
   rootProps: T
 ): Folder<T, U> {
   return {
     ...rootProps,
     type: FileSystemNodeTypeFolder,
-    filename: filenameFromPath(rootFilename),
+    filename: pathTip(rootFilename),
     path: rootFilename,
     children: [],
   };
