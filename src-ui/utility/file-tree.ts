@@ -194,3 +194,18 @@ export function createRoot<T extends object, U extends object>(
     children: [],
   };
 }
+
+/**
+ * Create a tree from an array of files
+ */
+export function createTree<U extends { path: string }>(
+  projectName: string,
+  files: U[]
+): Folder<{}, U> {
+  const root: Folder<{}, U> = createRoot(projectName, {});
+  files.forEach((file) => {
+    const { path, ...fileProps } = file;
+    addFileByPath(root, path, fileProps);
+  });
+  return root;
+}

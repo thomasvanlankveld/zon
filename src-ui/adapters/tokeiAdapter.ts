@@ -3,7 +3,7 @@ import { isLeft } from 'fp-ts/lib/Either';
 import { flatMap } from 'lodash';
 
 import { Project } from '../project/Project';
-import { Folder, addFileByPath, createRoot, toPathArray, toPathString } from '../utility/file-tree';
+import { toPathArray, toPathString, createTree } from '../utility/file-tree';
 
 /**
  * Allows us to parse Tokei languages
@@ -56,20 +56,21 @@ export default function tokeiAdapter(input: unknown, projectName: string): Proje
   if (isLeft(parseResult)) throw new Error(tokeiParseErrorMessage);
   const parsed = parseResult.right;
 
-  // Extract a list of file stats
+  // Extract an array of files, each with path and number of lines of code
   const languages = Object.values(parsed.inner);
   const files = flatMap(languages, (language) => language.stats).map((file) => {
     // Drop any "current folder" specifiers in the file paths and prepend the project name
     const path = toPathArray(file.name);
     if (path[0] === '.') path.splice(0, 1);
-    return { ...file, name: toPathString([projectName].concat(path)) };
+    const pathString = toPathString([projectName].concat(path));
+
+    // Extract number of lines of code
+    const { code } = file;
+
+    // Return file specs
+    return { numberOfLines: code, path: pathString };
   });
 
   // Construct the file tree
-  const root: Folder<{}, { numberOfLines: number }> = createRoot(projectName, {});
-  files.forEach((file) => {
-    addFileByPath(root, file.name, { numberOfLines: file.code });
-  });
-
-  return root;
+  return createTree(projectName, files);
 }
