@@ -1,3 +1,4 @@
+import { zip } from 'lodash';
 import { Leaf, Branch, Node, NodeTypeLeaf, NodeTypeBranch } from './tree';
 
 /**
@@ -117,66 +118,93 @@ export function createFile<U extends object>(path: string, fileProps?: U): File<
 }
 
 /**
- * Adds a node to a file tree using its path as a location specifier
+ * Split an array into two arrays based on whether their elements satisfy a given predicate
  */
-export function addNodeByPath(root: Folder, path: string, node: FileSystemNode): void {
+function partition<T>(array: T[], predicate: (val: T) => boolean): [T[], T[]] {
+  return array.reduce<[T[], T[]]>(
+    ([pass, fail], elem) => {
+      // Based on the predicate, append the element either to the `pass` or the `fail` array
+      return predicate(elem) ? [[...pass, elem], fail] : [pass, [...fail, elem]];
+    },
+    [[], []]
+  );
+}
+
+/**
+ * Merges two trees.
+ *
+ * The second node takes precedence over the first node, similar to how `Object.assign` works. Any keys that are present in both nodes will get the values of the second node. This works recursively: For any child nodes that exist in both trees, children of the second node will overwrite any properties also specified by matching children of the first node.
+ *
+ * This operation is confluently persistent. Both nodes remain unmodified. The returned node is a new object, which shares as many child nodes as possibly with the two source nodes.
+ */
+function mergeTrees<T extends object, U extends object>(
+  first: FileSystemNode<T, U>,
+  second: FileSystemNode<T, U>
+): FileSystemNode<T, U> {
+  // If either node is a file, do a simple property merge
+  if (isFile(first) || isFile(second)) return { ...first, ...second };
+
+  // Partition the first node's children into unique and shared
+  const [uniqueFirstChildren, sharedFirst] = partition(
+    first.children,
+    (firstChild) => !second.children.some((secondChild) => firstChild.path === secondChild.path)
+  );
+
+  // Partition the second node's children into unique and shared
+  const [uniqueSecondChildren, sharedSecond] = partition(
+    second.children,
+    (secondChild) => !first.children.some((firstChild) => firstChild.path === secondChild.path)
+  );
+
+  // Merge the shared children as trees
+  const mergedChildren = zip(sharedFirst, sharedSecond).map(([firstChild, secondChild]) => {
+    if (firstChild == null || secondChild == null)
+      throw new Error(
+        `This should never happen: Missing one of these two nodes in array zip: ${firstChild}, ${secondChild}`
+      );
+    return mergeTrees(firstChild, secondChild);
+  });
+
+  // Put all unique and merged children together
+  const children = [...uniqueFirstChildren, ...uniqueSecondChildren, ...mergedChildren];
+
+  // Merge folders with children
+  return { ...first, ...second, children };
+}
+
+/**
+ * Adds a node to a tree.
+ *
+ * The node is placed in the tree by its `path` property, and all intermediate folders are created if necessary.
+ *
+ * This operation is confluently persistent. The old root remains unmodified. The returned root is a new object. As many nodes as possible are shared between the old and the new tree.
+ */
+export function rootWithNode<T extends object, U extends object>(
+  root: FileSystemNode<T, U>,
+  node: FileSystemNode<T, U>
+): FileSystemNode<T, U> {
+  // Extract path from node
+  const { path: nodePath } = node;
+
   // Check that node path fits in root
-  if (root.filename !== toPathArray(path)[0]) {
-    throw new Error(`Can't add node with path ${path} to a tree with root path ${root.path}`);
+  if (root.filename !== toPathArray(nodePath)[0]) {
+    throw new Error(`Can't add node with path ${nodePath} to a tree with root path ${root.path}`);
   }
 
-  // Initialize parent and path segments
-  let lastKnownFolder = root;
-  const pathSegments = toPathArray(path).slice(1, -1);
+  // Create a tree containing only a path to the new node
+  const paths = toPathArray(nodePath).map((_, i, arr) => toPathString(arr.slice(0, i + 1)));
+  const reversedPaths = paths.reverse();
+  const newRoot = reversedPaths.slice(1).reduce<FileSystemNode>((child, parentPath) => {
+    return {
+      type: FileSystemNodeTypeFolder,
+      filename: pathTip(parentPath),
+      path: parentPath,
+      children: [child],
+    };
+  }, createFile(reversedPaths[0], node));
 
-  // For every path element, add a folder to the tree if necessary
-  pathSegments.forEach((elem, i) => {
-    // Try to find the next folder
-    let nextFolder = lastKnownFolder.children.find((childNode) => childNode.filename === elem);
-    const nextFolderPath = toPathString([root.filename].concat(pathSegments.slice(0, i + 1)));
-
-    // If it does not exist, create it and append it to the previous folder
-    if (nextFolder == null) {
-      nextFolder = {
-        type: FileSystemNodeTypeFolder,
-        filename: elem,
-        path: nextFolderPath,
-        children: [],
-      };
-      if (typeof nextFolder === 'undefined') throw new Error('This should never happen');
-      lastKnownFolder.children.push(nextFolder);
-    }
-
-    // We now know the next folder
-    if (isFile(nextFolder))
-      throw new Error(
-        `Found a file instead of a folder at "${nextFolderPath}" when trying to add a file at "${path}"`
-      );
-    lastKnownFolder = nextFolder;
-  });
-
-  // Add the file to its direct parent folder
-  lastKnownFolder.children.push(node);
-}
-
-/**
- * Adds a file to a file tree using its path as a location specifier
- */
-export function addFileByPath(root: Folder, path: string, fileProps: object): void {
-  addNodeByPath(root, path, createFile(path, fileProps));
-}
-
-/**
- * Adds a folder to a file tree using its path as a location specifier
- */
-export function addFolderByPath(root: Folder, path: string, folderProps?: object): void {
-  addNodeByPath(root, path, {
-    ...folderProps,
-    type: FileSystemNodeTypeFolder,
-    filename: pathTip(path),
-    path,
-    children: [],
-  });
+  // Merge the new and old tree into one
+  return mergeTrees(root, newRoot);
 }
 
 /**
@@ -198,14 +226,16 @@ export function createRoot<T extends object, U extends object>(
 /**
  * Create a tree from an array of files
  */
-export function createTree<U extends { path: string }>(
-  projectName: string,
-  files: U[]
-): Folder<{}, U> {
-  const root: Folder<{}, U> = createRoot(projectName, {});
-  files.forEach((file) => {
-    const { path, ...fileProps } = file;
-    addFileByPath(root, path, fileProps);
-  });
-  return root;
+export function createTreeFromFiles<U extends { path: string }>(files: U[]): FileSystemNode<{}, U> {
+  // Get root name from the first path segment of the first file
+  const rootName = toPathArray(files[0].path)[0];
+
+  // Create an empty root
+  const emptyRoot = createRoot<{}, U>(rootName, {});
+
+  // Add all files to the root
+  return files.reduce<FileSystemNode<{}, U>>(
+    (root, file) => rootWithNode<{}, U>(root, createFile(file.path, file)),
+    emptyRoot
+  );
 }

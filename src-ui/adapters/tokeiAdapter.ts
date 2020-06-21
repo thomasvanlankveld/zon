@@ -3,7 +3,7 @@ import { isLeft } from 'fp-ts/lib/Either';
 import { flatMap } from 'lodash';
 
 import { Project } from '../project/Project';
-import { toPathArray, toPathString, createTree } from '../utility/file-tree';
+import { toPathArray, toPathString, createTreeFromFiles } from '../utility/file-tree';
 
 /**
  * Allows us to parse Tokei languages
@@ -72,5 +72,5 @@ export default function tokeiAdapter(input: unknown, projectName: string): Proje
   });
 
   // Construct the file tree
-  return createTree(projectName, files);
+  return createTreeFromFiles(files);
 }

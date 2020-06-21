@@ -3,7 +3,7 @@ import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import SlocView from './SlocView';
-import { createFile } from '../utility/file-tree';
+import { createTreeFromFiles } from '../utility/file-tree';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -11,7 +11,7 @@ describe('SlocView', () => {
   it('renders breadcrumbs, a diagram and a list', () => {
     expect.hasAssertions();
 
-    const project = createFile('test', { numberOfLines: 5 });
+    const project = createTreeFromFiles([{ path: 'test', numberOfLines: 5 }]);
     const wrapper = shallow(<SlocView data={project} />);
 
     expect(wrapper.html()).toMatchInlineSnapshot(
