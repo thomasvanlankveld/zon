@@ -1,4 +1,4 @@
-import { zip } from 'lodash';
+import { zip, partition } from 'lodash';
 import { Leaf, Branch, Node, NodeTypeLeaf, NodeTypeBranch } from './tree';
 
 /**
@@ -115,19 +115,6 @@ export function createFile<U extends object>(path: string, fileProps?: U): File<
     filename: pathTip(path),
     path,
   };
-}
-
-/**
- * Split an array into two arrays based on whether their elements satisfy a given predicate
- */
-function partition<T>(array: T[], predicate: (val: T) => boolean): [T[], T[]] {
-  return array.reduce<[T[], T[]]>(
-    ([pass, fail], elem) => {
-      // Based on the predicate, append the element either to the `pass` or the `fail` array
-      return predicate(elem) ? [[...pass, elem], fail] : [pass, [...fail, elem]];
-    },
-    [[], []]
-  );
 }
 
 /**
