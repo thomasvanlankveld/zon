@@ -1,5 +1,4 @@
 import { zip, partition } from 'lodash';
-import { Leaf, Branch, Node, NodeTypeLeaf, NodeTypeBranch } from './tree';
 
 /**
  * Path as strings
@@ -12,29 +11,12 @@ export type PathString = string;
 export type PathArray = string[];
 
 /**
- * Denotes a node as file
+ * Types a file system node can be
  */
-export type FileSystemNodeTypeFile = NodeTypeLeaf;
-
-/**
- * Denotes a node as file
- */
-export const FileSystemNodeTypeFile = NodeTypeLeaf;
-
-/**
- * Denotes a node as folder
- */
-export type FileSystemNodeTypeFolder = NodeTypeBranch;
-
-/**
- * Denotes a node as folder
- */
-export const FileSystemNodeTypeFolder = NodeTypeBranch;
-
-/**
- * Types a node can be
- */
-export type FileSystemNodeType = FileSystemNodeTypeFile | FileSystemNodeTypeFolder;
+export enum FileSystemNodeType {
+  File = 'File',
+  Folder = 'Folder',
+}
 
 /**
  * Things both a folder and a file must have
@@ -47,23 +29,24 @@ export interface FileSystemNodeBase {
 /**
  * A file
  */
-export type File<U extends object = {}> = Leaf<FileSystemNodeBase & U>;
+export type File<U extends object = {}> = FileSystemNodeBase &
+  U & {
+    type: FileSystemNodeType.File;
+  };
 
 /**
  * A folder
  */
-export type Folder<T extends object = {}, U extends object = T> = Branch<
-  FileSystemNodeBase & T,
-  FileSystemNodeBase & U
->;
+export type Folder<T extends object = {}, U extends object = T> = FileSystemNodeBase &
+  T & {
+    type: FileSystemNodeType.Folder;
+    children: FileSystemNode<T, U>[];
+  };
 
 /**
  * A file or folder
  */
-export type FileSystemNode<T extends object = {}, U extends object = T> = Node<
-  FileSystemNodeBase & T,
-  FileSystemNodeBase & U
->;
+export type FileSystemNode<T extends object = {}, U extends object = T> = Folder<T, U> | File<U>;
 
 /**
  * Convert path string to array of path segments
@@ -83,7 +66,7 @@ export function toPathString(pathArray: PathArray): PathString {
  * Whether the given item is a folder
  */
 export function isFile(item: FileSystemNode): item is File {
-  return item.type === FileSystemNodeTypeFile;
+  return item.type === FileSystemNodeType.File;
 }
 
 /**
@@ -92,7 +75,7 @@ export function isFile(item: FileSystemNode): item is File {
 export function isFolder<T extends object, U extends object>(
   item: FileSystemNode<T>
 ): item is Folder<T, U> {
-  return item.type === FileSystemNodeTypeFolder;
+  return item.type === FileSystemNodeType.Folder;
 }
 
 /**
@@ -111,7 +94,7 @@ export function createFile<U extends object>(path: string, fileProps: U): File<U
 export function createFile<U extends object>(path: string, fileProps?: U): File<U | {}> {
   return {
     ...fileProps,
-    type: FileSystemNodeTypeFile,
+    type: FileSystemNodeType.File,
     filename: pathTip(path),
     path,
   };
@@ -147,7 +130,7 @@ function mergeTrees<T extends object, U extends object>(
   const mergedChildren = zip(sharedFirst, sharedSecond).map(([firstChild, secondChild]) => {
     if (firstChild == null || secondChild == null)
       throw new Error(
-        `This should never happen: Missing one of these two nodes in array zip: ${firstChild}, ${secondChild}`
+        `This should never happen: Missing one of these two nodes in array zip: ${firstChild}, ${secondChild}. If you see this, file an issue at: https://github.com/thomasvanlankveld/zon/issues`
       );
     return mergeTrees(firstChild, secondChild);
   });
@@ -183,7 +166,7 @@ export function rootWithNode<T extends object, U extends object>(
   const reversedPaths = paths.reverse();
   const newRoot = reversedPaths.slice(1).reduce<FileSystemNode>((child, parentPath) => {
     return {
-      type: FileSystemNodeTypeFolder,
+      type: FileSystemNodeType.Folder,
       filename: pathTip(parentPath),
       path: parentPath,
       children: [child],
@@ -203,7 +186,7 @@ export function createRoot<T extends object, U extends object>(
 ): Folder<T, U> {
   return {
     ...rootProps,
-    type: FileSystemNodeTypeFolder,
+    type: FileSystemNodeType.Folder,
     filename: pathTip(rootFilename),
     path: rootFilename,
     children: [],
