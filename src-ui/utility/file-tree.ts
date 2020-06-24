@@ -101,6 +101,36 @@ export function createFile<U extends object>(path: string, fileProps?: U): File<
 }
 
 /**
+ * Create folder node
+ */
+export function createFolder(path: string): Folder<{}, {}>;
+export function createFolder<T extends object>(
+  path: string,
+  options: { folderProps: T }
+): Folder<T, {}>;
+export function createFolder<T extends object, U extends object>(
+  path: string,
+  options: { children: FileSystemNode<T, U>[] }
+): Folder<T, U>;
+export function createFolder<T extends object, U extends object>(
+  path: string,
+  options: { folderProps: T; children: FileSystemNode<T, U>[] }
+): Folder<T, U>;
+export function createFolder<T extends object, U extends object>(
+  path: string,
+  options: { folderProps?: T; children?: FileSystemNode<T, U>[] } = {}
+): Folder<T | {}, U | {}> {
+  const { folderProps, children } = options;
+  return {
+    ...folderProps,
+    type: FileSystemNodeType.Folder,
+    filename: pathTip(path),
+    path,
+    children: children || [],
+  };
+}
+
+/**
  * Merges two trees.
  *
  * The second node takes precedence over the first node, similar to how `Object.assign` works. Any keys that are present in both nodes will get the values of the second node. This works recursively: For any child nodes that exist in both trees, children of the second node will overwrite any properties also specified by matching children of the first node.
@@ -165,12 +195,7 @@ export function rootWithNode<T extends object, U extends object>(
   const paths = toPathArray(nodePath).map((_, i, arr) => toPathString(arr.slice(0, i + 1)));
   const reversedPaths = paths.reverse();
   const newRoot = reversedPaths.slice(1).reduce<FileSystemNode>((child, parentPath) => {
-    return {
-      type: FileSystemNodeType.Folder,
-      filename: pathTip(parentPath),
-      path: parentPath,
-      children: [child],
-    };
+    return createFolder(parentPath, { children: [child] });
   }, createFile(reversedPaths[0], node));
 
   // Merge the new and old tree into one
@@ -184,13 +209,7 @@ export function createRoot<T extends object, U extends object>(
   rootFilename: string,
   rootProps: T
 ): Folder<T, U> {
-  return {
-    ...rootProps,
-    type: FileSystemNodeType.Folder,
-    filename: pathTip(rootFilename),
-    path: rootFilename,
-    children: [],
-  };
+  return createFolder(rootFilename, { folderProps: rootProps });
 }
 
 /**
