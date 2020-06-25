@@ -192,11 +192,20 @@ export function rootWithNode<T extends object, U extends object>(
   }
 
   // Create a tree containing only a path to the new node
-  const paths = toPathArray(nodePath).map((_, i, arr) => toPathString(arr.slice(0, i + 1)));
-  const reversedPaths = paths.reverse();
-  const newRoot = reversedPaths.slice(1).reduce<FileSystemNode>((child, parentPath) => {
-    return createFolder(parentPath, { children: [child] });
-  }, createFile(reversedPaths[0], node));
+  const pathElements = toPathArray(nodePath);
+  // Get an array of paths for the folders we need to create
+  const pathsInBetween = pathElements
+    // Drop the last path element, since we'll be using the given node there instead of creating a folder
+    .slice(0, pathElements.length - 1)
+    // Map elements to paths up to that point
+    .map((_, i, arr) => toPathString(arr.slice(0, i + 1)));
+  // Order paths in between from new node to root
+  const reversedPaths = pathsInBetween.reverse();
+  // Create new folder nodes from new node up to root
+  const newRoot = reversedPaths.reduce<FileSystemNode>(
+    (child, folderPath) => createFolder(folderPath, { children: [child] }),
+    node
+  );
 
   // Merge the new and old tree into one
   return mergeTrees(root, newRoot);
