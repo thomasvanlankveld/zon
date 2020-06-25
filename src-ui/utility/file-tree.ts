@@ -144,7 +144,7 @@ export function createFolder<T extends object, U extends object>(
  *
  * This operation is confluently persistent. Both nodes remain unmodified. The returned node is a new object, which shares as many child nodes as possibly with the two source nodes.
  */
-function mergeTrees<T extends object, U extends object>(
+export function mergeTrees<T extends object, U extends object>(
   first: FileSystemNode<T, U>,
   second: FileSystemNode<T, U>
 ): FileSystemNode<T, U> {
