@@ -79,7 +79,14 @@ export function isFolder<T extends object, U extends object>(
 }
 
 /**
- * Get the name of a file from its path
+ * Get the first path segment
+ */
+export function pathRoot(path: string): string {
+  return toPathArray(path)[0];
+}
+
+/**
+ * Get the last path segment
  */
 export function pathTip(path: string): string {
   return toPathArray(path).slice(-1)[0];
@@ -226,7 +233,7 @@ export function createRoot<T extends object, U extends object>(
  */
 export function createTreeFromFiles<U extends { path: string }>(files: U[]): FileSystemNode<{}, U> {
   // Get root name from the first path segment of the first file
-  const rootName = toPathArray(files[0].path)[0];
+  const rootName = pathRoot(files[0].path);
 
   // Create an empty root
   const emptyRoot = createRoot<{}, U>(rootName, {});
