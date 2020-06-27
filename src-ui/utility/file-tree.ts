@@ -29,24 +29,29 @@ export interface FileSystemNodeBase {
 /**
  * A file
  */
-export type File<U extends object = {}> = FileSystemNodeBase &
-  U & {
+export type File<FileData extends object = {}> = FileSystemNodeBase &
+  FileData & {
     type: FileSystemNodeType.File;
   };
 
 /**
  * A folder
  */
-export type Folder<T extends object = {}, U extends object = T> = FileSystemNodeBase &
-  T & {
+export type Folder<
+  FileData extends object = {},
+  FolderData extends object = {}
+> = FileSystemNodeBase &
+  FolderData & {
     type: FileSystemNodeType.Folder;
-    children: FileSystemNode<T, U>[];
+    children: FileSystemNode<FolderData, FileData>[];
   };
 
 /**
  * A file or folder
  */
-export type FileSystemNode<T extends object = {}, U extends object = T> = Folder<T, U> | File<U>;
+export type FileSystemNode<FileData extends object = {}, FolderData extends object = {}> =
+  | Folder<FileData, FolderData>
+  | File<FileData>;
 
 /**
  * Convert path string to array of path segments
@@ -72,9 +77,9 @@ export function isFile(item: FileSystemNode): item is File {
 /**
  * Whether the given item is a folder
  */
-export function isFolder<T extends object, U extends object>(
-  item: FileSystemNode<T>
-): item is Folder<T, U> {
+export function isFolder<FileData extends object, FolderData extends object>(
+  item: FileSystemNode<FileData, FolderData>
+): item is Folder<FileData, FolderData> {
   return item.type === FileSystemNodeType.Folder;
 }
 
@@ -95,12 +100,18 @@ export function pathTip(path: string): string {
 /**
  * Create file node
  */
-export function createFile(path: string): File<{}>;
-export function createFile(path: string, fileProps: undefined): File<{}>;
-export function createFile<U extends object>(path: string, fileProps: U): File<U>;
-export function createFile<U extends object>(path: string, fileProps?: U): File<U | {}> {
+export function createFile(path: string): File;
+export function createFile(path: string, fileProps: undefined): File;
+export function createFile<FileData extends object>(
+  path: string,
+  fileData: FileData
+): File<FileData>;
+export function createFile<FileData extends object>(
+  path: string,
+  fileData?: FileData
+): File<FileData | {}> {
   return {
-    ...fileProps,
+    ...fileData,
     type: FileSystemNodeType.File,
     filename: pathTip(path),
     path,
@@ -110,26 +121,26 @@ export function createFile<U extends object>(path: string, fileProps?: U): File<
 /**
  * Create folder node
  */
-export function createFolder(path: string): Folder<{}, {}>;
-export function createFolder<T extends object>(
+export function createFolder(path: string): Folder;
+export function createFolder<FolderData extends object>(
   path: string,
-  options: { folderProps: T }
-): Folder<T, {}>;
-export function createFolder<T extends object, U extends object>(
+  options: { folderData: FolderData }
+): Folder<{}, FolderData>;
+export function createFolder<FileData extends object, FolderData extends object>(
   path: string,
-  options: { children: FileSystemNode<T, U>[] }
-): Folder<T, U>;
-export function createFolder<T extends object, U extends object>(
+  options: { children: FileSystemNode<FileData, FolderData>[] }
+): Folder<FileData, FolderData>;
+export function createFolder<FileData extends object, FolderData extends object>(
   path: string,
-  options: { folderProps: T; children: FileSystemNode<T, U>[] }
-): Folder<T, U>;
-export function createFolder<T extends object, U extends object>(
+  options: { folderData: FolderData; children: FileSystemNode<FileData, FolderData>[] }
+): Folder<FileData, FolderData>;
+export function createFolder<FileData extends object, FolderData extends object>(
   path: string,
-  options: { folderProps?: T; children?: FileSystemNode<T, U>[] } = {}
-): Folder<T | {}, U | {}> {
-  const { folderProps, children } = options;
+  options: { folderData?: FolderData; children?: FileSystemNode<FileData, FolderData>[] } = {}
+): Folder<FileData, FolderData | {}> {
+  const { folderData, children } = options;
   return {
-    ...folderProps,
+    ...folderData,
     type: FileSystemNodeType.Folder,
     filename: pathTip(path),
     path,
@@ -144,12 +155,14 @@ export function createFolder<T extends object, U extends object>(
  *
  * This operation is confluently persistent. Both nodes remain unmodified. The returned node is a new object, which shares as many child nodes as possibly with the two source nodes.
  */
-export function mergeTrees<T extends object, U extends object>(
-  first: FileSystemNode<T, U>,
-  second: FileSystemNode<T, U>
-): FileSystemNode<T, U> {
+export function mergeTrees<
+  FileProps extends object,
+  FolderProps extends object,
+  First extends FileSystemNode<FileProps, FolderProps>,
+  Second extends FileSystemNode<FileProps, FolderProps>
+>(first: First, second: Second): First & Second {
   // If either node is a file, do a simple property merge
-  if (isFile(first) || isFile(second)) return { ...first, ...second };
+  if (!isFolder(first) || !isFolder(second)) return { ...first, ...second };
 
   // Partition the first node's children into unique and shared
   const [uniqueFirstChildren, sharedFirst] = partition(
@@ -186,10 +199,10 @@ export function mergeTrees<T extends object, U extends object>(
  *
  * This operation is confluently persistent. The old root remains unmodified. The returned root is a new object. As many nodes as possible are shared between the old and the new tree.
  */
-export function rootWithNode<T extends object, U extends object>(
-  root: FileSystemNode<T, U>,
-  node: FileSystemNode<T, U>
-): FileSystemNode<T, U> {
+export function rootWithNode<FileData extends object = {}, FolderData extends object = {}>(
+  root: FileSystemNode<FileData, FolderData>,
+  node: FileSystemNode<FileData, FolderData>
+): FileSystemNode<FileData, FolderData> {
   // Extract path from node
   const { path: nodePath } = node;
 
@@ -209,7 +222,7 @@ export function rootWithNode<T extends object, U extends object>(
   // Order paths in between from new node to root
   const reversedPaths = pathsInBetween.reverse();
   // Create new folder nodes from new node up to root
-  const newRoot = reversedPaths.reduce<FileSystemNode>(
+  const newRoot = reversedPaths.reduce(
     (child, folderPath) => createFolder(folderPath, { children: [child] }),
     node
   );
@@ -221,26 +234,34 @@ export function rootWithNode<T extends object, U extends object>(
 /**
  * Create a file tree root
  */
-export function createRoot<T extends object, U extends object>(
+export function createRoot(rootFilename: string): Folder;
+export function createRoot<FileData extends object>(rootFilename: string): Folder<FileData>;
+export function createRoot<FileData extends object, FolderData extends object>(
+  rootFilename: string
+): Folder<FileData, FolderData>;
+export function createRoot<FileData extends object, FolderData extends object = {}>(
   rootFilename: string,
-  rootProps: T
-): Folder<T, U> {
-  return createFolder(rootFilename, { folderProps: rootProps });
+  rootProps?: FolderData
+): Folder<FileData | {}, FolderData | {}> {
+  if (rootProps == null) return createFolder(rootFilename);
+  return createFolder(rootFilename, { folderData: rootProps });
 }
 
 /**
  * Create a tree from an array of files
  */
-export function createTreeFromFiles<U extends { path: string }>(files: U[]): FileSystemNode<{}, U> {
+export function createTreeFromFiles<FileData extends { path: string }>(
+  files: FileData[]
+): FileSystemNode<{}, FileData> {
   // Get root name from the first path segment of the first file
   const rootName = pathRoot(files[0].path);
 
   // Create an empty root
-  const emptyRoot = createRoot<{}, U>(rootName, {});
+  const emptyRoot = createRoot<FileData>(rootName);
 
   // Add all files to the root
-  return files.reduce<FileSystemNode<{}, U>>(
-    (root, file) => rootWithNode<{}, U>(root, createFile(file.path, file)),
-    emptyRoot
-  );
+  return files.reduce<FileSystemNode<FileData>>((root, fileData) => {
+    const file = createFile(fileData.path, fileData);
+    return rootWithNode(root, file);
+  }, emptyRoot);
 }
