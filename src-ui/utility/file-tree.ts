@@ -122,10 +122,15 @@ export function createFile<FileData extends object>(
  * Create folder node
  */
 export function createFolder(path: string): Folder;
+export function createFolder<FileData extends object>(path: string): Folder<FileData>;
 export function createFolder<FolderData extends object>(
   path: string,
   options: { folderData: FolderData }
 ): Folder<{}, FolderData>;
+export function createFolder<FileData extends object, FolderData extends object>(
+  path: string,
+  options: { folderData: FolderData }
+): Folder<FileData, FolderData>;
 export function createFolder<FileData extends object, FolderData extends object>(
   path: string,
   options: { children: FileSystemNode<FileData, FolderData>[] }
@@ -232,22 +237,6 @@ export function rootWithNode<FileData extends object = {}, FolderData extends ob
 }
 
 /**
- * Create a file tree root
- */
-export function createRoot(rootFilename: string): Folder;
-export function createRoot<FileData extends object>(rootFilename: string): Folder<FileData>;
-export function createRoot<FileData extends object, FolderData extends object>(
-  rootFilename: string
-): Folder<FileData, FolderData>;
-export function createRoot<FileData extends object, FolderData extends object = {}>(
-  rootFilename: string,
-  rootProps?: FolderData
-): Folder<FileData | {}, FolderData | {}> {
-  if (rootProps == null) return createFolder(rootFilename);
-  return createFolder(rootFilename, { folderData: rootProps });
-}
-
-/**
  * Create a tree from an array of files
  */
 export function createTreeFromFiles<FileData extends { path: string }>(
@@ -257,7 +246,7 @@ export function createTreeFromFiles<FileData extends { path: string }>(
   const rootName = pathRoot(files[0].path);
 
   // Create an empty root
-  const emptyRoot = createRoot<FileData>(rootName);
+  const emptyRoot = createFolder<FileData>(rootName);
 
   // Add all files to the root
   return files.reduce<FileSystemNode<FileData>>((root, fileData) => {
