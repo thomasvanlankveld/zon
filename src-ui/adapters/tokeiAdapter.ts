@@ -3,7 +3,7 @@ import { isLeft } from 'fp-ts/lib/Either';
 import { flatMap } from 'lodash';
 
 import { Project } from '../project/Project';
-import { toPathArray, toPathString, createTreeFromFiles } from '../utility/file-tree';
+import { toPathString, toPathArray, createTreeFromFiles } from '../file-tree';
 
 /**
  * Allows us to parse Tokei languages

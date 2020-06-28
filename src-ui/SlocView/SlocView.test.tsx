@@ -3,7 +3,7 @@ import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import SlocView from './SlocView';
-import { createTreeFromFiles } from '../utility/file-tree';
+import { createTreeFromFiles } from '../file-tree';
 
 Enzyme.configure({ adapter: new Adapter() });
 
