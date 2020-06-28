@@ -9,7 +9,7 @@ export default function zonPartition<T extends Project>(data: T): HierarchyRecta
   // Add hierarchical helper methods and data
   const root = hierarchy(data)
     // Compute the number of lines of every branch as the sum of the number of lines of all its children
-    .sum((d) => (d as { numberOfLines: number }).numberOfLines)
+    .sum((d) => (d as { data: { numberOfLines: number } }).data.numberOfLines)
     // Sort hierarchy by number of lines, high to low
     .sort((a, b) => (a.value && b.value ? b.value - a.value : 0));
 

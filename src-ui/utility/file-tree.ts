@@ -21,18 +21,18 @@ export enum FileSystemNodeType {
 /**
  * Things both a folder and a file must have
  */
-export interface FileSystemNodeBase {
+export interface FileSystemNodeBase<NodeData extends object = {}> {
   filename: string;
   path: PathString;
+  data: NodeData;
 }
 
 /**
  * A file
  */
-export type File<FileData extends object = {}> = FileSystemNodeBase &
-  FileData & {
-    type: FileSystemNodeType.File;
-  };
+export type File<FileData extends object = {}> = FileSystemNodeBase<FileData> & {
+  type: FileSystemNodeType.File;
+};
 
 /**
  * A folder
@@ -40,11 +40,10 @@ export type File<FileData extends object = {}> = FileSystemNodeBase &
 export type Folder<
   FileData extends object = {},
   FolderData extends object = {}
-> = FileSystemNodeBase &
-  FolderData & {
-    type: FileSystemNodeType.Folder;
-    children: FileSystemNode<FolderData, FileData>[];
-  };
+> = FileSystemNodeBase<FolderData> & {
+  type: FileSystemNodeType.Folder;
+  children: FileSystemNode<FileData, FolderData>[];
+};
 
 /**
  * A file or folder
@@ -101,7 +100,7 @@ export function pathTip(path: string): string {
  * Create file node
  */
 export function createFile(path: string): File;
-export function createFile(path: string, fileProps: undefined): File;
+export function createFile(path: string, fileData: undefined): File;
 export function createFile<FileData extends object>(
   path: string,
   fileData: FileData
@@ -111,10 +110,10 @@ export function createFile<FileData extends object>(
   fileData?: FileData
 ): File<FileData | {}> {
   return {
-    ...fileData,
     type: FileSystemNodeType.File,
     filename: pathTip(path),
     path,
+    data: fileData || {},
   };
 }
 
@@ -142,13 +141,13 @@ export function createFolder<FileData extends object, FolderData extends object>
 export function createFolder<FileData extends object, FolderData extends object>(
   path: string,
   options: { folderData?: FolderData; children?: FileSystemNode<FileData, FolderData>[] } = {}
-): Folder<FileData, FolderData | {}> {
+): Folder<FileData | {}, FolderData | {}> {
   const { folderData, children } = options;
   return {
-    ...folderData,
     type: FileSystemNodeType.Folder,
     filename: pathTip(path),
     path,
+    data: folderData || {},
     children: children || [],
   };
 }
@@ -161,13 +160,14 @@ export function createFolder<FileData extends object, FolderData extends object>
  * This operation is confluently persistent. Both nodes remain unmodified. The returned node is a new object, which shares as many child nodes as possibly with the two source nodes.
  */
 export function mergeTrees<
-  FileProps extends object,
-  FolderProps extends object,
-  First extends FileSystemNode<FileProps, FolderProps>,
-  Second extends FileSystemNode<FileProps, FolderProps>
+  FileData extends object,
+  FolderData extends object,
+  First extends FileSystemNode<FileData, FolderData>,
+  Second extends FileSystemNode<FileData, FolderData>
 >(first: First, second: Second): First & Second {
-  // If either node is a file, do a simple property merge
-  if (!isFolder(first) || !isFolder(second)) return { ...first, ...second };
+  // If either node is not a folder, do a simple property merge
+  if (!isFolder(first) || !isFolder(second))
+    return { ...first, ...second, data: { ...first.data, ...second.data } };
 
   // Partition the first node's children into unique and shared
   const [uniqueFirstChildren, sharedFirst] = partition(
@@ -194,7 +194,7 @@ export function mergeTrees<
   const children = [...uniqueFirstChildren, ...uniqueSecondChildren, ...mergedChildren];
 
   // Merge folders with children
-  return { ...first, ...second, children };
+  return { ...first, ...second, children, data: { ...first.data, ...second.data } };
 }
 
 /**
@@ -241,7 +241,7 @@ export function rootWithNode<FileData extends object = {}, FolderData extends ob
  */
 export function createTreeFromFiles<FileData extends { path: string }>(
   files: FileData[]
-): FileSystemNode<{}, FileData> {
+): FileSystemNode<FileData> {
   // Get root name from the first path segment of the first file
   const rootName = pathRoot(files[0].path);
 
