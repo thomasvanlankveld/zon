@@ -68,7 +68,7 @@ export default function tokeiAdapter(input: unknown, projectName: string): Proje
     const { code } = file;
 
     // Return file specs
-    return { numberOfLines: code, path: pathString };
+    return { path: pathString, data: { numberOfLines: code } };
   });
 
   // Construct the file tree

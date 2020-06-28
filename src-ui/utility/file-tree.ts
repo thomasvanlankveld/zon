@@ -1,4 +1,4 @@
-import { zip, partition } from 'lodash';
+import { zip, partition, uniqBy } from 'lodash';
 
 /**
  * Path as strings
@@ -165,6 +165,18 @@ export function mergeTrees<
   First extends FileSystemNode<FileData, FolderData>,
   Second extends FileSystemNode<FileData, FolderData>
 >(first: First, second: Second): First & Second {
+  // Bail on node type mismatch
+  if (first.type !== second.type)
+    throw new Error(
+      `Failed to merge node with path ${first.path} and type ${first.type} with node with path ${second.path} and type ${second.type}. Types should be the same.`
+    );
+
+  // Bail on node path mismatch
+  if (first.path !== second.path)
+    throw new Error(
+      `Failed to merge nodes with paths ${first.path} and ${second.path}. Paths should be the same.`
+    );
+
   // If either node is not a folder, do a simple property merge
   if (!isFolder(first) || !isFolder(second))
     return { ...first, ...second, data: { ...first.data, ...second.data } };
@@ -239,18 +251,25 @@ export function rootWithNode<FileData extends object = {}, FolderData extends ob
 /**
  * Create a tree from an array of files
  */
-export function createTreeFromFiles<FileData extends { path: string }>(
-  files: FileData[]
+export function createTreeFromFiles<FileData extends object>(
+  files: { path: string; data: FileData }[]
 ): FileSystemNode<FileData> {
+  // Add empty root to all paths if necessary
+  const rootedFiles =
+    uniqBy(files, (file) => pathRoot(file.path)).length > 1 ||
+    files.some((file) => toPathArray(file.path).length < 2)
+      ? files.map((file) => ({ ...file, path: `/${file.path}` }))
+      : files;
+
   // Get root name from the first path segment of the first file
-  const rootName = pathRoot(files[0].path);
+  const rootName = pathRoot(rootedFiles[0].path);
 
   // Create an empty root
   const emptyRoot = createFolder<FileData>(rootName);
 
   // Add all files to the root
-  return files.reduce<FileSystemNode<FileData>>((root, fileData) => {
-    const file = createFile(fileData.path, fileData);
-    return rootWithNode(root, file);
+  return rootedFiles.reduce<FileSystemNode<FileData>>((root, file) => {
+    const fileNode = createFile(file.path, file.data);
+    return rootWithNode(root, fileNode);
   }, emptyRoot);
 }
