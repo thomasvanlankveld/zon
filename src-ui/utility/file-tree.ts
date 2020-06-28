@@ -1,4 +1,5 @@
 import { zip, partition, uniqBy } from 'lodash';
+import { DeepReadonly } from 'utility-types';
 
 /**
  * Path as strings
@@ -22,16 +23,16 @@ export enum FileSystemNodeType {
  * Things both a folder and a file must have
  */
 export interface FileSystemNodeBase<NodeData extends object = {}> {
-  filename: string;
-  path: PathString;
-  data: NodeData;
+  readonly filename: string;
+  readonly path: PathString;
+  readonly data: DeepReadonly<NodeData>;
 }
 
 /**
  * A file
  */
 export type File<FileData extends object = {}> = FileSystemNodeBase<FileData> & {
-  type: FileSystemNodeType.File;
+  readonly type: FileSystemNodeType.File;
 };
 
 /**
@@ -40,10 +41,11 @@ export type File<FileData extends object = {}> = FileSystemNodeBase<FileData> & 
 export type Folder<
   FileData extends object = {},
   FolderData extends object = {}
-> = FileSystemNodeBase<FolderData> & {
-  type: FileSystemNodeType.Folder;
-  children: FileSystemNode<FileData, FolderData>[];
-};
+> = FileSystemNodeBase<FolderData> &
+  Readonly<{
+    type: FileSystemNodeType.Folder;
+    children: ReadonlyArray<FileSystemNode<FileData, FolderData>>;
+  }>;
 
 /**
  * A file or folder
