@@ -1,41 +1,35 @@
-import React, { SFC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 import SlocView from '../SlocView/SlocView';
 import { Project } from '../project/Project';
-import zonAdapter from '../adapters/zonAdapter';
-import tokeiAdapter from '../adapters/tokeiAdapter';
+import { ZonClient } from '../services/zon-client/zon-client';
+
+interface AppProps {
+  zonClient: ZonClient;
+}
 
 /**
  *
  */
-const App: SFC = function App() {
+const App: FC<AppProps> = function App(props) {
+  const { zonClient } = props;
+
+  // Keep project data
   const [data, setData] = useState<Project | null>(null);
 
+  // If there is no data, get it
   useEffect(() => {
     if (data == null) {
-      if (process.env.NODE_ENV === 'development') {
-        import('../../input/redux.json')
-          .then(async (reduxData) => {
-            const parsed = tokeiAdapter(reduxData, 'redux');
-            setData(parsed);
-          })
-          .catch((errr) => {
-            throw errr;
-          });
-      } else {
-        fetch('http://localhost:3030/input')
-          .then(async (response) => {
-            const json = await response.json();
-            const parsed = zonAdapter(json);
-            setData(parsed);
-          })
-          .catch((errr) => {
-            throw errr;
-          });
-      }
+      zonClient
+        .getProjectData()
+        .then((projectData) => setData(projectData))
+        .catch((errr) => {
+          throw errr;
+        });
     }
   }, [data]);
 
+  // Render the page or a loading indicator
   return data == null ? <h3 style={{ color: 'white' }}>Loading...</h3> : <SlocView data={data} />;
 };
 
