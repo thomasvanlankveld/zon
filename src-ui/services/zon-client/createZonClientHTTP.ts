@@ -1,4 +1,4 @@
-import { ZonClient } from './zon-client';
+import { ZonClient } from './ZonClient';
 import zonAdapter from '../../adapters/zonAdapter';
 import { Project } from '../../project/Project';
 

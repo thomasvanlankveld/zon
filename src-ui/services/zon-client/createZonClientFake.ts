@@ -1,4 +1,4 @@
-import { ZonClient } from './zon-client';
+import { ZonClient } from './ZonClient';
 import tokeiAdapter from '../../adapters/tokeiAdapter';
 import { Project } from '../../project/Project';
 

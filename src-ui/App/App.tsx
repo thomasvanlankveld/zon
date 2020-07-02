@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 
 import SlocView from '../SlocView/SlocView';
 import { Project } from '../project/Project';
-import { ZonClient } from '../services/zon-client/zon-client';
+import { ZonClient } from '../services/zon-client/ZonClient';
 
 interface AppProps {
   zonClient: ZonClient;

@@ -1,4 +1,4 @@
-import { ZonClient } from '../zon-client';
+import { ZonClient } from '../ZonClient';
 import jestFn from '../../../utils/test-support/jestFn';
 
 /**
