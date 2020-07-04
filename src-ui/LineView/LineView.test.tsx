@@ -1,10 +1,10 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import SlocView from './SlocView';
+import LineView from './LineView';
 import { createTreeFromFiles } from '../file-tree';
 
-describe('SlocView', () => {
+describe('LineView', () => {
   it('renders breadcrumbs, a diagram and a list', () => {
     expect.hasAssertions();
 
@@ -15,8 +15,8 @@ describe('SlocView', () => {
       { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
     ]);
 
-    // When I render the sloc view
-    const { asFragment } = render(<SlocView data={project} />);
+    // When I render the line view
+    const { asFragment } = render(<LineView data={project} />);
 
     // Then I see the project visualized
     expect(asFragment()).toMatchInlineSnapshot(`

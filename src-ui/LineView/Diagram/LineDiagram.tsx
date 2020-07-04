@@ -1,14 +1,14 @@
 import React, { SFC, useMemo } from 'react';
 
-import { SlocViewNode } from '../SlocViewNode';
-import SlocViewPath from './SlocViewPath';
+import { LineViewNode } from '../LineViewNode';
+import LineDiagramPath from './LineDiagramPath';
 import { width, height } from '../config';
 import zonPartition, { selectNode } from '../partition';
 
-interface SlocDiagramProps {
-  projectRoot: SlocViewNode;
+interface LineDiagramProps {
+  projectRoot: LineViewNode;
   diagramRootFilePath: string;
-  isHighlighted: (d: SlocViewNode) => boolean;
+  isHighlighted: (d: LineViewNode) => boolean;
   hoveredArcFilePath: string | null;
   setHoveredArcFilePath: (path: string | null) => void;
   setDiagramRootFilePath: (path: string) => void;
@@ -17,7 +17,7 @@ interface SlocDiagramProps {
 /**
  *
  */
-const SlocDiagram: SFC<SlocDiagramProps> = function SlocDiagram(props) {
+const LineDiagram: SFC<LineDiagramProps> = function LineDiagram(props) {
   const {
     projectRoot,
     diagramRootFilePath,
@@ -59,7 +59,7 @@ const SlocDiagram: SFC<SlocDiagramProps> = function SlocDiagram(props) {
         .descendants()
         // .filter((d) => d.depth > 0)
         .map((d) => (
-          <SlocViewPath
+          <LineDiagramPath
             key={d.data.path}
             d={d}
             isHighlighted={isHighlighted(d)}
@@ -72,4 +72,4 @@ const SlocDiagram: SFC<SlocDiagramProps> = function SlocDiagram(props) {
   );
 };
 
-export default SlocDiagram;
+export default LineDiagram;

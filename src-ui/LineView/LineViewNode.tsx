@@ -3,4 +3,4 @@ import { Project } from '../project/Project';
 import { NodeColors } from './color';
 
 export type ColoredProject = Project & NodeColors;
-export type SlocViewNode = HierarchyRectangularNode<ColoredProject>;
+export type LineViewNode = HierarchyRectangularNode<ColoredProject>;

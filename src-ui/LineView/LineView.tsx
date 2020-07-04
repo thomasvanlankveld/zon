@@ -4,18 +4,18 @@ import styled from 'styled-components';
 
 import { Project } from '../project/Project';
 import zonColoredHierarchy from './color';
-import SlocViewBreadCrumbs from './SlocViewBreadCrumbs';
-import SlocDiagram from './Diagram/SlocDiagram';
-import SlocList from './SlocList';
+import LineViewBreadCrumbs from './LineViewBreadCrumbs';
+import LineDiagram from './Diagram/LineDiagram';
+import LineList from './LineList';
 
-interface SlocViewProps {
+interface LineViewProps {
   data: Project;
 }
 
 /**
  *
  */
-const SlocViewGrid = styled.div`
+const LineViewGrid = styled.div`
   display: grid;
   grid-auto-flow: column;
   column-gap: 20px;
@@ -25,7 +25,7 @@ const SlocViewGrid = styled.div`
 /**
  *
  */
-const SlocView: SFC<SlocViewProps> = function SlocView(props) {
+const LineView: SFC<LineViewProps> = function LineView(props) {
   const { data } = props;
   const projectRootPath = data.path;
 
@@ -51,14 +51,14 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
 
   return (
     <>
-      <SlocViewBreadCrumbs
+      <LineViewBreadCrumbs
         projectRoot={projectRoot}
         path={hoveredArcFilePath || diagramRootFilePath}
         isHighlighted={isHighlighted}
         setDiagramRootFilePath={setDiagramRootFilePath}
       />
-      <SlocViewGrid>
-        <SlocDiagram
+      <LineViewGrid>
+        <LineDiagram
           projectRoot={projectRoot}
           diagramRootFilePath={diagramRootFilePath}
           isHighlighted={isHighlighted}
@@ -66,7 +66,7 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
           setHoveredArcFilePath={setHoveredArcFilePath}
           setDiagramRootFilePath={setDiagramRootFilePath}
         />
-        <SlocList
+        <LineList
           projectRoot={projectRoot}
           listRootFilePath={hoveredArcFilePath || diagramRootFilePath}
           isHighlighted={isHighlighted}
@@ -74,9 +74,9 @@ const SlocView: SFC<SlocViewProps> = function SlocView(props) {
           setHoveredListItemFilePath={setHoveredListItemFilePath}
           setDiagramRootFilePath={setDiagramRootFilePath}
         />
-      </SlocViewGrid>
+      </LineViewGrid>
     </>
   );
 };
 
-export default SlocView;
+export default LineView;

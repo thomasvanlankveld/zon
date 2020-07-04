@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { arc } from 'd3';
 
 import { colorNode } from '../color';
-import { SlocViewNode } from '../SlocViewNode';
+import { LineViewNode } from '../LineViewNode';
 import { width, height } from '../config';
 
 /**
  *
  */
-function slocViewArc(d: SlocViewNode): string | undefined {
+function LineDiagramArc(d: LineViewNode): string | undefined {
   const radius = Math.min(width, height) / 2;
   const padding = 0.005;
   return (
@@ -24,7 +24,7 @@ function slocViewArc(d: SlocViewNode): string | undefined {
 }
 
 interface PathProps {
-  datum: SlocViewNode;
+  datum: LineViewNode;
   isHighlighted: boolean;
 }
 
@@ -42,8 +42,8 @@ const Path = styled.path<PathProps>`
   }
 `;
 
-interface SlocViewPathProps {
-  d: SlocViewNode;
+interface LineDiagramPathProps {
+  d: LineViewNode;
   isHighlighted: boolean;
   hoveredFilePath: string | null;
   setHoveredFilePath: (path: string | null) => void;
@@ -53,12 +53,12 @@ interface SlocViewPathProps {
 /**
  *
  */
-const SlocViewPath: SFC<SlocViewPathProps> = function SlocViewPath(props) {
+const LineDiagramPath: SFC<LineDiagramPathProps> = function LineDiagramPath(props) {
   const { d, isHighlighted, hoveredFilePath, setHoveredFilePath, onClick } = props;
 
   return (
     <Path
-      d={slocViewArc(d)}
+      d={LineDiagramArc(d)}
       datum={d}
       isHighlighted={isHighlighted}
       onMouseEnter={(): void => setHoveredFilePath(d.data.path)}
@@ -70,4 +70,4 @@ const SlocViewPath: SFC<SlocViewPathProps> = function SlocViewPath(props) {
   );
 };
 
-export default SlocViewPath;
+export default LineDiagramPath;

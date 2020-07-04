@@ -1,13 +1,13 @@
 import React, { SFC } from 'react';
 import { colorNode } from './color';
-import { SlocViewNode } from './SlocViewNode';
+import { LineViewNode } from './LineViewNode';
 import Button from '../component-lib/Button';
 import { useSelectNode } from './partition';
 
-interface SlocListProps {
-  projectRoot: SlocViewNode;
+interface LineListProps {
+  projectRoot: LineViewNode;
   listRootFilePath: string;
-  isHighlighted: (d: SlocViewNode) => boolean;
+  isHighlighted: (d: LineViewNode) => boolean;
   hoveredListItemFilePath: string | null;
   setHoveredListItemFilePath: (path: string | null) => void;
   setDiagramRootFilePath: (path: string) => void;
@@ -16,7 +16,7 @@ interface SlocListProps {
 /**
  *
  */
-const SlocList: SFC<SlocListProps> = function SlocList(props) {
+const LineList: SFC<LineListProps> = function LineList(props) {
   const {
     projectRoot,
     listRootFilePath,
@@ -57,4 +57,4 @@ const SlocList: SFC<SlocListProps> = function SlocList(props) {
   );
 };
 
-export default SlocList;
+export default LineList;
