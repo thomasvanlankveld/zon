@@ -11,6 +11,10 @@
 
 Probably start with cheatsheet, then "which query should I use?".
 
+For testing svg, the cheatsheet says:
+
+> **ByTitle** find by title attribute or svg title tag
+
 - [react testing library at DuckDuckGo](https://duckduckgo.com/?t=ffab&q=react+testing+library&atb=v171-1&ia=software)
 - [React Testing Library · Testing Library](https://testing-library.com/docs/react-testing-library/intro)
 - [API · Testing Library](https://testing-library.com/docs/react-testing-library/api#render-result)
