@@ -39,3 +39,9 @@ For testing svg, the cheatsheet says:
 
 - [enzyme snapshot at DuckDuckGo](https://duckduckgo.com/?t=ffab&q=enzyme+snapshot&atb=v171-1&ia=software)
 - [Testing React components with Jest and Enzyme | Hacker Noon](https://hackernoon.com/testing-react-components-with-jest-and-enzyme-41d592c174f)
+
+## msw
+
+Interesting way to mock HTTP requests:
+
+- [What is Mock Service Worker (MSW)? - YouTube](https://www.youtube.com/watch?v=HcQCqboatZk&feature=youtu.be)
