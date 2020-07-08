@@ -23,3 +23,8 @@
 - [aria svg at DuckDuckGo](https://duckduckgo.com/?t=ffab&q=aria+svg&atb=v171-1&ia=web)
 - [SVG Accessibility/ARIA roles for charts - W3C Wiki](https://www.w3.org/wiki/SVG_Accessibility/ARIA_roles_for_charts)
 - [ARIA: img role - Accessibility | MDN](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/Role_Img)
+
+## Accessibility inspector
+
+- [inspect accessibility properties at DuckDuckGo](https://duckduckgo.com/?t=ffab&q=inspect+accessibility+properties&atb=v171-1&ia=web)
+- [Accessibility Inspector - Firefox Developer Tools | MDN](https://developer.mozilla.org/en-US/docs/Tools/Accessibility_inspector)
