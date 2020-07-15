@@ -54,7 +54,12 @@ const LineDiagram: SFC<LineDiagramProps> = function LineDiagram(props) {
   }
 
   return (
-    <svg width={width} height={height} viewBox={`${-width / 2} ${-height / 2} ${width} ${height}`}>
+    <svg
+      aria-label={`${projectRoot.data.filename} content diagram`}
+      width={width}
+      height={height}
+      viewBox={`${-width / 2} ${-height / 2} ${width} ${height}`}
+    >
       {diagramRoot
         .descendants()
         // .filter((d) => d.depth > 0)

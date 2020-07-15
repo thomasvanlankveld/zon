@@ -21,7 +21,7 @@ const LineViewBreadCrumbs: SFC<LineViewBreadCrumbsProps> = function LineViewBrea
   const breadCrumbNode = useSelectNode(projectRoot, path);
 
   return (
-    <div style={{ marginBottom: '20px' }}>
+    <nav style={{ marginBottom: '20px' }} aria-label="breadcrumbs">
       {breadCrumbNode
         .ancestors()
         .reverse()
@@ -41,7 +41,7 @@ const LineViewBreadCrumbs: SFC<LineViewBreadCrumbsProps> = function LineViewBrea
           </span>,
         ])
         .slice(0, -1)}
-    </div>
+    </nav>
   );
 };
 

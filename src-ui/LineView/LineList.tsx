@@ -35,12 +35,15 @@ const LineList: SFC<LineListProps> = function LineList(props) {
         <strong>{listRoot.data.filename}</strong>
         {`: ${listRoot.value}`}
       </h3>
-      {(listRoot.children || []).map((d) => (
-        <p key={d.data.path}>
+      <nav aria-label={`${listRoot.data.filename} content list`}>
+        {(listRoot.children || []).map((d) => (
           <Button
+            key={d.data.path}
             style={{
               color: colorNode(d, { isHighlighted: isHighlighted(d) }),
               cursor: 'pointer',
+              display: 'block',
+              margin: '12px 0',
             }}
             onClick={(): void => setDiagramRootFilePath(d.data.path)}
             onMouseEnter={(): void => setHoveredListItemFilePath(d.data.path)}
@@ -51,8 +54,8 @@ const LineList: SFC<LineListProps> = function LineList(props) {
             <strong>{d.data.filename}</strong>
             {`: ${d.value} lines`}
           </Button>
-        </p>
-      ))}
+        ))}
+      </nav>
     </div>
   );
 };
