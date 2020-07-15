@@ -7,11 +7,20 @@
 - [Testing React Apps · Jest](https://jestjs.io/docs/en/tutorial-react#enzyme)
 - [snapshot-diff | Yarn](https://classic.yarnpkg.com/en/package/snapshot-diff)
 
+### jest-dom
+
+- [testing-library/jest-dom: Custom jest matchers to test the state of the DOM](https://github.com/testing-library/jest-dom)
+
 ## React testing library
 
 Probably start with cheatsheet, then "which query should I use?".
 
-For testing svg, the cheatsheet says:
+**Read this**:
+
+- [Common mistakes with React Testing Library](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
+- [How to use React Testing Library Tutorial - RWieruch](https://www.robinwieruch.de/react-testing-library)
+
+For testing svg, the cheatsheet says (although we may want to use ARIA labels even in the diagram):
 
 > **ByTitle** find by title attribute or svg title tag
 
