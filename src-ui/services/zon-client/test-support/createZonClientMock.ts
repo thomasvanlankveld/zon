@@ -1,5 +1,5 @@
 import { ZonClient } from '../ZonClient';
-import jestFn from '../../../utils/test-support/jestFn';
+import jestFn from '../../../test-support/jestFn';
 
 /**
  * Create a client to mock zon data fetching

@@ -46,9 +46,13 @@
     },
     "collectCoverageFrom": [
       "src-ui/**/*.{js,jsx,ts,tsx}"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src-ui/test-support/jest.setup.ts"
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.2",
     "@testing-library/react": "^10.4.3",
     "@types/d3": "^5.7.2",
     "@types/jest": "^25.2.1",

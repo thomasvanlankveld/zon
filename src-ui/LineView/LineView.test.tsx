@@ -16,9 +16,12 @@ describe('LineView', () => {
     ]);
 
     // When I render the line view
-    const { asFragment } = render(<LineView data={project} />);
+    const { asFragment, getByRole } = render(<LineView data={project} />);
 
-    // Then I see the project visualized
+    // Then I see the project name in the breadcrumbs
+    expect(getByRole('navigation', { name: /breadcrumbs/ })).toHaveTextContent('my-project');
+
+    // And I see the project visualized
     expect(asFragment()).toMatchInlineSnapshot(`
       <DocumentFragment>
         <nav
