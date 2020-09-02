@@ -28,3 +28,13 @@
 
 - [inspect accessibility properties at DuckDuckGo](https://duckduckgo.com/?t=ffab&q=inspect+accessibility+properties&atb=v171-1&ia=web)
 - [Accessibility Inspector - Firefox Developer Tools | MDN](https://developer.mozilla.org/en-US/docs/Tools/Accessibility_inspector)
+
+## A11y for interactive visualizations
+
+- [a11y interactive visualization at DuckDuckGo](https://duckduckgo.com/?t=ffab&q=a11y+interactive+visualization&atb=v171-1&ia=web)
+- [Interactive, responsive and accessible visuals - everviz.com](https://www.everviz.com/blog/interactive-responsive-accessible/)
+- **THIS ONE:** [Reliable and Valid SVG Accessibility – Fizz Studio](https://fizz.studio/blog/reliable-valid-svg-accessibility/)
+- [tota11y – an accessibility visualization toolkit](https://blog.khanacademy.org/tota11y-an-accessibility-visualization-toolkit/)
+- [GitHub - Khan/tota11y: an accessibility (a11y) visualization toolkit](https://github.com/Khan/tota11y)
+- [tota11y – an accessibility visualization toolkit](https://khan.github.io/tota11y/)
+- [tabindex - HTML: Hypertext Markup Language | MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex)
