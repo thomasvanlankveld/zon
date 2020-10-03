@@ -33,7 +33,7 @@ const LineList: SFC<LineListProps> = function LineList(props) {
     <div>
       <h3 style={{ color: 'white' }}>
         <strong>{listRoot.data.filename}</strong>
-        {`: ${listRoot.value}`}
+        {`: ${listRoot.value} lines`}
       </h3>
       <nav aria-label={`${listRoot.data.filename} content list`}>
         {(listRoot.children || []).map((d) => (

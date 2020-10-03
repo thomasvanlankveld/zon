@@ -20,14 +20,16 @@ describe('LineView', () => {
 
     // Then I see the project name in the breadcrumbs
     expect(getByRole('navigation', { name: /breadcrumbs/ })).toHaveTextContent('my-project');
+    expect(getByRole('button', { name: 'my-project' })).toBeVisible();
 
     // And I see the project visualized
-    expect(getByRole('img', { name: 'my-project content diagram' })).toBeVisible();
-    expect(getByRole('button', { name: 'my-project: 100 lines' })).toBeVisible();
-    expect(getByRole('button', { name: 'my-project/package.json: 30 lines' })).toBeVisible();
-    expect(getByRole('button', { name: 'my-project/src: 70 lines' })).toBeVisible();
-    expect(getByRole('button', { name: 'my-project/src/foo.ts: 50 lines' })).toBeVisible();
-    expect(getByRole('button', { name: 'my-project/src/bar.ts: 20 lines' })).toBeVisible();
+    expect(getByRole('img', { name: 'my-project line count diagram' })).toBeVisible();
+
+    // And I see the project's top folders and files listed
+    expect(getByRole('heading', { name: 'my-project : 100 lines' })).toBeVisible();
+    expect(getByRole('navigation', { name: 'my-project content list' })).toBeVisible();
+    expect(getByRole('button', { name: 'src : 70 lines' })).toBeVisible();
+    expect(getByRole('button', { name: 'package.json : 30 lines' })).toBeVisible();
 
     // And I see the entire line view
     expect(asFragment()).toMatchInlineSnapshot(`
@@ -49,41 +51,31 @@ describe('LineView', () => {
           class="sc-AxiKw kvctUQ"
         >
           <svg
-            aria-label="my-project content diagram"
+            aria-label="my-project line count diagram"
             height="500"
             role="img"
             viewBox="-250 -250 500 500"
             width="500"
           >
             <path
-              aria-label="my-project: 100 lines"
               class="sc-AxirZ gEHNzQ"
               d="M5.102694996447305e-15,-83.33333333333333A83.33333333333333,83.33333333333333,0,1,1,-5.102694996447305e-15,83.33333333333333A83.33333333333333,83.33333333333333,0,1,1,5.102694996447305e-15,-83.33333333333333Z"
-              role="button"
             />
             <path
-              aria-label="my-project/src: 70 lines"
               class="sc-AxirZ eyvvLs"
               d="M0.000012499986981635035,-166.6666666666662A166.66666666666666,166.66666666666666,0,1,1,-158.5094155198167,51.5028442840185L-79.2547058285535,25.751428086106067A83.33333333333333,83.33333333333333,0,1,0,0.000012499986976532307,-83.33333333333239Z"
-              role="button"
             />
             <path
-              aria-label="my-project/package.json: 30 lines"
               class="sc-AxirZ ckCNTr"
               d="M-158.50942324523353,51.502820507630375A166.66666666666666,166.66666666666666,0,0,1,-0.000012499987002045817,-166.6666666666662L-0.000012499986986737697,-83.33333333333239A83.33333333333333,83.33333333333333,0,0,0,-79.2547135539703,25.75140430971794Z"
-              role="button"
             />
             <path
-              aria-label="my-project/src/foo.ts: 50 lines"
               class="sc-AxirZ kZsyof"
               d="M0.000012499987005241455,-249.9999999999997A250,250,0,0,1,0.000012499987005241455,249.9999999999997L0.000012499986981635035,166.6666666666662A166.66666666666666,166.66666666666666,0,0,0,0.000012499986981635035,-166.6666666666662Z"
-              role="button"
             />
             <path
-              aria-label="my-project/src/bar.ts: 20 lines"
               class="sc-AxirZ ivsFwH"
               d="M-0.000012499986974625285,249.9999999999997A250,250,0,0,1,-237.76412521107972,77.25426048193081L-158.5094155198167,51.5028442840185A166.66666666666666,166.66666666666666,0,0,0,-0.000012499986961224256,166.6666666666662Z"
-              role="button"
             />
           </svg>
           <div>
@@ -93,7 +85,7 @@ describe('LineView', () => {
               <strong>
                 my-project
               </strong>
-              : 100
+              : 100 lines
             </h3>
             <nav
               aria-label="my-project content list"

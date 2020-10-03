@@ -55,7 +55,7 @@ const LineDiagram: SFC<LineDiagramProps> = function LineDiagram(props) {
 
   return (
     <svg
-      aria-label={`${projectRoot.data.filename} content diagram`}
+      aria-label={`${projectRoot.data.filename} line count diagram`}
       role="img"
       width={width}
       height={height}

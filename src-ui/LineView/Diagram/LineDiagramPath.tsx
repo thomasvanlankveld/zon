@@ -58,8 +58,6 @@ const LineDiagramPath: SFC<LineDiagramPathProps> = function LineDiagramPath(prop
 
   return (
     <Path
-      aria-label={`${d.data.path}: ${d.value} lines`}
-      role="button"
       d={LineDiagramArc(d)}
       datum={d}
       isHighlighted={isHighlighted}
