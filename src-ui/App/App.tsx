@@ -9,7 +9,7 @@ interface AppProps {
 }
 
 /**
- *
+ * The zon app
  */
 const App: FC<AppProps> = function App(props) {
   const { zonClient } = props;
