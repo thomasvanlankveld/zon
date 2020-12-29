@@ -31,4 +31,13 @@ describe('LineView', () => {
     expect(getByRole('button', { name: 'src : 70 lines' })).toBeVisible();
     expect(getByRole('button', { name: 'package.json : 30 lines' })).toBeVisible();
   });
+
+  it.todo('navigates to a folder on breadcrumb click');
+  it.todo('navigates to a folder on diagram segment click');
+  it.todo('navigates to the parent folder on diagram center click');
+  it.todo('previews a folder or file on diagram segment hover (navigation and list)');
+  it.todo('highlights a folder or file on diagram segment hover (breadcrumb and diagram segment)');
+
+  it.todo('navigates to a folder on list item click');
+  it.todo('highlights a folder or file on list item hover (diagram segment)');
 });
