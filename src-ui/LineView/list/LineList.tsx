@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { colorNode } from './color';
-import { LineViewNode } from './LineViewNode';
-import Button from '../component-lib/Button';
-import { useSelectNode } from './partition';
+import { colorNode } from '../color';
+import { LineViewNode } from '../LineViewNode';
+import Button from '../../component-lib/Button';
+import { useSelectNode } from '../partition';
 
 interface LineListProps {
   projectRoot: LineViewNode;

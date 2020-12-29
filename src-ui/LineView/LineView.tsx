@@ -6,7 +6,7 @@ import { Project } from '../project/Project';
 import zonColoredHierarchy from './color';
 import LineViewNavigation from './navigation/LineViewNavigation';
 import LineDiagram from './diagram/LineDiagram';
-import LineList from './LineList';
+import LineList from './list/LineList';
 
 interface LineViewProps {
   data: Project;
