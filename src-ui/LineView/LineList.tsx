@@ -1,4 +1,4 @@
-import React, { SFC } from 'react';
+import React, { FC } from 'react';
 import { colorNode } from './color';
 import { LineViewNode } from './LineViewNode';
 import Button from '../component-lib/Button';
@@ -16,7 +16,7 @@ interface LineListProps {
 /**
  *
  */
-const LineList: SFC<LineListProps> = function LineList(props) {
+const LineList: FC<LineListProps> = function LineList(props) {
   const {
     projectRoot,
     listRootFilePath,

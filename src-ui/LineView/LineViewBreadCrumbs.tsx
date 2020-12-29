@@ -1,4 +1,4 @@
-import React, { SFC } from 'react';
+import React, { FC } from 'react';
 import { colorNode } from './color';
 import Button from '../component-lib/Button';
 import { LineViewNode } from './LineViewNode';
@@ -14,7 +14,7 @@ interface LineViewBreadCrumbsProps {
 /**
  *
  */
-const LineViewBreadCrumbs: SFC<LineViewBreadCrumbsProps> = function LineViewBreadCrumbs(props) {
+const LineViewBreadCrumbs: FC<LineViewBreadCrumbsProps> = function LineViewBreadCrumbs(props) {
   const { projectRoot, path, isHighlighted, setDiagramRootFilePath } = props;
 
   // Get breadcrumb node (project root if none matches path)

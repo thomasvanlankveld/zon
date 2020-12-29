@@ -1,4 +1,4 @@
-import React, { SFC, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 
 import { LineViewNode } from '../LineViewNode';
 import LineDiagramPath from './LineDiagramPath';
@@ -17,7 +17,7 @@ interface LineDiagramProps {
 /**
  *
  */
-const LineDiagram: SFC<LineDiagramProps> = function LineDiagram(props) {
+const LineDiagram: FC<LineDiagramProps> = function LineDiagram(props) {
   const {
     projectRoot,
     diagramRootFilePath,

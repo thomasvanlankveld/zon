@@ -1,4 +1,4 @@
-import React, { SFC, useState, useMemo, useCallback } from 'react';
+import React, { FC, useState, useMemo, useCallback } from 'react';
 import { HierarchyNode } from 'd3';
 import styled from 'styled-components';
 
@@ -25,7 +25,7 @@ const LineViewGrid = styled.div`
 /**
  *
  */
-const LineView: SFC<LineViewProps> = function LineView(props) {
+const LineView: FC<LineViewProps> = function LineView(props) {
   const { data } = props;
   const projectRootPath = data.path;
 

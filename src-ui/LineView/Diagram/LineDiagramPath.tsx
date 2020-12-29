@@ -1,4 +1,4 @@
-import React, { SFC } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import { arc } from 'd3';
 
@@ -53,7 +53,7 @@ interface LineDiagramPathProps {
 /**
  *
  */
-const LineDiagramPath: SFC<LineDiagramPathProps> = function LineDiagramPath(props) {
+const LineDiagramPath: FC<LineDiagramPathProps> = function LineDiagramPath(props) {
   const { d, isHighlighted, hoveredFilePath, setHoveredFilePath, onClick } = props;
 
   return (
