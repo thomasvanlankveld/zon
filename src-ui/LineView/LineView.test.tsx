@@ -3,6 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 
 import LineView from './LineView';
 import { createTreeFromFiles } from '../file-tree';
+import getBreadcrumbsForPath from './navigation/test-support/getBreadcrumbsForPath';
 
 describe('LineView', () => {
   it('renders breadcrumbs, a diagram and a list', () => {
@@ -44,7 +45,8 @@ describe('LineView', () => {
     ]);
 
     // And a rendered line view
-    const { getByRole } = render(<LineView data={project} />);
+    const renderResult = render(<LineView data={project} />);
+    const { getByRole } = renderResult;
 
     // And I navigated to the `src` folder in navigation
     fireEvent.click(getByRole('button', { name: 'src : 70 lines' }));
@@ -53,7 +55,9 @@ describe('LineView', () => {
     fireEvent.click(getByRole('button', { name: 'my-project' }));
 
     // Then I see the breadcrumbs for the project root
-    expect(false).toBe(true);
+    getBreadcrumbsForPath(['my-project'], renderResult).forEach((breadcrumb) => {
+      expect(breadcrumb).toBeVisible();
+    });
 
     // And I see a visualization from the project root
     expect(false).toBe(true);
