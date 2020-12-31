@@ -55,7 +55,7 @@ describe('LineView', () => {
     fireEvent.click(getByRole('button', { name: 'my-project' }));
 
     // Then I see the breadcrumbs for the project root
-    getBreadcrumbsForPath(['my-project'], renderResult).forEach((breadcrumb) => {
+    getBreadcrumbsForPath('my-project', renderResult).forEach((breadcrumb) => {
       expect(breadcrumb).toBeVisible();
     });
 

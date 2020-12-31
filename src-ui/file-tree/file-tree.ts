@@ -1,7 +1,7 @@
 import { DeepReadonly } from 'utility-types';
 
 /**
- * Path as strings
+ * Path as string
  */
 export type PathString = string;
 
@@ -9,6 +9,11 @@ export type PathString = string;
  * Path as array of path segments
  */
 export type PathArray = string[];
+
+/**
+ * Path as either string or an array of path segments
+ */
+export type Path = PathString | PathArray;
 
 /**
  * Types a file system node can be

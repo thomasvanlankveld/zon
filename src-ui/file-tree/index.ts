@@ -1,3 +1,4 @@
+import asPathArray from './asPathArray';
 import createTreeFromFiles from './createTreeFromFiles';
 import isFile from './isFile';
 import isFolder from './isFolder';
@@ -12,6 +13,7 @@ export * from './createFile';
 export * from './createFolder';
 export * from './file-tree';
 export {
+  asPathArray,
   createTreeFromFiles,
   isFile,
   isFolder,

@@ -1,5 +1,5 @@
 import { RenderResult } from '@testing-library/react';
-import { PathArray } from '../../../file-tree';
+import { asPathArray, Path } from '../../../file-tree';
 
 /**
  * Get an array of breadcrumb `HTMLElement`s matching the given path.
@@ -10,9 +10,10 @@ import { PathArray } from '../../../file-tree';
  * @param renderResult Result of calling `render` from `@testing-library/react` on `LineViewBreadcrumbTrail` or any of its parents.
  */
 export default function getBreadcrumbsForPath(
-  path: PathArray,
+  path: Path,
   renderResult: RenderResult
 ): HTMLElement[] {
+  const pathArray = asPathArray(path);
   const { getByRole } = renderResult;
-  return path.map((segment) => getByRole('button', { name: segment }));
+  return pathArray.map((segment) => getByRole('button', { name: segment }));
 }
