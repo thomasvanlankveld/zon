@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 
 import LineView from './LineView';
 import { createTreeFromFiles } from '../file-tree';
-import getBreadcrumbsForPath from './navigation/test-support/getBreadcrumbsForPath';
+import getBreadcrumbsForPath from './breadcrumb-trail/test-support/getBreadcrumbsForPath';
 
 describe('LineView', () => {
   it('renders breadcrumbs, a diagram and a list', () => {
@@ -48,10 +48,10 @@ describe('LineView', () => {
     const renderResult = render(<LineView data={project} />);
     const { getByRole } = renderResult;
 
-    // And I navigated to the `src` folder in navigation
+    // And I navigated to the `src` folder
     fireEvent.click(getByRole('button', { name: 'src : 70 lines' }));
 
-    // When I click the `my-project` breadcrumb in the navigation
+    // When I click the `my-project` breadcrumb
     fireEvent.click(getByRole('button', { name: 'my-project' }));
 
     // Then I see the breadcrumbs for the project root

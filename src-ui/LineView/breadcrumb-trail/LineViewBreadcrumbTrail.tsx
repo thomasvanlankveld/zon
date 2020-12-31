@@ -4,7 +4,7 @@ import Button from '../../component-lib/Button';
 import { LineViewNode } from '../LineViewNode';
 import { useSelectNode } from '../partition';
 
-interface LineViewNavigationProps {
+interface LineViewBreadcrumbTrailProps {
   projectRoot: LineViewNode;
   path: string;
   isHighlighted: (d: LineViewNode) => boolean;
@@ -14,10 +14,12 @@ interface LineViewNavigationProps {
 /**
  *
  */
-const LineViewNavigation: FC<LineViewNavigationProps> = function LineViewNavigation(props) {
+const LineViewBreadcrumbTrail: FC<LineViewBreadcrumbTrailProps> = function LineViewBreadcrumbTrail(
+  props
+) {
   const { projectRoot, path, isHighlighted, setDiagramRootFilePath } = props;
 
-  // Get current node from a navigation perspective (project root if none matches path)
+  // Get node that is currently visualized (project root if none matches path)
   const currentNode = useSelectNode(projectRoot, path);
 
   return (
@@ -45,4 +47,4 @@ const LineViewNavigation: FC<LineViewNavigationProps> = function LineViewNavigat
   );
 };
 
-export default LineViewNavigation;
+export default LineViewBreadcrumbTrail;

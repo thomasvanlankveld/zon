@@ -7,7 +7,7 @@ import { PathArray } from '../../../file-tree';
  * Will throw a `TestingLibraryElementError` if a breadcrumb can not be found.
  *
  * @param path The array of filesystem path segments to find matching breadcrumbs for
- * @param renderResult Result of calling `render` from `@testing-library/react` on `LineViewNavigation` or any of its parents.
+ * @param renderResult Result of calling `render` from `@testing-library/react` on `LineViewBreadcrumbTrail` or any of its parents.
  */
 export default function getBreadcrumbsForPath(
   path: PathArray,

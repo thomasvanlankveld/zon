@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { Project } from '../project/Project';
 import zonColoredHierarchy from './color';
-import LineViewNavigation from './navigation/LineViewNavigation';
+import LineViewBreadcrumbTrail from './breadcrumb-trail/LineViewBreadcrumbTrail';
 import LineDiagram from './diagram/LineDiagram';
 import LineList from './list/LineList';
 
@@ -51,7 +51,7 @@ const LineView: FC<LineViewProps> = function LineView(props) {
 
   return (
     <>
-      <LineViewNavigation
+      <LineViewBreadcrumbTrail
         projectRoot={projectRoot}
         path={hoveredArcFilePath || diagramRootFilePath}
         isHighlighted={isHighlighted}
