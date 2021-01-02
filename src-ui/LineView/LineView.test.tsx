@@ -5,6 +5,7 @@ import LineView from './LineView';
 import { createTreeFromFiles } from '../file-tree';
 import getBreadcrumbsForPath from './breadcrumb-trail/test-support/getBreadcrumbsForPath';
 import getBreadcrumbTrail from './breadcrumb-trail/test-support/getBreadcrumbTrail';
+import getBreadcrumb from './breadcrumb-trail/test-support/getBreadcrumb';
 
 describe('LineView', () => {
   it('renders breadcrumbs, a diagram and a list', () => {
@@ -56,7 +57,7 @@ describe('LineView', () => {
     fireEvent.click(getByRole('button', { name: 'src : 70 lines' }));
 
     // When I click the `my-project` breadcrumb
-    fireEvent.click(getByRole('button', { name: 'my-project' }));
+    fireEvent.click(getBreadcrumb('my-project', renderResult));
 
     // Then I see the breadcrumbs for the project root
     getBreadcrumbsForPath('my-project', renderResult).forEach((breadcrumb) => {

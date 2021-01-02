@@ -1,5 +1,6 @@
 import { RenderResult } from '@testing-library/react';
 import { asPathArray, Path } from '../../../file-tree';
+import getBreadcrumb from './getBreadcrumb';
 
 /**
  * Get an array of breadcrumb `HTMLElement`s matching the given path.
@@ -14,6 +15,5 @@ export default function getBreadcrumbsForPath(
   renderResult: RenderResult
 ): HTMLElement[] {
   const pathArray = asPathArray(path);
-  const { getByRole } = renderResult;
-  return pathArray.map((segment) => getByRole('button', { name: segment }));
+  return pathArray.map((segment) => getBreadcrumb(segment, renderResult));
 }
