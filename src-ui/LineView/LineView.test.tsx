@@ -4,6 +4,7 @@ import { render, fireEvent } from '@testing-library/react';
 import LineView from './LineView';
 import { createTreeFromFiles } from '../file-tree';
 import getBreadcrumbsForPath from './breadcrumb-trail/test-support/getBreadcrumbsForPath';
+import getBreadcrumbTrail from './breadcrumb-trail/test-support/getBreadcrumbTrail';
 
 describe('LineView', () => {
   it('renders breadcrumbs, a diagram and a list', () => {
@@ -17,11 +18,14 @@ describe('LineView', () => {
     ]);
 
     // When I render the line view
-    const { getByRole } = render(<LineView data={project} />);
+    const renderResult = render(<LineView data={project} />);
+    const { getByRole } = renderResult;
 
     // Then I see the breadcrumbs for the project's root
-    expect(getByRole('navigation', { name: /breadcrumbs/ })).toHaveTextContent('my-project');
-    expect(getByRole('button', { name: 'my-project' })).toBeVisible();
+    expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project');
+    getBreadcrumbsForPath('my-project', renderResult).forEach((breadcrumb) => {
+      expect(breadcrumb).toBeVisible();
+    });
 
     // And I see the project visualized
     expect(getByRole('img', { name: 'my-project line count diagram' })).toBeVisible();
