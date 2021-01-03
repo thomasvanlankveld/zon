@@ -56,26 +56,25 @@ describe('LineView', () => {
     // And a rendered line view
     const renderResult = render(<LineView data={project} />);
 
-    // And I navigated to the `src` folder
-    fireEvent.click(getLineListItemByName('src', renderResult));
+    // And I navigated to `src/foo.ts`
+    fireEvent.click(getDiagramPath('my-project/src/foo.ts', renderResult));
 
-    // When I click the `my-project` breadcrumb
-    fireEvent.click(getBreadcrumb('my-project', renderResult));
+    // When I click the `src` breadcrumb
+    fireEvent.click(getBreadcrumb('src', renderResult));
 
-    // Then I see the breadcrumbs for the project root
-    expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project');
+    // Then I see the breadcrumbs for the `src` folder
+    expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project / src');
 
     // And I see a visualization from the project root
-    expect(getDiagramPath('my-project/package.json', renderResult)).toBeVisible();
     expect(getDiagramPath('my-project/src', renderResult)).toBeVisible();
     expect(getDiagramPath('my-project/src/foo.ts', renderResult)).toBeVisible();
     expect(getDiagramPath('my-project/src/bar.ts', renderResult)).toBeVisible();
 
     // And I see a list of the project's top folders and files
-    expect(getLineList('my-project', renderResult)).toBeVisible();
-    expect(getLineListHeading('my-project', renderResult)).toBeVisible();
-    expect(getLineListItemByName('package.json', renderResult)).toBeVisible();
-    expect(getLineListItemByName('src', renderResult)).toBeVisible();
+    expect(getLineList('src', renderResult)).toBeVisible();
+    expect(getLineListHeading('src', renderResult)).toBeVisible();
+    expect(getLineListItemByName('foo.ts', renderResult)).toBeVisible();
+    expect(getLineListItemByName('bar.ts', renderResult)).toBeVisible();
   });
   it.todo('navigates to a folder on diagram segment click');
   it.todo('navigates to the parent folder on diagram center click');
