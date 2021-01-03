@@ -6,6 +6,8 @@ import { createTreeFromFiles } from '../file-tree';
 import getBreadcrumbTrail from './breadcrumb-trail/test-support/getBreadcrumbTrail';
 import getBreadcrumb from './breadcrumb-trail/test-support/getBreadcrumb';
 import getLineListItemByName from './list/test-support/getLineListItemByName';
+import getDiagram from './diagram/test-support/getDiagram';
+import getDiagramPath from './diagram/test-support/getDiagramPath';
 
 describe('LineView', () => {
   it('renders breadcrumbs, a diagram and a list', () => {
@@ -27,7 +29,11 @@ describe('LineView', () => {
     expect(getBreadcrumb('my-project', renderResult)).toBeVisible();
 
     // And I see the project visualized
-    expect(getByRole('img', { name: 'my-project line count diagram' })).toBeVisible();
+    expect(getDiagram('my-project', renderResult)).toBeVisible();
+    expect(getDiagramPath('my-project/package.json', renderResult)).toBeVisible();
+    expect(getDiagramPath('my-project/src', renderResult)).toBeVisible();
+    expect(getDiagramPath('my-project/src/foo.ts', renderResult)).toBeVisible();
+    expect(getDiagramPath('my-project/src/bar.ts', renderResult)).toBeVisible();
 
     // And I see the project's top folders and files listed
     expect(getByRole('heading', { name: 'my-project : 100 lines' })).toBeVisible();
@@ -61,7 +67,10 @@ describe('LineView', () => {
     expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project');
 
     // And I see a visualization from the project root
-    expect(false).toBe(true);
+    expect(getDiagramPath('my-project/package.json', renderResult)).toBeVisible();
+    expect(getDiagramPath('my-project/src', renderResult)).toBeVisible();
+    expect(getDiagramPath('my-project/src/foo.ts', renderResult)).toBeVisible();
+    expect(getDiagramPath('my-project/src/bar.ts', renderResult)).toBeVisible();
 
     // And I see a list of the project's top folders and files
     expect(getByRole('heading', { name: 'my-project : 100 lines' })).toBeVisible();

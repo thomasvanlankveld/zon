@@ -66,6 +66,7 @@ const LineDiagramPath: FC<LineDiagramPathProps> = function LineDiagramPath(props
         if (hoveredFilePath === d.data.path) setHoveredFilePath(null);
       }}
       onClick={(): void => onClick(d.data.path)}
+      data-testid={`diagram-path-${d.data.path}`}
     />
   );
 };
