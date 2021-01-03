@@ -24,9 +24,7 @@ describe('LineView', () => {
 
     // Then I see the breadcrumbs for the project's root
     expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project');
-    getBreadcrumbsForPath('my-project', renderResult).forEach((breadcrumb) => {
-      expect(breadcrumb).toBeVisible();
-    });
+    expect(getBreadcrumb('my-project', renderResult)).toBeVisible();
 
     // And I see the project visualized
     expect(getByRole('img', { name: 'my-project line count diagram' })).toBeVisible();
@@ -60,9 +58,7 @@ describe('LineView', () => {
     fireEvent.click(getBreadcrumb('my-project', renderResult));
 
     // Then I see the breadcrumbs for the project root
-    getBreadcrumbsForPath('my-project', renderResult).forEach((breadcrumb) => {
-      expect(breadcrumb).toBeVisible();
-    });
+    expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project');
 
     // And I see a visualization from the project root
     expect(false).toBe(true);
