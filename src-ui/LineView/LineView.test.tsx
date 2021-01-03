@@ -8,6 +8,8 @@ import getBreadcrumb from './breadcrumb-trail/test-support/getBreadcrumb';
 import getLineListItemByName from './list/test-support/getLineListItemByName';
 import getDiagram from './diagram/test-support/getDiagram';
 import getDiagramPath from './diagram/test-support/getDiagramPath';
+import getLineListHeading from './list/test-support/getLineListHeading';
+import getLineList from './list/test-support/getLineList';
 
 describe('LineView', () => {
   it('renders breadcrumbs, a diagram and a list', () => {
@@ -22,7 +24,6 @@ describe('LineView', () => {
 
     // When I render the line view
     const renderResult = render(<LineView data={project} />);
-    const { getByRole } = renderResult;
 
     // Then I see the breadcrumbs for the project's root
     expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project');
@@ -36,14 +37,13 @@ describe('LineView', () => {
     expect(getDiagramPath('my-project/src/bar.ts', renderResult)).toBeVisible();
 
     // And I see the project's top folders and files listed
-    expect(getByRole('heading', { name: 'my-project : 100 lines' })).toBeVisible();
-    expect(getByRole('navigation', { name: 'my-project content list' })).toBeVisible();
-    expect(getByRole('button', { name: 'src : 70 lines' })).toBeVisible();
-    expect(getByRole('button', { name: 'package.json : 30 lines' })).toBeVisible();
+    expect(getLineList('my-project', renderResult)).toBeVisible();
+    expect(getLineListHeading('my-project', renderResult)).toBeVisible();
+    expect(getLineListItemByName('package.json', renderResult)).toBeVisible();
+    expect(getLineListItemByName('src', renderResult)).toBeVisible();
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('navigates to a folder on breadcrumb click', () => {
+  it('navigates to a folder on breadcrumb click', () => {
     expect.hasAssertions();
 
     // Given a project with an `src` folder
@@ -55,7 +55,6 @@ describe('LineView', () => {
 
     // And a rendered line view
     const renderResult = render(<LineView data={project} />);
-    const { getByRole } = renderResult;
 
     // And I navigated to the `src` folder
     fireEvent.click(getLineListItemByName('src', renderResult));
@@ -73,7 +72,10 @@ describe('LineView', () => {
     expect(getDiagramPath('my-project/src/bar.ts', renderResult)).toBeVisible();
 
     // And I see a list of the project's top folders and files
-    expect(getByRole('heading', { name: 'my-project : 100 lines' })).toBeVisible();
+    expect(getLineList('my-project', renderResult)).toBeVisible();
+    expect(getLineListHeading('my-project', renderResult)).toBeVisible();
+    expect(getLineListItemByName('package.json', renderResult)).toBeVisible();
+    expect(getLineListItemByName('src', renderResult)).toBeVisible();
   });
   it.todo('navigates to a folder on diagram segment click');
   it.todo('navigates to the parent folder on diagram center click');
