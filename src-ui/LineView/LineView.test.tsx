@@ -5,9 +5,9 @@ import LineView from './LineView';
 import { createTreeFromFiles } from '../file-tree';
 import getBreadcrumbTrail from './breadcrumb-trail/test-support/getBreadcrumbTrail';
 import getBreadcrumb from './breadcrumb-trail/test-support/getBreadcrumb';
-import getDiagram from './diagram/test-support/getDiagram';
 import getDiagramPath from './diagram/test-support/getDiagramPath';
 import getLineListElements from './list/test-support/getLineListElements';
+import getDiagramElements from './diagram/test-support/getDiagramElements';
 
 describe('LineView', () => {
   it('renders breadcrumbs, a diagram and a list', () => {
@@ -28,11 +28,17 @@ describe('LineView', () => {
     expect(getBreadcrumb('my-project', renderResult)).toBeVisible();
 
     // And I see the project visualized
-    expect(getDiagram('my-project', renderResult)).toBeVisible();
-    expect(getDiagramPath('my-project/package.json', renderResult)).toBeVisible();
-    expect(getDiagramPath('my-project/src', renderResult)).toBeVisible();
-    expect(getDiagramPath('my-project/src/foo.ts', renderResult)).toBeVisible();
-    expect(getDiagramPath('my-project/src/bar.ts', renderResult)).toBeVisible();
+    const diagramElements = getDiagramElements(
+      'my-project',
+      [
+        'my-project/package.json',
+        'my-project/src',
+        'my-project/src/foo.ts',
+        'my-project/src/bar.ts',
+      ],
+      renderResult
+    );
+    diagramElements.forEach((element) => expect(element).toBeVisible());
 
     // Then I see a list of the top level folder's contents
     const lineListElements = getLineListElements(
@@ -66,9 +72,12 @@ describe('LineView', () => {
     expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project / src');
 
     // And I see a visualization from the `src` folder
-    expect(getDiagramPath('my-project/src', renderResult)).toBeVisible();
-    expect(getDiagramPath('my-project/src/foo.ts', renderResult)).toBeVisible();
-    expect(getDiagramPath('my-project/src/bar.ts', renderResult)).toBeVisible();
+    const diagramElements = getDiagramElements(
+      'my-project',
+      ['my-project/src', 'my-project/src/foo.ts', 'my-project/src/bar.ts'],
+      renderResult
+    );
+    diagramElements.forEach((element) => expect(element).toBeVisible());
 
     // Then I see a list of the `src` folder's contents
     const lineListElements = getLineListElements('src', ['foo.ts', 'bar.ts'], renderResult);
@@ -94,7 +103,20 @@ describe('LineView', () => {
     // Then I see the breadcrumbs for the `src` folder
     expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project / src');
 
-    // Then I see a list of the `src` folder's contents
+    // And I still see the whole project visualized
+    const diagramElements = getDiagramElements(
+      'my-project',
+      [
+        'my-project/package.json',
+        'my-project/src',
+        'my-project/src/foo.ts',
+        'my-project/src/bar.ts',
+      ],
+      renderResult
+    );
+    diagramElements.forEach((element) => expect(element).toBeVisible());
+
+    // And I see a list of the `src` folder's contents
     const lineListElements = getLineListElements('src', ['foo.ts', 'bar.ts'], renderResult);
     lineListElements.forEach((element) => expect(element).toBeVisible());
   });
