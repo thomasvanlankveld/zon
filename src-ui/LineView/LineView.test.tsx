@@ -65,20 +65,46 @@ describe('LineView', () => {
     // Then I see the breadcrumbs for the `src` folder
     expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project / src');
 
-    // And I see a visualization from the project root
+    // And I see a visualization from the `src` folder
     expect(getDiagramPath('my-project/src', renderResult)).toBeVisible();
     expect(getDiagramPath('my-project/src/foo.ts', renderResult)).toBeVisible();
     expect(getDiagramPath('my-project/src/bar.ts', renderResult)).toBeVisible();
 
-    // And I see a list of the project's top folders and files
+    // Then I see a list of the `src` folder's contents
     expect(getLineList('src', renderResult)).toBeVisible();
     expect(getLineListHeading('src', renderResult)).toBeVisible();
     expect(getLineListItemByName('foo.ts', renderResult)).toBeVisible();
     expect(getLineListItemByName('bar.ts', renderResult)).toBeVisible();
   });
+
+  it('previews a folder or file on diagram segment hover (navigation and list)', () => {
+    expect.hasAssertions();
+
+    // Given a project with an `src` folder
+    const project = createTreeFromFiles([
+      { path: 'my-project/package.json', data: { numberOfLines: 30 } },
+      { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
+      { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
+    ]);
+
+    // And a rendered line view
+    const renderResult = render(<LineView data={project} />);
+
+    // When I hover my cursor over the diagram path for the `src` folder
+    fireEvent.mouseEnter(getDiagramPath('my-project/src', renderResult));
+
+    // Then I see the breadcrumbs for the `src` folder
+    expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project / src');
+
+    // Then I see a list of the `src` folder's contents
+    expect(getLineList('src', renderResult)).toBeVisible();
+    expect(getLineListHeading('src', renderResult)).toBeVisible();
+    expect(getLineListItemByName('foo.ts', renderResult)).toBeVisible();
+    expect(getLineListItemByName('bar.ts', renderResult)).toBeVisible();
+  });
+
   it.todo('navigates to a folder on diagram segment click');
   it.todo('navigates to the parent folder on diagram center click');
-  it.todo('previews a folder or file on diagram segment hover (navigation and list)');
   it.todo('highlights a folder or file on diagram segment hover (breadcrumb and diagram segment)');
 
   it.todo('navigates to a folder on list item click');
