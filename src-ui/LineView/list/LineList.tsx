@@ -29,12 +29,16 @@ const LineList: FC<LineListProps> = function LineList(props) {
   // Select root node for the list view (either root or the file of the hovered arc)
   const listRoot = useSelectNode(projectRoot, listRootFilePath);
 
+  // Header text and markdown-style underline
+  const headerText = `${listRoot.data.filename}: ${listRoot.value} lines`;
+  const headerUnderlineText = Array.from({ length: headerText.length }, () => '=').join('');
+
   return (
     <div>
-      <h3 style={{ color: 'white' }}>
-        <strong>{listRoot.data.filename}</strong>
-        {`: ${listRoot.value} lines`}
-      </h3>
+      <h4 style={{ color: 'white', marginBottom: 0, fontWeight: 'normal' }}>{headerText}</h4>
+      <p style={{ color: 'white', marginTop: 0, marginBottom: '22px' }}>
+        {`${headerUnderlineText}`}
+      </p>
       <nav aria-label={`${listRoot.data.filename} content list`}>
         {(listRoot.children || []).map((d) => (
           <Button
@@ -43,7 +47,7 @@ const LineList: FC<LineListProps> = function LineList(props) {
               color: colorNode(d, { isHighlighted: isHighlighted(d) }),
               cursor: 'pointer',
               display: 'block',
-              margin: '12px 0',
+              margin: 0,
             }}
             onClick={(): void => setDiagramRootFilePath(d.data.path)}
             onMouseEnter={(): void => setHoveredListItemFilePath(d.data.path)}
@@ -51,8 +55,7 @@ const LineList: FC<LineListProps> = function LineList(props) {
               if (hoveredListItemFilePath === d.data.path) setHoveredListItemFilePath(null);
             }}
           >
-            <strong>{d.data.filename}</strong>
-            {`: ${d.value} lines`}
+            {`${d.data.filename}: ${d.value} lines`}
           </Button>
         ))}
       </nav>

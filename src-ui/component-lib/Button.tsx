@@ -12,7 +12,6 @@ const Button = styled.button`
   /* Change the font styles in all browsers. */
   font: inherit; /* 1 */
   color: inherit;
-  line-height: 1.15; /* 1 */
 
   /* Remove the margin in Firefox and Safari. */
   margin: 0; /* 2 */
