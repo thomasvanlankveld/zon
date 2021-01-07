@@ -1,0 +1,29 @@
+/* Font for old browsers, see: https://web.dev/variable-fonts/#fallbacks */
+@font-face {
+  font-family: Roboto;
+  src: local('Roboto'), url('./component-lib/fonts/Roboto_Mono/RobotoMono-Regular.ttf');
+  font-weight: normal;
+}
+
+/* Font for modern browsers, see: https://web.dev/variable-fonts/#fallbacks */
+@supports (font-variation-settings: normal) {
+  @font-face {
+    font-family: 'Roboto';
+    src: url('./component-lib/fonts/Roboto_Mono/RobotoMono-VariableFont_wght.ttf')
+        format('woff2 supports variations'),
+      url('./component-lib/fonts/Roboto_Mono/RobotoMono-VariableFont_wght.ttf')
+        format('woff2-variations');
+    font-weight: 100 1000;
+    font-stretch: 25% 151%;
+  }
+
+  .super-bold {
+    font-weight: 1000;
+  }
+}
+
+/* All text Roboto */
+body {
+  font-family: Roboto;
+  font-weight: 200;
+}

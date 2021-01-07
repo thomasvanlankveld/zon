@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import App from './App/App';
 import createZonClientFake from './services/zon-client/createZonClientFake';
 import createZonClientHTTP from './services/zon-client/createZonClientHTTP';
+import './index.css';
 
 // Create zon client service
 const zonClient =
