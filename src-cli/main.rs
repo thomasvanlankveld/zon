@@ -1,10 +1,11 @@
 use std::env;
+use std::str;
 
 use anyhow::Result;
 use colored::*;
 use serde_json::json;
 use tokei::{Config, Languages};
-use warp::Filter;
+use warp::{http::Response, Filter};
 
 // Include html and js file content loader
 include!(concat!(env!("OUT_DIR"), "/loader.rs"));
@@ -47,8 +48,38 @@ async fn main() -> Result<()> {
         .with(warp::reply::with::header("content-length", js().len()))
         .with(warp::reply::with::header("accept-ranges", "bytes"));
 
+    // Get css contents and headers
+    let served_zon_ui_index_css = warp::path!("index.css")
+        .map(|| css())
+        .with(warp::reply::with::header("content-type", "text/css"))
+        .with(warp::reply::with::header("content-length", css().len()))
+        .with(warp::reply::with::header("accept-ranges", "bytes"));
+
+    // Get regular font contents and headers
+    let served_zon_ui_fira_code_regular = warp::path!("FiraCode-Regular.ttf").map(|| {
+        Response::builder()
+            .header("content-type", "font/ttf")
+            .header("accept-ranges", "bytes")
+            .header("content-length", fira_code_regular().len())
+            .body(fira_code_regular())
+    });
+
+    // Get variable weight font contents and headers
+    let served_zon_ui_fira_code_variable_wght =
+        warp::path!("FiraCode-VariableFont_wght.ttf").map(|| {
+            Response::builder()
+                .header("content-type", "font/ttf")
+                .header("accept-ranges", "bytes")
+                .header("content-length", fira_code_variable_wght().len())
+                .body(fira_code_variable_wght())
+        });
+
     // Serve UI and analysis json
-    let served_zon_ui = served_zon_ui_index_html.or(served_zon_ui_index_js);
+    let served_zon_ui = served_zon_ui_index_html
+        .or(served_zon_ui_index_js)
+        .or(served_zon_ui_index_css)
+        .or(served_zon_ui_fira_code_regular)
+        .or(served_zon_ui_fira_code_variable_wght);
     let served_zon_json = warp::path("input").map(move || format!("{}", zon_json));
     let served = served_zon_ui.or(served_zon_json);
     println!(
