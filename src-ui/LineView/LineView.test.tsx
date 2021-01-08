@@ -101,6 +101,9 @@ describe('LineView', () => {
       // And a rendered line view
       const renderResult = render(<LineView data={project} />);
 
+      // Then the diagram path for the `src` folder is *not* highlighted
+      expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(251,150,51);');
+
       // When I hover my cursor over the diagram path for the `src` folder
       fireEvent.mouseEnter(getDiagramPath('my-project/src', renderResult));
 
@@ -119,6 +122,9 @@ describe('LineView', () => {
         renderResult
       );
       diagramElements.forEach((element) => expect(element).toBeVisible());
+
+      // And the diagram path for the `src` folder is highlighted
+      expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(255,174,76);');
 
       // And I see a list of the `src` folder's contents
       const lineListElements = getLineListElements('src', ['foo.ts', 'bar.ts'], renderResult);
