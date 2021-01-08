@@ -242,11 +242,17 @@ describe('LineView', () => {
       // Then the diagram path for the `src` folder is *not* highlighted
       expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(251,150,51);');
 
+      // And the list item for the `src` folder is *not* highlighted
+      expect(getLineListItemByName('src', renderResult)).toHaveStyle('color: rgb(251,150,51);');
+
       // When I hover my cursor over the `src` list item
       fireEvent.mouseEnter(getLineListItemByName('src', renderResult));
 
       // Then the diagram path for the `src` folder is highlighted
       expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(255,174,76);');
+
+      // And the list item for the `src` folder is highlighted
+      expect(getLineListItemByName('src', renderResult)).toHaveStyle('color: rgb(255,174,76);');
     });
   });
 });
