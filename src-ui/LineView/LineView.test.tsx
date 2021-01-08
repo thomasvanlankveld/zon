@@ -190,10 +190,6 @@ describe('LineView', () => {
       const lineListElements = getLineListElements('src', ['foo.ts', 'bar.ts'], renderResult);
       lineListElements.forEach((element) => expect(element).toBeVisible());
     });
-
-    it.todo(
-      'highlights a folder or file on diagram segment hover (breadcrumb and diagram segment)'
-    );
   });
 
   describe('list actions', () => {
