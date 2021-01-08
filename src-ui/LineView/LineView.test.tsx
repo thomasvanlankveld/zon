@@ -49,82 +49,91 @@ describe('LineView', () => {
     lineListElements.forEach((element) => expect(element).toBeVisible());
   });
 
-  it('navigates to a folder on breadcrumb click', () => {
-    expect.hasAssertions();
+  describe('breadcrumb trail actions', () => {
+    it('navigates to a folder on breadcrumb click', () => {
+      expect.hasAssertions();
 
-    // Given a project with an `src` folder
-    const project = createTreeFromFiles([
-      { path: 'my-project/package.json', data: { numberOfLines: 30 } },
-      { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
-      { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
-    ]);
+      // Given a project with an `src` folder
+      const project = createTreeFromFiles([
+        { path: 'my-project/package.json', data: { numberOfLines: 30 } },
+        { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
+        { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
+      ]);
 
-    // And a rendered line view
-    const renderResult = render(<LineView data={project} />);
+      // And a rendered line view
+      const renderResult = render(<LineView data={project} />);
 
-    // And I navigated to `src/foo.ts`
-    fireEvent.click(getDiagramPath('my-project/src/foo.ts', renderResult));
+      // And I navigated to `src/foo.ts`
+      fireEvent.click(getDiagramPath('my-project/src/foo.ts', renderResult));
 
-    // When I click the `src` breadcrumb
-    fireEvent.click(getBreadcrumb('src', renderResult));
+      // When I click the `src` breadcrumb
+      fireEvent.click(getBreadcrumb('src', renderResult));
 
-    // Then I see the breadcrumbs for the `src` folder
-    expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project / src');
+      // Then I see the breadcrumbs for the `src` folder
+      expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project / src');
 
-    // And I see a visualization from the `src` folder
-    const diagramElements = getDiagramElements(
-      'my-project',
-      ['my-project/src', 'my-project/src/foo.ts', 'my-project/src/bar.ts'],
-      renderResult
-    );
-    diagramElements.forEach((element) => expect(element).toBeVisible());
+      // And I see a visualization from the `src` folder
+      const diagramElements = getDiagramElements(
+        'my-project',
+        ['my-project/src', 'my-project/src/foo.ts', 'my-project/src/bar.ts'],
+        renderResult
+      );
+      diagramElements.forEach((element) => expect(element).toBeVisible());
 
-    // Then I see a list of the `src` folder's contents
-    const lineListElements = getLineListElements('src', ['foo.ts', 'bar.ts'], renderResult);
-    lineListElements.forEach((element) => expect(element).toBeVisible());
+      // Then I see a list of the `src` folder's contents
+      const lineListElements = getLineListElements('src', ['foo.ts', 'bar.ts'], renderResult);
+      lineListElements.forEach((element) => expect(element).toBeVisible());
+    });
   });
 
-  it('previews a folder or file on diagram segment hover (navigation and list)', () => {
-    expect.hasAssertions();
+  describe('diagram actions', () => {
+    it('previews a folder or file on diagram segment hover (navigation and list)', () => {
+      expect.hasAssertions();
 
-    // Given a project with an `src` folder
-    const project = createTreeFromFiles([
-      { path: 'my-project/package.json', data: { numberOfLines: 30 } },
-      { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
-      { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
-    ]);
+      // Given a project with an `src` folder
+      const project = createTreeFromFiles([
+        { path: 'my-project/package.json', data: { numberOfLines: 30 } },
+        { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
+        { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
+      ]);
 
-    // And a rendered line view
-    const renderResult = render(<LineView data={project} />);
+      // And a rendered line view
+      const renderResult = render(<LineView data={project} />);
 
-    // When I hover my cursor over the diagram path for the `src` folder
-    fireEvent.mouseEnter(getDiagramPath('my-project/src', renderResult));
+      // When I hover my cursor over the diagram path for the `src` folder
+      fireEvent.mouseEnter(getDiagramPath('my-project/src', renderResult));
 
-    // Then I see the breadcrumbs for the `src` folder
-    expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project / src');
+      // Then I see the breadcrumbs for the `src` folder
+      expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project / src');
 
-    // And I still see the whole project visualized
-    const diagramElements = getDiagramElements(
-      'my-project',
-      [
-        'my-project/package.json',
-        'my-project/src',
-        'my-project/src/foo.ts',
-        'my-project/src/bar.ts',
-      ],
-      renderResult
+      // And I still see the whole project visualized
+      const diagramElements = getDiagramElements(
+        'my-project',
+        [
+          'my-project/package.json',
+          'my-project/src',
+          'my-project/src/foo.ts',
+          'my-project/src/bar.ts',
+        ],
+        renderResult
+      );
+      diagramElements.forEach((element) => expect(element).toBeVisible());
+
+      // And I see a list of the `src` folder's contents
+      const lineListElements = getLineListElements('src', ['foo.ts', 'bar.ts'], renderResult);
+      lineListElements.forEach((element) => expect(element).toBeVisible());
+    });
+
+    it.todo('navigates to a folder on diagram segment click');
+
+    it.todo('navigates to the parent folder on diagram center click');
+    it.todo(
+      'highlights a folder or file on diagram segment hover (breadcrumb and diagram segment)'
     );
-    diagramElements.forEach((element) => expect(element).toBeVisible());
-
-    // And I see a list of the `src` folder's contents
-    const lineListElements = getLineListElements('src', ['foo.ts', 'bar.ts'], renderResult);
-    lineListElements.forEach((element) => expect(element).toBeVisible());
   });
 
-  it.todo('navigates to a folder on diagram segment click');
-  it.todo('navigates to the parent folder on diagram center click');
-  it.todo('highlights a folder or file on diagram segment hover (breadcrumb and diagram segment)');
-
-  it.todo('navigates to a folder on list item click');
-  it.todo('highlights a folder or file on list item hover (diagram segment)');
+  describe('list actions', () => {
+    it.todo('navigates to a folder on list item click');
+    it.todo('highlights a folder or file on list item hover (diagram segment)');
+  });
 });
