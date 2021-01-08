@@ -138,11 +138,8 @@ describe('LineView', () => {
       // And a rendered line view
       const renderResult = render(<LineView data={project} />);
 
-      // And I navigated to `src/foo.ts`
-      fireEvent.click(getDiagramPath('my-project/src/foo.ts', renderResult));
-
-      // When I click on the diagram center
-      fireEvent.click(getDiagramPath('my-project/src/foo.ts', renderResult));
+      // And I click on the diagram path for the `src` folder
+      fireEvent.click(getDiagramPath('my-project/src', renderResult));
 
       // Then I see the breadcrumbs for the `src` folder
       expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project / src');
@@ -173,8 +170,11 @@ describe('LineView', () => {
       // And a rendered line view
       const renderResult = render(<LineView data={project} />);
 
-      // And I click on the diagram path for the `src` folder
-      fireEvent.click(getDiagramPath('my-project/src', renderResult));
+      // And I navigated to `src/foo.ts`
+      fireEvent.click(getDiagramPath('my-project/src/foo.ts', renderResult));
+
+      // When I click on the diagram center
+      fireEvent.click(getDiagramPath('my-project/src/foo.ts', renderResult));
 
       // Then I see the breadcrumbs for the `src` folder
       expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project / src');
