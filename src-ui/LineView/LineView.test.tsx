@@ -225,6 +225,28 @@ describe('LineView', () => {
       const lineListElements = getLineListElements('src', ['foo.ts', 'bar.ts'], renderResult);
       lineListElements.forEach((element) => expect(element).toBeVisible());
     });
-    it.todo('highlights a folder or file on list item hover (diagram segment)');
+
+    it('highlights a folder or file on list item hover (diagram segment)', () => {
+      expect.hasAssertions();
+
+      // Given a project with an `src` folder
+      const project = createTreeFromFiles([
+        { path: 'my-project/package.json', data: { numberOfLines: 30 } },
+        { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
+        { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
+      ]);
+
+      // And a rendered line view
+      const renderResult = render(<LineView data={project} />);
+
+      // Then the diagram path for the `src` folder is *not* highlighted
+      expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(251,150,51);');
+
+      // When I hover my cursor over the `src` list item
+      fireEvent.mouseEnter(getLineListItemByName('src', renderResult));
+
+      // Then the diagram path for the `src` folder is highlighted
+      expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(255,174,76);');
+    });
   });
 });
