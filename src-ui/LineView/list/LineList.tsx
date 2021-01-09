@@ -3,6 +3,7 @@ import { colorNode } from '../color';
 import { LineViewNode } from '../LineViewNode';
 import Button from '../../component-lib/Button';
 import { useSelectNode } from '../partition';
+import formatNumber from '../../component-lib/format/formatNumber';
 
 interface LineListProps {
   projectRoot: LineViewNode;
@@ -30,7 +31,7 @@ const LineList: FC<LineListProps> = function LineList(props) {
   const listRoot = useSelectNode(projectRoot, listRootFilePath);
 
   // Header text and markdown-style underline
-  const headerText = `${listRoot.data.filename}: ${listRoot.value} lines`;
+  const headerText = `${listRoot.data.filename}: ${formatNumber(listRoot.value || 0)} lines`;
   const headerUnderlineText = Array.from({ length: headerText.length }, () => '=').join('');
 
   return (
@@ -55,7 +56,7 @@ const LineList: FC<LineListProps> = function LineList(props) {
               if (hoveredListItemFilePath === d.data.path) setHoveredListItemFilePath(null);
             }}
           >
-            {`${d.data.filename}: ${d.value} lines`}
+            {`${d.data.filename}: ${formatNumber(d.value || 0)} lines`}
           </Button>
         ))}
       </nav>
