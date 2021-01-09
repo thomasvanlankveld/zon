@@ -102,7 +102,7 @@ describe('LineView', () => {
       const renderResult = render(<LineView data={project} />);
 
       // Then the diagram path for the `src` folder is *not* highlighted
-      expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(251,150,51);');
+      expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(232,176,46);');
 
       // When I hover my cursor over the diagram path for the `src` folder
       fireEvent.mouseEnter(getDiagramPath('my-project/src', renderResult));
@@ -124,7 +124,7 @@ describe('LineView', () => {
       diagramElements.forEach((element) => expect(element).toBeVisible());
 
       // And the diagram path for the `src` folder is highlighted
-      expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(255,174,76);');
+      expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(255,201,73);');
 
       // And I see a list of the `src` folder's contents
       const lineListElements = getLineListElements('src', ['foo.ts', 'bar.ts'], renderResult);
@@ -246,19 +246,19 @@ describe('LineView', () => {
       const renderResult = render(<LineView data={project} />);
 
       // Then the diagram path for the `src` folder is *not* highlighted
-      expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(251,150,51);');
+      expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(232,176,46);');
 
       // And the list item for the `src` folder is *not* highlighted
-      expect(getLineListItemByName('src', renderResult)).toHaveStyle('color: rgb(251,150,51);');
+      expect(getLineListItemByName('src', renderResult)).toHaveStyle('color: rgb(232,176,46);');
 
       // When I hover my cursor over the `src` list item
       fireEvent.mouseEnter(getLineListItemByName('src', renderResult));
 
       // Then the diagram path for the `src` folder is highlighted
-      expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(255,174,76);');
+      expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(255,201,73);');
 
       // And the list item for the `src` folder is highlighted
-      expect(getLineListItemByName('src', renderResult)).toHaveStyle('color: rgb(255,174,76);');
+      expect(getLineListItemByName('src', renderResult)).toHaveStyle('color: rgb(255,201,73);');
     });
   });
 });

@@ -1,4 +1,4 @@
-import { HierarchyRectangularNode, interpolateRainbow, lab } from 'd3';
+import { HierarchyRectangularNode, interpolateRainbow, lab, scaleLinear } from 'd3';
 
 import { Project } from '../project/Project';
 import zonPartition from './partition';
@@ -12,7 +12,22 @@ export interface NodeColors {
 export type ColoredNode<T = object> = HierarchyRectangularNode<T & NodeColors>;
 
 /**
+ * Narrows a value from a 0 - 1 domain to a 0.1 - 0.925 range, because values outside this range produce colors that are difficult to see on a dark background.
+ */
+const scaleForDarkBackground = scaleLinear().range([0.1, 0.925]);
+
+/**
+ * Get the color for a node
  *
+ * @param d The node for which to determine the color
+ */
+function zonBaseColorForNode(d: HierarchyRectangularNode<unknown>): string {
+  const centerValue = d.x0 + (d.x1 - d.x0) / 2;
+  return interpolateRainbow(scaleForDarkBackground(centerValue));
+}
+
+/**
+ * Add zon colors to every node in the hierarchy
  */
 export default function zonColoredHierarchy<T extends Project>(data: T): ColoredNode<T> {
   // Partition the data
@@ -22,7 +37,7 @@ export default function zonColoredHierarchy<T extends Project>(data: T): Colored
   /* eslint-disable no-param-reassign */
   root.each((d) => {
     // The base color is based on the node's center within the partition
-    const baseColor = interpolateRainbow(d.x0 + (d.x1 - d.x0) / 2);
+    const baseColor = zonBaseColorForNode(d);
     (d as ColoredNode<T>).data.baseColor = baseColor;
 
     // The highlighted color is a brighter version of the base color
