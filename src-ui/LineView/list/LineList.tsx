@@ -3,7 +3,7 @@ import { colorNode } from '../color';
 import { LineViewNode } from '../LineViewNode';
 import Button from '../../component-lib/Button';
 import { useSelectNode } from '../partition';
-import formatNumber from '../../component-lib/format/formatNumber';
+import LineListItemText from './LineListItemText';
 
 interface LineListProps {
   projectRoot: LineViewNode;
@@ -30,16 +30,11 @@ const LineList: FC<LineListProps> = function LineList(props) {
   // Select root node for the list view (either root or the file of the hovered arc)
   const listRoot = useSelectNode(projectRoot, listRootFilePath);
 
-  // Header text and markdown-style underline
-  const headerText = `${listRoot.data.filename}: ${formatNumber(listRoot.value || 0)} lines`;
-  const headerUnderlineText = Array.from({ length: headerText.length }, () => '=').join('');
-
   return (
     <div>
-      <h4 style={{ color: 'white', marginBottom: 0, fontWeight: 'normal' }}>{headerText}</h4>
-      <p style={{ color: 'white', marginTop: 0, marginBottom: '22px' }}>
-        {`${headerUnderlineText}`}
-      </p>
+      <h4 style={{ color: 'white', marginBottom: '22px', fontWeight: 'normal', whiteSpace: 'pre' }}>
+        <LineListItemText node={listRoot} />
+      </h4>
       <nav aria-label={`${listRoot.data.filename} content list`}>
         {(listRoot.children || []).map((d) => (
           <Button
@@ -49,6 +44,7 @@ const LineList: FC<LineListProps> = function LineList(props) {
               cursor: 'pointer',
               display: 'block',
               margin: 0,
+              whiteSpace: 'pre',
             }}
             onClick={(): void => setDiagramRootFilePath(d.data.path)}
             onMouseEnter={(): void => setHoveredListItemFilePath(d.data.path)}
@@ -56,7 +52,7 @@ const LineList: FC<LineListProps> = function LineList(props) {
               if (hoveredListItemFilePath === d.data.path) setHoveredListItemFilePath(null);
             }}
           >
-            {`${d.data.filename}: ${formatNumber(d.value || 0)} lines`}
+            <LineListItemText node={d} />
           </Button>
         ))}
       </nav>
