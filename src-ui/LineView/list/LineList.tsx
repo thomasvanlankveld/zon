@@ -1,15 +1,13 @@
 import React, { FC } from 'react';
-import { colorNode } from '../color';
 import { LineViewNode } from '../LineViewNode';
-import Button from '../../component-lib/Button';
 import { useSelectNode } from '../partition';
 import LineListItemText from './LineListItemText';
+import LineListItem from './LineListItem';
 
 interface LineListProps {
   projectRoot: LineViewNode;
   listRootFilePath: string;
   isHighlighted: (d: LineViewNode) => boolean;
-  hoveredListItemFilePath: string | null;
   setHoveredListItemFilePath: (path: string | null) => void;
   setDiagramRootFilePath: (path: string) => void;
 }
@@ -22,7 +20,6 @@ const LineList: FC<LineListProps> = function LineList(props) {
     projectRoot,
     listRootFilePath,
     isHighlighted,
-    hoveredListItemFilePath,
     setHoveredListItemFilePath,
     setDiagramRootFilePath,
   } = props;
@@ -37,23 +34,14 @@ const LineList: FC<LineListProps> = function LineList(props) {
       </h4>
       <nav aria-label={`${listRoot.data.filename} content list`}>
         {(listRoot.children || []).map((d) => (
-          <Button
+          <LineListItem
             key={d.data.path}
-            style={{
-              color: colorNode(d, { isHighlighted: isHighlighted(d) }),
-              cursor: 'pointer',
-              display: 'block',
-              margin: 0,
-              whiteSpace: 'pre',
-            }}
+            d={d}
+            isHighlighted={isHighlighted(d)}
             onClick={(): void => setDiagramRootFilePath(d.data.path)}
             onMouseEnter={(): void => setHoveredListItemFilePath(d.data.path)}
-            onMouseLeave={(): void => {
-              if (hoveredListItemFilePath === d.data.path) setHoveredListItemFilePath(null);
-            }}
-          >
-            <LineListItemText node={d} />
-          </Button>
+            onMouseLeave={(): void => setHoveredListItemFilePath(null)}
+          />
         ))}
       </nav>
     </div>
