@@ -23,7 +23,6 @@ describe('LineDiagram', () => {
         projectRoot={data}
         diagramRootFilePath={project.path}
         isHighlighted={(): boolean => false}
-        hoveredArcFilePath={null}
         setHoveredArcFilePath={(): void => {
           /* Empty */
         }}

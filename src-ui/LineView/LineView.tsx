@@ -62,7 +62,6 @@ const LineView: FC<LineViewProps> = function LineView(props) {
           projectRoot={projectRoot}
           diagramRootFilePath={diagramRootFilePath}
           isHighlighted={isHighlighted}
-          hoveredArcFilePath={hoveredArcFilePath}
           setHoveredArcFilePath={setHoveredArcFilePath}
           setDiagramRootFilePath={setDiagramRootFilePath}
         />

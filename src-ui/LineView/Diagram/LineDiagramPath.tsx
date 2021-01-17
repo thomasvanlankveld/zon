@@ -45,30 +45,33 @@ const Path = styled.path<PathProps>`
 interface LineDiagramPathProps {
   d: LineViewNode;
   isHighlighted: boolean;
-  hoveredFilePath: string | null;
-  setHoveredFilePath: (path: string | null) => void;
+  onMouseEnter: (path: string) => void;
+  onMouseLeave: (path: string) => void;
   onClick: (path: string) => void;
 }
 
 /**
  *
  */
-const LineDiagramPath: FC<LineDiagramPathProps> = function LineDiagramPath(props) {
-  const { d, isHighlighted, hoveredFilePath, setHoveredFilePath, onClick } = props;
+const LineDiagramPath: FC<LineDiagramPathProps> = React.memo(
+  function LineDiagramPath(props) {
+    const { d, isHighlighted, onMouseEnter, onMouseLeave, onClick } = props;
 
-  return (
-    <Path
-      d={LineDiagramArc(d)}
-      datum={d}
-      isHighlighted={isHighlighted}
-      onMouseEnter={(): void => setHoveredFilePath(d.data.path)}
-      onMouseLeave={(): void => {
-        if (hoveredFilePath === d.data.path) setHoveredFilePath(null);
-      }}
-      onClick={(): void => onClick(d.data.path)}
-      data-testid={`diagram-path-${d.data.path}`}
-    />
-  );
-};
+    return (
+      <Path
+        d={LineDiagramArc(d)}
+        datum={d}
+        isHighlighted={isHighlighted}
+        onMouseEnter={(): void => onMouseEnter(d.data.path)}
+        onMouseLeave={(): void => onMouseLeave(d.data.path)}
+        onClick={(): void => onClick(d.data.path)}
+        data-testid={`diagram-path-${d.data.path}`}
+      />
+    );
+  },
+  function areEqual(firstProps, secondProps): boolean {
+    return firstProps.d === secondProps.d && firstProps.isHighlighted === secondProps.isHighlighted;
+  }
+);
 
 export default LineDiagramPath;

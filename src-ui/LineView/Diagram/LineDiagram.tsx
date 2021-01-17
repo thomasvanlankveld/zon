@@ -9,7 +9,6 @@ interface LineDiagramProps {
   projectRoot: LineViewNode;
   diagramRootFilePath: string;
   isHighlighted: (d: LineViewNode) => boolean;
-  hoveredArcFilePath: string | null;
   setHoveredArcFilePath: (path: string | null) => void;
   setDiagramRootFilePath: (path: string) => void;
 }
@@ -22,7 +21,6 @@ const LineDiagram: FC<LineDiagramProps> = function LineDiagram(props) {
     projectRoot,
     diagramRootFilePath,
     isHighlighted,
-    hoveredArcFilePath,
     setHoveredArcFilePath,
     setDiagramRootFilePath,
   } = props;
@@ -69,8 +67,8 @@ const LineDiagram: FC<LineDiagramProps> = function LineDiagram(props) {
             key={d.data.path}
             d={d}
             isHighlighted={isHighlighted(d)}
-            hoveredFilePath={hoveredArcFilePath}
-            setHoveredFilePath={setHoveredArcFilePath}
+            onMouseEnter={(path: string): void => setHoveredArcFilePath(path)}
+            onMouseLeave={(): void => setHoveredArcFilePath(null)}
             onClick={navigateFromPathClick}
           />
         ))}
