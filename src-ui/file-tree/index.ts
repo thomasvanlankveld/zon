@@ -1,5 +1,5 @@
 import asPathArray from './asPathArray';
-import createTreeFromFiles from './createTreeFromFiles';
+import { createTreeFromFiles } from './createTreeFromFiles';
 import isFile from './isFile';
 import isFolder from './isFolder';
 import mergeTrees from './mergeTrees';

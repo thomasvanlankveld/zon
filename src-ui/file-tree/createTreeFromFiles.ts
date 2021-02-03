@@ -32,9 +32,13 @@ function withEmptyRoot<File extends { path: string }>(file: File): File {
 /**
  * Create a tree from an array of files
  */
-export default function createTreeFromFiles<FileData extends object>(
+export function createTreeFromFiles(files: { path: string }[]): FileSystemNode;
+export function createTreeFromFiles<FileData extends object>(
   files: { path: string; data: FileData }[]
-): FileSystemNode<FileData> {
+): FileSystemNode<FileData>;
+export function createTreeFromFiles(
+  files: { path: string; data?: object }[]
+): FileSystemNode<object> {
   // Add empty root to all paths if necessary. This is the case under two circumstances. Firstly, if any of the files have different roots, we need to add a common shared root. Secondly, if any of the files exist at the root pathselves, we need to add a root, since the root must be a folder.
   const rootedFiles =
     haveDifferentRoots(files) || files.some(existAtRoot) ? files.map(withEmptyRoot) : files;
@@ -43,11 +47,11 @@ export default function createTreeFromFiles<FileData extends object>(
   const rootName = pathRoot(rootedFiles[0].path);
 
   // Create an empty root
-  const emptyRoot = createFolder<FileData>(rootName);
+  const emptyRoot = createFolder<object>(rootName);
 
   // Add all files to the root
-  return rootedFiles.reduce<FileSystemNode<FileData>>((root, file) => {
-    const fileNode = createFile(file.path, file.data);
+  return rootedFiles.reduce<FileSystemNode<object>>((root, file) => {
+    const fileNode = createFile(file.path, file.data || {});
     return rootWithNode(root, fileNode);
   }, emptyRoot);
 }

@@ -72,5 +72,5 @@ export default function tokeiAdapter(input: unknown, projectName: string): Proje
   });
 
   // Construct the file tree
-  return createTreeFromFiles(files);
+  return createTreeFromFiles<{ numberOfLines: number }>(files);
 }

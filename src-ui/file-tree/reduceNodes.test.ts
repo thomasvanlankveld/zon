@@ -1,4 +1,4 @@
-import createTreeFromFiles from './createTreeFromFiles';
+import { createTreeFromFiles } from './createTreeFromFiles';
 import { reduceNodes } from './reduceNodes';
 
 describe('reduceNodes', () => {
@@ -7,9 +7,9 @@ describe('reduceNodes', () => {
 
     // Given a file tree
     const tree = createTreeFromFiles([
-      { path: 'my-project/package.json', data: {} },
-      { path: 'my-project/src/foo.ts', data: {} },
-      { path: 'my-project/src/bar.ts', data: {} },
+      { path: 'my-project/package.json' },
+      { path: 'my-project/src/foo.ts' },
+      { path: 'my-project/src/bar.ts' },
     ]);
 
     // When I reduce it to the number of nodes
@@ -51,9 +51,9 @@ describe('reduceNodes', () => {
 
     // Given a file tree
     const tree = createTreeFromFiles([
-      { path: 'my-project/package.json', data: {} },
-      { path: 'my-project/src/foo.ts', data: {} },
-      { path: 'my-project/src/bar.ts', data: {} },
+      { path: 'my-project/package.json' },
+      { path: 'my-project/src/foo.ts' },
+      { path: 'my-project/src/bar.ts' },
     ]);
 
     // When I reduce it to the sum of the number of folders
