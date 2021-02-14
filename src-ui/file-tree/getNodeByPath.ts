@@ -1,4 +1,4 @@
-import { isFile } from '.';
+import isFile from './isFile';
 import asPathArray from './asPathArray';
 import { FileSystemNode, Path } from './file-tree';
 
