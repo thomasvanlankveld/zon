@@ -10,14 +10,15 @@ interface Reducer<T, FileData extends object, FolderData extends object> {
   (accumulator: T, node: FileSystemNode<FileData, FolderData>): T;
 }
 
-// export function reduceNodes<T, FileData extends object, FolderData extends object>(
-//   root: FileSystemNode<FileData, FolderData>,
-//   reducers: {
-//     fileReducer?: (accumulator: T, node: File<FileData>) => T;
-//     folderReducer?: (accumulator: T, node: Folder<FileData, FolderData>) => T;
-//   },
-//   initialValue: T
-// ): T;
+/**
+ * Reduce a tree to a value
+ *
+ * Takes a single reducer to use for all nodes, or an object specifying both or either of "fileReducer" and "folderReducer"
+ *
+ * @param root The root of the tree to be reduced
+ * @param reduction Either a reducer function to apply to all nodes, or an object specifying either or both of "fileReducer" and "folderReducer"
+ * @param initialValue The value to start with
+ */
 export function reduceNodes<T, FileData extends object, FolderData extends object>(
   root: FileSystemNode<FileData, FolderData>,
   reducer: Reducer<T, FileData, FolderData>,
