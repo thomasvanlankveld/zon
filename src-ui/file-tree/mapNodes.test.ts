@@ -73,7 +73,7 @@ describe('mapNodes', () => {
     const counted = mapNodes(tree, {
       folderMapper: produce((draftNode) => {
         draftNode.data.charsInName = draftNode.filename.length;
-      }) as FolderMapper<{}, {}, {}, { charsInName: number }>,
+      }) as FolderMapper<{}, {}, { charsInName: number }>,
     });
 
     // Then I get the number of characters for every folder node
@@ -102,7 +102,7 @@ describe('mapNodes', () => {
       }) as FileMapper<{}, { charsInName: number }>,
       folderMapper: produce((draftNode) => {
         draftNode.data.charsInName = draftNode.filename.length;
-      }) as FolderMapper<{}, {}, { charsInName: number }, { charsInName: number }>,
+      }) as FolderMapper<{}, {}, { charsInName: number }>,
     });
 
     // Then I get the number of characters for every folder node

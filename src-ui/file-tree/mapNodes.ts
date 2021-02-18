@@ -8,10 +8,9 @@ export interface FileMapper<FileDataIn extends object, FileDataOut extends objec
 export interface FolderMapper<
   FileDataIn extends object,
   FolderDataIn extends object,
-  FileDataOut extends object,
   FolderDataOut extends object
 > {
-  (node: Folder<FileDataIn, FolderDataIn>): Folder<FileDataOut, FolderDataOut>;
+  (node: Folder<FileDataIn, FolderDataIn>): Folder<FileDataIn, FolderDataOut>;
 }
 
 export interface MapperPair<
@@ -21,7 +20,7 @@ export interface MapperPair<
   FolderDataOut extends object
 > {
   fileMapper: FileMapper<FileDataIn, FileDataOut>;
-  folderMapper: FolderMapper<FileDataIn, FolderDataIn, FileDataOut, FolderDataOut>;
+  folderMapper: FolderMapper<FileDataIn, FolderDataIn, FolderDataOut>;
 }
 
 export interface Mapper<
@@ -76,7 +75,7 @@ export function mapNodes<
 >(
   root: FileSystemNode<FileDataIn, FolderDataIn>,
   mappers: {
-    folderMapper: FolderMapper<FileDataIn, FolderDataIn, FileDataIn, FolderDataOut>;
+    folderMapper: FolderMapper<FileDataIn, FolderDataIn, FolderDataOut>;
   }
 ): FileSystemNode<FileDataIn, FolderDataOut>;
 export function mapNodes<
@@ -89,23 +88,28 @@ export function mapNodes<
   mapping:
     | Partial<MapperPair<FileDataIn, FolderDataIn, FileDataOut, FolderDataOut>>
     | Mapper<FileDataIn, FolderDataIn, FileDataOut, FolderDataOut>
-): FileSystemNode<FileDataOut, FolderDataOut> {
+): FileSystemNode<FileDataIn | FileDataOut, FolderDataIn | FolderDataOut> {
   // Extract file and folder reducer
-  const mappers = ((): MapperPair<FileDataIn, FolderDataIn, FileDataOut, FolderDataOut> => {
+  const mappers = ((): MapperPair<
+    FileDataIn,
+    FolderDataIn,
+    FileDataIn | FileDataOut,
+    FolderDataIn | FolderDataOut
+  > => {
     // If there is a single given mapper, use it for both files and folders
     if (typeof mapping === 'function')
       return {
         fileMapper: mapping as FileMapper<FileDataIn, FileDataOut>,
-        folderMapper: mapping as FolderMapper<FileDataIn, FolderDataIn, FileDataOut, FolderDataOut>,
+        folderMapper: mapping as FolderMapper<FileDataIn, FolderDataIn, FolderDataOut>,
       };
 
     // Otherwise return the respective mappers, using an identity function as default if needed
     const defaultMapper = <T>(node: T): T => node;
     return {
-      fileMapper: mapping.fileMapper || (defaultMapper as FileMapper<FileDataIn, FileDataOut>),
+      fileMapper: mapping.fileMapper || (defaultMapper as FileMapper<FileDataIn, FileDataIn>),
       folderMapper:
         mapping.folderMapper ||
-        (defaultMapper as FolderMapper<FileDataIn, FolderDataIn, FileDataOut, FolderDataOut>),
+        (defaultMapper as FolderMapper<FileDataIn, FolderDataIn, FolderDataIn>),
     };
   })();
   const { fileMapper, folderMapper } = mappers;
