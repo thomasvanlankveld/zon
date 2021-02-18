@@ -27,7 +27,7 @@ export enum FileSystemNodeType {
  * Things both a folder and a file must have
  */
 export interface FileSystemNodeBase<NodeData extends object = {}> {
-  readonly filename: string;
+  readonly nodeName: string;
   readonly path: PathString;
   readonly data: DeepReadonly<NodeData>;
 }

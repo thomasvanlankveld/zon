@@ -19,7 +19,7 @@ describe('reduceNodes', () => {
     expect(numberOfNodes).toStrictEqual(5);
 
     // And I reduce it to the total number of characters in all node names
-    const numberOfChars = reduceNodes(tree, (total, node) => total + node.filename.length, 0);
+    const numberOfChars = reduceNodes(tree, (total, node) => total + node.nodeName.length, 0);
 
     // Then I get the total number of characters in all node names
     expect(numberOfChars).toStrictEqual(37);
@@ -82,7 +82,7 @@ describe('reduceNodes', () => {
           return { ...totals, numberOfLines };
         },
         folderReducer: (totals, node) => {
-          const charsInFolderNames = totals.charsInFolderNames + node.filename.length;
+          const charsInFolderNames = totals.charsInFolderNames + node.nodeName.length;
           return { ...totals, charsInFolderNames };
         },
       },

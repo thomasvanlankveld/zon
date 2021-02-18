@@ -20,7 +20,7 @@ describe('mapNodes', () => {
     const counted = mapNodes(
       tree,
       produce((draftNode) => {
-        draftNode.data.charsInName = draftNode.filename.length;
+        draftNode.data.charsInName = draftNode.nodeName.length;
       }) as Mapper<{}, {}, { charsInName: number }, { charsInName: number }>
     );
 
@@ -45,7 +45,7 @@ describe('mapNodes', () => {
     // When I map all file nodes to contain the number of characters in their name
     const counted = mapNodes(tree, {
       fileMapper: produce((draftNode) => {
-        draftNode.data.charsInName = draftNode.filename.length;
+        draftNode.data.charsInName = draftNode.nodeName.length;
       }) as FileMapper<{}, { charsInName: number }>,
     });
 
@@ -72,7 +72,7 @@ describe('mapNodes', () => {
     // When I map all folder nodes to contain the number of characters in their name
     const counted = mapNodes(tree, {
       folderMapper: produce((draftNode) => {
-        draftNode.data.charsInName = draftNode.filename.length;
+        draftNode.data.charsInName = draftNode.nodeName.length;
       }) as FolderMapper<{}, {}, { charsInName: number }>,
     });
 
@@ -98,10 +98,10 @@ describe('mapNodes', () => {
     // When I map all folder nodes to contain the number of characters in their name, and all file nodes to contain twice that number
     const counted = mapNodes(tree, {
       fileMapper: produce((draftNode) => {
-        draftNode.data.charsInName = draftNode.filename.length * 2;
+        draftNode.data.charsInName = draftNode.nodeName.length * 2;
       }) as FileMapper<{}, { charsInName: number }>,
       folderMapper: produce((draftNode) => {
-        draftNode.data.charsInName = draftNode.filename.length;
+        draftNode.data.charsInName = draftNode.nodeName.length;
       }) as FolderMapper<{}, {}, { charsInName: number }>,
     });
 

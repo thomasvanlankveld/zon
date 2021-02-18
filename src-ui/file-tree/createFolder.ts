@@ -29,7 +29,7 @@ export function createFolder<FileData extends object, FolderData extends object>
   const { folderData, children } = options;
   return {
     type: FileSystemNodeType.Folder,
-    filename: pathTip(path),
+    nodeName: pathTip(path),
     path,
     data: folderData || {},
     children: children || [],

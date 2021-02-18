@@ -19,7 +19,7 @@ describe('getNodeByPath', () => {
     // Then I get the right node
     expect(node).toStrictEqual({
       data: {},
-      filename: 'foo.ts',
+      nodeName: 'foo.ts',
       path: 'my-project/src/foo.ts',
       type: FileSystemNodeType.File,
     });
@@ -43,19 +43,19 @@ describe('getNodeByPath', () => {
       children: [
         {
           data: {},
-          filename: 'foo.ts',
+          nodeName: 'foo.ts',
           path: 'my-project/src/foo.ts',
           type: FileSystemNodeType.File,
         },
         {
           data: {},
-          filename: 'bar.ts',
+          nodeName: 'bar.ts',
           path: 'my-project/src/bar.ts',
           type: FileSystemNodeType.File,
         },
       ],
       data: {},
-      filename: 'src',
+      nodeName: 'src',
       path: 'my-project/src',
       type: FileSystemNodeType.Folder,
     });

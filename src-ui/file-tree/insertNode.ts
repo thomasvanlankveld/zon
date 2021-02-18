@@ -19,7 +19,7 @@ export default function insertNode<FileData extends object = {}, FolderData exte
   const { path: nodePath } = node;
 
   // Check that node path fits in root
-  if (root.filename !== toPathArray(nodePath)[0]) {
+  if (root.nodeName !== toPathArray(nodePath)[0]) {
     throw new Error(`Can't add node with path ${nodePath} to a tree with root path ${root.path}`);
   }
 

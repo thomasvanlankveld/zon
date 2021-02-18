@@ -36,7 +36,7 @@ const LineViewBreadcrumbTrail: FC<LineViewBreadcrumbTrailProps> = function LineV
             key={d.data.path}
             onClick={(): void => setDiagramRootFilePath(d.data.path)}
           >
-            <span>{d.data.filename}</span>
+            <span>{d.data.nodeName}</span>
           </Button>,
           <span style={{ color: 'white' }} key={`${d.data.path}-/`}>
             {' / '}

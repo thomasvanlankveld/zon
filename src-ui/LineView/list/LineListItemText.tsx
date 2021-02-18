@@ -20,18 +20,18 @@ const truncation = '...';
 const LineListItemText: FC<LineListItemTextProps> = function listItemText(props) {
   const { node } = props;
 
-  const { filename } = node.data;
+  const { nodeName } = node.data;
 
   const numberOfLinesText = `${formatNumber(node.value || 0)} lines`;
 
-  const numberOfBlanks = charsPerListItem - (filename.length + numberOfLinesText.length);
+  const numberOfBlanks = charsPerListItem - (nodeName.length + numberOfLinesText.length);
 
   const filenameText = ((): string => {
-    if (numberOfBlanks >= 1) return filename;
+    if (numberOfBlanks >= 1) return nodeName;
 
     const numberOfFilenameChars =
       charsPerListItem - (numberOfLinesText.length + minimumSpace) - truncation.length;
-    return `${filename.substring(0, numberOfFilenameChars)}${truncation}`;
+    return `${nodeName.substring(0, numberOfFilenameChars)}${truncation}`;
   })();
 
   const blanksText = Array.from({ length: Math.max(numberOfBlanks, minimumSpace) }, () => ' ').join(

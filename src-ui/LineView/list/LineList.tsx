@@ -32,7 +32,7 @@ const LineList: FC<LineListProps> = function LineList(props) {
       <h4 style={{ color: 'white', marginBottom: '22px', fontWeight: 'normal', whiteSpace: 'pre' }}>
         <LineListItemText node={listRoot} />
       </h4>
-      <nav aria-label={`${listRoot.data.filename} content list`}>
+      <nav aria-label={`${listRoot.data.nodeName} content list`}>
         {(listRoot.children || []).map((d) => (
           <LineListItem
             key={d.data.path}

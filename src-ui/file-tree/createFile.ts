@@ -16,7 +16,7 @@ export function createFile<FileData extends object>(
 ): File<FileData | {}> {
   return {
     type: FileSystemNodeType.File,
-    filename: pathTip(path),
+    nodeName: pathTip(path),
     path,
     data: fileData || {},
   };
