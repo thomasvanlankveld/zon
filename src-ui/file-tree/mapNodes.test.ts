@@ -56,7 +56,7 @@ describe('mapNodes', () => {
 
     // And I don't get any data for the folder nodes
     expect(counted.data).toStrictEqual({});
-    expect(getNodeByPath(counted, 'my-project/src')?.data).toStrictEqual({});
+    expect(getFolderByPath(counted, 'my-project/src')?.data).toStrictEqual({});
   });
 
   it('maps nodes given a folderMapper', () => {

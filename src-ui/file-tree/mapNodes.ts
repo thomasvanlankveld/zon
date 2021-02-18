@@ -57,8 +57,28 @@ export function mapNodes<
   FolderDataOut extends object
 >(
   root: FileSystemNode<FileDataIn, FolderDataIn>,
-  mappers: Partial<MapperPair<FileDataIn, FolderDataIn, FileDataOut, FolderDataOut>>
+  mappers: MapperPair<FileDataIn, FolderDataIn, FileDataOut, FolderDataOut>
 ): FileSystemNode<FileDataOut, FolderDataOut>;
+export function mapNodes<
+  FileDataIn extends object,
+  FolderDataIn extends object,
+  FileDataOut extends object
+>(
+  root: FileSystemNode<FileDataIn, FolderDataIn>,
+  mappers: {
+    fileMapper: FileMapper<FileDataIn, FileDataOut>;
+  }
+): FileSystemNode<FileDataOut, FolderDataIn>;
+export function mapNodes<
+  FileDataIn extends object,
+  FolderDataIn extends object,
+  FolderDataOut extends object
+>(
+  root: FileSystemNode<FileDataIn, FolderDataIn>,
+  mappers: {
+    folderMapper: FolderMapper<FileDataIn, FolderDataIn, FileDataIn, FolderDataOut>;
+  }
+): FileSystemNode<FileDataIn, FolderDataOut>;
 export function mapNodes<
   FileDataIn extends object,
   FolderDataIn extends object,
