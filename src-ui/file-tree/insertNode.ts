@@ -5,13 +5,13 @@ import { createFolder } from './createFolder';
 import mergeTrees from './mergeTrees';
 
 /**
- * Adds a node to a tree.
+ * "Adds" a node to a tree.
  *
  * The node is placed in the tree by its `path` property, and all intermediate folders are created if necessary.
  *
  * This operation is confluently persistent. The old root remains unmodified. The returned root is a new object. As many nodes as possible are shared between the old and the new tree.
  */
-export default function rootWithNode<FileData extends object = {}, FolderData extends object = {}>(
+export default function insertNode<FileData extends object = {}, FolderData extends object = {}>(
   root: FileSystemNode<FileData, FolderData>,
   node: FileSystemNode<FileData, FolderData>
 ): FileSystemNode<FileData, FolderData> {

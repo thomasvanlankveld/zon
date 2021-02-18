@@ -7,7 +7,7 @@ import isFolder from './isFolder';
 import mergeTrees from './mergeTrees';
 import pathRoot from './pathRoot';
 import pathTip from './pathTip';
-import rootWithNode from './rootWithNode';
+import insertNode from './insertNode';
 import toPathArray from './toPathArray';
 import toPathString from './toPathString';
 
@@ -27,7 +27,7 @@ export {
   mergeTrees,
   pathRoot,
   pathTip,
-  rootWithNode,
+  insertNode,
   toPathArray,
   toPathString,
 };

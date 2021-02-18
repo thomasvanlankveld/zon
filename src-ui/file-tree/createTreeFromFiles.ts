@@ -4,7 +4,7 @@ import toPathArray from './toPathArray';
 import pathRoot from './pathRoot';
 import { createFile } from './createFile';
 import { createFolder } from './createFolder';
-import rootWithNode from './rootWithNode';
+import insertNode from './insertNode';
 
 /**
  * Whether all of the given files have the same path root
@@ -52,6 +52,6 @@ export function createTreeFromFiles(
   // Add all files to the root
   return rootedFiles.reduce<FileSystemNode<object>>((root, file) => {
     const fileNode = createFile(file.path, file.data || {});
-    return rootWithNode(root, fileNode);
+    return insertNode(root, fileNode);
   }, emptyRoot);
 }
