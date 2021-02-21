@@ -44,16 +44,20 @@ export type File<FileData extends object = {}> = FileSystemNodeBase<FileData> & 
  */
 export type Folder<
   FileData extends object = {},
-  FolderData extends object = {}
+  FolderData extends object = {},
+  ChildrenFolderData extends object = FolderData
 > = FileSystemNodeBase<FolderData> &
   Readonly<{
     type: FileSystemNodeType.Folder;
-    children: ReadonlyArray<FileSystemNode<FileData, FolderData>>;
+    children: ReadonlyArray<FileSystemNode<FileData, ChildrenFolderData>>;
   }>;
 
 /**
  * A file or folder
  */
-export type FileSystemNode<FileData extends object = {}, FolderData extends object = {}> =
-  | Folder<FileData, FolderData>
-  | File<FileData>;
+export type FileSystemNode<
+  FileData extends object = {},
+  FolderData extends object = {},
+  ChildrenFileData extends object = FileData,
+  ChildrenFolderData extends object = FolderData
+> = Folder<ChildrenFileData, FolderData, ChildrenFolderData> | File<FileData>;

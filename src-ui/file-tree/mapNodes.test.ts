@@ -1,6 +1,6 @@
 import produce from 'immer';
 import { createTreeFromFiles } from './createTreeFromFiles';
-import { Mapper, FileMapper, FolderMapper, mapNodes } from './mapNodes';
+import { FileMapper, FolderMapper, mapNodes, UniformMapper } from './mapNodes';
 import getNodeByPath from './getNodeByPath';
 import getFileByPath from './getFileByPath';
 import getFolderByPath from './getFolderByPath';
@@ -21,7 +21,7 @@ describe('mapNodes', () => {
       tree,
       produce((draftNode) => {
         draftNode.data.charsInName = draftNode.nodeName.length;
-      }) as Mapper<{}, {}, { charsInName: number }, { charsInName: number }>
+      }) as UniformMapper<{}, { charsInName: number }>
     );
 
     // Then I get the number of characters for every node
@@ -102,7 +102,7 @@ describe('mapNodes', () => {
       }) as FileMapper<{}, { charsInName: number }>,
       folderMapper: produce((draftNode) => {
         draftNode.data.charsInName = draftNode.nodeName.length;
-      }) as FolderMapper<{}, {}, { charsInName: number }>,
+      }) as FolderMapper<{ charsInName: number }, {}, { charsInName: number }>,
     });
 
     // Then I get the number of characters for every folder node
