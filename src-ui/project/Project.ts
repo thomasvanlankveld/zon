@@ -2,6 +2,9 @@ import { FileSystemNode } from '../file-tree/file-tree';
 
 export interface ProjectNodeData {
   numberOfLines: number;
+  firstLine: number;
+  middleLine: number;
+  lastLine: number;
 }
 
 export type ProjectFileData = ProjectNodeData;
