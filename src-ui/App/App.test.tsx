@@ -3,8 +3,8 @@ import { render } from '@testing-library/react';
 
 import App from './App';
 import createZonClientMock from '../services/zon-client/test-support/createZonClientMock';
-import { createTreeFromFiles } from '../file-tree';
 import nextTick from '../test-support/nextTick';
+import createProject from '../adapters/createProject';
 
 describe('App', () => {
   // eslint-disable-next-line jest/expect-expect, jest/prefer-expect-assertions
@@ -42,7 +42,7 @@ describe('App', () => {
     expect.hasAssertions();
 
     // Given a project
-    const project = createTreeFromFiles([
+    const project = createProject([
       { path: 'my-project/package.json', data: { numberOfLines: 30 } },
       { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
       { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },

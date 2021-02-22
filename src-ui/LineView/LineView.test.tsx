@@ -2,20 +2,20 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 
 import LineView from './LineView';
-import { createTreeFromFiles } from '../file-tree';
 import getBreadcrumbTrail from './breadcrumb-trail/test-support/getBreadcrumbTrail';
 import getBreadcrumb from './breadcrumb-trail/test-support/getBreadcrumb';
 import getDiagramPath from './diagram/test-support/getDiagramPath';
 import getLineListElements from './list/test-support/getLineListElements';
 import getDiagramElements from './diagram/test-support/getDiagramElements';
 import getLineListItemByName from './list/test-support/getLineListItemByName';
+import createProject from '../adapters/createProject';
 
 describe('LineView', () => {
   it('renders breadcrumbs, a diagram and a list', () => {
     expect.hasAssertions();
 
     // Given a project
-    const project = createTreeFromFiles([
+    const project = createProject([
       { path: 'my-project/package.json', data: { numberOfLines: 30 } },
       { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
       { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
@@ -55,7 +55,7 @@ describe('LineView', () => {
       expect.hasAssertions();
 
       // Given a project with an `src` folder
-      const project = createTreeFromFiles([
+      const project = createProject([
         { path: 'my-project/package.json', data: { numberOfLines: 30 } },
         { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
         { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
@@ -92,7 +92,7 @@ describe('LineView', () => {
       expect.hasAssertions();
 
       // Given a project with an `src` folder
-      const project = createTreeFromFiles([
+      const project = createProject([
         { path: 'my-project/package.json', data: { numberOfLines: 30 } },
         { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
         { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
@@ -135,7 +135,7 @@ describe('LineView', () => {
       expect.hasAssertions();
 
       // Given a project with an `src` folder
-      const project = createTreeFromFiles([
+      const project = createProject([
         { path: 'my-project/package.json', data: { numberOfLines: 30 } },
         { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
         { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
@@ -167,7 +167,7 @@ describe('LineView', () => {
       expect.hasAssertions();
 
       // Given a project with an `src` folder
-      const project = createTreeFromFiles([
+      const project = createProject([
         { path: 'my-project/package.json', data: { numberOfLines: 30 } },
         { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
         { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
@@ -204,7 +204,7 @@ describe('LineView', () => {
       expect.hasAssertions();
 
       // Given a project with an `src` folder
-      const project = createTreeFromFiles([
+      const project = createProject([
         { path: 'my-project/package.json', data: { numberOfLines: 30 } },
         { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
         { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
@@ -236,7 +236,7 @@ describe('LineView', () => {
       expect.hasAssertions();
 
       // Given a project with an `src` folder
-      const project = createTreeFromFiles([
+      const project = createProject([
         { path: 'my-project/package.json', data: { numberOfLines: 30 } },
         { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
         { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },

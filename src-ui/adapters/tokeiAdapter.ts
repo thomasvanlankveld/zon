@@ -3,20 +3,8 @@ import { isLeft } from 'fp-ts/lib/Either';
 import { flatMap } from 'lodash';
 
 import { Project } from '../project/Project';
-import {
-  toPathString,
-  toPathArray,
-  createTreeFromFiles,
-  mapNodes,
-  FolderMapper,
-} from '../file-tree';
-
-/**
- * Type of counted data
- */
-interface Counted {
-  numberOfLines: number;
-}
+import { toPathString, toPathArray } from '../file-tree';
+import createProject from './createProject';
 
 /**
  * Allows us to parse Tokei languages
@@ -84,24 +72,6 @@ export default function tokeiAdapter(input: unknown, projectName: string): Proje
     return { path: pathString, data: { numberOfLines: code } };
   });
 
-  // Construct the file tree
-  const root = createTreeFromFiles<Counted>(files);
-
-  // Add number of lines count to folders as well
-  const addNumberOfLinesToFolders: FolderMapper<
-    Counted,
-    {},
-    Counted
-  > = function addNumberOfLinesToFolders(node) {
-    const numberOfLines = node.children.reduce(
-      (sum, child) => sum + (child.data as Counted).numberOfLines || 0,
-      0
-    );
-    return { ...node, data: { ...node.data, numberOfLines } };
-  };
-  const rootWithLineSum = mapNodes(root, {
-    folderMapper: addNumberOfLinesToFolders,
-  });
-
-  return rootWithLineSum;
+  // Create a project from the file description and return
+  return createProject(files);
 }
