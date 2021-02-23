@@ -2,6 +2,7 @@ import { FileSystemNode } from '../file-tree/file-tree';
 
 export interface ProjectNodeData {
   numberOfLines: number;
+  nodeColorValue: number;
   firstLine: number;
   middleLine: number;
   lastLine: number;

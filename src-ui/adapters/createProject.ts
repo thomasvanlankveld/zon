@@ -50,15 +50,17 @@ export default function createProject(files: CountedFiles): Project {
       const firstLine = lineNumber;
       const middleLine = lineNumber + node.data.numberOfLines / 2;
       const lastLine = lineNumber + node.data.numberOfLines;
+      const nodeColorValue = middleLine / sortedRoot.data.numberOfLines;
       lineNumber += node.data.numberOfLines;
-      return { ...node, data: { ...node.data, firstLine, middleLine, lastLine } };
+      return { ...node, data: { ...node.data, nodeColorValue, firstLine, middleLine, lastLine } };
     },
     folderMapper(node) {
       // Folders share their first line with the first child
       const firstLine = Math.min(...node.children.map((child) => child.data.firstLine));
       const middleLine = firstLine + node.data.numberOfLines / 2;
       const lastLine = firstLine + node.data.numberOfLines;
-      return { ...node, data: { ...node.data, firstLine, middleLine, lastLine } };
+      const nodeColorValue = middleLine / sortedRoot.data.numberOfLines;
+      return { ...node, data: { ...node.data, nodeColorValue, firstLine, middleLine, lastLine } };
     },
   };
   const rootWithLinePositions = mapNodes(sortedRoot, linePositionMappers);
