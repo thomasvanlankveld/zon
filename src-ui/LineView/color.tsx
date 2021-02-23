@@ -17,13 +17,15 @@ export type ColoredNode<T = object> = HierarchyRectangularNode<T & NodeColors>;
 const scaleForDarkBackground = scaleLinear().range([0.1, 0.925]);
 
 /**
- * Get the color for a node
+ * Get the color for a node's "color value"
  *
- * @param d The node for which to determine the color
+ * @param value A value between 0 and 1, representing the node's position
  */
-function zonBaseColorForNode(d: HierarchyRectangularNode<unknown>): string {
-  const centerValue = d.x0 + (d.x1 - d.x0) / 2;
-  return interpolateRainbow(scaleForDarkBackground(centerValue));
+function interpolateZon(value: number): NodeColors {
+  const baseColor = interpolateRainbow(scaleForDarkBackground(value));
+  const highlightedColor = lab(baseColor).brighter(0.5).toString();
+  const pressedColor = lab(baseColor).brighter(1).toString();
+  return { baseColor, highlightedColor, pressedColor };
 }
 
 /**
@@ -36,16 +38,10 @@ export default function zonColoredHierarchy<T extends Project>(data: T): Colored
   // Add color values to each node
   /* eslint-disable no-param-reassign */
   root.each((d) => {
-    // The base color is based on the node's center within the partition
-    const baseColor = zonBaseColorForNode(d);
+    // A node's colors are based on the node's center within the partition
+    const { baseColor, highlightedColor, pressedColor } = interpolateZon(d.x0 + (d.x1 - d.x0) / 2);
     (d as ColoredNode<T>).data.baseColor = baseColor;
-
-    // The highlighted color is a brighter version of the base color
-    const highlightedColor = lab(baseColor).brighter(0.5).toString();
     (d as ColoredNode<T>).data.highlightedColor = highlightedColor;
-
-    // The pressed color is an even brighter version of the base color
-    const pressedColor = lab(baseColor).brighter(1).toString();
     (d as ColoredNode<T>).data.pressedColor = pressedColor;
   });
   /* eslint-enable no-param-reassign */
