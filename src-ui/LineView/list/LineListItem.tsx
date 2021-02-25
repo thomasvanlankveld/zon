@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import Button from '../../component-lib/Button';
+import { Project } from '../../project/Project';
 import { colorNode } from '../color';
-import { LineViewNode } from '../LineViewNode';
 import LineListItemText from './LineListItemText';
 
 interface LineListItemProps {
-  d: LineViewNode;
+  node: Project;
   isHighlighted: boolean;
   onMouseEnter: (path: string) => void;
   onMouseLeave: (path: string) => void;
@@ -17,27 +17,29 @@ interface LineListItemProps {
  */
 const LineListItem: FC<LineListItemProps> = React.memo(
   function LineListItem(props) {
-    const { d, isHighlighted, onMouseEnter, onMouseLeave, onClick } = props;
+    const { node, isHighlighted, onMouseEnter, onMouseLeave, onClick } = props;
 
     return (
       <Button
         style={{
-          color: colorNode(d, { isHighlighted }),
+          color: colorNode(node, { isHighlighted }),
           cursor: 'pointer',
           display: 'block',
           margin: 0,
           whiteSpace: 'pre',
         }}
-        onClick={(): void => onClick(d.data.path)}
-        onMouseEnter={(): void => onMouseEnter(d.data.path)}
-        onMouseLeave={(): void => onMouseLeave(d.data.path)}
+        onClick={(): void => onClick(node.path)}
+        onMouseEnter={(): void => onMouseEnter(node.path)}
+        onMouseLeave={(): void => onMouseLeave(node.path)}
       >
-        <LineListItemText node={d} />
+        <LineListItemText node={node} />
       </Button>
     );
   },
   function areEqual(firstProps, secondProps): boolean {
-    return firstProps.d === secondProps.d && firstProps.isHighlighted === secondProps.isHighlighted;
+    return (
+      firstProps.node === secondProps.node && firstProps.isHighlighted === secondProps.isHighlighted
+    );
   }
 );
 

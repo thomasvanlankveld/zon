@@ -3,11 +3,12 @@ import { colorNode } from '../color';
 import Button from '../../component-lib/Button';
 import { LineViewNode } from '../LineViewNode';
 import { useSelectNode } from '../partition';
+import { Project } from '../../project/Project';
 
 interface LineViewBreadcrumbTrailProps {
   projectRoot: LineViewNode;
   path: string;
-  isHighlighted: (d: LineViewNode) => boolean;
+  isHighlighted: (node: Project) => boolean;
   setDiagramRootFilePath: (path: string) => void;
 }
 
@@ -30,7 +31,7 @@ const LineViewBreadcrumbTrail: FC<LineViewBreadcrumbTrailProps> = function LineV
         .flatMap((d) => [
           <Button
             style={{
-              color: colorNode(d, { isHighlighted: isHighlighted(d) }),
+              color: colorNode(d.data, { isHighlighted: isHighlighted(d.data) }),
               cursor: 'pointer',
             }}
             key={d.data.path}

@@ -40,8 +40,8 @@ const LineView: FC<LineViewProps> = function LineView(props) {
 
   // Whether a node should be highlighted
   const isHighlighted = useCallback(
-    function isHighlighted(d: HierarchyNode<Project>): boolean {
-      return hoveredArcFilePath === d.data.path || hoveredListItemFilePath === d.data.path;
+    function isHighlighted(node: Project): boolean {
+      return hoveredArcFilePath === node.path || hoveredListItemFilePath === node.path;
     },
     [hoveredArcFilePath, hoveredListItemFilePath]
   );
@@ -66,7 +66,7 @@ const LineView: FC<LineViewProps> = function LineView(props) {
           setDiagramRootFilePath={setDiagramRootFilePath}
         />
         <LineList
-          projectRoot={projectRoot}
+          projectRoot={data}
           listRootFilePath={hoveredArcFilePath || diagramRootFilePath}
           isHighlighted={isHighlighted}
           setHoveredListItemFilePath={setHoveredListItemFilePath}

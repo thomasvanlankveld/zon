@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import formatNumber from '../../component-lib/format/formatNumber';
-import { LineViewNode } from '../LineViewNode';
+import { Project } from '../../project/Project';
 
 interface LineListItemTextProps {
-  node: LineViewNode;
+  node: Project;
 }
 
 const charsPerListItem = 40;
@@ -20,9 +20,9 @@ const truncation = '...';
 const LineListItemText: FC<LineListItemTextProps> = function listItemText(props) {
   const { node } = props;
 
-  const { nodeName } = node.data;
+  const { nodeName } = node;
 
-  const numberOfLinesText = `${formatNumber(node.value || 0)} lines`;
+  const numberOfLinesText = `${formatNumber(node.data.numberOfLines)} lines`;
 
   const numberOfBlanks = charsPerListItem - (nodeName.length + numberOfLinesText.length);
 

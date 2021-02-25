@@ -4,11 +4,12 @@ import { LineViewNode } from '../LineViewNode';
 import LineDiagramPath from './LineDiagramPath';
 import { width, height } from '../config';
 import zonPartition, { selectNode } from '../partition';
+import { Project } from '../../project/Project';
 
 interface LineDiagramProps {
   projectRoot: LineViewNode;
   diagramRootFilePath: string;
-  isHighlighted: (d: LineViewNode) => boolean;
+  isHighlighted: (node: Project) => boolean;
   setHoveredArcFilePath: (path: string | null) => void;
   setDiagramRootFilePath: (path: string) => void;
 }
@@ -66,7 +67,7 @@ const LineDiagram: FC<LineDiagramProps> = function LineDiagram(props) {
           <LineDiagramPath
             key={d.data.path}
             d={d}
-            isHighlighted={isHighlighted(d)}
+            isHighlighted={isHighlighted(d.data)}
             onMouseEnter={(path: string): void => setHoveredArcFilePath(path)}
             onMouseLeave={(): void => setHoveredArcFilePath(null)}
             onClick={navigateFromPathClick}

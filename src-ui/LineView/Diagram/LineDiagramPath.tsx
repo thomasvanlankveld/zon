@@ -5,6 +5,7 @@ import { arc } from 'd3';
 import { colorNode } from '../color';
 import { LineViewNode } from '../LineViewNode';
 import { width, height } from '../config';
+import { Project } from '../../project/Project';
 
 /**
  *
@@ -24,7 +25,7 @@ function LineDiagramArc(d: LineViewNode): string | undefined {
 }
 
 interface PathProps {
-  datum: LineViewNode;
+  node: Project;
   isHighlighted: boolean;
 }
 
@@ -34,11 +35,11 @@ interface PathProps {
 const Path = styled.path<PathProps>`
   cursor: pointer;
   fill: ${(props): string => {
-    const { datum, isHighlighted } = props;
-    return colorNode(datum, { isHighlighted });
+    const { node, isHighlighted } = props;
+    return colorNode(node, { isHighlighted });
   }};
   &:active {
-    fill: ${(props): string => colorNode(props.datum, { isPressed: true })};
+    fill: ${(props): string => colorNode(props.node, { isPressed: true })};
   }
 `;
 
@@ -60,7 +61,7 @@ const LineDiagramPath: FC<LineDiagramPathProps> = React.memo(
     return (
       <Path
         d={LineDiagramArc(d)}
-        datum={d}
+        node={d.data}
         isHighlighted={isHighlighted}
         onMouseEnter={(): void => onMouseEnter(d.data.path)}
         onMouseLeave={(): void => onMouseLeave(d.data.path)}
