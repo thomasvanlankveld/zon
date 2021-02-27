@@ -1,8 +1,9 @@
-import toPathArray from './toPathArray';
+import asPathArray from './asPathArray';
+import { Path, PathString } from './file-tree';
 
 /**
  * Get the last path segment
  */
-export default function pathTip(path: string): string {
-  return toPathArray(path).slice(-1)[0];
+export default function pathTip(path: Path): PathString {
+  return asPathArray(path).slice(-1)[0];
 }
