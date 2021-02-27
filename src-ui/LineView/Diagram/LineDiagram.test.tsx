@@ -3,7 +3,6 @@ import { render } from '@testing-library/react';
 
 import createProject from '../../adapters/createProject';
 import LineDiagram from './LineDiagram';
-import zonColoredHierarchy from '../color';
 
 describe('LineDiagram', () => {
   it('renders a diagram of the given project', () => {
@@ -15,12 +14,11 @@ describe('LineDiagram', () => {
       { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
       { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
     ]);
-    const data = zonColoredHierarchy(project);
 
     // When I render the line diagram
     const { asFragment } = render(
       <LineDiagram
-        projectRoot={data}
+        projectRoot={project}
         diagramRootFilePath={project.path}
         isHighlighted={(): boolean => false}
         setHoveredArcFilePath={(): void => {

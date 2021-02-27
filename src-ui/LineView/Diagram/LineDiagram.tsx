@@ -1,13 +1,14 @@
 import React, { FC, useMemo } from 'react';
 
-import { LineViewNode } from '../LineViewNode';
 import LineDiagramPath from './LineDiagramPath';
 import { width, height } from '../config';
-import zonPartition, { selectNode } from '../partition';
+import zonPartition from '../partition';
 import { Project } from '../../project/Project';
+import { getNodeByPath } from '../../file-tree';
+import pathParent from '../../file-tree/pathParent';
 
 interface LineDiagramProps {
-  projectRoot: LineViewNode;
+  projectRoot: Project;
   diagramRootFilePath: string;
   isHighlighted: (node: Project) => boolean;
   setHoveredArcFilePath: (path: string | null) => void;
@@ -29,13 +30,13 @@ const LineDiagram: FC<LineDiagramProps> = function LineDiagram(props) {
   // Select root node for the diagram (either root or the selected file)
   const { diagramRoot, diagramRootParentPath } = useMemo(() => {
     // Get the diagram root
-    const unpartitionedDiagramRoot = selectNode(projectRoot, diagramRootFilePath) || projectRoot;
+    const unpartitionedDiagramRoot = getNodeByPath(projectRoot, diagramRootFilePath);
 
     // Get the path to the parent of the diagram root
-    const parentPath = unpartitionedDiagramRoot.parent?.data.path || projectRoot.data.path;
+    const parentPath = pathParent(unpartitionedDiagramRoot.path);
 
     // Repartition the data so the diagram root spans 360 degrees
-    const partitionedDiagramRoot = zonPartition(unpartitionedDiagramRoot.data);
+    const partitionedDiagramRoot = zonPartition(unpartitionedDiagramRoot);
 
     // Return data
     return { diagramRoot: partitionedDiagramRoot, diagramRootParentPath: parentPath };
@@ -54,7 +55,7 @@ const LineDiagram: FC<LineDiagramProps> = function LineDiagram(props) {
 
   return (
     <svg
-      aria-label={`${projectRoot.data.nodeName} line count diagram`}
+      aria-label={`${projectRoot.nodeName} line count diagram`}
       role="img"
       width={width}
       height={height}

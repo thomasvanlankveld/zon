@@ -1,5 +1,4 @@
 import React, { FC, useState, useMemo, useCallback } from 'react';
-import { HierarchyNode } from 'd3';
 import styled from 'styled-components';
 
 import { Project } from '../project/Project';
@@ -59,7 +58,7 @@ const LineView: FC<LineViewProps> = function LineView(props) {
       />
       <LineViewGrid>
         <LineDiagram
-          projectRoot={projectRoot}
+          projectRoot={data}
           diagramRootFilePath={diagramRootFilePath}
           isHighlighted={isHighlighted}
           setHoveredArcFilePath={setHoveredArcFilePath}
