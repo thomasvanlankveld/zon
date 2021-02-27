@@ -17,7 +17,7 @@ export default function getNodeByPath<FileData extends object, FolderData extend
   const pathArray = asPathArray(path);
   const [currentSegment, ...nextSegments] = pathArray;
 
-  // On these conditions, we're found the node!
+  // On these conditions, we have found the node!
   if (nextSegments.length === 0 && currentNode.nodeName === currentSegment) return currentNode;
 
   // Encountering a file here means we can't search any deeper
