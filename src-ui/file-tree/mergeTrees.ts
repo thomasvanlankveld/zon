@@ -7,7 +7,7 @@ import isFolder from './isFolder';
  *
  * The second node takes precedence over the first node, similar to how `Object.assign` works. Any keys that are present in both nodes will get the values of the second node. This works recursively: For any child nodes that exist in both trees, children of the second node will overwrite any properties also specified by matching children of the first node.
  *
- * This operation is confluently persistent. Both nodes remain unmodified. The returned node is a new object, which shares as many child nodes as possibly with the two source nodes.
+ * This operation is confluently persistent. Both input nodes remain unmodified. The returned node is a new object, which shares as many child nodes as possibly with the two source nodes.
  */
 export default function mergeTrees<
   FileData extends object,

@@ -14,10 +14,10 @@ export function createFolder<FileData extends object, FolderData extends object>
   path: string,
   options: { folderData: FolderData }
 ): Folder<FileData, FolderData>;
-export function createFolder<FileData extends object, FolderData extends object>(
+export function createFolder<FileData extends object, ChildrenFolderData extends object = {}>(
   path: string,
-  options: { children: FileSystemNode<FileData, FolderData>[] }
-): Folder<FileData, FolderData>;
+  options: { children: FileSystemNode<FileData, {}, {}, ChildrenFolderData>[] }
+): Folder<FileData, {}, ChildrenFolderData>;
 export function createFolder<FileData extends object, FolderData extends object>(
   path: string,
   options: { folderData: FolderData; children: FileSystemNode<FileData, FolderData>[] }

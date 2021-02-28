@@ -4,7 +4,7 @@ import toPathArray from './toPathArray';
 import pathRoot from './pathRoot';
 import { createFile } from './createFile';
 import { createFolder } from './createFolder';
-import insertNode from './insertNode';
+import { insertNode } from './insertNode';
 
 /**
  * Whether all of the given files have the same path root
