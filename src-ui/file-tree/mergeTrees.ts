@@ -1,4 +1,5 @@
 import { zip, partition } from 'lodash';
+import isFile from './isFile';
 import { FileSystemNode } from './file-tree';
 import isFolder from './isFolder';
 
@@ -9,12 +10,10 @@ import isFolder from './isFolder';
  *
  * This operation is confluently persistent. Both input nodes remain unmodified. The returned node is a new object, which shares as many child nodes as possibly with the two source nodes.
  */
-export default function mergeTrees<
-  FileData extends object,
-  FolderData extends object,
-  First extends FileSystemNode<FileData, FolderData>,
-  Second extends FileSystemNode<FileData, FolderData>
->(first: First, second: Second): First & Second {
+export default function mergeTrees<FileData extends object, FolderData extends object>(
+  first: FileSystemNode<FileData, FolderData>,
+  second: FileSystemNode<FileData, FolderData>
+): FileSystemNode<FileData, FolderData> {
   // Bail on node type mismatch
   if (first.type !== second.type)
     throw new Error(
@@ -28,8 +27,14 @@ export default function mergeTrees<
     );
 
   // If either node is not a folder, do a simple property merge
-  if (!isFolder(first) || !isFolder(second))
+  if (isFile(first) && isFile(second))
     return { ...first, ...second, data: { ...first.data, ...second.data } };
+
+  // This check is not necessary at this point, but the compiler doesn't know that
+  if (!isFolder(first) || !isFolder(second))
+    throw new Error(
+      `Failed to merge node with path ${first.path} and type ${first.type} with node with path ${second.path} and type ${second.type}. Types should be the same.`
+    );
 
   // Partition the first node's children into unique and shared
   const [uniqueFirstChildren, sharedFirst] = partition(

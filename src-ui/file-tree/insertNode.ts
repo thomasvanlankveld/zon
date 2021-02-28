@@ -97,7 +97,7 @@ export function insertNode<FileData extends object = {}, FolderData extends obje
       return nonNullFolderFactory(plainFolder);
     },
     node
-  );
+  ) as FileSystemNode<FileData, FolderData>;
 
   // Merge the new and old tree into one
   return mergeTrees(root, newRoot);
