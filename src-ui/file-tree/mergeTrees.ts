@@ -50,10 +50,16 @@ export default function mergeTrees<FileData extends object, FolderData extends o
 
   // Merge the shared children as trees
   const mergedChildren = zip(sharedFirst, sharedSecond).map(([firstChild, secondChild]) => {
-    if (firstChild == null || secondChild == null)
-      throw new Error(
-        `This should never happen: Missing one of these two nodes in array zip: ${firstChild}, ${secondChild}. If you see this, file an issue at: https://github.com/thomasvanlankveld/zon/issues`
+    if (firstChild == null || secondChild == null) {
+      const [firstPaths, secondPaths] = [sharedFirst, sharedSecond].map((set) =>
+        set.map((node) => node.path)
       );
+      throw new Error(
+        `Failed to merge nodes "${first.path}": Could not zip nodes with paths ["${firstPaths.join(
+          '", "'
+        )}"] and ["${secondPaths.join('", "')}"]`
+      );
+    }
     return mergeTrees(firstChild, secondChild);
   });
 

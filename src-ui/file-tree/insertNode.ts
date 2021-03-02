@@ -72,10 +72,14 @@ export function insertNode<FileData extends object = {}, FolderData extends obje
   const reversedPaths = pathsInBetween.reverse();
 
   // Create new folder nodes from new node up to root
-  const newRoot = reversedPaths.reduce<FileSystemNode<FileData, {}, {}, FolderData>>(
+  const newRoot = reversedPaths.reduce<FileSystemNode<FileData, FolderData>>(
     (child, folderPath) => {
       // If there is no factory, just create a parent folder and return
-      if (folderFactory == null) return createFolder(folderPath, { children: [child] });
+      if (folderFactory == null)
+        return createFolder(folderPath, { children: [child] }) as FileSystemNode<
+          FileData,
+          FolderData
+        >;
       // TODO: Fix this! (Maybe a TypeScript version upgrade will suffice?)
       const nonNullFolderFactory = folderFactory as FolderFactory<FileData, FolderData>;
 
@@ -90,14 +94,32 @@ export function insertNode<FileData extends object = {}, FolderData extends obje
         }
       })();
 
+      // Put child and its siblings together
+      const children = ((): FileSystemNode<FileData, FolderData>[] => {
+        // See if the child has a sibling with the same path
+        const twinIndex = siblings.findIndex((sibling) => sibling.path === child.path);
+
+        // If the child has no twin, just append it
+        if (twinIndex === -1) return [...siblings, child];
+
+        // Merge child and its twin
+        const twin = siblings[twinIndex];
+        const merged = mergeTrees(twin, child);
+
+        // Put the merged child into its proper place
+        const earlierSiblings = siblings.slice(0, twinIndex);
+        const laterSiblings = siblings.slice(twinIndex + 1);
+        return [...earlierSiblings, merged, ...laterSiblings];
+      })();
+
       // Create parent folder node
-      const plainFolder = createFolder(folderPath, { children: [...siblings, child] });
+      const plainFolder = createFolder(folderPath, { children });
 
       // Take it through the factory to constuct folder data
       return nonNullFolderFactory(plainFolder);
     },
     node
-  ) as FileSystemNode<FileData, FolderData>;
+  );
 
   // Merge the new and old tree into one
   return mergeTrees(root, newRoot);
