@@ -1,4 +1,4 @@
-import { createTreeFromFiles } from './createTreeFromFiles';
+import { createTree } from './createTree';
 import { reduceNodes } from './reduceNodes';
 
 describe('reduceNodes', () => {
@@ -6,7 +6,7 @@ describe('reduceNodes', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTreeFromFiles([
+    const tree = createTree([
       { path: 'my-project/package.json' },
       { path: 'my-project/src/foo.ts' },
       { path: 'my-project/src/bar.ts' },
@@ -29,7 +29,7 @@ describe('reduceNodes', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTreeFromFiles([
+    const tree = createTree([
       { path: 'my-project/package.json', data: { numberOfLines: 30 } },
       { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
       { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },
@@ -50,7 +50,7 @@ describe('reduceNodes', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTreeFromFiles([
+    const tree = createTree([
       { path: 'my-project/package.json' },
       { path: 'my-project/src/foo.ts' },
       { path: 'my-project/src/bar.ts' },
@@ -67,7 +67,7 @@ describe('reduceNodes', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTreeFromFiles([
+    const tree = createTree([
       { path: 'my-project/package.json', data: { numberOfLines: 30 } },
       { path: 'my-project/src/foo.ts', data: { numberOfLines: 50 } },
       { path: 'my-project/src/bar.ts', data: { numberOfLines: 20 } },

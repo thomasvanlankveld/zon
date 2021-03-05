@@ -13,7 +13,7 @@ import toPathString from './toPathString';
 
 export * from './createFile';
 export * from './createFolder';
-export * from './createTreeFromFiles';
+export * from './createTree';
 export * from './file-tree';
 export * from './insertNode';
 export * from './mapNodes';

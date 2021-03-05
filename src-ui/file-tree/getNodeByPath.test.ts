@@ -1,4 +1,4 @@
-import { createTreeFromFiles } from './createTreeFromFiles';
+import { createTree } from './createTree';
 import { FileSystemNode, FileSystemNodeType } from './file-tree';
 import getNodeByPath from './getNodeByPath';
 import NodeNotFoundError from './NodeNotFoundError';
@@ -8,7 +8,7 @@ describe('getNodeByPath', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTreeFromFiles([
+    const tree = createTree([
       { path: 'my-project/package.json' },
       { path: 'my-project/src/foo.ts' },
       { path: 'my-project/src/bar.ts' },
@@ -30,7 +30,7 @@ describe('getNodeByPath', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTreeFromFiles([
+    const tree = createTree([
       { path: 'my-project/package.json' },
       { path: 'my-project/src/foo.ts' },
       { path: 'my-project/src/bar.ts' },
@@ -66,10 +66,7 @@ describe('getNodeByPath', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTreeFromFiles([
-      { path: 'my-project/package.json' },
-      { path: 'my-project/src/' },
-    ]);
+    const tree = createTree([{ path: 'my-project/package.json' }, { path: 'my-project/src/' }]);
 
     // When I call `getNodeByPath` with a path beyond a file
     const queryBeyondFile = (): FileSystemNode =>

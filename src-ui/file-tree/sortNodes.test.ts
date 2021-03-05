@@ -1,4 +1,4 @@
-import { createTreeFromFiles } from './createTreeFromFiles';
+import { createTree } from './createTree';
 import getFolderByPath from './getFolderByPath';
 import sortNodes from './sortNodes';
 
@@ -7,7 +7,7 @@ describe('sortNodes', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTreeFromFiles([
+    const tree = createTree([
       { path: 'my-project/package.json' },
       { path: 'my-project/src/quux.ts' },
       { path: 'my-project/src/foo.ts' },

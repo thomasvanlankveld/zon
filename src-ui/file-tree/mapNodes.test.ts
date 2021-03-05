@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { createTreeFromFiles } from './createTreeFromFiles';
+import { createTree } from './createTree';
 import { FileMapper, FolderMapper, mapNodes, UniformMapper } from './mapNodes';
 import getNodeByPath from './getNodeByPath';
 import getFileByPath from './getFileByPath';
@@ -10,7 +10,7 @@ describe('mapNodes', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTreeFromFiles([
+    const tree = createTree([
       { path: 'my-project/package.json' },
       { path: 'my-project/src/foo.ts' },
       { path: 'my-project/src/bar.ts' },
@@ -36,7 +36,7 @@ describe('mapNodes', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTreeFromFiles([
+    const tree = createTree([
       { path: 'my-project/package.json' },
       { path: 'my-project/src/foo.ts' },
       { path: 'my-project/src/bar.ts' },
@@ -63,7 +63,7 @@ describe('mapNodes', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTreeFromFiles([
+    const tree = createTree([
       { path: 'my-project/package.json' },
       { path: 'my-project/src/foo.ts' },
       { path: 'my-project/src/bar.ts' },
@@ -89,7 +89,7 @@ describe('mapNodes', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTreeFromFiles([
+    const tree = createTree([
       { path: 'my-project/package.json' },
       { path: 'my-project/src/foo.ts' },
       { path: 'my-project/src/bar.ts' },

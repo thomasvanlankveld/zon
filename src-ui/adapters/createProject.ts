@@ -1,4 +1,4 @@
-import { createTreeFromFiles, FolderMapper, mapNodes, MapperPair, sortNodes } from '../file-tree';
+import { createTree, FolderMapper, mapNodes, MapperPair, sortNodes } from '../file-tree';
 import { Project, ProjectNodeData } from '../project/Project';
 
 /**
@@ -18,7 +18,7 @@ export type CountedFiles = { path: string; data: Counted }[];
  */
 export default function createProject(files: CountedFiles): Project {
   // Construct the file tree
-  const root = createTreeFromFiles<Counted>(files);
+  const root = createTree(files);
 
   // Add number of lines count to folders as well
   const addNumberOfLinesToFolders: FolderMapper<
