@@ -66,7 +66,10 @@ describe('getNodeByPath', () => {
     expect.hasAssertions();
 
     // Given a file tree
-    const tree = createTree([{ path: 'my-project/package.json' }, { path: 'my-project/src/' }]);
+    const tree = createTree([
+      { path: 'my-project/package.json' },
+      { path: 'my-project/src/', type: FileSystemNodeType.Folder },
+    ]);
 
     // When I call `getNodeByPath` with a path beyond a file
     const queryBeyondFile = (): FileSystemNode =>
