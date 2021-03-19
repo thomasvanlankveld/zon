@@ -53,13 +53,13 @@ export default function zonColoredHierarchy<T extends Project>(data: T): Colored
  *
  */
 export function colorNode(
-  d: Project,
+  node: Project,
   {
     isHighlighted = false,
     isPressed = false,
   }: { isHighlighted?: boolean; isPressed?: boolean } = {}
 ): string {
-  const { baseColor, highlightedColor, pressedColor } = interpolateZon(d.data.nodeColorValue);
+  const { baseColor, highlightedColor, pressedColor } = interpolateZon(node.data.nodeColorValue);
   if (isPressed) return pressedColor;
   if (isHighlighted) return highlightedColor;
   return baseColor;

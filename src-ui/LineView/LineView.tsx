@@ -45,13 +45,10 @@ const LineView: FC<LineViewProps> = function LineView(props) {
     [hoveredArcFilePath, hoveredListItemFilePath]
   );
 
-  // Get hierarchy with colors
-  const projectRoot = useMemo(() => zonColoredHierarchy(data), [data]);
-
   return (
     <>
       <LineViewBreadcrumbTrail
-        projectRoot={projectRoot}
+        projectRoot={data}
         path={hoveredArcFilePath || diagramRootFilePath}
         isHighlighted={isHighlighted}
         setDiagramRootFilePath={setDiagramRootFilePath}
