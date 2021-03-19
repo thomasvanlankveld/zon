@@ -1,14 +1,13 @@
-import React, { FC, useState, useMemo, useCallback } from 'react';
+import React, { FC, useState, useCallback } from 'react';
 import styled from 'styled-components';
 
 import { Project } from '../project/Project';
-import zonColoredHierarchy from './color';
 import LineViewBreadcrumbTrail from './breadcrumb-trail/LineViewBreadcrumbTrail';
 import LineDiagram from './diagram/LineDiagram';
 import LineList from './list/LineList';
 
 interface LineViewProps {
-  data: Project;
+  projectRoot: Project;
 }
 
 /**
@@ -25,11 +24,10 @@ const LineViewGrid = styled.div`
  *
  */
 const LineView: FC<LineViewProps> = function LineView(props) {
-  const { data } = props;
-  const projectRootPath = data.path;
+  const { projectRoot } = props;
 
   // Path of the selected file
-  const [diagramRootFilePath, setDiagramRootFilePath] = useState<string>(projectRootPath);
+  const [diagramRootFilePath, setDiagramRootFilePath] = useState<string>(projectRoot.path);
 
   // Path of the file for the hovered arc
   const [hoveredArcFilePath, setHoveredArcFilePath] = useState<string | null>(null);
@@ -48,21 +46,21 @@ const LineView: FC<LineViewProps> = function LineView(props) {
   return (
     <>
       <LineViewBreadcrumbTrail
-        projectRoot={data}
+        projectRoot={projectRoot}
         path={hoveredArcFilePath || diagramRootFilePath}
         isHighlighted={isHighlighted}
         setDiagramRootFilePath={setDiagramRootFilePath}
       />
       <LineViewGrid>
         <LineDiagram
-          projectRoot={data}
+          projectRoot={projectRoot}
           diagramRootFilePath={diagramRootFilePath}
           isHighlighted={isHighlighted}
           setHoveredArcFilePath={setHoveredArcFilePath}
           setDiagramRootFilePath={setDiagramRootFilePath}
         />
         <LineList
-          projectRoot={data}
+          projectRoot={projectRoot}
           listRootFilePath={hoveredArcFilePath || diagramRootFilePath}
           isHighlighted={isHighlighted}
           setHoveredListItemFilePath={setHoveredListItemFilePath}

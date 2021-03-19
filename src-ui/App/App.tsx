@@ -30,7 +30,11 @@ const App: FC<AppProps> = function App(props) {
   }, [data]);
 
   // Render the page or a loading indicator
-  return data == null ? <h3 style={{ color: 'white' }}>Loading...</h3> : <LineView data={data} />;
+  return data == null ? (
+    <h3 style={{ color: 'white' }}>Loading...</h3>
+  ) : (
+    <LineView projectRoot={data} />
+  );
 };
 
 export default App;

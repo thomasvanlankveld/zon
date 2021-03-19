@@ -22,7 +22,7 @@ describe('LineView', () => {
     ]);
 
     // When I render the line view
-    const renderResult = render(<LineView data={project} />);
+    const renderResult = render(<LineView projectRoot={project} />);
 
     // Then I see the breadcrumbs for the project's root
     expect(getBreadcrumbTrail(renderResult)).toHaveTextContent('my-project');
@@ -62,7 +62,7 @@ describe('LineView', () => {
       ]);
 
       // And a rendered line view
-      const renderResult = render(<LineView data={project} />);
+      const renderResult = render(<LineView projectRoot={project} />);
 
       // And I navigated to `src/foo.ts`
       fireEvent.click(getDiagramPath('my-project/src/foo.ts', renderResult));
@@ -99,7 +99,7 @@ describe('LineView', () => {
       ]);
 
       // And a rendered line view
-      const renderResult = render(<LineView data={project} />);
+      const renderResult = render(<LineView projectRoot={project} />);
 
       // Then the diagram path for the `src` folder is *not* highlighted
       expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(232,176,46);');
@@ -142,7 +142,7 @@ describe('LineView', () => {
       ]);
 
       // And a rendered line view
-      const renderResult = render(<LineView data={project} />);
+      const renderResult = render(<LineView projectRoot={project} />);
 
       // And I click on the diagram path for the `src` folder
       fireEvent.click(getDiagramPath('my-project/src', renderResult));
@@ -174,7 +174,7 @@ describe('LineView', () => {
       ]);
 
       // And a rendered line view
-      const renderResult = render(<LineView data={project} />);
+      const renderResult = render(<LineView projectRoot={project} />);
 
       // And I navigated to `src/foo.ts`
       fireEvent.click(getDiagramPath('my-project/src/foo.ts', renderResult));
@@ -211,7 +211,7 @@ describe('LineView', () => {
       ]);
 
       // And a rendered line view
-      const renderResult = render(<LineView data={project} />);
+      const renderResult = render(<LineView projectRoot={project} />);
 
       // When I click on the `src` list item
       fireEvent.click(getLineListItemByName('src', renderResult));
@@ -243,7 +243,7 @@ describe('LineView', () => {
       ]);
 
       // And a rendered line view
-      const renderResult = render(<LineView data={project} />);
+      const renderResult = render(<LineView projectRoot={project} />);
 
       // Then the diagram path for the `src` folder is *not* highlighted
       expect(getDiagramPath('my-project/src', renderResult)).toHaveStyle('fill: rgb(232,176,46);');

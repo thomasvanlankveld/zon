@@ -1,16 +1,15 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { arc } from 'd3';
+import { arc, HierarchyRectangularNode } from 'd3';
 
 import { colorNode } from '../color';
-import { LineViewNode } from '../LineViewNode';
 import { width, height } from '../config';
 import { Project } from '../../project/Project';
 
 /**
  *
  */
-function LineDiagramArc(d: LineViewNode): string | undefined {
+function LineDiagramArc(d: HierarchyRectangularNode<unknown>): string | undefined {
   const radius = Math.min(width, height) / 2;
   const padding = 0.005;
   return (
@@ -44,7 +43,7 @@ const Path = styled.path<PathProps>`
 `;
 
 interface LineDiagramPathProps {
-  d: LineViewNode;
+  d: HierarchyRectangularNode<Project>;
   isHighlighted: boolean;
   onMouseEnter: (path: string) => void;
   onMouseLeave: (path: string) => void;
