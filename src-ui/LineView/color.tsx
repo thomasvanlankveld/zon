@@ -1,7 +1,6 @@
 import { HierarchyRectangularNode, interpolateRainbow, lab, scaleLinear } from 'd3';
 
 import { Project } from '../project/Project';
-import zonPartition from './partition';
 
 export interface NodeColors {
   baseColor: string;
@@ -26,27 +25,6 @@ function interpolateZon(value: number): NodeColors {
   const highlightedColor = lab(baseColor).brighter(0.5).toString();
   const pressedColor = lab(baseColor).brighter(1).toString();
   return { baseColor, highlightedColor, pressedColor };
-}
-
-/**
- * Add zon colors to every node in the hierarchy
- */
-export default function zonColoredHierarchy<T extends Project>(data: T): ColoredNode<T> {
-  // Partition the data
-  const root = zonPartition(data);
-
-  // Add color values to each node
-  /* eslint-disable no-param-reassign */
-  root.each((d) => {
-    // A node's colors are based on the node's center within the partition
-    const { baseColor, highlightedColor, pressedColor } = interpolateZon(d.x0 + (d.x1 - d.x0) / 2);
-    (d as ColoredNode<T>).data.baseColor = baseColor;
-    (d as ColoredNode<T>).data.highlightedColor = highlightedColor;
-    (d as ColoredNode<T>).data.pressedColor = pressedColor;
-  });
-  /* eslint-enable no-param-reassign */
-
-  return root as ColoredNode<T>;
 }
 
 /**
