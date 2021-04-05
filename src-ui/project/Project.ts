@@ -4,8 +4,6 @@ export interface ProjectNodeData {
   numberOfLines: number;
   nodeColorValue: number;
   firstLine: number;
-  middleLine: number;
-  lastLine: number;
 }
 
 export type ProjectFileData = ProjectNodeData;
