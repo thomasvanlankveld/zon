@@ -4,6 +4,10 @@ import pathTip from './pathTip';
 
 /**
  * Create folder node
+ *
+ * @param {Path} path Path for the node
+ * @param {FolderData?} options.folderData (Optional) Data for the node
+ * @param {FileSystemNode[]?} options.children (Optional) Children for the node
  */
 export function createFolder(path: Path): Folder;
 export function createFolder<FileData extends object>(path: Path): Folder<FileData>;

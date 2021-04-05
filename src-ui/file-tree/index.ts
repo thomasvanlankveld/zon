@@ -15,6 +15,7 @@ import sortNodes from './sortNodes';
 import toPathArray from './toPathArray';
 import toPathString from './toPathString';
 
+export * from './clusterNodes';
 export * from './createFile';
 export * from './createFolder';
 export * from './createTree';
