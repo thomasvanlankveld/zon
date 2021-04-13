@@ -6,7 +6,10 @@ import isFile from './isFile';
  * Takes a node and returns `true` or `false`.
  */
 export interface NodePredicate<FileData extends object = {}, FolderData extends object = {}> {
-  (node: FileSystemNode<FileData, FolderData>): boolean;
+  (
+    node: FileSystemNode<FileData, FolderData>,
+    parent: FileSystemNode<FileData, FolderData>
+  ): boolean;
 }
 
 /**
@@ -34,11 +37,12 @@ export interface ClusterFactory<FileData extends object = {}, FolderData extends
  *   { path: 'my-project/src/bar.ts' },
  * ]);
  *
- * // When I cluster typescript files
- * const isTypeScriptFile: NodePredicate = (node) => node.path.endsWith('.ts');
+ * // When I cluster typescript files in the `src` folder
+ * const isTypeScriptFileInSrc: NodePredicate = (node, parent) =>
+ *   node.path.endsWith('.ts') && parent.path.endsWith('/src');
  * const clusterFactory: ClusterFactory = (parent, childrenToCluster) =>
  *   createFolder(`${parent.path}/{typescript}`, { children: childrenToCluster });
- * const clusteredTree = clusterNodes(tree, isTypeScriptFile, clusterFactory);
+ * const clusteredTree = clusterNodes(tree, isTypeScriptFileInSrc, clusterFactory);
  *
  * // Then the typescript files are clustered
  * expect(getFileByPath(clusteredTree, 'my-project/package.json')).toBeDefined();
@@ -72,7 +76,9 @@ export default function clusterNodes<FileData extends object, FolderData extends
   if (isFile(root)) return root;
 
   // Partition children according to the predicate
-  const [childrenToCluster, childrenNotToCluster] = partition(root.children, predicate);
+  const [childrenToCluster, childrenNotToCluster] = partition(root.children, (child) =>
+    predicate(child, root)
+  );
 
   // For all children that are not to be clustered, cluster all their children as well
   const recursedChildren = childrenNotToCluster.map((child) =>
