@@ -12,7 +12,7 @@ path = "src-cli/main.rs"
 
 [dependencies]
 warp = "0.2.3"
-tokio = { version = "0.2.21", features = ["macros"] }
+tokio = { version = "1.8.4", features = ["macros"] }
 tokei = "11.2.1"
 serde_json = "1.0.53"
 colored = "1.9.3"
