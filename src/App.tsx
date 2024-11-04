@@ -2,6 +2,7 @@ import { createSignal } from "solid-js";
 import logo from "./assets/logo.svg";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
+import Donut from "./Donut";
 import "./App.css";
 
 // Test:
@@ -56,6 +57,7 @@ function App() {
           <pre>{lineCounts()}</pre>
         </div>
       )}
+      {Donut()}
     </main>
   );
 }
