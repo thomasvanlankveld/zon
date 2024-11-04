@@ -3,13 +3,20 @@ import logo from "./assets/logo.svg";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
 
-function App() {
-  const [greetMsg, setGreetMsg] = createSignal("");
-  const [name, setName] = createSignal("");
+// Test:
+// /Users/thomasvanlankveld/Code/zon/src-tauri
+// /Users/thomasvanlankveld/Code/everon-portal/frontend/src
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name: name() }));
+function App() {
+  const [lineCounts, setLineCounts] = createSignal("");
+  const [loading, setLoading] = createSignal(false);
+  const [path, setPath] = createSignal("");
+
+  async function countLines() {
+    setLoading(true);
+    const languages = await invoke("count_lines", { path: path() });
+    setLineCounts(JSON.stringify(languages, null, 2));
+    setLoading(false);
   }
 
   return (
@@ -33,17 +40,18 @@ function App() {
         class="row"
         onSubmit={(e) => {
           e.preventDefault();
-          greet();
+          countLines();
         }}
       >
         <input
           id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
+          onChange={(e) => setPath(e.currentTarget.value)}
+          placeholder="Enter a path..."
         />
-        <button type="submit">Greet</button>
+        <button type="submit">Count</button>
       </form>
-      <p>{greetMsg()}</p>
+      <p>{loading() && "Loading..."}</p>
+      <pre>{lineCounts()}</pre>
     </main>
   );
 }

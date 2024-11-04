@@ -1,14 +1,20 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+use tokei::{Config, Languages};
+
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+async fn count_lines(path: String) -> Languages {
+    let config = Config::default();
+    let mut languages = Languages::new();
+    // TODO: Support multiple paths? Support excludes?
+    languages.get_statistics(&[path], &[], &config);
+
+    languages
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![count_lines])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
