@@ -15,6 +15,10 @@ function App() {
   const [root, setRoot] = createSignal<Zon.Node | null>(null);
   const [loading, setLoading] = createSignal(false);
   const [path, setPath] = createSignal("");
+  // Path of the file for the hovered arc
+  const [hoveredArcFilePath, setHoveredArcFilePath] = createSignal<
+    string | null
+  >(null);
 
   async function countLinesInFolder() {
     const projectPath = await open({
@@ -26,15 +30,16 @@ function App() {
       throw new Error("No path found for opened folder");
     }
 
+    setRoot(null);
     setPath(projectPath);
     setLoading(true);
 
     const languages = await invoke("count_lines", { path: projectPath });
-    const projectRoot = Zon.getHierarchy(
-      projectPath,
-      languages as Tokei.Languages,
-      [Zon.LineType.blanks, Zon.LineType.code, Zon.LineType.comments]
-    );
+    const projectRoot = Zon.getTree(projectPath, languages as Tokei.Languages, [
+      Zon.LineType.blanks,
+      Zon.LineType.code,
+      Zon.LineType.comments,
+    ]);
 
     setRoot(projectRoot);
     setLoading(false);
@@ -72,7 +77,12 @@ function App() {
             <p>
               Counted {rootVal.numberOfLines} lines in {path()}:
             </p>
-            <Donut root={rootVal} />
+            {/* Add line count? Maybe keep hashmap of all root descendants for fast lookup? */}
+            <p>Hovering: {hoveredArcFilePath() ?? "..."}</p>
+            <Donut
+              root={rootVal}
+              setHoveredArcFilePath={setHoveredArcFilePath}
+            />
             <pre>{jsonReport}</pre>
           </div>
         );

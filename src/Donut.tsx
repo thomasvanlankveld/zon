@@ -1,58 +1,66 @@
 import { arc } from "./svg";
 import { Zon } from "./utils/zon";
 
-function DonutSegment(d: string) {
+function DonutSegment(props: {
+  d: string;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+}) {
+  const { d, onMouseEnter, onMouseLeave } = props;
+
   return (
     <path
       d={d}
       fill="#98abc5"
       stroke="black"
       style="stroke-width: 2px; opacity: 0.7;"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     ></path>
   );
 }
 
-type Slice = {
-  startAngle: number;
-  endAngle: number;
-};
-
-export default function Donut(props: { root: Zon.Node }) {
-  const { root } = props;
+export default function Donut(props: {
+  root: Zon.Node;
+  setHoveredArcFilePath: (path: string | null) => void;
+}) {
+  const { root, setHoveredArcFilePath } = props;
 
   const width = 500;
   const height = 500;
-  const outerRadius = Math.min(width, height) / 2;
-  const innerRadius = outerRadius / 2;
+  const maxRadius = Math.min(width, height) / 2;
 
   const center = {
     x: width / 2,
     y: height / 2,
   };
 
-  const percentages = root.children.map(
-    (child) => child.numberOfLines / root.numberOfLines
-  );
+  const nodes = Zon.getDescendants(root);
 
-  const numPercentages = percentages.length;
-  const slices: Slice[] = [];
+  function getArc(node: Zon.Node) {
+    const outerRadius = node.dimensions.y0 * maxRadius;
+    const innerRadius = node.dimensions.y1 * maxRadius;
+    const startAngle = node.dimensions.x0 * 2 * Math.PI + Math.PI;
+    const endAngle = node.dimensions.x1 * 2 * Math.PI + Math.PI;
 
-  for (let i = 0; i < numPercentages; i++) {
-    const percentage = percentages[i];
-    const startAngle = i === 0 ? Math.PI : slices[i - 1].endAngle;
-    const endAngle = startAngle + 2 * Math.PI * percentage;
-
-    slices[i] = { startAngle, endAngle };
+    return arc({ innerRadius, outerRadius, startAngle, endAngle });
   }
 
-  const ds = slices.map((slice) => arc({ ...slice, innerRadius, outerRadius }));
-
   // TODO:
-  // - Leave some room for stroke?
+  // - FIX DEPTH BUG WHEN SCANNING EVERON-PORTAL
+  // - Add padding between segments?
+  // - Leave some room for stroke, between svg width / height and the outermost arcs
+  // - Zoom "slider"?
   return (
     <svg width={width} height={height}>
       <g transform={`translate(${center.x},${center.y})`}>
-        {ds.map((d) => DonutSegment(d))}
+        {nodes.map((node) => (
+          <DonutSegment
+            d={getArc(node)}
+            onMouseEnter={() => setHoveredArcFilePath(node.path)}
+            onMouseLeave={() => setHoveredArcFilePath(null)}
+          />
+        ))}
       </g>
     </svg>
   );
