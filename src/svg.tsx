@@ -3,6 +3,7 @@
 // - https://github.com/thomasvanlankveld/zon/blob/master/src-ui/LineView/Diagram/LineDiagramPath.tsx
 // - https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
 // - https://observablehq.com/@d3/donut-chart/2
+// - https://math.stackexchange.com/questions/260096/find-the-coordinates-of-a-point-on-a-circle
 
 // Example arc:
 // `M 0.6, -248.999

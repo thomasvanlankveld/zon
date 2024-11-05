@@ -77,7 +77,7 @@ function App() {
             <p>
               Counted {rootVal.numberOfLines} lines in {path()}:
             </p>
-            {/* Add line count? Maybe keep hashmap of all root descendants for fast lookup? */}
+            {/* TODO: Add line count? Maybe keep hashmap of all root descendants for fast lookup? */}
             <p>Hovering: {hoveredArcFilePath() ?? "..."}</p>
             <Donut
               root={rootVal}

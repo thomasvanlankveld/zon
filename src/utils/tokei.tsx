@@ -4,6 +4,7 @@ export namespace Tokei {
     blanks: number;
     code: number;
     comments: number;
+    // TODO: Figure out if I need to do anything with `blobs`
     // blobs: BTreeMap<LanguageType, CodeStats>
     blobs: {};
   };
@@ -20,6 +21,7 @@ export namespace Tokei {
     code: number;
     comments: number;
     reports: Report[];
+    // TODO: Figure out if I need to do anything with `children`
     // children: BTreeMap<LanguageType, Vec<Report>>
     children: {};
     inaccurate: boolean;
