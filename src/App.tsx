@@ -12,7 +12,7 @@ import { Zon } from "./utils/zon";
 // /Users/thomasvanlankveld/Code/everon-portal/frontend/src
 
 function App() {
-  const [lineCounts, setLineCounts] = createSignal("");
+  const [root, setRoot] = createSignal<Zon.Node | null>(null);
   const [loading, setLoading] = createSignal(false);
   const [path, setPath] = createSignal("");
 
@@ -30,13 +30,13 @@ function App() {
     setLoading(true);
 
     const languages = await invoke("count_lines", { path: projectPath });
-    const hierarchy = Zon.getHierarchy(
+    const projectRoot = Zon.getHierarchy(
       projectPath,
       languages as Tokei.Languages,
       [Zon.CountType.blanks, Zon.CountType.code, Zon.CountType.comments]
     );
 
-    setLineCounts(JSON.stringify(hierarchy, null, 2));
+    setRoot(projectRoot);
     setLoading(false);
   }
 
@@ -59,13 +59,24 @@ function App() {
 
       <button onClick={countLinesInFolder}>Select folder</button>
       {loading() && <p>Counting lines in {path()}</p>}
-      {lineCounts() && (
-        <div>
-          <p>Counted lines in {path()}:</p>
-          <pre>{lineCounts()}</pre>
-        </div>
-      )}
-      {Donut()}
+      {(() => {
+        const rootVal = root();
+        const jsonReport = JSON.stringify(rootVal, null, 2);
+
+        if (!rootVal) {
+          return;
+        }
+
+        return (
+          <div>
+            <p>
+              Counted {rootVal.count} lines in {path()}:
+            </p>
+            <Donut root={rootVal} />
+            <pre>{jsonReport}</pre>
+          </div>
+        );
+      })()}
     </main>
   );
 }

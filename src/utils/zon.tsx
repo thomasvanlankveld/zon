@@ -8,7 +8,7 @@ export namespace Zon {
   } as const;
   export type CountType = keyof typeof CountType;
 
-  type Node = Tokei.Report & {
+  export type Node = Tokei.Report & {
     count: number;
     depth: number;
     height: number;

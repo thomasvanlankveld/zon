@@ -1,4 +1,5 @@
 import { arc } from "./svg";
+import { Zon } from "./utils/zon";
 
 function DonutSegment(d: string) {
   return (
@@ -16,7 +17,9 @@ type Slice = {
   endAngle: number;
 };
 
-export default function Donut() {
+export default function Donut(props: { root: Zon.Node }) {
+  const { root } = props;
+
   const width = 500;
   const height = 500;
   const outerRadius = Math.min(width, height) / 2;
@@ -27,7 +30,7 @@ export default function Donut() {
     y: height / 2,
   };
 
-  const percentages = [0.1, 0.2, 0.3, 0.4];
+  const percentages = root.children.map((child) => child.count / root.count);
 
   const numPercentages = percentages.length;
   const slices: Slice[] = [];
