@@ -33,7 +33,7 @@ function App() {
     const projectRoot = Zon.getHierarchy(
       projectPath,
       languages as Tokei.Languages,
-      [Zon.CountType.blanks, Zon.CountType.code, Zon.CountType.comments]
+      [Zon.LineType.blanks, Zon.LineType.code, Zon.LineType.comments]
     );
 
     setRoot(projectRoot);
@@ -70,7 +70,7 @@ function App() {
         return (
           <div>
             <p>
-              Counted {rootVal.count} lines in {path()}:
+              Counted {rootVal.numberOfLines} lines in {path()}:
             </p>
             <Donut root={rootVal} />
             <pre>{jsonReport}</pre>

@@ -1,15 +1,15 @@
 import { Tokei } from "./tokei";
 
 export namespace Zon {
-  export const CountType = {
+  export const LineType = {
     blanks: "blanks",
     code: "code",
     comments: "comments",
   } as const;
-  export type CountType = keyof typeof CountType;
+  export type LineType = keyof typeof LineType;
 
   export type Node = Tokei.Report & {
-    count: number;
+    numberOfLines: number;
     depth: number;
     height: number;
     children: Node[];
@@ -24,7 +24,7 @@ export namespace Zon {
   export function getHierarchy(
     projectPath: string,
     languages: Tokei.Languages,
-    countTypes: CountType[]
+    lineTypes: LineType[]
   ) {
     const projectName = getProjectName(projectPath);
     const numberOfCharactersToRemove = projectPath.length - projectName.length;
@@ -46,12 +46,15 @@ export namespace Zon {
             nodes[nodeName].stats.blanks += tokeiReport.stats.blanks;
             nodes[nodeName].stats.code += tokeiReport.stats.code;
             nodes[nodeName].stats.comments += tokeiReport.stats.comments;
-            nodes[nodeName].count += getCount(tokeiReport.stats, countTypes);
+            nodes[nodeName].numberOfLines += getNumberOfLines(
+              tokeiReport.stats,
+              lineTypes
+            );
           } else {
             const node = {
               ...tokeiReport,
               name: nodeName,
-              count: getCount(tokeiReport.stats, countTypes),
+              numberOfLines: getNumberOfLines(tokeiReport.stats, lineTypes),
               depth: i,
               height: 0,
               children: [],
@@ -81,12 +84,14 @@ export namespace Zon {
     return root;
   }
 
-  function getCount(stats: Tokei.CodeStats, countTypes: CountType[]) {
-    return countTypes.reduce((total, type) => total + stats[type], 0);
+  function getNumberOfLines(stats: Tokei.CodeStats, lineTypes: LineType[]) {
+    return lineTypes.reduce((total, type) => total + stats[type], 0);
   }
 
   function sortHierarchy(node: Node) {
-    node.children.sort((left, right) => (left.count > right.count ? 1 : -1));
+    node.children.sort((left, right) =>
+      left.numberOfLines > right.numberOfLines ? 1 : -1
+    );
 
     for (const child of node.children) {
       sortHierarchy(child);

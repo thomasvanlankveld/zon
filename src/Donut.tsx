@@ -30,7 +30,9 @@ export default function Donut(props: { root: Zon.Node }) {
     y: height / 2,
   };
 
-  const percentages = root.children.map((child) => child.count / root.count);
+  const percentages = root.children.map(
+    (child) => child.numberOfLines / root.numberOfLines
+  );
 
   const numPercentages = percentages.length;
   const slices: Slice[] = [];
