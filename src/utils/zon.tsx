@@ -86,7 +86,7 @@ export namespace Zon {
   }
 
   function sortHierarchy(node: Node) {
-    node.children.sort((left, right) => (left.count > right.count ? -1 : 1));
+    node.children.sort((left, right) => (left.count > right.count ? 1 : -1));
 
     for (const child of node.children) {
       sortHierarchy(child);
