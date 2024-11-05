@@ -12,8 +12,8 @@
 
 function point(radius: number, angle: number) {
   return {
-    x: radius * Math.cos(angle),
-    y: radius * Math.sin(angle),
+    x: radius * Math.sin(angle),
+    y: radius * Math.cos(angle),
   };
 }
 
@@ -35,9 +35,9 @@ export function arc(arcSpecs: ArcSpecs) {
   const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
 
   const startCommand = `M ${outerStart.x} ${outerStart.y}`;
-  const outerArcCommand = `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${outerEnd.x} ${outerEnd.y}`;
+  const outerArcCommand = `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 0 ${outerEnd.x} ${outerEnd.y}`;
   const lineCommand = `L ${innerEnd.x} ${innerEnd.y}`;
-  const innerArcCommand = `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${innerStart.x} ${innerStart.y}`;
+  const innerArcCommand = `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 1 ${innerStart.x} ${innerStart.y}`;
 
   return `${startCommand} ${outerArcCommand} ${lineCommand} ${innerArcCommand} Z`;
 }

@@ -34,7 +34,7 @@ export default function Donut() {
 
   for (let i = 0; i < numPercentages; i++) {
     const percentage = percentages[i];
-    const startAngle = i === 0 ? 0 : slices[i - 1].endAngle;
+    const startAngle = i === 0 ? Math.PI : slices[i - 1].endAngle;
     const endAngle = startAngle + 2 * Math.PI * percentage;
 
     slices[i] = { startAngle, endAngle };
