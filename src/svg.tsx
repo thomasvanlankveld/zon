@@ -34,13 +34,12 @@ export function arc(arcSpecs: ArcSpecs) {
   const innerStart = point(innerRadius, startAngle);
 
   const isLarge = endAngle - startAngle >= Math.PI;
-  const [outerLargeArcFlag, outerSweepFlag, innerLargeArcFlag, innerSweepFlag] =
-    isLarge ? [1, 0, 1, 1] : [0, 0, 0, 1];
+  const largeArcFlag = isLarge ? 1 : 0;
 
   const startCommand = `M ${outerStart.x} ${outerStart.y}`;
-  const outerArcCommand = `A ${outerRadius} ${outerRadius} 0 ${outerLargeArcFlag} ${outerSweepFlag} ${outerEnd.x} ${outerEnd.y}`;
+  const outerArcCommand = `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 0 ${outerEnd.x} ${outerEnd.y}`;
   const lineCommand = `L ${innerEnd.x} ${innerEnd.y}`;
-  const innerArcCommand = `A ${innerRadius} ${innerRadius} 0 ${innerLargeArcFlag} ${innerSweepFlag} ${innerStart.x} ${innerStart.y}`;
+  const innerArcCommand = `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 1 ${innerStart.x} ${innerStart.y}`;
 
   return `${startCommand} ${outerArcCommand} ${lineCommand} ${innerArcCommand} Z`;
 }
