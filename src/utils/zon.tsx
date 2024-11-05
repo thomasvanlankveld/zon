@@ -1,7 +1,15 @@
 import { Tokei } from "./tokei";
 
 export namespace Zon {
+  export const CountType = {
+    blanks: "blanks",
+    code: "code",
+    comments: "comments",
+  } as const;
+  export type CountType = keyof typeof CountType;
+
   type Node = Tokei.Report & {
+    count: number;
     depth: number;
     height: number;
     children: Node[];
@@ -15,7 +23,8 @@ export namespace Zon {
 
   export function getHierarchy(
     projectPath: string,
-    languages: Tokei.Languages
+    languages: Tokei.Languages,
+    countTypes: CountType[]
   ) {
     const projectName = getProjectName(projectPath);
     const numberOfCharactersToRemove = projectPath.length - projectName.length;
@@ -37,10 +46,12 @@ export namespace Zon {
             nodes[nodeName].stats.blanks += tokeiReport.stats.blanks;
             nodes[nodeName].stats.code += tokeiReport.stats.code;
             nodes[nodeName].stats.comments += tokeiReport.stats.comments;
+            nodes[nodeName].count += getCount(tokeiReport.stats, countTypes);
           } else {
             const node = {
               ...tokeiReport,
               name: nodeName,
+              count: getCount(tokeiReport.stats, countTypes),
               depth: i,
               height: 0,
               children: [],
@@ -63,6 +74,22 @@ export namespace Zon {
       }
     }
 
-    return nodes[projectName];
+    const root = nodes[projectName];
+
+    sortHierarchy(root);
+
+    return root;
+  }
+
+  function getCount(stats: Tokei.CodeStats, countTypes: CountType[]) {
+    return countTypes.reduce((total, type) => total + stats[type], 0);
+  }
+
+  function sortHierarchy(node: Node) {
+    node.children.sort((left, right) => (left.count > right.count ? -1 : 1));
+
+    for (const child of node.children) {
+      sortHierarchy(child);
+    }
   }
 }

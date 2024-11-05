@@ -32,7 +32,8 @@ function App() {
     const languages = await invoke("count_lines", { path: projectPath });
     const hierarchy = Zon.getHierarchy(
       projectPath,
-      languages as Tokei.Languages
+      languages as Tokei.Languages,
+      [Zon.CountType.blanks, Zon.CountType.code, Zon.CountType.comments]
     );
 
     setLineCounts(JSON.stringify(hierarchy, null, 2));
