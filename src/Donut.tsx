@@ -44,7 +44,6 @@ export default function Donut() {
 
   // TODO:
   // - Leave some room for stroke?
-  // - Rotate 90 deg
   return (
     <svg width={width} height={height}>
       <g transform={`translate(${center.x},${center.y})`}>
