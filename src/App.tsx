@@ -4,6 +4,8 @@ import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import Donut from "./Donut";
 import "./App.css";
+import { Tokei } from "./utils/tokei";
+import { Zon } from "./utils/zon";
 
 // Test:
 // /Users/thomasvanlankveld/Code/zon/src-tauri
@@ -15,20 +17,25 @@ function App() {
   const [path, setPath] = createSignal("");
 
   async function countLinesInFolder() {
-    const file = await open({
+    const projectPath = await open({
       multiple: false,
       directory: true,
     });
 
-    if (file == null) {
-      throw new Error("No path found for file");
+    if (projectPath == null) {
+      throw new Error("No path found for opened folder");
     }
 
-    setPath(file);
-
+    setPath(projectPath);
     setLoading(true);
-    const languages = await invoke("count_lines", { path: path() });
-    setLineCounts(JSON.stringify(languages, null, 2));
+
+    const languages = await invoke("count_lines", { path: projectPath });
+    const hierarchy = Zon.getHierarchy(
+      projectPath,
+      languages as Tokei.Languages
+    );
+
+    setLineCounts(JSON.stringify(hierarchy, null, 2));
     setLoading(false);
   }
 
