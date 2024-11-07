@@ -1,4 +1,4 @@
-import { Tokei } from "./tokei";
+import { Tokei } from "./tokei.ts";
 
 export namespace Zon {
   export const LineType = {

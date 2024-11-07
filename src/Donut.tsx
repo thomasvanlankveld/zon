@@ -1,5 +1,5 @@
-import { arc } from "./svg";
-import { Zon } from "./utils/zon";
+import { arc } from "./utils/svg.ts";
+import { Zon } from "./utils/zon.ts";
 
 function DonutSegment(props: {
   d: string;

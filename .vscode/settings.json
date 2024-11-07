@@ -1,5 +1,4 @@
 {
   "editor.defaultFormatter": "denoland.vscode-deno",
-  "cSpell.words": ["Tokei"],
-  "deno.enable": true
+  "cSpell.words": ["Tokei"]
 }
