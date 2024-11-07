@@ -33,7 +33,7 @@ export namespace Zon {
   export function getTree(
     projectPath: string,
     languages: Tokei.Languages,
-    lineTypes: LineType[]
+    lineTypes: LineType[],
   ) {
     const projectName = getProjectName(projectPath);
     const numberOfCharactersToRemove = projectPath.length - projectName.length;
@@ -57,7 +57,7 @@ export namespace Zon {
             nodes[nodePath].stats.comments += tokeiReport.stats.comments;
             nodes[nodePath].numberOfLines += getNumberOfLines(
               tokeiReport.stats,
-              lineTypes
+              lineTypes,
             );
           } else {
             const node = {
@@ -82,7 +82,7 @@ export namespace Zon {
               parent.children.push(node);
               parent.height = Math.max(
                 parent.height,
-                fileNameSegments.length - i
+                fileNameSegments.length - i,
               );
             }
           }
@@ -100,7 +100,7 @@ export namespace Zon {
 
   function getNumberOfLines(
     stats: Tokei.CodeStats,
-    lineTypes: LineType[]
+    lineTypes: LineType[],
   ): number {
     return lineTypes.reduce((total, type) => total + stats[type], 0);
   }
@@ -119,15 +119,15 @@ export namespace Zon {
     node: Node,
     maxHeight: number,
     totalNumberOfLines: number,
-    lineNumber: number
+    lineNumber: number,
   ): void {
     for (const child of node.children) {
       child.firstLine = lineNumber;
 
       // TODO: Extract dimension calculation so it can be calculated after taking navigation into account
       child.dimensions.x0 = child.firstLine / totalNumberOfLines;
-      child.dimensions.x1 =
-        child.dimensions.x0 + child.numberOfLines / totalNumberOfLines;
+      child.dimensions.x1 = child.dimensions.x0 +
+        child.numberOfLines / totalNumberOfLines;
       child.dimensions.y0 = child.depth / maxHeight;
       child.dimensions.y1 = child.dimensions.y0 - 1 / maxHeight;
 

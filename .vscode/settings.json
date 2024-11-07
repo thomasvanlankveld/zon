@@ -1,4 +1,5 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "cSpell.words": ["Tokei"]
+  "editor.defaultFormatter": "denoland.vscode-deno",
+  "cSpell.words": ["Tokei"],
+  "deno.enable": true
 }

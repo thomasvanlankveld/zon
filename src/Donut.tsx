@@ -16,7 +16,8 @@ function DonutSegment(props: {
       style="stroke-width: 2px; opacity: 0.7;"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-    ></path>
+    >
+    </path>
   );
 }
 
