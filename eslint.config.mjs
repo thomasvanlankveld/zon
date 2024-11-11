@@ -1,12 +1,16 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
+import solid from "eslint-plugin-solid/configs/recommended";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 import prettierConfig from "eslint-config-prettier";
 
 export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
-  prettierConfig,
+  jsxA11y.flatConfigs.recommended,
   {
+    files: ["**/*.{ts,tsx}"],
+    solid,
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -14,4 +18,5 @@ export default tseslint.config(
       },
     },
   },
+  prettierConfig,
 );
