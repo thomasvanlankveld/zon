@@ -1,3 +1,4 @@
+import { For } from "solid-js";
 import { getArc } from "./utils/svg.ts";
 import { Node, getDescendants } from "./utils/zon.ts";
 
@@ -6,17 +7,15 @@ function DonutSegment(props: {
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }) {
-  const { d, onMouseEnter, onMouseLeave } = props;
-
   return (
     <path
-      d={d}
+      d={props.d}
       fill="#98abc5"
       stroke="black"
-      style="stroke-width: 2px; opacity: 0.7;"
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    ></path>
+      style={{ "stroke-width": "2px; opacity: 0.7" }}
+      onMouseEnter={() => props.onMouseEnter()}
+      onMouseLeave={() => props.onMouseLeave()}
+    />
   );
 }
 
@@ -24,8 +23,6 @@ export default function Donut(props: {
   root: Node;
   setHoveredArcFilePath: (path: string | null) => void;
 }) {
-  const { root, setHoveredArcFilePath } = props;
-
   const width = 500;
   const height = 500;
   const maxRadius = Math.min(width, height) / 2;
@@ -35,7 +32,7 @@ export default function Donut(props: {
     y: height / 2,
   };
 
-  const nodes = getDescendants(root);
+  const nodes = () => getDescendants(props.root);
 
   function getArcFromNode(node: Node) {
     const outerRadius = node.dimensions.y0 * maxRadius;
@@ -54,13 +51,15 @@ export default function Donut(props: {
   return (
     <svg width={width} height={height}>
       <g transform={`translate(${center.x},${center.y})`}>
-        {nodes.map((node) => (
-          <DonutSegment
-            d={getArcFromNode(node)}
-            onMouseEnter={() => setHoveredArcFilePath(node.path)}
-            onMouseLeave={() => setHoveredArcFilePath(null)}
-          />
-        ))}
+        <For each={nodes()}>
+          {(node) => (
+            <DonutSegment
+              d={getArcFromNode(node)}
+              onMouseEnter={() => props.setHoveredArcFilePath(node.path)}
+              onMouseLeave={() => props.setHoveredArcFilePath(null)}
+            />
+          )}
+        </For>
       </g>
     </svg>
   );
