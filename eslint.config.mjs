@@ -9,7 +9,7 @@ export default tseslint.config(
   ...tseslint.configs.recommendedTypeChecked,
   jsxA11y.flatConfigs.recommended,
   {
-    files: ["**/*.{ts,tsx}"],
+    files: ["src/**/*.{ts,tsx}"],
     ...solid,
     languageOptions: {
       parserOptions: {
