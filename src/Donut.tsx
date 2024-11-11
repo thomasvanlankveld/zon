@@ -1,5 +1,5 @@
 import { arc } from "./utils/svg.ts";
-import { Zon } from "./utils/zon.ts";
+import { Node, getDescendants } from "./utils/zon.ts";
 
 function DonutSegment(props: {
   d: string;
@@ -21,7 +21,7 @@ function DonutSegment(props: {
 }
 
 export default function Donut(props: {
-  root: Zon.Node;
+  root: Node;
   setHoveredArcFilePath: (path: string | null) => void;
 }) {
   const { root, setHoveredArcFilePath } = props;
@@ -35,9 +35,9 @@ export default function Donut(props: {
     y: height / 2,
   };
 
-  const nodes = Zon.getDescendants(root);
+  const nodes = getDescendants(root);
 
-  function getArc(node: Zon.Node) {
+  function getArc(node: Node) {
     const outerRadius = node.dimensions.y0 * maxRadius;
     const innerRadius = node.dimensions.y1 * maxRadius;
     const startAngle = node.dimensions.x0 * 2 * Math.PI + Math.PI;

@@ -3,15 +3,15 @@ import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import Donut from "./Donut.tsx";
 import "./App.css";
-import { Tokei } from "./utils/tokei.ts";
-import { Zon } from "./utils/zon.ts";
+import { Languages } from "./utils/tokei.ts";
+import { Node, LineType, createTree } from "./utils/zon.ts";
 
 // Test:
 // /Users/thomasvanlankveld/Code/zon/src-tauri
 // /Users/thomasvanlankveld/Code/everon-portal/frontend/src
 
 function App() {
-  const [root, setRoot] = createSignal<Zon.Node | null>(null);
+  const [root, setRoot] = createSignal<Node | null>(null);
   const [loading, setLoading] = createSignal(false);
   const [path, setPath] = createSignal("");
   // Path of the file for the hovered arc
@@ -34,10 +34,10 @@ function App() {
     setLoading(true);
 
     const languages = await invoke("count_lines", { path: projectPath });
-    const projectRoot = Zon.getTree(projectPath, languages as Tokei.Languages, [
-      Zon.LineType.blanks,
-      Zon.LineType.code,
-      Zon.LineType.comments,
+    const projectRoot = createTree(projectPath, languages as Languages, [
+      LineType.blanks,
+      LineType.code,
+      LineType.comments,
     ]);
 
     setRoot(projectRoot);
