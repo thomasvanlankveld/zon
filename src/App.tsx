@@ -5,6 +5,7 @@ import Donut from "./Donut.tsx";
 import "./App.css";
 import { Languages } from "./utils/tokei.ts";
 import { Node, LineType, createTree } from "./utils/zon.ts";
+import logAsyncErrors from "./utils/async/logErrors.ts";
 
 // Test:
 // /Users/thomasvanlankveld/Code/zon/src-tauri
@@ -48,7 +49,9 @@ function App() {
     <main class="container">
       <h1>Zon</h1>
 
-      <button onClick={countLinesInFolder}>Select folder</button>
+      <button onClick={logAsyncErrors(countLinesInFolder)}>
+        Select folder
+      </button>
       {loading() && <p>Counting lines in {path()}</p>}
       {(() => {
         const rootVal = root();
