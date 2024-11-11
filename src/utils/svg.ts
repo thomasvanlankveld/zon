@@ -26,7 +26,7 @@ export type ArcSpecs = {
 };
 
 // TODO: If circle, do something else
-export function arc(arcSpecs: ArcSpecs) {
+export function getArc(arcSpecs: ArcSpecs) {
   const { innerRadius, outerRadius, startAngle, endAngle } = arcSpecs;
 
   const outerStart = point(outerRadius, startAngle);

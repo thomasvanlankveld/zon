@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["Tokei"]
+  "cSpell.words": ["Tokei"],
+  "deno.enable": false
 }

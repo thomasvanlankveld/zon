@@ -1,4 +1,4 @@
-import { arc } from "./utils/svg.ts";
+import { getArc } from "./utils/svg.ts";
 import { Node, getDescendants } from "./utils/zon.ts";
 
 function DonutSegment(props: {
@@ -37,13 +37,13 @@ export default function Donut(props: {
 
   const nodes = getDescendants(root);
 
-  function getArc(node: Node) {
+  function getArcFromNode(node: Node) {
     const outerRadius = node.dimensions.y0 * maxRadius;
     const innerRadius = node.dimensions.y1 * maxRadius;
     const startAngle = node.dimensions.x0 * 2 * Math.PI + Math.PI;
     const endAngle = node.dimensions.x1 * 2 * Math.PI + Math.PI;
 
-    return arc({ innerRadius, outerRadius, startAngle, endAngle });
+    return getArc({ innerRadius, outerRadius, startAngle, endAngle });
   }
 
   // TODO:
@@ -56,7 +56,7 @@ export default function Donut(props: {
       <g transform={`translate(${center.x},${center.y})`}>
         {nodes.map((node) => (
           <DonutSegment
-            d={getArc(node)}
+            d={getArcFromNode(node)}
             onMouseEnter={() => setHoveredArcFilePath(node.path)}
             onMouseLeave={() => setHoveredArcFilePath(null)}
           />

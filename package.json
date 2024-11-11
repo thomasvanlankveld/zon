@@ -12,12 +12,13 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
+    "prepare": "husky",
     "tauri": "tauri",
-    "format": "deno task prettier-format",
-    "lint": "deno task prettier-lint && deno task eslint",
-    "prettier-lint": "deno run --no-prompt --allow-env=TERM --allow-sys=cpus,uid --allow-read=. --allow-write=./node_modules/.cache/prettier npm:prettier src --check",
-    "prettier-format": "deno run --no-prompt --allow-env=TERM --allow-sys=cpus,uid --allow-read=. --allow-write=./node_modules/.cache/prettier,src npm:prettier src --write",
-    "eslint": "deno run --allow-env --allow-sys=cpus --allow-read=. --deny-read=/uSERS --allow-write=.eslintcache npm:eslint src"
+    "prettier-lint": "deno run --no-prompt --allow-env=TERM --allow-sys=cpus,uid --allow-read=. --allow-write=./node_modules/.cache/prettier npm:prettier src --ignore-unknown --check",
+    "prettier-format": "deno run --no-prompt --allow-env=TERM --allow-sys=cpus,uid --allow-read=. --allow-write=./node_modules/.cache/prettier,src npm:prettier src  --ignore-unknown --write",
+    "eslint": "deno run --allow-env --allow-sys=cpus --allow-read=. --deny-read=/uSERS --allow-write=.eslintcache npm:eslint src",
+    "test": "deno run --allow-env --allow-sys=cpus,uid,homedir --allow-read --allow-write --allow-run --allow-ffi=. --allow-net npm:vitest run",
+    "lint-staged": "deno run --allow-env --allow-read --allow-run=git,deno --allow-write=.git npm:lint-staged"
   },
   "dependencies": {
     "@tauri-apps/plugin-dialog": "~2.0.1",
@@ -30,11 +31,21 @@
     "@types/eslint__js": "^8.42.3",
     "eslint": "^9.14.0",
     "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.1.6",
+    "jsdom": "^25.0.1",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "typescript": "^5.2.2",
     "typescript-eslint": "^8.13.0",
     "vite": "^5.3.1",
     "vite-plugin-solid": "^2.8.0",
-    "@tauri-apps/cli": "^2"
+    "@tauri-apps/cli": "^2",
+    "vitest": "^2.1.4"
+  },
+  "lint-staged": {
+    "src/*": [
+      "deno task eslint",
+      "deno task prettier-format"
+    ]
   }
 }
