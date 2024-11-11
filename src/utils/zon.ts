@@ -107,7 +107,7 @@ export namespace Zon {
 
   function sortTree(node: Node): void {
     node.children.sort((left, right) =>
-      left.numberOfLines > right.numberOfLines ? 1 : -1
+      left.numberOfLines > right.numberOfLines ? 1 : -1,
     );
 
     for (const child of node.children) {
@@ -126,8 +126,8 @@ export namespace Zon {
 
       // TODO: Extract dimension calculation so it can be calculated after taking navigation into account
       child.dimensions.x0 = child.firstLine / totalNumberOfLines;
-      child.dimensions.x1 = child.dimensions.x0 +
-        child.numberOfLines / totalNumberOfLines;
+      child.dimensions.x1 =
+        child.dimensions.x0 + child.numberOfLines / totalNumberOfLines;
       child.dimensions.y0 = child.depth / maxHeight;
       child.dimensions.y1 = child.dimensions.y0 - 1 / maxHeight;
 

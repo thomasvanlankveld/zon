@@ -12,7 +12,9 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "prettier-lint": "deno run --no-prompt --allow-env=TERM --allow-sys=cpus,uid --allow-read=. --allow-write=./node_modules/.cache/prettier npm:prettier . --check",
+    "prettier-format": "deno run --no-prompt --allow-env=TERM --allow-sys=cpus,uid --allow-read=. --allow-write=./node_modules/.cache/prettier,src npm:prettier src --write"
   },
   "dependencies": {
     "@tauri-apps/plugin-dialog": "~2.0.1",
@@ -21,6 +23,7 @@
     "@tauri-apps/plugin-shell": "^2"
   },
   "devDependencies": {
+    "prettier": "^3.3.3",
     "typescript": "^5.2.2",
     "vite": "^5.3.1",
     "vite-plugin-solid": "^2.8.0",

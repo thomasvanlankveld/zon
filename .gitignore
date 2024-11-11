@@ -123,6 +123,6 @@ temp/
 # End of https://www.gitignore.io/api/node,visualstudiocode
 
 
-#Added by cargo
-
-/target
+# Cargo (Moved from `src-tauri/.gitignore`)
+src-tauri/target
+src-tauri/gen/schemas

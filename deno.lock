@@ -5,6 +5,7 @@
     "npm:@tauri-apps/cli@2": "2.0.4",
     "npm:@tauri-apps/plugin-dialog@~2.0.1": "2.0.1",
     "npm:@tauri-apps/plugin-shell@2": "2.0.1",
+    "npm:prettier@^3.3.3": "3.3.3",
     "npm:solid-js@^1.7.8": "1.9.3_seroval@1.1.1",
     "npm:typescript@^5.2.2": "5.6.3",
     "npm:vite-plugin-solid@^2.8.0": "2.10.2_solid-js@1.9.3__seroval@1.1.1_vite@5.4.10_@babel+core@7.26.0",
@@ -531,6 +532,9 @@
         "source-map-js"
       ]
     },
+    "prettier@3.3.3": {
+      "integrity": "sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew=="
+    },
     "rollup@4.24.3": {
       "integrity": "sha512-HBW896xR5HGmoksbi3JBDtmVzWiPAYqp7wip50hjQ67JbDz61nyoMPdqu1DvVW9asYb2M65Z20ZHsyJCMqMyDg==",
       "dependencies": [
@@ -641,6 +645,7 @@
         "npm:@tauri-apps/cli@2",
         "npm:@tauri-apps/plugin-dialog@~2.0.1",
         "npm:@tauri-apps/plugin-shell@2",
+        "npm:prettier@^3.3.3",
         "npm:solid-js@^1.7.8",
         "npm:typescript@^5.2.2",
         "npm:vite-plugin-solid@^2.8.0",
