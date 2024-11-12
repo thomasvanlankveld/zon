@@ -1,11 +1,12 @@
 import { createSignal, Show } from "solid-js";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
-import Sunburst from "./Sunburst.tsx";
 import "./App.css";
-import { Languages } from "./utils/tokei.ts";
-import { Node, LineType, createTree } from "./utils/zon.ts";
+import type { Languages } from "./utils/tokei.ts";
+import { type Node, LineType, createTree } from "./utils/zon.ts";
 import logAsyncErrors from "./utils/async/logErrors.ts";
+import LandingPage from "./pages/LandingPage.tsx";
+import ReportPage from "./pages/ReportPage.tsx";
 
 // Test:
 // /Users/thomasvanlankveld/Code/zon/src-tauri
@@ -13,12 +14,8 @@ import logAsyncErrors from "./utils/async/logErrors.ts";
 
 function App() {
   const [root, setRoot] = createSignal<Node | null>(null);
-  const [loading, setLoading] = createSignal(false);
+  const [isLoading, setIsLoading] = createSignal(false);
   const [path, setPath] = createSignal("");
-  // Path of the file for the hovered arc
-  const [hoveredArcFilePath, setHoveredArcFilePath] = createSignal<
-    string | null
-  >(null);
 
   async function countLinesInFolder() {
     const projectPath = await open({
@@ -32,7 +29,7 @@ function App() {
 
     setRoot(null);
     setPath(projectPath);
-    setLoading(true);
+    setIsLoading(true);
 
     const languages = await invoke("count_lines", { path: projectPath });
     const projectRoot = createTree(projectPath, languages as Languages, [
@@ -42,34 +39,23 @@ function App() {
     ]);
 
     setRoot(projectRoot);
-    setLoading(false);
+    setIsLoading(false);
   }
 
   return (
-    <main class="container">
-      <h1>Zon</h1>
-
-      <button onClick={logAsyncErrors(countLinesInFolder)}>
-        Select folder
-      </button>
-      {loading() && <p>Counting lines in {path()}</p>}
-      <Show when={root()} keyed>
-        {(rootVal) => (
-          <div>
-            <p>
-              Counted {rootVal.numberOfLines} lines in {path()}:
-            </p>
-            {/* TODO: Add line count? Maybe keep hashmap of all root descendants for fast lookup? */}
-            <p>Hovering: {hoveredArcFilePath() ?? "..."}</p>
-            <Sunburst
-              root={rootVal}
-              setHoveredArcFilePath={setHoveredArcFilePath}
-            />
-            <pre>{JSON.stringify(rootVal, null, 2)}</pre>
-          </div>
-        )}
-      </Show>
-    </main>
+    <Show
+      when={root()}
+      keyed
+      fallback={
+        <LandingPage
+          path={path()}
+          isLoading={isLoading()}
+          countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+        />
+      }
+    >
+      {(rootVal) => <ReportPage root={rootVal} path={path()} />}
+    </Show>
   );
 }
 
