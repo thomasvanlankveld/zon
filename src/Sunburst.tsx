@@ -19,7 +19,7 @@ function DonutSegment(props: {
   );
 }
 
-export default function Donut(props: {
+export default function Sunburst(props: {
   root: Node;
   setHoveredArcFilePath: (path: string | null) => void;
 }) {

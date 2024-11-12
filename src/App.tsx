@@ -1,7 +1,7 @@
-import { createSignal } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
-import Donut from "./Donut.tsx";
+import Sunburst from "./Sunburst.tsx";
 import "./App.css";
 import { Languages } from "./utils/tokei.ts";
 import { Node, LineType, createTree } from "./utils/zon.ts";
@@ -53,29 +53,22 @@ function App() {
         Select folder
       </button>
       {loading() && <p>Counting lines in {path()}</p>}
-      {(() => {
-        const rootVal = root();
-        const jsonReport = JSON.stringify(rootVal, null, 2);
-
-        if (!rootVal) {
-          return;
-        }
-
-        return (
+      <Show when={root()} keyed>
+        {(rootVal) => (
           <div>
             <p>
               Counted {rootVal.numberOfLines} lines in {path()}:
             </p>
             {/* TODO: Add line count? Maybe keep hashmap of all root descendants for fast lookup? */}
             <p>Hovering: {hoveredArcFilePath() ?? "..."}</p>
-            <Donut
+            <Sunburst
               root={rootVal}
               setHoveredArcFilePath={setHoveredArcFilePath}
             />
-            <pre>{jsonReport}</pre>
+            <pre>{JSON.stringify(rootVal, null, 2)}</pre>
           </div>
-        );
-      })()}
+        )}
+      </Show>
     </main>
   );
 }
