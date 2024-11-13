@@ -1,28 +1,13 @@
-import { For } from "solid-js";
+import { For, type Setter } from "solid-js";
 import { getArc } from "./utils/svg.ts";
-import { Node, getDescendants } from "./utils/zon.ts";
+import { type Node, getDescendants } from "./utils/zon.ts";
 
-function DonutSegment(props: {
-  d: string;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
-}) {
-  return (
-    <path
-      d={props.d}
-      fill="#98abc5"
-      stroke="black"
-      style={{ "stroke-width": "2px; opacity: 0.7" }}
-      onMouseEnter={() => props.onMouseEnter()}
-      onMouseLeave={() => props.onMouseLeave()}
-    />
-  );
-}
-
-export default function Sunburst(props: {
+type SunburstProps = {
   root: Node;
-  setHoveredArcFilePath: (path: string | null) => void;
-}) {
+  setHoveredArcFilePath: Setter<string | null>;
+};
+
+export default function Sunburst(props: SunburstProps) {
   const width = 500;
   const height = 500;
   const maxRadius = Math.min(width, height) / 2;
@@ -53,10 +38,13 @@ export default function Sunburst(props: {
       <g transform={`translate(${center.x},${center.y})`}>
         <For each={nodes()}>
           {(node) => (
-            <DonutSegment
+            <path
               d={getArcFromNode(node)}
-              onMouseEnter={() => props.setHoveredArcFilePath(node.path)}
-              onMouseLeave={() => props.setHoveredArcFilePath(null)}
+              fill="#98abc5"
+              stroke="black"
+              style={{ "stroke-width": "2px; opacity: 0.7" }}
+              onMouseEnter={[props.setHoveredArcFilePath, node.path]}
+              onMouseLeave={[props.setHoveredArcFilePath, null]}
             />
           )}
         </For>
