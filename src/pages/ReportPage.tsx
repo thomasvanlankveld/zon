@@ -1,4 +1,4 @@
-import { createSignal, type Component } from "solid-js";
+import { createSignal } from "solid-js";
 import type { Node } from "../utils/zon.ts";
 import Sunburst from "../Sunburst.tsx";
 
@@ -7,7 +7,7 @@ type ReportPageProps = {
   path: string;
 };
 
-const ReportPage: Component<ReportPageProps> = function ReportPage(props) {
+export default function ReportPage(props: ReportPageProps) {
   const [hoveredArcFilePath, setHoveredArcFilePath] = createSignal<
     string | null
   >(null);
@@ -27,6 +27,4 @@ const ReportPage: Component<ReportPageProps> = function ReportPage(props) {
       <pre>{JSON.stringify(props.root, null, 2)}</pre>
     </main>
   );
-};
-
-export default ReportPage;
+}

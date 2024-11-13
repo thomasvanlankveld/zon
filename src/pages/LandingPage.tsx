@@ -1,12 +1,10 @@
-import { Component } from "solid-js";
-
 type LandingPageProps = {
   isLoading: boolean;
   path?: string;
   countLinesInFolder: () => void;
 };
 
-const LandingPage: Component<LandingPageProps> = function LandingPage(props) {
+export default function LandingPage(props: LandingPageProps) {
   return (
     <main>
       <h1>Zon</h1>
@@ -15,6 +13,4 @@ const LandingPage: Component<LandingPageProps> = function LandingPage(props) {
       {props.isLoading && <p>Counting lines in {props.path}</p>}
     </main>
   );
-};
-
-export default LandingPage;
+}
