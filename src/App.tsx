@@ -6,7 +6,7 @@ import type { Languages } from "./utils/tokei.ts";
 import { type Node, LineType, createTree } from "./utils/zon.ts";
 import logAsyncErrors from "./utils/async/logErrors.ts";
 import LandingPage from "./pages/LandingPage.tsx";
-import ReportPage from "./pages/ReportPage.tsx";
+import ReportPage from "./pages/ReportPage/ReportPage.tsx";
 
 // Test:
 // /Users/thomasvanlankveld/Code/zon/src-tauri

@@ -1,10 +1,10 @@
 import { For, type Setter } from "solid-js";
-import { getArc } from "./utils/svg.ts";
-import { type Node, getDescendants } from "./utils/zon.ts";
+import { getArc } from "../../utils/svg.ts";
+import { type Node, getDescendants } from "../../utils/zon.ts";
 
 type SunburstProps = {
   root: Node;
-  setHoveredArcFilePath: Setter<string | null>;
+  setHoverArcPath: Setter<string | null>;
 };
 
 export default function Sunburst(props: SunburstProps) {
@@ -43,8 +43,8 @@ export default function Sunburst(props: SunburstProps) {
               fill="#98abc5"
               stroke="black"
               style={{ "stroke-width": "2px; opacity: 0.7" }}
-              onMouseEnter={[props.setHoveredArcFilePath, node.path]}
-              onMouseLeave={[props.setHoveredArcFilePath, null]}
+              onMouseEnter={[props.setHoverArcPath, node.path]}
+              onMouseLeave={[props.setHoverArcPath, null]}
             />
           )}
         </For>

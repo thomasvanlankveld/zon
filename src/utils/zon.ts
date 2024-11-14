@@ -10,6 +10,7 @@ export type LineType = keyof typeof LineType;
 export type Node = {
   stats: CodeStats;
   path: string;
+  name: string;
   numberOfLines: number;
   firstLine: number;
   depth: number;
@@ -47,7 +48,7 @@ export function createTree(
     // For every file
     for (const tokeiReport of language.reports) {
       const fileName = tokeiReport.name.slice(numberOfCharactersToRemove);
-      const fileNameSegments = fileName.split("/").slice();
+      const fileNameSegments = fileName.split("/");
 
       // Create or update all parent folders, then create the file
       for (let i = 0; i < fileNameSegments.length; i++) {
@@ -64,6 +65,7 @@ export function createTree(
           const node = {
             stats: tokeiReport.stats,
             path: nodePath,
+            name: fileNameSegments[i],
             numberOfLines: getNumberOfLines(tokeiReport.stats, lineTypes),
             depth: i,
             height: fileNameSegments.length - i - 1,
@@ -101,7 +103,7 @@ function getNumberOfLines(stats: CodeStats, lineTypes: LineType[]): number {
 
 function sortTree(node: Node): void {
   node.children.sort((left, right) =>
-    left.numberOfLines > right.numberOfLines ? 1 : -1,
+    left.numberOfLines < right.numberOfLines ? 1 : -1,
   );
 
   for (const child of node.children) {
@@ -136,4 +138,23 @@ function addDimensions(
 
 export function getDescendants(node: Node): Node[] {
   return [...node.children, ...node.children.flatMap(getDescendants)];
+}
+
+export function getNodeByPath(root: Node, path: string): Node {
+  const pathSegments = path.split("/");
+  let node = root;
+
+  for (const segment of pathSegments) {
+    const match = node.children.find((child) => child.name === segment);
+
+    if (match == null) {
+      throw new Error(
+        `Could not find node ${path} in ${root.name}: ${node.path} does not have a child named ${segment}`,
+      );
+    }
+
+    node = match;
+  }
+
+  return node;
 }
