@@ -27,20 +27,22 @@ export type ArcSpecs = {
 
 // TODO: If circle, do something else
 export function getArc(arcSpecs: ArcSpecs) {
-  const { innerRadius, outerRadius, startAngle, endAngle } = arcSpecs;
+  const { innerRadius, outerRadius } = arcSpecs;
+  const startAngle = Math.PI - arcSpecs.startAngle;
+  const endAngle = Math.PI - arcSpecs.endAngle;
 
   const outerStart = point(outerRadius, startAngle);
   const outerEnd = point(outerRadius, endAngle);
   const innerEnd = point(innerRadius, endAngle);
   const innerStart = point(innerRadius, startAngle);
 
-  const isLarge = endAngle - startAngle >= Math.PI;
+  const isLarge = startAngle - endAngle >= Math.PI;
   const largeArcFlag = isLarge ? 1 : 0;
 
   const startCommand = `M ${outerStart.x} ${outerStart.y}`;
-  const outerArcCommand = `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 0 ${outerEnd.x} ${outerEnd.y}`;
+  const outerArcCommand = `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${outerEnd.x} ${outerEnd.y}`;
   const lineCommand = `L ${innerEnd.x} ${innerEnd.y}`;
-  const innerArcCommand = `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 1 ${innerStart.x} ${innerStart.y}`;
+  const innerArcCommand = `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${innerStart.x} ${innerStart.y}`;
 
   return `${startCommand} ${outerArcCommand} ${lineCommand} ${innerArcCommand} Z`;
 }

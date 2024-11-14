@@ -22,8 +22,8 @@ export default function Sunburst(props: SunburstProps) {
   function getArcFromNode(node: Node) {
     const outerRadius = node.dimensions.y0 * maxRadius;
     const innerRadius = node.dimensions.y1 * maxRadius;
-    const startAngle = node.dimensions.x0 * 2 * Math.PI + Math.PI;
-    const endAngle = node.dimensions.x1 * 2 * Math.PI + Math.PI;
+    const startAngle = node.dimensions.x0 * 2 * Math.PI;
+    const endAngle = node.dimensions.x1 * 2 * Math.PI;
 
     return getArc({ innerRadius, outerRadius, startAngle, endAngle });
   }
