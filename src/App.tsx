@@ -60,7 +60,13 @@ function App() {
         />
       }
     >
-      {(rootVal) => <ReportPage root={rootVal} path={path()} />}
+      {(rootVal) => (
+        <ReportPage
+          root={rootVal}
+          path={path()}
+          countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+        />
+      )}
     </Show>
   );
 }

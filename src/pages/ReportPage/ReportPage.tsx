@@ -2,10 +2,12 @@ import { createEffect, createSignal } from "solid-js";
 import type { Node } from "../../utils/zon.ts";
 import Sunburst from "./Sunburst.tsx";
 import ReportList from "./ReportList.tsx";
+import UploadButton from "../../components/UploadButton.tsx";
 
 type ReportPageProps = {
   root: Node;
   path: string;
+  countLinesInFolder: () => void;
 };
 
 export default function ReportPage(props: ReportPageProps) {
@@ -26,10 +28,10 @@ export default function ReportPage(props: ReportPageProps) {
 
   return (
     <main>
-      {/* TODO: Add header, controls to select a different folder, and loading */}
-      <p>
-        Counted {props.root.numberOfLines} lines in {props.path}:
-      </p>
+      <div style={{ display: "flex", "justify-content": "space-between" }}>
+        <h1>Zon</h1>
+        <UploadButton countLinesInFolder={props.countLinesInFolder} />
+      </div>
       {/* TODO: Add line count? Maybe keep hashmap of all root descendants for fast lookup? */}
       <p>Hovering: {hoverArcPath() ?? "..."}</p>
       <div style={{ display: "flex" }}>

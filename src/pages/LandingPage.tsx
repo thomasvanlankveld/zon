@@ -1,3 +1,7 @@
+import { Show } from "solid-js";
+import UploadButton from "../components/UploadButton";
+import CountingLines from "../components/CountingLines";
+
 type LandingPageProps = {
   isLoading: boolean;
   path?: string;
@@ -9,8 +13,10 @@ export default function LandingPage(props: LandingPageProps) {
     <main>
       <h1>Zon</h1>
 
-      <button onClick={() => props.countLinesInFolder()}>Select folder</button>
-      {props.isLoading && <p>Counting lines in {props.path}</p>}
+      <UploadButton countLinesInFolder={props.countLinesInFolder} />
+      <Show when={props.isLoading}>
+        <CountingLines path={props.path as string} />
+      </Show>
     </main>
   );
 }
