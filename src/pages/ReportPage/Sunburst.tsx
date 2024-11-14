@@ -40,7 +40,7 @@ export default function Sunburst(props: SunburstProps) {
           {(node) => (
             <path
               d={getArcFromNode(node)}
-              fill="#98abc5"
+              fill={node.color}
               stroke="black"
               style={{ "stroke-width": "2px; opacity: 0.7" }}
               onMouseEnter={[props.setHoverArcPath, node.path]}

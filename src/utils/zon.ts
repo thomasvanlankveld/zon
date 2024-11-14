@@ -1,3 +1,4 @@
+import { rainbow } from "./color.ts";
 import { CodeStats, Languages } from "./tokei.ts";
 
 export const LineType = {
@@ -13,6 +14,7 @@ export type Node = {
   name: string;
   numberOfLines: number;
   firstLine: number;
+  color: string;
   depth: number;
   height: number;
   children: Node[];
@@ -71,8 +73,9 @@ export function createTree(
             height: fileNameSegments.length - i - 1,
             // `children` updated as we build the tree
             children: [],
-            // Actual values of `firstLine` and `dimensions` can only be determined after sorting
+            // Actual values of `firstLine`, `color` and `dimensions` can only be determined after sorting
             firstLine: 0,
+            color: "",
             dimensions: { x0: 0, x1: 0, y0: 0, y1: 0 },
           };
 
@@ -92,7 +95,7 @@ export function createTree(
   const root = nodes[projectName];
 
   sortTree(root);
-  addDimensions(root, root.height, root.numberOfLines, 0);
+  addDeduced(root, root.height, root.numberOfLines, 0);
 
   return root;
 }
@@ -111,7 +114,7 @@ function sortTree(node: Node): void {
   }
 }
 
-function addDimensions(
+function addDeduced(
   node: Node,
   maxHeight: number,
   totalNumberOfLines: number,
@@ -122,6 +125,10 @@ function addDimensions(
   for (const child of node.children) {
     child.firstLine = lineNumber;
 
+    const middleLine = lineNumber + child.numberOfLines / 2;
+    // TODO: If this calculation takes too long, maybe defer it?
+    child.color = rainbow(middleLine / totalNumberOfLines);
+
     // TODO: Extract dimension calculation so it can be calculated after taking navigation into account
     child.dimensions.x0 = child.firstLine / totalNumberOfLines;
     child.dimensions.x1 =
@@ -130,7 +137,7 @@ function addDimensions(
       (child.depth + centerRadius) / (maxHeight + centerRadius);
     child.dimensions.y1 = child.dimensions.y0 - 1 / (maxHeight + centerRadius);
 
-    addDimensions(child, maxHeight, totalNumberOfLines, lineNumber);
+    addDeduced(child, maxHeight, totalNumberOfLines, lineNumber);
 
     lineNumber += child.numberOfLines;
   }
