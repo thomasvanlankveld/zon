@@ -31,6 +31,12 @@ function App() {
     setPath(projectPath);
     setIsLoading(true);
 
+    // Maybe adopt createResource for this?
+    // https://www.solidjs.com/tutorial/async_resources
+    // https://docs.solidjs.com/reference/basic-reactivity/create-resource
+    // https://www.solidjs.com/tutorial/async_suspense (Using `<Show>` is also fine for client-only projects)
+    // https://www.solidjs.com/tutorial/async_transitions
+    // https://docs.solidjs.com/reference/reactive-utilities/use-transition
     const languages = await invoke("count_lines", { path: projectPath });
     const projectRoot = createTree(projectPath, languages as Languages, [
       LineType.blanks,
