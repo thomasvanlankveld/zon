@@ -65,9 +65,10 @@ export default function Sunburst(props: SunburstProps) {
               d={getNodeArc(getArcDimensions(node))}
               fill={node.color}
               stroke="black"
-              style={{ "stroke-width": "2px; opacity: 0.7" }}
+              style={{ "stroke-width": "2px; opacity: 0.7", cursor: "pointer" }}
               onMouseEnter={[props.setHoverArcPath, node.path]}
               onMouseLeave={[props.setHoverArcPath, null]}
+              onClick={[props.setDiagramRootPath, node.path]}
             />
           )}
         </For>
