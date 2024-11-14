@@ -1,11 +1,11 @@
-import { createMemo, For } from "solid-js";
+import { createMemo, For, type Setter } from "solid-js";
 import { getNodeByPath, type Node } from "../../utils/zon";
 
 type ReportListProps = {
   root: Node;
   listRootPath: string | null;
-  setHoverListPath: (path: string | null) => void;
-  setDiagramRootPath: (path: string) => void;
+  setHoverListPath: Setter<string | null>;
+  setDiagramRootPath: Setter<string | null>;
 };
 
 export default function ReportList(props: ReportListProps) {

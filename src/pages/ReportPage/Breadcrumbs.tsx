@@ -1,10 +1,10 @@
-import { createMemo, For, Show } from "solid-js";
+import { createMemo, For, type Setter, Show } from "solid-js";
 import { getNodesAlongPath, type Node } from "../../utils/zon";
 
 type BreadcrumbsProps = {
   root: Node;
   path: string;
-  setDiagramRootPath: (path: string) => void;
+  setDiagramRootPath: Setter<string | null>;
 };
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {

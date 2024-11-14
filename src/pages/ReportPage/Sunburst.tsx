@@ -1,6 +1,6 @@
-import { For, type Setter } from "solid-js";
+import { createEffect, For, type Setter } from "solid-js";
 import { getArc } from "../../utils/svg.ts";
-import { type Node, getDescendants } from "../../utils/zon.ts";
+import { type Node, getDescendants, getNodeByPath } from "../../utils/zon.ts";
 
 type Dimensions = {
   x0: number;
@@ -11,7 +11,9 @@ type Dimensions = {
 
 type SunburstProps = {
   root: Node;
+  diagramRootPath: string;
   setHoverArcPath: Setter<string | null>;
+  setDiagramRootPath: Setter<string | null>;
 };
 
 export default function Sunburst(props: SunburstProps) {
@@ -25,13 +27,17 @@ export default function Sunburst(props: SunburstProps) {
     y: height / 2,
   };
 
-  const nodes = () => getDescendants(props.root);
+  createEffect(() => console.log("diagramRootPath", props.diagramRootPath));
+  const diagramRoot = () => getNodeByPath(props.root, props.diagramRootPath);
+  const nodes = () => getDescendants(diagramRoot());
 
   function getArcDimensions(node: Node) {
-    const x0 = node.firstLine / props.root.numberOfLines;
-    const x1 = x0 + node.numberOfLines / props.root.numberOfLines;
-    const y0 = (node.depth + centerRadius) / (props.root.height + centerRadius);
-    const y1 = y0 - 1 / (props.root.height + centerRadius);
+    const x0 = node.firstLine / diagramRoot().numberOfLines;
+    const x1 = x0 + node.numberOfLines / diagramRoot().numberOfLines;
+    const y0 =
+      (node.depth + centerRadius - diagramRoot().depth) /
+      (diagramRoot().height + centerRadius);
+    const y1 = y0 - 1 / (diagramRoot().height + centerRadius);
 
     return { x0, x1, y0, y1 };
   }

@@ -24,7 +24,7 @@ export default function ReportPage(props: ReportPageProps) {
   // Path of the file for the hovered list item
   const [hoverListPath, setHoverListPath] = createSignal<string | null>(null);
   // TODO: Actually use hoverListPath
-  createEffect(() => console.log(hoverListPath()));
+  createEffect(() => console.log("hoverListPath", hoverListPath()));
 
   // TODO: Move "highlighted" into reactive state, so that SolidJS can update only the needed elements
 
@@ -43,7 +43,12 @@ export default function ReportPage(props: ReportPageProps) {
         setDiagramRootPath={setDiagramRootPath}
       />
       <div style={{ display: "flex" }}>
-        <Sunburst root={props.root} setHoverArcPath={setHoverArcPath} />
+        <Sunburst
+          root={props.root}
+          diagramRootPath={diagramRootPath()}
+          setHoverArcPath={setHoverArcPath}
+          setDiagramRootPath={setDiagramRootPath}
+        />
         <ReportList
           root={props.root}
           listRootPath={hoverArcPath() ?? diagramRootPath()}
