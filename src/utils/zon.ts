@@ -18,12 +18,6 @@ export type Node = {
   depth: number;
   height: number;
   children: Node[];
-  dimensions: {
-    x0: number;
-    x1: number;
-    y0: number;
-    y1: number;
-  };
 };
 
 export function getProjectName(projectPath: string): string {
@@ -73,10 +67,9 @@ export function createTree(
             height: fileNameSegments.length - i - 1,
             // `children` updated as we build the tree
             children: [],
-            // Actual values of `firstLine`, `color` and `dimensions` can only be determined after sorting
+            // Actual values of `firstLine` and `color` can only be determined after sorting
             firstLine: 0,
             color: "",
-            dimensions: { x0: 0, x1: 0, y0: 0, y1: 0 },
           };
 
           nodes[nodePath] = node;
@@ -95,7 +88,7 @@ export function createTree(
   const root = nodes[projectName];
 
   sortTree(root);
-  addDeduced(root, root.height, root.numberOfLines, 0);
+  addDeduced(root, root.numberOfLines, 0);
 
   return root;
 }
@@ -116,28 +109,16 @@ function sortTree(node: Node): void {
 
 function addDeduced(
   node: Node,
-  maxHeight: number,
   totalNumberOfLines: number,
   lineNumber: number,
 ): void {
-  const centerRadius = 0.8;
-
   for (const child of node.children) {
     child.firstLine = lineNumber;
 
     const middleLine = lineNumber + child.numberOfLines / 2;
-    // TODO: If this calculation takes too long, maybe defer it?
     child.color = rainbow(middleLine / totalNumberOfLines);
 
-    // TODO: Extract dimension calculation so it can be calculated after taking navigation into account
-    child.dimensions.x0 = child.firstLine / totalNumberOfLines;
-    child.dimensions.x1 =
-      child.dimensions.x0 + child.numberOfLines / totalNumberOfLines;
-    child.dimensions.y0 =
-      (child.depth + centerRadius) / (maxHeight + centerRadius);
-    child.dimensions.y1 = child.dimensions.y0 - 1 / (maxHeight + centerRadius);
-
-    addDeduced(child, maxHeight, totalNumberOfLines, lineNumber);
+    addDeduced(child, totalNumberOfLines, lineNumber);
 
     lineNumber += child.numberOfLines;
   }
