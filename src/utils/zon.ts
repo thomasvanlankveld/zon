@@ -151,12 +151,13 @@ export function getNodeByPath(root: Node, path: string): Node {
   const pathSegments = path.split("/");
   let node = root;
 
-  for (const segment of pathSegments) {
+  for (let i = 1; i < pathSegments.length; i++) {
+    const segment = pathSegments[i];
     const match = node.children.find((child) => child.name === segment);
 
     if (match == null) {
       throw new Error(
-        `Could not find node ${path} in ${root.name}: ${node.path} does not have a child named ${segment}`,
+        `Could not find node "${path}" in "${root.name}": "${node.path}" does not have a child named "${segment}"`,
       );
     }
 
@@ -164,4 +165,27 @@ export function getNodeByPath(root: Node, path: string): Node {
   }
 
   return node;
+}
+
+export function getNodesAlongPath(root: Node, path: string): Node[] {
+  const pathSegments = path.split("/");
+  let parent = root;
+
+  return pathSegments.map((segment, i) => {
+    if (i === 0) {
+      return root;
+    }
+
+    const match = parent.children.find((child) => child.name === segment);
+
+    if (match == null) {
+      throw new Error(
+        `Could not get nodes along path "${path}" in "${root.name}": "${parent.path}" does not have a child named "${segment}"`,
+      );
+    }
+
+    parent = match;
+
+    return match;
+  });
 }

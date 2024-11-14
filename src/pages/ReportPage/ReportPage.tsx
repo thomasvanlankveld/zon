@@ -3,6 +3,7 @@ import type { Node } from "../../utils/zon.ts";
 import Sunburst from "./Sunburst.tsx";
 import ReportList from "./ReportList.tsx";
 import UploadButton from "../../components/UploadButton.tsx";
+import Breadcrumbs from "./Breadcrumbs.tsx";
 
 type ReportPageProps = {
   root: Node;
@@ -12,10 +13,11 @@ type ReportPageProps = {
 
 export default function ReportPage(props: ReportPageProps) {
   // Path of the selected file
-  const [diagramRootPath, setDiagramRootPath] = createSignal<string | null>(
-    null,
-  );
-  createEffect(() => setDiagramRootPath(props.root.path));
+  const [selectedDiagramRootPath, setDiagramRootPath] = createSignal<
+    string | null
+  >(null);
+  const defaultRootPath = () => props.root.path.split("/").slice(-1)[0];
+  const diagramRootPath = () => selectedDiagramRootPath() ?? defaultRootPath();
 
   const [hoverArcPath, setHoverArcPath] = createSignal<string | null>(null);
 
@@ -26,6 +28,8 @@ export default function ReportPage(props: ReportPageProps) {
 
   // TODO: Move "highlighted" into reactive state, so that SolidJS can update only the needed elements
 
+  const breadcrumbPath = () => hoverArcPath() ?? diagramRootPath();
+
   return (
     <main>
       <div style={{ display: "flex", "justify-content": "space-between" }}>
@@ -33,12 +37,16 @@ export default function ReportPage(props: ReportPageProps) {
         <UploadButton countLinesInFolder={props.countLinesInFolder} />
       </div>
       {/* TODO: Add line count? Maybe keep hashmap of all root descendants for fast lookup? */}
-      <p>Hovering: {hoverArcPath() ?? "..."}</p>
+      <Breadcrumbs
+        root={props.root}
+        path={breadcrumbPath()}
+        setDiagramRootPath={setDiagramRootPath}
+      />
       <div style={{ display: "flex" }}>
         <Sunburst root={props.root} setHoverArcPath={setHoverArcPath} />
         <ReportList
           root={props.root}
-          listRootPath={hoverArcPath() || diagramRootPath()}
+          listRootPath={hoverArcPath() ?? diagramRootPath()}
           setHoverListPath={setHoverListPath}
           setDiagramRootPath={setDiagramRootPath}
         />

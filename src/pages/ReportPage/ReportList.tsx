@@ -1,4 +1,4 @@
-import { For } from "solid-js";
+import { createMemo, For } from "solid-js";
 import { getNodeByPath, type Node } from "../../utils/zon";
 
 type ReportListProps = {
@@ -10,10 +10,11 @@ type ReportListProps = {
 
 export default function ReportList(props: ReportListProps) {
   // Select root node for the list view (either root or the file of the hovered arc)
-  const listRoot = () =>
+  const listRoot = createMemo(() =>
     props.listRootPath != null
       ? getNodeByPath(props.root, props.listRootPath)
-      : props.root;
+      : props.root,
+  );
 
   return (
     <div>
