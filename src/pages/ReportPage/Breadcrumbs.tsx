@@ -17,6 +17,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
         {(node, i) => (
           <>
             <button
+              {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
               style={{
                 color: node.color,
                 cursor: "pointer",
