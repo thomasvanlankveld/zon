@@ -42,30 +42,32 @@ export function createTree(
 
   const nodes: { [name: string]: Node } = {};
 
+  // For every programming language
   for (const language of languageValues) {
+    // For every file
     for (const tokeiReport of language.reports) {
       const fileName = tokeiReport.name.slice(numberOfCharactersToRemove);
       const fileNameSegments = fileName.split("/").slice();
 
+      // Create or update all parent folders, then create the file
       for (let i = 0; i < fileNameSegments.length; i++) {
         const nodePath = fileNameSegments.slice(0, i + 1).join("/");
 
         if (nodePath in nodes) {
-          nodes[nodePath].stats.blanks += tokeiReport.stats.blanks;
-          nodes[nodePath].stats.code += tokeiReport.stats.code;
-          nodes[nodePath].stats.comments += tokeiReport.stats.comments;
-          nodes[nodePath].numberOfLines += getNumberOfLines(
-            tokeiReport.stats,
-            lineTypes,
-          );
+          const node = nodes[nodePath];
+          node.stats.blanks += tokeiReport.stats.blanks;
+          node.stats.code += tokeiReport.stats.code;
+          node.stats.comments += tokeiReport.stats.comments;
+          node.numberOfLines += getNumberOfLines(tokeiReport.stats, lineTypes);
+          node.height = Math.max(node.height, fileNameSegments.length - i - 1);
         } else {
           const node = {
             stats: tokeiReport.stats,
             path: nodePath,
             numberOfLines: getNumberOfLines(tokeiReport.stats, lineTypes),
             depth: i,
-            // `height` and `children` updated as we build the tree
-            height: 0,
+            height: fileNameSegments.length - i - 1,
+            // `children` updated as we build the tree
             children: [],
             // Actual values of `firstLine` and `dimensions` can only be determined after sorting
             firstLine: 0,
@@ -79,10 +81,6 @@ export function createTree(
             const parent = nodes[parentName];
 
             parent.children.push(node);
-            parent.height = Math.max(
-              parent.height,
-              fileNameSegments.length - i,
-            );
           }
         }
       }
@@ -117,6 +115,8 @@ function addDimensions(
   totalNumberOfLines: number,
   lineNumber: number,
 ): void {
+  const centerRadius = 0.8;
+
   for (const child of node.children) {
     child.firstLine = lineNumber;
 
@@ -124,8 +124,9 @@ function addDimensions(
     child.dimensions.x0 = child.firstLine / totalNumberOfLines;
     child.dimensions.x1 =
       child.dimensions.x0 + child.numberOfLines / totalNumberOfLines;
-    child.dimensions.y0 = child.depth / maxHeight;
-    child.dimensions.y1 = child.dimensions.y0 - 1 / maxHeight;
+    child.dimensions.y0 =
+      (child.depth + centerRadius) / (maxHeight + centerRadius);
+    child.dimensions.y1 = child.dimensions.y0 - 1 / (maxHeight + centerRadius);
 
     addDimensions(child, maxHeight, totalNumberOfLines, lineNumber);
 
