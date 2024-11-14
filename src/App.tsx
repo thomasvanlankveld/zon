@@ -24,7 +24,7 @@ function App() {
     });
 
     if (projectPath == null) {
-      throw new Error("No path found for opened folder");
+      return;
     }
 
     setRoot(null);
