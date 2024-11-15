@@ -32,13 +32,20 @@ export type ArcSpecs = {
  * @returns
  */
 export function getArc(arcSpecs: ArcSpecs) {
-  if (arcSpecs.startAngle === arcSpecs.endAngle % (Math.PI * 2)) {
-    return getClosedCircleArc(arcSpecs.outerRadius);
-  }
-
   const { innerRadius, outerRadius } = arcSpecs;
   const startAngle = Math.PI - arcSpecs.startAngle;
   const endAngle = Math.PI - arcSpecs.endAngle;
+
+  const isCircle = Math.abs(startAngle) === Math.abs(endAngle) % (Math.PI * 2);
+  const isOpen = innerRadius > 0;
+
+  if (isCircle && !isOpen) {
+    return getClosedCircleArc(outerRadius);
+  }
+
+  if (isCircle && isOpen) {
+    return getOpenCircleArc(arcSpecs);
+  }
 
   const outerStart = point(outerRadius, startAngle);
   const outerEnd = point(outerRadius, endAngle);
@@ -62,4 +69,11 @@ function getClosedCircleArc(radius: number) {
   const secondHalf = `A ${radius},${radius} 0 1,1 ${radius},0`;
 
   return `${startCommand} ${firstHalf} ${secondHalf} Z`;
+}
+
+function getOpenCircleArc(arcSpecs: {
+  innerRadius: number;
+  outerRadius: number;
+}) {
+  return `${getClosedCircleArc(arcSpecs.outerRadius)} ${getClosedCircleArc(arcSpecs.innerRadius)}`;
 }

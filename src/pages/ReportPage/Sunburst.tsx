@@ -46,7 +46,7 @@ export default function Sunburst(props: SunburstProps) {
     const depthFromRoot = node.depth - root.depth;
     const dy = 1 / (root.height + centerRadius);
     const y0 = (depthFromRoot + centerRadius) / (root.height + centerRadius);
-    const y1 = y0 - dy;
+    const y1 = Math.max(y0 - dy, 0);
 
     return { x0, x1, y0, y1 };
   }
@@ -86,6 +86,7 @@ export default function Sunburst(props: SunburstProps) {
           {(node) => (
             <path
               d={getNodeArc(getArcDimensions(node))}
+              fill-rule="evenodd"
               fill={node.color}
               stroke="black"
               style={{ "stroke-width": "2px; opacity: 0.7", cursor: "pointer" }}
