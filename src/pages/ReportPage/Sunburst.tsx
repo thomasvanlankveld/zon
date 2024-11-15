@@ -1,4 +1,4 @@
-import { createEffect, For, type Setter } from "solid-js";
+import { For, type Setter } from "solid-js";
 import { getArc } from "../../utils/svg.ts";
 import { type Node, getDescendants, getNodeByPath } from "../../utils/zon.ts";
 
@@ -27,7 +27,6 @@ export default function Sunburst(props: SunburstProps) {
     y: height / 2,
   };
 
-  createEffect(() => console.log("diagramRootPath", props.diagramRootPath));
   const diagramRoot = () => getNodeByPath(props.root, props.diagramRootPath);
   const nodes = () => getDescendants(diagramRoot());
 
