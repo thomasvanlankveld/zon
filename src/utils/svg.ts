@@ -27,6 +27,10 @@ export type ArcSpecs = {
 
 // TODO: If circle, do something else
 export function getArc(arcSpecs: ArcSpecs) {
+  if (arcSpecs.startAngle === arcSpecs.endAngle % (Math.PI * 2)) {
+    return getCircleArc(arcSpecs.outerRadius);
+  }
+
   const { innerRadius, outerRadius } = arcSpecs;
   const startAngle = Math.PI - arcSpecs.startAngle;
   const endAngle = Math.PI - arcSpecs.endAngle;
@@ -45,4 +49,12 @@ export function getArc(arcSpecs: ArcSpecs) {
   const innerArcCommand = `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${innerStart.x} ${innerStart.y}`;
 
   return `${startCommand} ${outerArcCommand} ${lineCommand} ${innerArcCommand} Z`;
+}
+
+function getCircleArc(radius: number) {
+  const startCommand = `M ${radius} 0`;
+  const firstHalf = `A ${radius} ${radius} 0 1 1 ${-2 * radius} 0`;
+  const secondHalf = `A ${radius} ${radius} 0 1 1 ${2 * radius} 0`;
+
+  return `${startCommand} ${firstHalf} ${secondHalf}`;
 }

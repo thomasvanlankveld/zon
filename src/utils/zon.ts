@@ -125,7 +125,7 @@ function addDeduced(
 }
 
 export function getDescendants(node: Node): Node[] {
-  return [...node.children, ...node.children.flatMap(getDescendants)];
+  return [node, ...node.children.flatMap(getDescendants)];
 }
 
 export function getNodeByPath(root: Node, path: string): Node {
@@ -169,4 +169,8 @@ export function getNodesAlongPath(root: Node, path: string): Node[] {
 
     return match;
   });
+}
+
+export function getParentPath(path: string) {
+  return path.split("/").slice(0, -1).join("/");
 }

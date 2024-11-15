@@ -1,6 +1,11 @@
 import { For, type Setter } from "solid-js";
 import { getArc } from "../../utils/svg.ts";
-import { type Node, getDescendants, getNodeByPath } from "../../utils/zon.ts";
+import {
+  type Node,
+  getDescendants,
+  getNodeByPath,
+  getParentPath,
+} from "../../utils/zon.ts";
 
 type Dimensions = {
   x0: number;
@@ -55,6 +60,20 @@ export default function Sunburst(props: SunburstProps) {
     return getArc({ innerRadius, outerRadius, startAngle, endAngle });
   }
 
+  function navigate(node: Node) {
+    const isReportRoot = node.path === props.root.path;
+    const isDiagramRoot = node.path === diagramRoot().path;
+    const isFile = node.height === 0;
+
+    if (isReportRoot) {
+      props.setDiagramRootPath(null);
+    } else if (isDiagramRoot || isFile) {
+      props.setDiagramRootPath(getParentPath(node.path));
+    } else {
+      props.setDiagramRootPath(node.path);
+    }
+  }
+
   // TODO:
   // - FIX DEPTH BUG WHEN SCANNING EVERON-PORTAL
   // - Add padding between segments?
@@ -72,7 +91,7 @@ export default function Sunburst(props: SunburstProps) {
               style={{ "stroke-width": "2px; opacity: 0.7", cursor: "pointer" }}
               onMouseEnter={[props.setHoverArcPath, node.path]}
               onMouseLeave={[props.setHoverArcPath, null]}
-              onClick={[props.setDiagramRootPath, node.path]}
+              onClick={[navigate, node]}
             />
           )}
         </For>
