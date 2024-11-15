@@ -51,10 +51,10 @@ export function getArc(arcSpecs: ArcSpecs) {
   return `${startCommand} ${outerArcCommand} ${lineCommand} ${innerArcCommand} Z`;
 }
 
-function getCircleArc(radius: number) {
+export function getCircleArc(radius: number) {
   const startCommand = `M ${radius} 0`;
-  const firstHalf = `A ${radius} ${radius} 0 1 1 ${-2 * radius} 0`;
-  const secondHalf = `A ${radius} ${radius} 0 1 1 ${2 * radius} 0`;
+  const firstHalf = `A ${radius} ${radius} 0 1 1 ${-radius} 0`;
+  const secondHalf = `A ${radius} ${radius} 0 1 1 ${radius} 0`;
 
-  return `${startCommand} ${firstHalf} ${secondHalf}`;
+  return `${startCommand} ${firstHalf} ${secondHalf} Z`;
 }
