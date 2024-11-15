@@ -26,9 +26,14 @@ export type ArcSpecs = {
 };
 
 // TODO: If circle, do something else
+/**
+ * Return the `d` string for an `svg` path to represent an arc around point `{x: 0, y: 0}`
+ * @param arcSpecs
+ * @returns
+ */
 export function getArc(arcSpecs: ArcSpecs) {
   if (arcSpecs.startAngle === arcSpecs.endAngle % (Math.PI * 2)) {
-    return getCircleArc(arcSpecs.outerRadius);
+    return getClosedCircleArc(arcSpecs.outerRadius);
   }
 
   const { innerRadius, outerRadius } = arcSpecs;
@@ -43,18 +48,18 @@ export function getArc(arcSpecs: ArcSpecs) {
   const isLarge = startAngle - endAngle >= Math.PI;
   const largeArcFlag = isLarge ? 1 : 0;
 
-  const startCommand = `M ${outerStart.x} ${outerStart.y}`;
-  const outerArcCommand = `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${outerEnd.x} ${outerEnd.y}`;
-  const lineCommand = `L ${innerEnd.x} ${innerEnd.y}`;
-  const innerArcCommand = `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${innerStart.x} ${innerStart.y}`;
+  const startCommand = `M ${outerStart.x},${outerStart.y}`;
+  const outerArcCommand = `A ${outerRadius},${outerRadius} 0 ${largeArcFlag},1 ${outerEnd.x},${outerEnd.y}`;
+  const lineCommand = `L ${innerEnd.x},${innerEnd.y}`;
+  const innerArcCommand = `A ${innerRadius},${innerRadius} 0 ${largeArcFlag},0 ${innerStart.x},${innerStart.y}`;
 
   return `${startCommand} ${outerArcCommand} ${lineCommand} ${innerArcCommand} Z`;
 }
 
-export function getCircleArc(radius: number) {
-  const startCommand = `M ${radius} 0`;
-  const firstHalf = `A ${radius} ${radius} 0 1 1 ${-radius} 0`;
-  const secondHalf = `A ${radius} ${radius} 0 1 1 ${radius} 0`;
+function getClosedCircleArc(radius: number) {
+  const startCommand = `M ${radius},0`;
+  const firstHalf = `A ${radius},${radius} 0 1,1 ${-radius},0`;
+  const secondHalf = `A ${radius},${radius} 0 1,1 ${radius},0`;
 
   return `${startCommand} ${firstHalf} ${secondHalf} Z`;
 }
