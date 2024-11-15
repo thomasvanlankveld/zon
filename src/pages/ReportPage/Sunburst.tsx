@@ -62,7 +62,7 @@ export default function Sunburst(props: SunburstProps) {
 
   function navigate(node: Node) {
     const isReportRoot = node.path === props.root.path;
-    const isDiagramRoot = node.path === diagramRoot().path;
+    const isDiagramRoot = node.path === props.diagramRootPath;
     const isFile = node.height === 0;
 
     if (isReportRoot) {

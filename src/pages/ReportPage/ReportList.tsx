@@ -1,5 +1,5 @@
 import { createMemo, For, type Setter } from "solid-js";
-import { getNodeByPath, type Node } from "../../utils/zon";
+import { getNodeByPath, getParentPath, type Node } from "../../utils/zon";
 
 type ReportListProps = {
   root: Node;
@@ -15,6 +15,20 @@ export default function ReportList(props: ReportListProps) {
       ? getNodeByPath(props.root, props.listRootPath)
       : props.root,
   );
+
+  function navigate(node: Node) {
+    const isReportRoot = node.path === props.root.path;
+    const isListRoot = node.path === props.listRootPath;
+    const isFile = node.height === 0;
+
+    if (isReportRoot) {
+      props.setDiagramRootPath(null);
+    } else if (isListRoot || isFile) {
+      props.setDiagramRootPath(getParentPath(node.path));
+    } else {
+      props.setDiagramRootPath(node.path);
+    }
+  }
 
   return (
     <div>
@@ -39,9 +53,9 @@ export default function ReportList(props: ReportListProps) {
                 margin: 0,
                 "white-space": "pre",
               }}
-              onClick={() => props.setDiagramRootPath(child.path)}
-              onMouseEnter={() => props.setHoverListPath(child.path)}
-              onMouseLeave={() => props.setHoverListPath(null)}
+              onMouseEnter={[props.setHoverListPath, child.path]}
+              onMouseLeave={[props.setHoverListPath, null]}
+              onClick={[navigate, child]}
             >
               {child.name} {child.numberOfLines}
             </button>

@@ -11,6 +11,13 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   const nodes = createMemo(() => getNodesAlongPath(props.root, props.path));
   const lastNodeIndex = () => nodes().length - 1;
 
+  function navigate(node: Node) {
+    const isReportRoot = node.path === props.root.path;
+    const targetPath = isReportRoot ? null : node.path;
+
+    props.setDiagramRootPath(targetPath);
+  }
+
   return (
     <nav style={{ "margin-bottom": "20px" }} aria-label="breadcrumbs">
       <For each={nodes()}>
@@ -22,7 +29,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
                 color: node.color,
                 cursor: "pointer",
               }}
-              onClick={() => props.setDiagramRootPath(node.path)}
+              onClick={[navigate, node]}
             >
               <span>{node.name}</span>
             </button>
