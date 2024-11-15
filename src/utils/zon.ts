@@ -124,8 +124,24 @@ function addDeduced(
   }
 }
 
-export function getDescendants(node: Node): Node[] {
-  return [node, ...node.children.flatMap(getDescendants)];
+type GetDescendantsOptions = {
+  minLines?: number;
+};
+
+export function getDescendants(
+  node: Node,
+  options: GetDescendantsOptions = {},
+): Node[] {
+  const minLines = options.minLines ?? 0;
+
+  if (node.numberOfLines < minLines) {
+    return [];
+  }
+
+  return [
+    node,
+    ...node.children.flatMap((child) => getDescendants(child, options)),
+  ];
 }
 
 export function getNodeByPath(root: Node, path: string): Node {

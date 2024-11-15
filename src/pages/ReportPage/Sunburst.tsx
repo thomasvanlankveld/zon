@@ -33,10 +33,16 @@ export default function Sunburst(props: SunburstProps) {
   };
 
   const diagramRoot = () => getNodeByPath(props.root, props.diagramRootPath);
-  const nodes = () => getDescendants(diagramRoot());
+  const nodes = () => getDescendants(diagramRoot(), { minLines: 1 });
 
   function getArcDimensions(node: Node) {
     const root = diagramRoot();
+
+    if (node.numberOfLines === 0) {
+      throw new Error(
+        `Can't draw an arc for node ${node.path} because it has 0 lines`,
+      );
+    }
 
     const firstLineFromRoot = node.firstLine - root.firstLine;
     const dx = node.numberOfLines / root.numberOfLines;
