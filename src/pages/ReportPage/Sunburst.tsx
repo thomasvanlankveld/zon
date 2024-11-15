@@ -32,12 +32,17 @@ export default function Sunburst(props: SunburstProps) {
   const nodes = () => getDescendants(diagramRoot());
 
   function getArcDimensions(node: Node) {
-    const x0 = node.firstLine / diagramRoot().numberOfLines;
-    const x1 = x0 + node.numberOfLines / diagramRoot().numberOfLines;
-    const y0 =
-      (node.depth + centerRadius - diagramRoot().depth) /
-      (diagramRoot().height + centerRadius);
-    const y1 = y0 - 1 / (diagramRoot().height + centerRadius);
+    const root = diagramRoot();
+
+    const firstLineFromRoot = node.firstLine - root.firstLine;
+    const dx = node.numberOfLines / root.numberOfLines;
+    const x0 = firstLineFromRoot / root.numberOfLines;
+    const x1 = x0 + dx;
+
+    const depthFromRoot = node.depth - root.depth;
+    const dy = 1 / (root.height + centerRadius);
+    const y0 = (depthFromRoot + centerRadius) / (root.height + centerRadius);
+    const y1 = y0 - dy;
 
     return { x0, x1, y0, y1 };
   }
