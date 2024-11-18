@@ -1,5 +1,10 @@
 import { createMemo, For, type Setter } from "solid-js";
-import { getNodeByPath, getParentPath, type Node } from "../../utils/zon";
+import {
+  getNodeByPath,
+  getParentPath,
+  NODE_TYPE,
+  type Node,
+} from "../../utils/zon";
 
 type ReportListProps = {
   root: Node;
@@ -19,7 +24,7 @@ export default function ReportList(props: ReportListProps) {
   function navigate(node: Node) {
     const isReportRoot = node.path === props.root.path;
     const isListRoot = node.path === props.listRootPath;
-    const isFile = node.height === 0;
+    const isFile = node.type === NODE_TYPE.FILE;
 
     if (isReportRoot) {
       props.setDiagramRootPath(null);

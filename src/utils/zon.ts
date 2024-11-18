@@ -8,7 +8,42 @@ export const LineType = {
 } as const;
 export type LineType = keyof typeof LineType;
 
+export const NODE_TYPE = {
+  FILE: "FILE",
+  FOLDER: "FOLDER",
+  SUMMARY: "SUMMARY",
+} as const;
+export type NODE_TYPE = keyof typeof NODE_TYPE;
+
+// type File = {
+//   type: typeof NODE_TYPE.FILE;
+//   name: string;
+//   height: 0;
+// };
+
+// type Folder = {
+//   type: typeof NODE_TYPE.FOLDER;
+//   name: string;
+//   children: Node[];
+//   height: number;
+// };
+
+// type Summary = {
+//   type: typeof NODE_TYPE.SUMMARY;
+//   height: number;
+// };
+
+// export type Node = {
+//   stats: CodeStats;
+//   path: string;
+//   numberOfLines: number;
+//   firstLine: number;
+//   color: string;
+//   depth: number;
+// } & (File | Folder | Summary);
+
 export type Node = {
+  type: NODE_TYPE;
   stats: CodeStats;
   path: string;
   name: string;
@@ -43,12 +78,12 @@ export function createTree(
   for (const language of languageValues) {
     // For every file
     for (const tokeiReport of language.reports) {
-      const fileName = tokeiReport.name.slice(numberOfCharactersToRemove);
-      const fileNameSegments = fileName.split("/");
+      const filePath = tokeiReport.name.slice(numberOfCharactersToRemove);
+      const filePathSegments = filePath.split("/");
 
       // Create or update all parent folders, then create the file
-      for (let i = 0; i < fileNameSegments.length; i++) {
-        const nodePath = fileNameSegments.slice(0, i + 1).join("/");
+      for (let i = 0; i < filePathSegments.length; i++) {
+        const nodePath = filePathSegments.slice(0, i + 1).join("/");
 
         if (nodePath in nodes) {
           const node = nodes[nodePath];
@@ -56,15 +91,22 @@ export function createTree(
           node.stats.code += tokeiReport.stats.code;
           node.stats.comments += tokeiReport.stats.comments;
           node.numberOfLines += getNumberOfLines(tokeiReport.stats, lineTypes);
-          node.height = Math.max(node.height, fileNameSegments.length - i - 1);
+          node.height = Math.max(node.height, filePathSegments.length - i - 1);
         } else {
+          const type =
+            i === filePathSegments.length - 1
+              ? NODE_TYPE.FILE
+              : NODE_TYPE.FOLDER;
+
+          // TODO: Maybe use `createNode`?
           const node = {
+            type,
             stats: tokeiReport.stats,
             path: nodePath,
-            name: fileNameSegments[i],
+            name: filePathSegments[i],
             numberOfLines: getNumberOfLines(tokeiReport.stats, lineTypes),
             depth: i,
-            height: fileNameSegments.length - i - 1,
+            height: filePathSegments.length - i - 1,
             // `children` updated as we build the tree
             children: [],
             // Actual values of `firstLine` and `color` can only be determined after sorting
@@ -75,7 +117,7 @@ export function createTree(
           nodes[nodePath] = node;
 
           if (i > 0) {
-            const parentName = fileNameSegments.slice(0, i).join("/");
+            const parentName = filePathSegments.slice(0, i).join("/");
             const parent = nodes[parentName];
 
             parent.children.push(node);
@@ -124,24 +166,103 @@ function addDeduced(
   }
 }
 
+function sumStats(statArr: CodeStats[]): CodeStats {
+  const sumStat: CodeStats = {
+    blanks: 0,
+    code: 0,
+    comments: 0,
+    blobs: {},
+  };
+
+  for (const stats of statArr) {
+    sumStat.blanks += stats.blanks;
+    sumStat.comments += stats.comments;
+    sumStat.code += stats.code;
+  }
+
+  return sumStat;
+}
+
+function subtractStats(left: CodeStats, right: CodeStats): CodeStats {
+  return {
+    blanks: left.blanks - right.blanks,
+    comments: left.comments - right.comments,
+    code: left.code - right.code,
+    blobs: {},
+  };
+}
+
+// TODO: Move grouping into a tree manipulation function, to maintain consistency between different UI elements?
 type GetDescendantsOptions = {
-  minLines?: number;
+  // TODO: Maybe make `exclude` into a callback?
+  exclude?: {
+    minLines?: number;
+  };
+  group?: {
+    // TODO: Maybe replace `group.minLines` with a callback?
+    // TODO: If not a callback, add a depth filter?
+    minLines?: number;
+    maxChildren?: number;
+  };
 };
 
 export function getDescendants(
   node: Node,
   options: GetDescendantsOptions = {},
 ): Node[] {
-  const minLines = options.minLines ?? 0;
+  const excludeMinLines = options.exclude?.minLines ?? 0;
 
-  if (node.numberOfLines < minLines) {
+  if (node.numberOfLines < excludeMinLines) {
     return [];
   }
 
-  return [
-    node,
-    ...node.children.flatMap((child) => getDescendants(child, options)),
-  ];
+  const groupMinLines = options.group?.minLines ?? 0;
+  const groupMaxChildren = options.group?.maxChildren ?? Infinity;
+
+  const visibleChildren = node.children
+    .slice(0, groupMaxChildren)
+    // TODO: Instead of filter, partition?
+    .filter((child) => child.numberOfLines >= groupMinLines);
+
+  const childDescendants = visibleChildren.flatMap((child) =>
+    getDescendants(child, options),
+  );
+
+  const nodes = [node, ...childDescendants];
+
+  if (node.children.length > visibleChildren.length) {
+    // The number of hidden nodes may be much larger than the number of visible ones, so we calculate the hidden stats
+    // by subtracting the visible totals from the parent's total
+    const visibleStats = sumStats(visibleChildren.map((child) => child.stats));
+    const hiddenStats = subtractStats(node.stats, visibleStats);
+
+    const lastVisibleChild = visibleChildren.at(-1);
+    const firstHiddenLine =
+      lastVisibleChild != null
+        ? lastVisibleChild.firstLine + lastVisibleChild.numberOfLines
+        : node.firstLine;
+
+    const hiddenNumberOfLines =
+      node.numberOfLines -
+      visibleChildren.reduce((acc, child) => acc + child.numberOfLines, 0);
+
+    const summary: Node = {
+      type: NODE_TYPE.SUMMARY,
+      stats: hiddenStats,
+      path: `${node.path}`,
+      name: "",
+      numberOfLines: hiddenNumberOfLines,
+      firstLine: firstHiddenLine,
+      color: "grey",
+      depth: node.depth + 1,
+      height: 0,
+      children: [],
+    };
+
+    nodes.push(summary);
+  }
+
+  return nodes;
 }
 
 export function getNodeByPath(root: Node, path: string): Node {

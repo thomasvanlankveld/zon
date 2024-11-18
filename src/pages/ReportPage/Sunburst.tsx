@@ -1,6 +1,7 @@
-import { For, type Setter } from "solid-js";
+import { createMemo, For, type Setter } from "solid-js";
 import { getArc } from "../../utils/svg.ts";
 import {
+  NODE_TYPE,
   type Node,
   getDescendants,
   getNodeByPath,
@@ -32,8 +33,20 @@ export default function Sunburst(props: SunburstProps) {
     y: height / 2,
   };
 
-  const diagramRoot = () => getNodeByPath(props.root, props.diagramRootPath);
-  const nodes = () => getDescendants(diagramRoot(), { minLines: 1 });
+  const diagramRoot = createMemo(() =>
+    getNodeByPath(props.root, props.diagramRootPath),
+  );
+  const nodes = () =>
+    getDescendants(diagramRoot(), {
+      exclude: { minLines: 1 }, // Can't render arcs for nodes with 0 lines
+      group: {
+        // TODO: Make center segments larger, so we can maybe increase the factor
+        // TODO: Make factor depend on chart size? (Share with list for consistency)
+        // minLines: Math.floor(props.root.numberOfLines / 100),
+        minLines: Math.floor(diagramRoot().numberOfLines / 100),
+        maxChildren: 10, // TODO: Make user-modify-able
+      },
+    });
 
   function getArcDimensions(node: Node) {
     const root = diagramRoot();
@@ -69,11 +82,12 @@ export default function Sunburst(props: SunburstProps) {
   function navigate(node: Node) {
     const isReportRoot = node.path === props.root.path;
     const isDiagramRoot = node.path === props.diagramRootPath;
-    const isFile = node.height === 0;
+    const isFile = node.type === NODE_TYPE.FILE;
+    const isSummary = node.type === NODE_TYPE.SUMMARY;
 
     if (isReportRoot) {
       props.setDiagramRootPath(null);
-    } else if (isDiagramRoot || isFile) {
+    } else if (isDiagramRoot || isFile || isSummary) {
       props.setDiagramRootPath(getParentPath(node.path));
     } else {
       props.setDiagramRootPath(node.path);
