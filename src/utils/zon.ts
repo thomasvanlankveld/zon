@@ -11,6 +11,7 @@ export type LineType = keyof typeof LineType;
 export const NODE_TYPE = {
   FILE: "FILE",
   FOLDER: "FOLDER",
+  // TODO: Rename summary to something like "SMALLER_ITEMS"
   SUMMARY: "SUMMARY",
 } as const;
 export type NODE_TYPE = keyof typeof NODE_TYPE;

@@ -1,3 +1,5 @@
+// Partially inspired by solid-primitives' createElementSize
+// https://github.com/solidjs-community/solid-primitives/blob/f9e669455ecf08b5e6b13d58a5500bea1843a7a8/packages/resize-observer/src/index.ts
 import {
   batch,
   createEffect,
