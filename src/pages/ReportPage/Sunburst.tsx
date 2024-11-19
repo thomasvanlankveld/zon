@@ -1,12 +1,4 @@
-import {
-  batch,
-  createMemo,
-  createSignal,
-  For,
-  onCleanup,
-  onMount,
-  type Setter,
-} from "solid-js";
+import { createMemo, createSignal, For, type Setter } from "solid-js";
 import { getArc } from "../../utils/svg.ts";
 import {
   NODE_TYPE,
@@ -15,6 +7,7 @@ import {
   getNodeByPath,
   getParentPath,
 } from "../../utils/zon.ts";
+import createElementSize from "../../primitives/createElementSize.ts";
 
 type Dimensions = {
   x0: number;
@@ -31,34 +24,11 @@ type SunburstProps = {
 };
 
 export default function Sunburst(props: SunburstProps) {
-  const [width, setWidth] = createSignal(500);
-  const [height, setHeight] = createSignal(500);
+  const [svg, setSvg] = createSignal<SVGSVGElement>();
+  const { width, height } = createElementSize(svg, { width: 500, height: 500 });
+
   const maxRadius = createMemo(() => Math.min(width(), height()) / 2);
   const centerRadius = 1;
-
-  let svg: SVGSVGElement | undefined;
-
-  const resizeObserver = new ResizeObserver((entries) => {
-    const svgResize = entries.at(-1);
-
-    if (svgResize == null) {
-      return;
-    }
-
-    batch(() => {
-      setWidth(svgResize.contentRect.width);
-      setHeight(svgResize.contentRect.height);
-    });
-  });
-
-  onMount(() => {
-    resizeObserver.observe(svg as SVGSVGElement);
-  });
-
-  onCleanup(() => {
-    resizeObserver.unobserve(svg as SVGSVGElement);
-  });
-
   const center = createMemo(() => ({
     x: width() / 2,
     y: height() / 2,
@@ -136,7 +106,7 @@ export default function Sunburst(props: SunburstProps) {
   // - Leave some room for stroke, between svg width / height and the outermost arcs
   // - Zoom "slider"?
   return (
-    <svg ref={svg} style={{ flex: "1 1 0%" }}>
+    <svg ref={setSvg} style={{ flex: "1 1 0%" }}>
       <g transform={`translate(${center().x},${center().y})`}>
         <For each={nodes()}>
           {(node) => (
