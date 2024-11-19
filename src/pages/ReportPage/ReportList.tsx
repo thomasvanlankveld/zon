@@ -3,37 +3,55 @@ import {
   getNodeByPath,
   getParentPath,
   NODE_TYPE,
+  type Path,
   type Node,
+  displayName,
+  pathString,
 } from "../../utils/zon";
 
 type ReportListProps = {
   root: Node;
-  listRootPath: string | null;
-  setHoverListPath: Setter<string | null>;
-  setDiagramRootPath: Setter<string | null>;
+  listRootPath: Path | null;
+  setHoverListPath: Setter<Path | null>;
+  setDiagramRootPath: Setter<Path | null>;
 };
 
 export default function ReportList(props: ReportListProps) {
   // Select root node for the list view (either root or the file of the hovered arc)
-  const listRoot = createMemo(() =>
-    props.listRootPath != null
-      ? getNodeByPath(props.root, props.listRootPath)
-      : props.root,
-  );
+  const listRoot = createMemo(() => {
+    const maybeListRoot =
+      props.listRootPath != null
+        ? getNodeByPath(props.root, props.listRootPath)
+        : props.root;
 
-  function navigate(node: Node) {
+    if (maybeListRoot.type === NODE_TYPE.FILE) {
+      throw new Error(
+        `Can't list files in "${pathString(props.listRootPath)}", because it's a file`,
+      );
+    }
+
+    return maybeListRoot;
+  });
+
+  function getTargetPath(node: Node): Path | null {
     const isReportRoot = node.path === props.root.path;
     const isListRoot = node.path === props.listRootPath;
     const isFile = node.type === NODE_TYPE.FILE;
 
     if (isReportRoot) {
-      props.setDiagramRootPath(null);
+      return null;
     } else if (isListRoot || isFile) {
-      props.setDiagramRootPath(getParentPath(node.path));
+      return getParentPath(node.path);
     } else {
-      props.setDiagramRootPath(node.path);
+      return node.path;
     }
   }
+
+  const listNodes = () =>
+    listRoot().children.map((child) => ({
+      ...child,
+      targetPath: getTargetPath(child),
+    }));
 
   return (
     <div style={{ flex: "1 1 0%" }}>
@@ -45,10 +63,10 @@ export default function ReportList(props: ReportListProps) {
           "white-space": "pre",
         }}
       >
-        {listRoot().name} {listRoot().numberOfLines}
+        {displayName(listRoot().name)} {listRoot().numberOfLines}
       </h4>
       <nav aria-label={`${listRoot.name} content list`}>
-        <For each={listRoot().children}>
+        <For each={listNodes()}>
           {(child) => (
             <button
               style={{
@@ -58,11 +76,11 @@ export default function ReportList(props: ReportListProps) {
                 margin: 0,
                 "white-space": "pre",
               }}
-              onMouseEnter={[props.setHoverListPath, child.path]}
+              onMouseEnter={[props.setHoverListPath, child.targetPath]}
               onMouseLeave={[props.setHoverListPath, null]}
-              onClick={[navigate, child]}
+              onClick={[props.setDiagramRootPath, child.targetPath]}
             >
-              {child.name} {child.numberOfLines}
+              {displayName(child.name)} {child.numberOfLines}
             </button>
           )}
         </For>

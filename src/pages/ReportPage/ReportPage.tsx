@@ -1,5 +1,5 @@
 import { createEffect, createSignal } from "solid-js";
-import type { Node } from "../../utils/zon.ts";
+import type { Node, Path } from "../../utils/zon.ts";
 import Sunburst from "./Sunburst.tsx";
 import ReportList from "./ReportList.tsx";
 import UploadButton from "../../components/UploadButton.tsx";
@@ -7,22 +7,20 @@ import Breadcrumbs from "./Breadcrumbs.tsx";
 
 type ReportPageProps = {
   root: Node;
-  path: string;
   countLinesInFolder: () => void;
 };
 
 export default function ReportPage(props: ReportPageProps) {
   // Path of the selected file
-  const [selectedDiagramRootPath, setDiagramRootPath] = createSignal<
-    string | null
-  >(null);
-  const defaultRootPath = () => props.root.path.split("/").slice(-1)[0];
+  const [selectedDiagramRootPath, setDiagramRootPath] =
+    createSignal<Path | null>(null);
+  const defaultRootPath = () => props.root.path.slice(-1);
   const diagramRootPath = () => selectedDiagramRootPath() ?? defaultRootPath();
 
-  const [hoverArcPath, setHoverArcPath] = createSignal<string | null>(null);
+  const [hoverArcPath, setHoverArcPath] = createSignal<Path | null>(null);
 
   // Path of the file for the hovered list item
-  const [hoverListPath, setHoverListPath] = createSignal<string | null>(null);
+  const [hoverListPath, setHoverListPath] = createSignal<Path | null>(null);
   // TODO: Actually use hoverListPath
   createEffect(() => console.log("hoverListPath", hoverListPath()));
 

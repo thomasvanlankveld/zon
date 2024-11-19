@@ -1,22 +1,30 @@
 import { createMemo, For, type Setter, Show } from "solid-js";
-import { getNodesAlongPath, type Node } from "../../utils/zon";
+import {
+  getNodesAlongPath,
+  type Path,
+  type Node,
+  displayName,
+} from "../../utils/zon";
 
 type BreadcrumbsProps = {
   root: Node;
-  path: string;
-  setDiagramRootPath: Setter<string | null>;
+  path: Path;
+  setDiagramRootPath: Setter<Path | null>;
 };
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
-  const nodes = createMemo(() => getNodesAlongPath(props.root, props.path));
-  const lastNodeIndex = () => nodes().length - 1;
-
-  function navigate(node: Node) {
+  function getTargetPath(node: Node): Path | null {
     const isReportRoot = node.path === props.root.path;
-    const targetPath = isReportRoot ? null : node.path;
-
-    props.setDiagramRootPath(targetPath);
+    return isReportRoot ? null : node.path;
   }
+
+  const nodes = createMemo(() =>
+    getNodesAlongPath(props.root, props.path).map((node) => ({
+      ...node,
+      targetPath: getTargetPath(node),
+    })),
+  );
+  const lastNodeIndex = () => nodes().length - 1;
 
   return (
     <nav style={{ "margin-bottom": "20px" }} aria-label="breadcrumbs">
@@ -29,9 +37,9 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
                 color: node.color,
                 cursor: "pointer",
               }}
-              onClick={[navigate, node]}
+              onClick={[props.setDiagramRootPath, node.targetPath]}
             >
-              <span>{node.name}</span>
+              <span>{displayName(node.name)}</span>
             </button>
             <Show when={i() !== lastNodeIndex()}>
               <span style={{ color: "white" }}>{" / "}</span>

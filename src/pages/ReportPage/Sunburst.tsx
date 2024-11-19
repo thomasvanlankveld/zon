@@ -3,9 +3,11 @@ import { getArc } from "../../utils/svg.ts";
 import {
   NODE_TYPE,
   type Node,
+  type Path,
   getDescendants,
   getNodeByPath,
   getParentPath,
+  pathString,
 } from "../../utils/zon.ts";
 import createElementSize from "../../primitives/createElementSize.ts";
 
@@ -18,9 +20,9 @@ type Dimensions = {
 
 type SunburstProps = {
   root: Node;
-  diagramRootPath: string;
-  setHoverArcPath: Setter<string | null>;
-  setDiagramRootPath: Setter<string | null>;
+  diagramRootPath: Path;
+  setHoverArcPath: Setter<Path | null>;
+  setDiagramRootPath: Setter<Path | null>;
 };
 
 export default function Sunburst(props: SunburstProps) {
@@ -47,7 +49,7 @@ export default function Sunburst(props: SunburstProps) {
 
     if (node.numberOfLines === 0) {
       throw new Error(
-        `Can't draw an arc for node ${node.path} because it has 0 lines`,
+        `Can't draw an arc for node ${pathString(node.path)} because it has 0 lines`,
       );
     }
 
@@ -74,6 +76,21 @@ export default function Sunburst(props: SunburstProps) {
     return getArc({ innerRadius, outerRadius, startAngle, endAngle });
   }
 
+  function getTargetPath(node: Node): Path | null {
+    const isReportRoot = node.path === props.root.path;
+    const isDiagramRoot = node.path === props.diagramRootPath;
+    const isFile = node.type === NODE_TYPE.FILE;
+    const isSummary = node.type === NODE_TYPE.GROUP;
+
+    if (isReportRoot) {
+      return null;
+    } else if (isDiagramRoot || isFile || isSummary) {
+      return getParentPath(node.path);
+    } else {
+      return node.path;
+    }
+  }
+
   const nodes = () =>
     // TODO: Move exclusion and grouping to an earlier stage, for easy consistency with list and breadcrumbs
     getDescendants(diagramRoot(), {
@@ -84,22 +101,11 @@ export default function Sunburst(props: SunburstProps) {
         minLines: Math.floor(diagramRoot().numberOfLines / 150),
         maxChildren: 10, // TODO: Make user-modify-able
       },
-    }).map((node) => ({ ...node, arc: getNodeArc(getArcDimensions(node)) }));
-
-  function navigate(node: Node) {
-    const isReportRoot = node.path === props.root.path;
-    const isDiagramRoot = node.path === props.diagramRootPath;
-    const isFile = node.type === NODE_TYPE.FILE;
-    const isSummary = node.type === NODE_TYPE.SUMMARY;
-
-    if (isReportRoot) {
-      props.setDiagramRootPath(null);
-    } else if (isDiagramRoot || isFile || isSummary) {
-      props.setDiagramRootPath(getParentPath(node.path));
-    } else {
-      props.setDiagramRootPath(node.path);
-    }
-  }
+    }).map((node) => ({
+      ...node,
+      arc: getNodeArc(getArcDimensions(node)),
+      targetPath: getTargetPath(node),
+    }));
 
   // TODO:
   // - Add padding between segments?
@@ -116,9 +122,9 @@ export default function Sunburst(props: SunburstProps) {
               fill={node.color}
               stroke="black"
               style={{ "stroke-width": "2px; opacity: 0.7", cursor: "pointer" }}
-              onMouseEnter={[props.setHoverArcPath, node.path]}
+              onMouseEnter={[props.setHoverArcPath, node.targetPath]}
               onMouseLeave={[props.setHoverArcPath, null]}
-              onClick={[navigate, node]}
+              onClick={[props.setDiagramRootPath, node.targetPath]}
             />
           )}
         </For>

@@ -11,55 +11,83 @@ export type LineType = keyof typeof LineType;
 export const NODE_TYPE = {
   FILE: "FILE",
   FOLDER: "FOLDER",
-  // TODO: Rename summary to something like "SMALLER_ITEMS"
-  SUMMARY: "SUMMARY",
+  GROUP: Symbol("GROUP"),
 } as const;
 export type NODE_TYPE = keyof typeof NODE_TYPE;
 
-// type File = {
-//   type: typeof NODE_TYPE.FILE;
-//   name: string;
-//   height: 0;
-// };
+export type SegmentName = string | typeof NODE_TYPE.GROUP;
+export type Path = SegmentName[];
 
-// type Folder = {
-//   type: typeof NODE_TYPE.FOLDER;
-//   name: string;
-//   children: Node[];
-//   height: number;
-// };
-
-// type Summary = {
-//   type: typeof NODE_TYPE.SUMMARY;
-//   height: number;
-// };
-
-// export type Node = {
-//   stats: CodeStats;
-//   path: string;
-//   numberOfLines: number;
-//   firstLine: number;
-//   color: string;
-//   depth: number;
-// } & (File | Folder | Summary);
-
-export type Node = {
-  type: NODE_TYPE;
+type NodeBase = {
   stats: CodeStats;
-  path: string;
-  name: string;
+  path: Path;
+  name: SegmentName;
   numberOfLines: number;
   firstLine: number;
   color: string;
   depth: number;
-  height: number;
-  children: Node[];
 };
+
+export type File = NodeBase & {
+  type: typeof NODE_TYPE.FILE;
+  height: 0;
+};
+
+export type Folder = NodeBase & {
+  type: typeof NODE_TYPE.FOLDER;
+  children: Node[];
+  height: number;
+};
+
+export type Group = NodeBase & {
+  type: typeof NODE_TYPE.GROUP;
+  children: Node[];
+  height: number;
+};
+
+export type Node = File | Folder | Group;
 
 export function getProjectName(projectPath: string): string {
   const projectPathSegments = projectPath.split("/");
 
   return projectPathSegments[projectPathSegments.length - 1];
+}
+
+/**
+ * For user-facing purposes
+ * @param name
+ * @returns
+ */
+export function displayName(name: SegmentName): string {
+  if (name === NODE_TYPE.GROUP) {
+    // TODO: i18n
+    return "Smaller items";
+  }
+
+  if (typeof name === "symbol") {
+    throw new Error(
+      `Can't convert segment name "${name.toString()}" into a string, unknown symbol type`,
+    );
+  }
+
+  return name;
+}
+
+/**
+ * Use only for internal & debugging purposes
+ * @param path
+ * @returns
+ */
+export function pathString(path: Path | null): string {
+  if (path == null) {
+    return "null";
+  }
+
+  return path
+    .map((segment) =>
+      segment === NODE_TYPE.GROUP ? 'Symbol("group")' : segment,
+    )
+    .join("/");
 }
 
 export function createTree(
@@ -84,44 +112,62 @@ export function createTree(
 
       // Create or update all parent folders, then create the file
       for (let i = 0; i < filePathSegments.length; i++) {
-        const nodePath = filePathSegments.slice(0, i + 1).join("/");
+        const nodePath = filePathSegments.slice(0, i + 1);
+        const nodePathStr = pathString(nodePath);
 
-        if (nodePath in nodes) {
-          const node = nodes[nodePath];
+        if (nodePathStr in nodes) {
+          const node = nodes[nodePathStr];
           node.stats.blanks += tokeiReport.stats.blanks;
           node.stats.code += tokeiReport.stats.code;
           node.stats.comments += tokeiReport.stats.comments;
           node.numberOfLines += getNumberOfLines(tokeiReport.stats, lineTypes);
           node.height = Math.max(node.height, filePathSegments.length - i - 1);
         } else {
-          const type =
-            i === filePathSegments.length - 1
-              ? NODE_TYPE.FILE
-              : NODE_TYPE.FOLDER;
-
-          // TODO: Maybe use `createNode`?
-          const node = {
-            type,
+          const nodeBase = {
             stats: tokeiReport.stats,
             path: nodePath,
             name: filePathSegments[i],
             numberOfLines: getNumberOfLines(tokeiReport.stats, lineTypes),
             depth: i,
-            height: filePathSegments.length - i - 1,
-            // `children` updated as we build the tree
-            children: [],
             // Actual values of `firstLine` and `color` can only be determined after sorting
             firstLine: 0,
             color: "",
           };
 
-          nodes[nodePath] = node;
+          const isFile = i === filePathSegments.length - 1;
+          const newNode: Node = isFile
+            ? {
+                ...nodeBase,
+                type: NODE_TYPE.FILE,
+                height: 0,
+              }
+            : {
+                ...nodeBase,
+                type: NODE_TYPE.FOLDER,
+                children: [],
+                // `children` updated as we build the tree
+                height: filePathSegments.length - i - 1,
+              };
+
+          nodes[nodePathStr] = newNode;
 
           if (i > 0) {
-            const parentName = filePathSegments.slice(0, i).join("/");
-            const parent = nodes[parentName];
+            const parentPath = getParentPath(nodePath);
+            const parent = nodes[pathString(parentPath)];
 
-            parent.children.push(node);
+            if (parent == null) {
+              throw new Error(
+                `Parent "${pathString(parentPath)}" of child "${pathString(nodePath)}" does not exist`,
+              );
+            }
+
+            if (parent.type !== NODE_TYPE.FOLDER) {
+              throw new Error(
+                `Parent "${pathString(parentPath)}" of child "${pathString(nodePath)}" is not a folder`,
+              );
+            }
+
+            parent.children.push(newNode);
           }
         }
       }
@@ -141,6 +187,10 @@ function getNumberOfLines(stats: CodeStats, lineTypes: LineType[]): number {
 }
 
 function sortTree(node: Node): void {
+  if (node.type === NODE_TYPE.FILE) {
+    return;
+  }
+
   node.children.sort((left, right) =>
     left.numberOfLines < right.numberOfLines ? 1 : -1,
   );
@@ -155,6 +205,10 @@ function addDeduced(
   totalNumberOfLines: number,
   lineNumber: number,
 ): void {
+  if (node.type === NODE_TYPE.FILE) {
+    return;
+  }
+
   for (const child of node.children) {
     child.firstLine = lineNumber;
 
@@ -223,6 +277,10 @@ export function getDescendants(
     return [node];
   }
 
+  if (node.type === NODE_TYPE.FILE) {
+    return [node];
+  }
+
   const groupMinLines = options.group?.minLines ?? 0;
   const groupMaxChildren = options.group?.maxChildren ?? Infinity;
 
@@ -253,11 +311,11 @@ export function getDescendants(
       node.numberOfLines -
       visibleChildren.reduce((acc, child) => acc + child.numberOfLines, 0);
 
-    const summary: Node = {
-      type: NODE_TYPE.SUMMARY,
+    const group: Node = {
+      type: NODE_TYPE.GROUP,
       stats: hiddenStats,
-      path: `${node.path}`,
-      name: "",
+      path: [...node.path, NODE_TYPE.GROUP],
+      name: NODE_TYPE.GROUP,
       numberOfLines: hiddenNumberOfLines,
       firstLine: firstHiddenLine,
       color: "grey",
@@ -266,23 +324,29 @@ export function getDescendants(
       children: [],
     };
 
-    nodes.push(summary);
+    nodes.push(group);
   }
 
   return nodes;
 }
 
-export function getNodeByPath(root: Node, path: string): Node {
-  const pathSegments = path.split("/");
+export function getNodeByPath(root: Node, path: Path): Node {
   let node = root;
 
-  for (let i = 1; i < pathSegments.length; i++) {
-    const segment = pathSegments[i];
+  for (let i = 1; i < path.length; i++) {
+    const segment = path[i];
+
+    if (node.type === NODE_TYPE.FILE) {
+      throw new Error(
+        `Can't find node "${pathString(path)}" in "${pathString([root.name])}": ${pathString(node.path)} is a file`,
+      );
+    }
+
     const match = node.children.find((child) => child.name === segment);
 
     if (match == null) {
       throw new Error(
-        `Could not find node "${path}" in "${root.name}": "${node.path}" does not have a child named "${segment}"`,
+        `Can't find node "${pathString(path)}" in "${pathString([root.name])}": "${pathString(node.path)}" does not have a child named "${pathString([segment])}"`,
       );
     }
 
@@ -292,20 +356,25 @@ export function getNodeByPath(root: Node, path: string): Node {
   return node;
 }
 
-export function getNodesAlongPath(root: Node, path: string): Node[] {
-  const pathSegments = path.split("/");
+export function getNodesAlongPath(root: Node, path: Path): Node[] {
   let parent = root;
 
-  return pathSegments.map((segment, i) => {
+  return path.map((segment, i) => {
     if (i === 0) {
       return root;
+    }
+
+    if (parent.type === NODE_TYPE.FILE) {
+      throw new Error(
+        `Can't get nodes along path "${pathString(path)}" in "${pathString([root.name])}": "${pathString(parent.path)}" is a file"`,
+      );
     }
 
     const match = parent.children.find((child) => child.name === segment);
 
     if (match == null) {
       throw new Error(
-        `Could not get nodes along path "${path}" in "${root.name}": "${parent.path}" does not have a child named "${segment}"`,
+        `Can't get nodes along path "${pathString(path)}" in "${pathString([root.name])}": "${pathString(parent.path)}" does not have a child named "${pathString([segment])}"`,
       );
     }
 
@@ -315,6 +384,6 @@ export function getNodesAlongPath(root: Node, path: string): Node[] {
   });
 }
 
-export function getParentPath(path: string) {
-  return path.split("/").slice(0, -1).join("/");
+export function getParentPath(path: Path) {
+  return path.slice(0, -1);
 }
