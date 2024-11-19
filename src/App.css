@@ -1,3 +1,13 @@
+html,
+body,
+#root {
+  margin: 0;
+  /* TODO: Replace with a 100dvh in the `main`? */
+  height: 100%;
+}
+
+/* Starter styles */
+
 .logo.vite:hover {
   filter: drop-shadow(0 0 2em #747bff);
 }

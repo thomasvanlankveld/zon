@@ -1,4 +1,12 @@
-import { createMemo, For, type Setter } from "solid-js";
+import {
+  batch,
+  createMemo,
+  createSignal,
+  For,
+  onCleanup,
+  onMount,
+  type Setter,
+} from "solid-js";
 import { getArc } from "../../utils/svg.ts";
 import {
   NODE_TYPE,
@@ -23,30 +31,46 @@ type SunburstProps = {
 };
 
 export default function Sunburst(props: SunburstProps) {
-  const width = 500;
-  const height = 500;
-  const maxRadius = Math.min(width, height) / 2;
-  const centerRadius = 0.8;
+  const [width, setWidth] = createSignal(500);
+  const [height, setHeight] = createSignal(500);
+  const maxRadius = createMemo(() => Math.min(width(), height()) / 2);
+  const centerRadius = 1;
 
-  const center = {
-    x: width / 2,
-    y: height / 2,
-  };
+  let svg: SVGSVGElement | undefined;
+
+  const resizeObserver = new ResizeObserver((entries) => {
+    const svgResize = entries.at(-1);
+
+    if (svgResize == null) {
+      return;
+    }
+
+    batch(() => {
+      setWidth(svgResize.contentRect.width);
+      setHeight(svgResize.contentRect.height);
+    });
+  });
+
+  onMount(() => {
+    resizeObserver.observe(svg as SVGSVGElement);
+  });
+
+  onCleanup(() => {
+    resizeObserver.unobserve(svg as SVGSVGElement);
+  });
+
+  const center = createMemo(() => ({
+    x: width() / 2,
+    y: height() / 2,
+  }));
 
   const diagramRoot = createMemo(() =>
     getNodeByPath(props.root, props.diagramRootPath),
   );
-  const nodes = () =>
-    getDescendants(diagramRoot(), {
-      exclude: { minLines: 1 }, // Can't render arcs for nodes with 0 lines
-      group: {
-        // TODO: Make center segments larger, so we can maybe increase the factor
-        // TODO: Make factor depend on chart size? (Share with list for consistency)
-        // minLines: Math.floor(props.root.numberOfLines / 100),
-        minLines: Math.floor(diagramRoot().numberOfLines / 100),
-        maxChildren: 10, // TODO: Make user-modify-able
-      },
-    });
+  const maxDepth = createMemo(() =>
+    // TODO: diagramRoot().height needs to refer to the visible height (after "exclude" filtering)
+    Math.min(diagramRoot().depth + 8, diagramRoot().height),
+  );
 
   function getArcDimensions(node: Node) {
     const root = diagramRoot();
@@ -63,21 +87,34 @@ export default function Sunburst(props: SunburstProps) {
     const x1 = x0 + dx;
 
     const depthFromRoot = node.depth - root.depth;
-    const dy = 1 / (root.height + centerRadius);
-    const y0 = (depthFromRoot + centerRadius) / (root.height + centerRadius);
+    const dy = 1 / (maxDepth() + centerRadius);
+    const y0 = (depthFromRoot + centerRadius) / (maxDepth() + centerRadius);
     const y1 = Math.max(y0 - dy, 0);
 
+    // TODO: Instead of a continuous scale, make a cutoff between wide inner segments and thin outer ones
     return { x0, x1, y0, y1 };
   }
 
   function getNodeArc(dimensions: Dimensions) {
-    const outerRadius = dimensions.y0 * maxRadius;
-    const innerRadius = dimensions.y1 * maxRadius;
+    const outerRadius = dimensions.y0 * maxRadius();
+    const innerRadius = dimensions.y1 * maxRadius();
     const startAngle = dimensions.x0 * 2 * Math.PI;
     const endAngle = dimensions.x1 * 2 * Math.PI;
 
     return getArc({ innerRadius, outerRadius, startAngle, endAngle });
   }
+
+  const nodes = () =>
+    // TODO: Move exclusion and grouping to an earlier stage, for easy consistency with list and breadcrumbs
+    getDescendants(diagramRoot(), {
+      exclude: { minLines: 1, maxDepth: maxDepth() }, // Can't render arcs for nodes with 0 lines
+      group: {
+        // TODO: Make center segments larger, so we can maybe increase the factor
+        // TODO: Make factor depend on chart size? (Share with list for consistency)
+        minLines: Math.floor(diagramRoot().numberOfLines / 150),
+        maxChildren: 10, // TODO: Make user-modify-able
+      },
+    }).map((node) => ({ ...node, arc: getNodeArc(getArcDimensions(node)) }));
 
   function navigate(node: Node) {
     const isReportRoot = node.path === props.root.path;
@@ -95,17 +132,16 @@ export default function Sunburst(props: SunburstProps) {
   }
 
   // TODO:
-  // - FIX DEPTH BUG WHEN SCANNING EVERON-PORTAL
   // - Add padding between segments?
   // - Leave some room for stroke, between svg width / height and the outermost arcs
   // - Zoom "slider"?
   return (
-    <svg width={width} height={height}>
-      <g transform={`translate(${center.x},${center.y})`}>
+    <svg ref={svg} style={{ flex: "1 1 0%" }}>
+      <g transform={`translate(${center().x},${center().y})`}>
         <For each={nodes()}>
           {(node) => (
             <path
-              d={getNodeArc(getArcDimensions(node))}
+              d={node.arc}
               fill-rule="evenodd"
               fill={node.color}
               stroke="black"

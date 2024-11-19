@@ -36,7 +36,7 @@ export default function ReportList(props: ReportListProps) {
   }
 
   return (
-    <div>
+    <div style={{ flex: "1 1 0%" }}>
       <h4
         style={{
           color: "white",

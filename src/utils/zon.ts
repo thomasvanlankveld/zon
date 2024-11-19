@@ -197,11 +197,12 @@ type GetDescendantsOptions = {
   // TODO: Maybe make `exclude` into a callback?
   exclude?: {
     minLines?: number;
+    maxDepth?: number;
   };
   group?: {
     // TODO: Maybe replace `group.minLines` with a callback?
-    // TODO: If not a callback, add a depth filter?
     minLines?: number;
+    // TODO: Maybe we don't need maxChildren?
     maxChildren?: number;
   };
 };
@@ -211,9 +212,14 @@ export function getDescendants(
   options: GetDescendantsOptions = {},
 ): Node[] {
   const excludeMinLines = options.exclude?.minLines ?? 0;
+  const excludeMaxDepth = options.exclude?.maxDepth ?? Infinity;
 
   if (node.numberOfLines < excludeMinLines) {
     return [];
+  }
+
+  if (node.depth === excludeMaxDepth) {
+    return [node];
   }
 
   const groupMinLines = options.group?.minLines ?? 0;

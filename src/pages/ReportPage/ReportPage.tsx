@@ -31,7 +31,17 @@ export default function ReportPage(props: ReportPageProps) {
   const breadcrumbPath = () => hoverArcPath() ?? diagramRootPath();
 
   return (
-    <main>
+    <main
+      style={{
+        height: "100%",
+        "max-height": "100%",
+        "box-sizing": "border-box",
+        padding: "1rem",
+        display: "grid",
+        "grid-auto-rows": "min-content min-content 1fr",
+        overflow: "hidden",
+      }}
+    >
       <div style={{ display: "flex", "justify-content": "space-between" }}>
         <h1>Zon</h1>
         <UploadButton countLinesInFolder={props.countLinesInFolder} />
@@ -42,7 +52,15 @@ export default function ReportPage(props: ReportPageProps) {
         path={breadcrumbPath()}
         setDiagramRootPath={setDiagramRootPath}
       />
-      <div style={{ display: "flex" }}>
+      {/* TODO: Fix scrolling down the list */}
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          "align-items": "stretch",
+          overflow: "hidden",
+        }}
+      >
         <Sunburst
           root={props.root}
           diagramRootPath={diagramRootPath()}
