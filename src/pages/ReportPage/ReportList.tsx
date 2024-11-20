@@ -37,10 +37,11 @@ export default function ReportList(props: ReportListProps) {
     const isReportRoot = node.path === props.root.path;
     const isListRoot = node.path === props.listRootPath;
     const isFile = node.type === NODE_TYPE.FILE;
+    const isGroup = node.type === NODE_TYPE.GROUP;
 
     if (isReportRoot) {
       return null;
-    } else if (isListRoot || isFile) {
+    } else if (isListRoot || isFile || isGroup) {
       return getParentPath(node.path);
     } else {
       return node.path;

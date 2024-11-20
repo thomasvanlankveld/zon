@@ -80,11 +80,11 @@ export default function Sunburst(props: SunburstProps) {
     const isReportRoot = node.path === props.root.path;
     const isDiagramRoot = node.path === props.diagramRootPath;
     const isFile = node.type === NODE_TYPE.FILE;
-    const isSummary = node.type === NODE_TYPE.GROUP;
+    const isGroup = node.type === NODE_TYPE.GROUP;
 
     if (isReportRoot) {
       return null;
-    } else if (isDiagramRoot || isFile || isSummary) {
+    } else if (isDiagramRoot || isFile || isGroup) {
       return getParentPath(node.path);
     } else {
       return node.path;
