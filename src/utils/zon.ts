@@ -262,10 +262,9 @@ type GroupOptions = {
 
 /**
  * Travels down the root and recursively replaces the smallest nodes with a group of the same size
- * Depths and heights are not updated
  * @param node
  * @param options
- * @returns
+ * @returns The root node
  */
 export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
   if (node.type !== NODE_TYPE.FOLDER) {
@@ -311,7 +310,13 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
     groupedChildren: hiddenChildren,
   };
 
-  return { ...node, children: [...visibleChildren, group] };
+  const newChildren = [...visibleChildren, group];
+
+  return {
+    ...node,
+    children: newChildren,
+    height: Math.max(...newChildren.map((child) => child.height)) + 1,
+  };
 }
 
 /**

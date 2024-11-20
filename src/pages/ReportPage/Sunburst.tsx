@@ -39,12 +39,7 @@ export default function Sunburst(props: SunburstProps) {
   const diagramRoot = createMemo(() =>
     getNodeByPath(props.root, props.diagramRootPath),
   );
-  const maxDepth = createMemo(() => {
-    // TODO: diagramRoot().height needs to refer to the visible height (after "exclude" filtering)
-    const depthFromRoot = Math.min(8, diagramRoot().height);
-
-    return diagramRoot().depth + depthFromRoot;
-  });
+  const maxDepthFromRoot = createMemo(() => Math.min(8, diagramRoot().height));
 
   function getArcDimensions(node: Node) {
     const root = diagramRoot();
@@ -61,8 +56,9 @@ export default function Sunburst(props: SunburstProps) {
     const x1 = x0 + dx;
 
     const depthFromRoot = node.depth - root.depth;
-    const dy = 1 / (maxDepth() + centerRadius);
-    const y0 = (depthFromRoot + centerRadius) / (maxDepth() + centerRadius);
+    const dy = 1 / (maxDepthFromRoot() + centerRadius);
+    const y0 =
+      (depthFromRoot + centerRadius) / (maxDepthFromRoot() + centerRadius);
     const y1 = Math.max(y0 - dy, 0);
 
     // TODO: Instead of a continuous scale, make a cutoff between wide inner segments and thin outer ones
@@ -96,7 +92,11 @@ export default function Sunburst(props: SunburstProps) {
   const nodes = () =>
     // TODO: Move exclusion and grouping to an earlier stage, for easy consistency with list and breadcrumbs
     getDescendants(diagramRoot(), {
-      exclude: { minLines: 1, maxDepth: maxDepth() }, // Can't render arcs for nodes with 0 lines
+      exclude: {
+        // Can't render arcs for nodes with 0 lines
+        minLines: 1,
+        maxDepth: diagramRoot().depth + maxDepthFromRoot(),
+      },
     }).map((node) => ({
       ...node,
       arc: getNodeArc(getArcDimensions(node)),
