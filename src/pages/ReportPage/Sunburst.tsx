@@ -39,10 +39,12 @@ export default function Sunburst(props: SunburstProps) {
   const diagramRoot = createMemo(() =>
     getNodeByPath(props.root, props.diagramRootPath),
   );
-  const maxDepth = createMemo(() =>
+  const maxDepth = createMemo(() => {
     // TODO: diagramRoot().height needs to refer to the visible height (after "exclude" filtering)
-    Math.min(diagramRoot().depth + 8, diagramRoot().height),
-  );
+    const depthFromRoot = Math.min(8, diagramRoot().height);
+
+    return diagramRoot().depth + depthFromRoot;
+  });
 
   function getArcDimensions(node: Node) {
     const root = diagramRoot();
