@@ -6,7 +6,7 @@ import {
   type Path,
   type Node,
   getDisplayName,
-  getPathString,
+  //   getPathString,
 } from "../../utils/zon";
 
 type ReportListProps = {
@@ -18,26 +18,14 @@ type ReportListProps = {
 
 export default function ReportList(props: ReportListProps) {
   // Select root node for the list view (either root or the file of the hovered arc)
-  const listRoot = createMemo(() => {
-    const maybeListRoot =
-      props.listRootPath != null
-        ? getNodeByPath(props.root, props.listRootPath)
-        : props.root;
-
-    if (maybeListRoot.type === NODE_TYPE.FILE) {
-      throw new Error(
-        `Can't list files in "${getPathString(props.listRootPath)}", because it's a file`,
-      );
-    }
-
-    return maybeListRoot;
-  });
+  const listRoot = createMemo(() =>
+    props.listRootPath != null
+      ? getNodeByPath(props.root, props.listRootPath)
+      : props.root,
+  );
 
   function getTargetPath(node: Node): Path | null {
-    const isFile = node.type === NODE_TYPE.FILE;
-    const isGroup = node.type === NODE_TYPE.GROUP;
-
-    if (isFile || isGroup) {
+    if (node.type === NODE_TYPE.GROUP) {
       return getParentPath(node.path);
     }
 
@@ -46,6 +34,11 @@ export default function ReportList(props: ReportListProps) {
 
   const listNodes = () => {
     const root = listRoot();
+
+    if (root.type === NODE_TYPE.FILE) {
+      return [];
+    }
+
     const children =
       root.type === NODE_TYPE.FOLDER ? root.children : root.groupedChildren;
 

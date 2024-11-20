@@ -78,8 +78,6 @@ export default function Sunburst(props: SunburstProps) {
   function getTargetPaths(node: Node) {
     const isReportRoot = arePathsEqual(node.path, props.root.path);
     const isDiagramRoot = arePathsEqual(node.path, props.diagramRootPath);
-    const isFile = node.type === NODE_TYPE.FILE;
-    const isGroup = node.type === NODE_TYPE.GROUP;
 
     if (isReportRoot) {
       return { clickTarget: null, hoverTarget: null };
@@ -89,7 +87,8 @@ export default function Sunburst(props: SunburstProps) {
       return { clickTarget: getParentPath(node.path), hoverTarget: node.path };
     }
 
-    const targetPath = isFile || isGroup ? getParentPath(node.path) : node.path;
+    const targetPath =
+      node.type === NODE_TYPE.GROUP ? getParentPath(node.path) : node.path;
 
     return { clickTarget: targetPath, hoverTarget: targetPath };
   }
@@ -106,7 +105,8 @@ export default function Sunburst(props: SunburstProps) {
       ...node,
       ...getTargetPaths(node),
       arc: getNodeArc(getArcDimensions(node)),
-      color: i === 0 ? "transparent" : node.color,
+      color:
+        i === 0 && node.type !== NODE_TYPE.FILE ? "transparent" : node.color,
     }));
 
   // TODO:
