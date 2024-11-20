@@ -47,11 +47,16 @@ export default function ReportList(props: ReportListProps) {
     }
   }
 
-  const listNodes = () =>
-    listRoot().children.map((child) => ({
+  const listNodes = () => {
+    const root = listRoot();
+    const children =
+      root.type === NODE_TYPE.FOLDER ? root.children : root.groupedChildren;
+
+    return children.map((child) => ({
       ...child,
       targetPath: getTargetPath(child),
     }));
+  };
 
   return (
     <div style={{ flex: "1 1 0%" }}>

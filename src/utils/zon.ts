@@ -41,7 +41,7 @@ export type Folder = NodeBase & {
 
 export type Group = NodeBase & {
   type: typeof NODE_TYPE.GROUP;
-  children: Node[];
+  groupedChildren: Node[];
   height: number;
 };
 
@@ -187,7 +187,7 @@ function getNumberOfLines(stats: CodeStats, lineTypes: LineType[]): number {
 }
 
 function sortTree(node: Node): void {
-  if (node.type === NODE_TYPE.FILE) {
+  if (node.type !== NODE_TYPE.FOLDER) {
     return;
   }
 
@@ -205,7 +205,7 @@ function addDeduced(
   totalNumberOfLines: number,
   lineNumber: number,
 ): void {
-  if (node.type === NODE_TYPE.FILE) {
+  if (node.type !== NODE_TYPE.FOLDER) {
     return;
   }
 
@@ -277,7 +277,7 @@ export function getDescendants(
     return [node];
   }
 
-  if (node.type === NODE_TYPE.FILE) {
+  if (node.type !== NODE_TYPE.FOLDER) {
     return [node];
   }
 
@@ -321,7 +321,7 @@ export function getDescendants(
       color: "grey",
       depth: node.depth + 1,
       height: 0,
-      children: [],
+      groupedChildren: [],
     };
 
     nodes.push(group);
@@ -336,9 +336,9 @@ export function getNodeByPath(root: Node, path: Path): Node {
   for (let i = 1; i < path.length; i++) {
     const segment = path[i];
 
-    if (node.type === NODE_TYPE.FILE) {
+    if (node.type !== NODE_TYPE.FOLDER) {
       throw new Error(
-        `Can't find node "${getPathString(path)}" in "${getPathString([root.name])}": ${getPathString(node.path)} is a file`,
+        `Can't find node "${getPathString(path)}" in "${getPathString([root.name])}": ${getPathString(node.path)} is not a folder`,
       );
     }
 
@@ -364,9 +364,9 @@ export function getNodesAlongPath(root: Node, path: Path): Node[] {
       return root;
     }
 
-    if (parent.type === NODE_TYPE.FILE) {
+    if (parent.type !== NODE_TYPE.FOLDER) {
       throw new Error(
-        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" is a file"`,
+        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" is not a"`,
       );
     }
 
