@@ -95,12 +95,6 @@ export default function Sunburst(props: SunburstProps) {
     // TODO: Move exclusion and grouping to an earlier stage, for easy consistency with list and breadcrumbs
     getDescendants(diagramRoot(), {
       exclude: { minLines: 1, maxDepth: maxDepth() }, // Can't render arcs for nodes with 0 lines
-      group: {
-        // TODO: Make center segments larger, so we can maybe increase the factor
-        // TODO: Make factor depend on chart size? (Share with list for consistency)
-        minLines: Math.floor(diagramRoot().numberOfLines / 150),
-        maxChildren: 10, // TODO: Make user-modify-able
-      },
     }).map((node) => ({
       ...node,
       arc: getNodeArc(getArcDimensions(node)),

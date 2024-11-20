@@ -1,5 +1,11 @@
-import { createEffect, createSignal } from "solid-js";
-import type { Node, Path } from "../../utils/zon.ts";
+import { createEffect, createMemo, createSignal } from "solid-js";
+import {
+  getNodeByPath,
+  groupSmallestNodes,
+  withNode,
+  type Node,
+  type Path,
+} from "../../utils/zon.ts";
 import Sunburst from "./Sunburst.tsx";
 import ReportList from "./ReportList.tsx";
 import UploadButton from "../../components/UploadButton.tsx";
@@ -15,11 +21,27 @@ export default function ReportPage(props: ReportPageProps) {
   const [selectedDiagramRootPath, setDiagramRootPath] =
     createSignal<Path | null>(null);
   const defaultRootPath = () => props.root.path.slice(-1);
-  const diagramRootPath = () => selectedDiagramRootPath() ?? defaultRootPath();
+  const diagramRootPath = createMemo(
+    () => selectedDiagramRootPath() ?? defaultRootPath(),
+  );
 
+  const diagramRoot = createMemo(() =>
+    getNodeByPath(props.root, diagramRootPath()),
+  );
+  const groupedDiagramRoot = createMemo(() =>
+    groupSmallestNodes(diagramRoot(), {
+      minLines: Math.floor(diagramRoot().numberOfLines / 150),
+      maxChildren: 11, // TODO: Depend on list height?
+    }),
+  );
+  const groupedReportRoot = createMemo(() =>
+    withNode(props.root, groupedDiagramRoot()),
+  );
+
+  // Path of the hovered arc
   const [hoverArcPath, setHoverArcPath] = createSignal<Path | null>(null);
 
-  // Path of the file for the hovered list item
+  // Path of the hovered list item
   const [hoverListPath, setHoverListPath] = createSignal<Path | null>(null);
   // TODO: Actually use hoverListPath
   createEffect(() => console.log("hoverListPath", hoverListPath()));
@@ -46,7 +68,7 @@ export default function ReportPage(props: ReportPageProps) {
       </div>
       {/* TODO: Add line count? Maybe keep hashmap of all root descendants for fast lookup? */}
       <Breadcrumbs
-        root={props.root}
+        root={groupedReportRoot()}
         path={breadcrumbPath()}
         setDiagramRootPath={setDiagramRootPath}
       />
@@ -60,13 +82,13 @@ export default function ReportPage(props: ReportPageProps) {
         }}
       >
         <Sunburst
-          root={props.root}
+          root={groupedReportRoot()}
           diagramRootPath={diagramRootPath()}
           setHoverArcPath={setHoverArcPath}
           setDiagramRootPath={setDiagramRootPath}
         />
         <ReportList
-          root={props.root}
+          root={groupedReportRoot()}
           listRootPath={hoverArcPath() ?? diagramRootPath()}
           setHoverListPath={setHoverListPath}
           setDiagramRootPath={setDiagramRootPath}

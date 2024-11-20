@@ -90,6 +90,14 @@ export function getPathString(path: Path | null): string {
     .join("/");
 }
 
+export function pathsAreEqual(left: Path, right: Path): boolean {
+  if (left.length !== right.length) {
+    return false;
+  }
+
+  return left.every((segment, i) => segment === right[i]);
+}
+
 export function createTree(
   projectPath: string,
   languages: Languages,
@@ -247,6 +255,119 @@ function subtractStats(left: CodeStats, right: CodeStats): CodeStats {
   };
 }
 
+type GroupOptions = {
+  minLines: number;
+  maxChildren: number;
+};
+
+/**
+ * Travels down the root and recursively replaces the smallest nodes with a group of the same size
+ * Depths and heights are not updated
+ * @param node
+ * @param options
+ * @returns
+ */
+export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
+  if (node.type !== NODE_TYPE.FOLDER) {
+    return node;
+  }
+
+  const visibleChildren = node.children
+    .slice(0, options.maxChildren)
+    .filter((child) => child.numberOfLines >= options.minLines)
+    .map((child) => groupSmallestNodes(child, options));
+
+  if (visibleChildren.length === node.children.length) {
+    return { ...node, children: visibleChildren };
+  }
+
+  const hiddenChildren = node.children.slice(visibleChildren.length);
+
+  // The number of hidden nodes may be much larger than the number of visible ones, so we calculate the hidden stats
+  // by subtracting the visible totals from the parent's total
+  const visibleStats = sumStats(visibleChildren.map((child) => child.stats));
+  const hiddenStats = subtractStats(node.stats, visibleStats);
+
+  const lastVisibleChild = visibleChildren.at(-1);
+  const firstHiddenLine =
+    lastVisibleChild != null
+      ? lastVisibleChild.firstLine + lastVisibleChild.numberOfLines
+      : node.firstLine;
+
+  const hiddenNumberOfLines =
+    node.numberOfLines -
+    visibleChildren.reduce((acc, child) => acc + child.numberOfLines, 0);
+
+  const group: Node = {
+    type: NODE_TYPE.GROUP,
+    stats: hiddenStats,
+    path: [...node.path, NODE_TYPE.GROUP],
+    name: NODE_TYPE.GROUP,
+    numberOfLines: hiddenNumberOfLines,
+    firstLine: firstHiddenLine,
+    color: "grey",
+    depth: node.depth + 1,
+    height: 0,
+    groupedChildren: hiddenChildren,
+  };
+
+  return { ...node, children: [...visibleChildren, group] };
+}
+
+/**
+ * Returns a copy of `root` with `insertion` inserted at the appropriate path
+ * This operation expects all needed folders to already be in place, and it does not recalculate any of the node values
+ * @param root The root in which to insert the node
+ * @param insertion The node to be inserted
+ * @returns Copy of root with insertion
+ */
+export function withNode(root: Node, insertion: Node): Node {
+  const path = insertion.path;
+
+  if (pathsAreEqual(root.path, insertion.path)) {
+    return insertion;
+  }
+
+  if (root.type !== NODE_TYPE.FOLDER) {
+    throw new Error(
+      `Can't insert node "${getPathString(path)}" into "${getPathString([root.name])}": ${getPathString(root.path)} is not a folder`,
+    );
+  }
+
+  const newRoot = { ...root };
+  let nextNode: Node = newRoot;
+
+  for (let i = 1; i < path.length; i++) {
+    const segment = path[i];
+
+    if (nextNode.type !== NODE_TYPE.FOLDER) {
+      throw new Error(
+        `Can't insert node "${getPathString(path)}" into "${getPathString([root.name])}": ${getPathString(nextNode.path)} is not a folder`,
+      );
+    }
+
+    const matchIndex = nextNode.children.findIndex(
+      (child) => child.name === segment,
+    );
+
+    if (matchIndex == null) {
+      throw new Error(
+        `Can't insert node "${getPathString(path)}" into "${getPathString([root.name])}": "${getPathString(nextNode.path)}" does not have a child named "${getPathString([segment])}"`,
+      );
+    }
+
+    // If we're at the end of the path, insert the insertion, otherwise clone the next node
+    const newNode: Node =
+      i === path.length - 1 ? insertion : { ...nextNode.children[matchIndex] };
+
+    // eslint-disable-next-line
+    nextNode.children = nextNode.children.with(matchIndex, newNode);
+    nextNode = newNode;
+  }
+
+  return newRoot;
+}
+
 // TODO: Move grouping into a tree manipulation function, to maintain consistency between different UI elements?
 type GetDescendantsOptions = {
   // TODO: Maybe make `exclude` into a callback?
@@ -254,6 +375,7 @@ type GetDescendantsOptions = {
     minLines?: number;
     maxDepth?: number;
   };
+  // TODO: Remove unneeded grouping logic
   group?: {
     // TODO: Maybe replace `group.minLines` with a callback?
     minLines?: number;
