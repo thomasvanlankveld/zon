@@ -4,6 +4,7 @@ import {
   type Path,
   type Node,
   getDisplayName,
+  arePathsEqual,
 } from "../../utils/zon";
 
 type BreadcrumbsProps = {
@@ -14,7 +15,7 @@ type BreadcrumbsProps = {
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
   function getTargetPath(node: Node): Path | null {
-    const isReportRoot = node.path === props.root.path;
+    const isReportRoot = arePathsEqual(node.path, props.root.path);
     return isReportRoot ? null : node.path;
   }
 

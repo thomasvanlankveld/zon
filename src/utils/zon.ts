@@ -90,7 +90,7 @@ export function getPathString(path: Path | null): string {
     .join("/");
 }
 
-export function pathsAreEqual(left: Path, right: Path): boolean {
+export function arePathsEqual(left: Path, right: Path): boolean {
   if (left.length !== right.length) {
     return false;
   }
@@ -329,7 +329,7 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
 export function withNode(root: Node, insertion: Node): Node {
   const path = insertion.path;
 
-  if (pathsAreEqual(root.path, insertion.path)) {
+  if (arePathsEqual(root.path, insertion.path)) {
     return insertion;
   }
 

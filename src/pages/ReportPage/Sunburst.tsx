@@ -8,6 +8,7 @@ import {
   getNodeByPath,
   getParentPath,
   getPathString,
+  arePathsEqual,
 } from "../../utils/zon.ts";
 import createElementSize from "../../primitives/createElementSize.ts";
 
@@ -41,7 +42,7 @@ export default function Sunburst(props: SunburstProps) {
   );
   const maxDepthFromRoot = createMemo(() => Math.min(8, diagramRoot().height));
 
-  function getArcDimensions(node: Node) {
+  function getArcDimensions(node: Node): Dimensions {
     const root = diagramRoot();
 
     if (node.numberOfLines === 0) {
@@ -65,7 +66,7 @@ export default function Sunburst(props: SunburstProps) {
     return { x0, x1, y0, y1 };
   }
 
-  function getNodeArc(dimensions: Dimensions) {
+  function getNodeArc(dimensions: Dimensions): string {
     const outerRadius = dimensions.y0 * maxRadius();
     const innerRadius = dimensions.y1 * maxRadius();
     const startAngle = dimensions.x0 * 2 * Math.PI;
@@ -75,8 +76,8 @@ export default function Sunburst(props: SunburstProps) {
   }
 
   function getTargetPaths(node: Node) {
-    const isReportRoot = node.path === props.root.path;
-    const isDiagramRoot = node.path === props.diagramRootPath;
+    const isReportRoot = arePathsEqual(node.path, props.root.path);
+    const isDiagramRoot = arePathsEqual(node.path, props.diagramRootPath);
     const isFile = node.type === NODE_TYPE.FILE;
     const isGroup = node.type === NODE_TYPE.GROUP;
 
