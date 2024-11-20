@@ -3,7 +3,7 @@ import {
   getNodesAlongPath,
   type Path,
   type Node,
-  displayName,
+  getDisplayName,
 } from "../../utils/zon";
 
 type BreadcrumbsProps = {
@@ -39,7 +39,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
               }}
               onClick={[props.setDiagramRootPath, node.targetPath]}
             >
-              <span>{displayName(node.name)}</span>
+              <span>{getDisplayName(node.name)}</span>
             </button>
             <Show when={i() !== lastNodeIndex()}>
               <span style={{ color: "white" }}>{" / "}</span>

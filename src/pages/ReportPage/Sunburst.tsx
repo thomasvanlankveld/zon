@@ -7,7 +7,7 @@ import {
   getDescendants,
   getNodeByPath,
   getParentPath,
-  pathString,
+  getPathString,
 } from "../../utils/zon.ts";
 import createElementSize from "../../primitives/createElementSize.ts";
 
@@ -49,7 +49,7 @@ export default function Sunburst(props: SunburstProps) {
 
     if (node.numberOfLines === 0) {
       throw new Error(
-        `Can't draw an arc for node ${pathString(node.path)} because it has 0 lines`,
+        `Can't draw an arc for node ${getPathString(node.path)} because it has 0 lines`,
       );
     }
 

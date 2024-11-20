@@ -58,7 +58,7 @@ export function getProjectName(projectPath: string): string {
  * @param name
  * @returns
  */
-export function displayName(name: SegmentName): string {
+export function getDisplayName(name: SegmentName): string {
   if (name === NODE_TYPE.GROUP) {
     // TODO: i18n
     return "Smaller items";
@@ -78,7 +78,7 @@ export function displayName(name: SegmentName): string {
  * @param path
  * @returns
  */
-export function pathString(path: Path | null): string {
+export function getPathString(path: Path | null): string {
   if (path == null) {
     return "null";
   }
@@ -113,7 +113,7 @@ export function createTree(
       // Create or update all parent folders, then create the file
       for (let i = 0; i < filePathSegments.length; i++) {
         const nodePath = filePathSegments.slice(0, i + 1);
-        const nodePathStr = pathString(nodePath);
+        const nodePathStr = getPathString(nodePath);
 
         if (nodePathStr in nodes) {
           const node = nodes[nodePathStr];
@@ -153,17 +153,17 @@ export function createTree(
 
           if (i > 0) {
             const parentPath = getParentPath(nodePath);
-            const parent = nodes[pathString(parentPath)];
+            const parent = nodes[getPathString(parentPath)];
 
             if (parent == null) {
               throw new Error(
-                `Parent "${pathString(parentPath)}" of child "${pathString(nodePath)}" does not exist`,
+                `Parent "${getPathString(parentPath)}" of child "${getPathString(nodePath)}" does not exist`,
               );
             }
 
             if (parent.type !== NODE_TYPE.FOLDER) {
               throw new Error(
-                `Parent "${pathString(parentPath)}" of child "${pathString(nodePath)}" is not a folder`,
+                `Parent "${getPathString(parentPath)}" of child "${getPathString(nodePath)}" is not a folder`,
               );
             }
 
@@ -338,7 +338,7 @@ export function getNodeByPath(root: Node, path: Path): Node {
 
     if (node.type === NODE_TYPE.FILE) {
       throw new Error(
-        `Can't find node "${pathString(path)}" in "${pathString([root.name])}": ${pathString(node.path)} is a file`,
+        `Can't find node "${getPathString(path)}" in "${getPathString([root.name])}": ${getPathString(node.path)} is a file`,
       );
     }
 
@@ -346,7 +346,7 @@ export function getNodeByPath(root: Node, path: Path): Node {
 
     if (match == null) {
       throw new Error(
-        `Can't find node "${pathString(path)}" in "${pathString([root.name])}": "${pathString(node.path)}" does not have a child named "${pathString([segment])}"`,
+        `Can't find node "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(node.path)}" does not have a child named "${getPathString([segment])}"`,
       );
     }
 
@@ -366,7 +366,7 @@ export function getNodesAlongPath(root: Node, path: Path): Node[] {
 
     if (parent.type === NODE_TYPE.FILE) {
       throw new Error(
-        `Can't get nodes along path "${pathString(path)}" in "${pathString([root.name])}": "${pathString(parent.path)}" is a file"`,
+        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" is a file"`,
       );
     }
 
@@ -374,7 +374,7 @@ export function getNodesAlongPath(root: Node, path: Path): Node[] {
 
     if (match == null) {
       throw new Error(
-        `Can't get nodes along path "${pathString(path)}" in "${pathString([root.name])}": "${pathString(parent.path)}" does not have a child named "${pathString([segment])}"`,
+        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" does not have a child named "${getPathString([segment])}"`,
       );
     }
 

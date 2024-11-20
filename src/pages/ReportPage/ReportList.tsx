@@ -5,8 +5,8 @@ import {
   NODE_TYPE,
   type Path,
   type Node,
-  displayName,
-  pathString,
+  getDisplayName,
+  getPathString,
 } from "../../utils/zon";
 
 type ReportListProps = {
@@ -26,7 +26,7 @@ export default function ReportList(props: ReportListProps) {
 
     if (maybeListRoot.type === NODE_TYPE.FILE) {
       throw new Error(
-        `Can't list files in "${pathString(props.listRootPath)}", because it's a file`,
+        `Can't list files in "${getPathString(props.listRootPath)}", because it's a file`,
       );
     }
 
@@ -63,7 +63,7 @@ export default function ReportList(props: ReportListProps) {
           "white-space": "pre",
         }}
       >
-        {displayName(listRoot().name)} {listRoot().numberOfLines}
+        {getDisplayName(listRoot().name)} {listRoot().numberOfLines}
       </h4>
       <nav aria-label={`${listRoot.name} content list`}>
         <For each={listNodes()}>
@@ -80,7 +80,7 @@ export default function ReportList(props: ReportListProps) {
               onMouseLeave={[props.setHoverListPath, null]}
               onClick={[props.setDiagramRootPath, child.targetPath]}
             >
-              {displayName(child.name)} {child.numberOfLines}
+              {getDisplayName(child.name)} {child.numberOfLines}
             </button>
           )}
         </For>
