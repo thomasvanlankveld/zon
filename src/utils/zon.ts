@@ -375,13 +375,6 @@ type GetDescendantsOptions = {
     minLines?: number;
     maxDepth?: number;
   };
-  // TODO: Remove unneeded grouping logic
-  group?: {
-    // TODO: Maybe replace `group.minLines` with a callback?
-    minLines?: number;
-    // TODO: Maybe we don't need maxChildren?
-    maxChildren?: number;
-  };
 };
 
 export function getDescendants(
@@ -403,53 +396,11 @@ export function getDescendants(
     return [node];
   }
 
-  const groupMinLines = options.group?.minLines ?? 0;
-  const groupMaxChildren = options.group?.maxChildren ?? Infinity;
-
-  const visibleChildren = node.children
-    .slice(0, groupMaxChildren)
-    // TODO: Instead of filter, partition?
-    .filter((child) => child.numberOfLines >= groupMinLines);
-
-  const childDescendants = visibleChildren.flatMap((child) =>
+  const childDescendants = node.children.flatMap((child) =>
     getDescendants(child, options),
   );
 
-  const nodes = [node, ...childDescendants];
-
-  if (node.children.length > visibleChildren.length) {
-    // The number of hidden nodes may be much larger than the number of visible ones, so we calculate the hidden stats
-    // by subtracting the visible totals from the parent's total
-    const visibleStats = sumStats(visibleChildren.map((child) => child.stats));
-    const hiddenStats = subtractStats(node.stats, visibleStats);
-
-    const lastVisibleChild = visibleChildren.at(-1);
-    const firstHiddenLine =
-      lastVisibleChild != null
-        ? lastVisibleChild.firstLine + lastVisibleChild.numberOfLines
-        : node.firstLine;
-
-    const hiddenNumberOfLines =
-      node.numberOfLines -
-      visibleChildren.reduce((acc, child) => acc + child.numberOfLines, 0);
-
-    const group: Node = {
-      type: NODE_TYPE.GROUP,
-      stats: hiddenStats,
-      path: [...node.path, NODE_TYPE.GROUP],
-      name: NODE_TYPE.GROUP,
-      numberOfLines: hiddenNumberOfLines,
-      firstLine: firstHiddenLine,
-      color: "grey",
-      depth: node.depth + 1,
-      height: 0,
-      groupedChildren: [],
-    };
-
-    nodes.push(group);
-  }
-
-  return nodes;
+  return [node, ...childDescendants];
 }
 
 export function getNodeByPath(root: Node, path: Path): Node {
