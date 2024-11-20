@@ -10,7 +10,7 @@ import {
 type BreadcrumbsProps = {
   root: Node;
   path: Path;
-  setDiagramRootPath: Setter<Path | null>;
+  setSelectedRootPath: Setter<Path | null>;
 };
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
@@ -38,7 +38,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
                 color: node.color,
                 cursor: "pointer",
               }}
-              onClick={[props.setDiagramRootPath, node.targetPath]}
+              onClick={[props.setSelectedRootPath, node.targetPath]}
             >
               <span>{getDisplayName(node.name)}</span>
             </button>

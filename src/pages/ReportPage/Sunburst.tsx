@@ -23,7 +23,7 @@ type SunburstProps = {
   root: Node;
   diagramRootPath: Path;
   setHoverArcPath: Setter<Path | null>;
-  setDiagramRootPath: Setter<Path | null>;
+  setSelectedRootPath: Setter<Path | null>;
 };
 
 export default function Sunburst(props: SunburstProps) {
@@ -78,13 +78,12 @@ export default function Sunburst(props: SunburstProps) {
   function getTargetPaths(node: Node) {
     const isReportRoot = arePathsEqual(node.path, props.root.path);
     const isDiagramRoot = arePathsEqual(node.path, props.diagramRootPath);
-    const isGroup = node.type === NODE_TYPE.GROUP;
 
     if (isReportRoot) {
       return { clickTarget: null, hoverTarget: null };
     }
 
-    if (isDiagramRoot || isGroup) {
+    if (isDiagramRoot) {
       return { clickTarget: getParentPath(node.path), hoverTarget: node.path };
     }
 
@@ -124,7 +123,7 @@ export default function Sunburst(props: SunburstProps) {
               style={{ "stroke-width": "2px; opacity: 0.7", cursor: "pointer" }}
               onMouseEnter={[props.setHoverArcPath, node.hoverTarget]}
               onMouseLeave={[props.setHoverArcPath, null]}
-              onClick={[props.setDiagramRootPath, node.clickTarget]}
+              onClick={[props.setSelectedRootPath, node.clickTarget]}
             />
           )}
         </For>

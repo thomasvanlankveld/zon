@@ -1,19 +1,17 @@
 import { createMemo, For, type Setter } from "solid-js";
 import {
   getNodeByPath,
-  getParentPath,
   NODE_TYPE,
   type Path,
   type Node,
   getDisplayName,
-  //   getPathString,
 } from "../../utils/zon";
 
 type ReportListProps = {
   root: Node;
   listRootPath: Path | null;
   setHoverListPath: Setter<Path | null>;
-  setDiagramRootPath: Setter<Path | null>;
+  setSelectedRootPath: Setter<Path | null>;
 };
 
 export default function ReportList(props: ReportListProps) {
@@ -24,14 +22,6 @@ export default function ReportList(props: ReportListProps) {
       : props.root,
   );
 
-  function getTargetPath(node: Node): Path | null {
-    if (node.type === NODE_TYPE.GROUP) {
-      return getParentPath(node.path);
-    }
-
-    return node.path;
-  }
-
   const listNodes = () => {
     const root = listRoot();
 
@@ -39,13 +29,9 @@ export default function ReportList(props: ReportListProps) {
       return [];
     }
 
-    const children =
-      root.type === NODE_TYPE.FOLDER ? root.children : root.groupedChildren;
-
-    return children.map((child) => ({
-      ...child,
-      targetPath: getTargetPath(child),
-    }));
+    return root.type === NODE_TYPE.FOLDER
+      ? root.children
+      : root.groupedChildren;
   };
 
   return (
@@ -71,9 +57,9 @@ export default function ReportList(props: ReportListProps) {
                 margin: 0,
                 "white-space": "pre",
               }}
-              onMouseEnter={[props.setHoverListPath, child.targetPath]}
+              onMouseEnter={[props.setHoverListPath, child.path]}
               onMouseLeave={[props.setHoverListPath, null]}
-              onClick={[props.setDiagramRootPath, child.targetPath]}
+              onClick={[props.setSelectedRootPath, child.path]}
             >
               {getDisplayName(child.name)} {child.numberOfLines}
             </button>

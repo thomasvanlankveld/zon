@@ -1,6 +1,7 @@
 import { createEffect, createMemo, createSignal } from "solid-js";
 import {
   getNodeByPath,
+  getParentPath,
   groupSmallestNodes,
   withNode,
   type Node,
@@ -18,13 +19,21 @@ type ReportPageProps = {
 
 export default function ReportPage(props: ReportPageProps) {
   // Path of the selected file
-  const [selectedDiagramRootPath, setDiagramRootPath] =
-    createSignal<Path | null>(null);
+  const [selectedRootPath, setSelectedRootPath] = createSignal<Path | null>(
+    null,
+  );
   const defaultRootPath = () => props.root.path.slice(-1);
-  const diagramRootPath = createMemo(
-    () => selectedDiagramRootPath() ?? defaultRootPath(),
+  const currentRootPath = createMemo(
+    () => selectedRootPath() ?? defaultRootPath(),
   );
 
+  const diagramRootPath = createMemo(() => {
+    const isSmallerItems = currentRootPath().at(-1);
+
+    return isSmallerItems
+      ? getParentPath(currentRootPath())
+      : currentRootPath();
+  });
   const diagramRoot = createMemo(() =>
     getNodeByPath(props.root, diagramRootPath()),
   );
@@ -48,7 +57,7 @@ export default function ReportPage(props: ReportPageProps) {
 
   // TODO: Move "highlighted" into reactive state, so that SolidJS can update only the needed elements
 
-  const breadcrumbPath = () => hoverArcPath() ?? diagramRootPath();
+  const breadcrumbPath = () => hoverArcPath() ?? currentRootPath();
 
   return (
     <main
@@ -70,7 +79,7 @@ export default function ReportPage(props: ReportPageProps) {
       <Breadcrumbs
         root={groupedReportRoot()}
         path={breadcrumbPath()}
-        setDiagramRootPath={setDiagramRootPath}
+        setSelectedRootPath={setSelectedRootPath}
       />
       {/* TODO: Fix scrolling down the list */}
       <div
@@ -85,13 +94,13 @@ export default function ReportPage(props: ReportPageProps) {
           root={groupedReportRoot()}
           diagramRootPath={diagramRootPath()}
           setHoverArcPath={setHoverArcPath}
-          setDiagramRootPath={setDiagramRootPath}
+          setSelectedRootPath={setSelectedRootPath}
         />
         <ReportList
           root={groupedReportRoot()}
-          listRootPath={hoverArcPath() ?? diagramRootPath()}
+          listRootPath={hoverArcPath() ?? currentRootPath()}
           setHoverListPath={setHoverListPath}
-          setDiagramRootPath={setDiagramRootPath}
+          setSelectedRootPath={setSelectedRootPath}
         />
       </div>
       {/* For debugging: */}
