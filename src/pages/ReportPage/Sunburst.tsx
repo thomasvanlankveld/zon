@@ -74,19 +74,23 @@ export default function Sunburst(props: SunburstProps) {
     return getArc({ innerRadius, outerRadius, startAngle, endAngle });
   }
 
-  function getTargetPath(node: Node): Path | null {
+  function getTargetPaths(node: Node) {
     const isReportRoot = node.path === props.root.path;
     const isDiagramRoot = node.path === props.diagramRootPath;
     const isFile = node.type === NODE_TYPE.FILE;
     const isGroup = node.type === NODE_TYPE.GROUP;
 
     if (isReportRoot) {
-      return null;
-    } else if (isDiagramRoot || isFile || isGroup) {
-      return getParentPath(node.path);
-    } else {
-      return node.path;
+      return { clickTarget: null, hoverTarget: null };
     }
+
+    if (isDiagramRoot) {
+      return { clickTarget: getParentPath(node.path), hoverTarget: node.path };
+    }
+
+    const targetPath = isFile || isGroup ? getParentPath(node.path) : node.path;
+
+    return { clickTarget: targetPath, hoverTarget: targetPath };
   }
 
   const nodes = () =>
@@ -97,10 +101,11 @@ export default function Sunburst(props: SunburstProps) {
         minLines: 1,
         maxDepth: diagramRoot().depth + maxDepthFromRoot(),
       },
-    }).map((node) => ({
+    }).map((node, i) => ({
       ...node,
+      ...getTargetPaths(node),
       arc: getNodeArc(getArcDimensions(node)),
-      targetPath: getTargetPath(node),
+      color: i === 0 ? "transparent" : node.color,
     }));
 
   // TODO:
@@ -118,9 +123,9 @@ export default function Sunburst(props: SunburstProps) {
               fill={node.color}
               stroke="black"
               style={{ "stroke-width": "2px; opacity: 0.7", cursor: "pointer" }}
-              onMouseEnter={[props.setHoverArcPath, node.targetPath]}
+              onMouseEnter={[props.setHoverArcPath, node.hoverTarget]}
               onMouseLeave={[props.setHoverArcPath, null]}
-              onClick={[props.setDiagramRootPath, node.targetPath]}
+              onClick={[props.setDiagramRootPath, node.clickTarget]}
             />
           )}
         </For>
