@@ -3,6 +3,7 @@ import {
   getNodeByPath,
   getParentPath,
   groupSmallestNodes,
+  NODE_TYPE,
   withNode,
   type Node,
   type Path,
@@ -27,13 +28,11 @@ export default function ReportPage(props: ReportPageProps) {
     () => selectedRootPath() ?? defaultRootPath(),
   );
 
-  const diagramRootPath = createMemo(() => {
-    const isSmallerItems = currentRootPath().at(-1);
-
-    return isSmallerItems
+  const diagramRootPath = createMemo(() =>
+    currentRootPath().at(-1) === NODE_TYPE.GROUP
       ? getParentPath(currentRootPath())
-      : currentRootPath();
-  });
+      : currentRootPath(),
+  );
   const diagramRoot = createMemo(() =>
     getNodeByPath(props.root, diagramRootPath()),
   );
