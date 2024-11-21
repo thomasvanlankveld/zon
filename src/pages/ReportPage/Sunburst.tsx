@@ -95,27 +95,39 @@ export default function Sunburst(props: SunburstProps) {
     return { clickTarget: node.path, hoverTarget: node.path };
   }
 
+  function getArcColors(node: Node) {
+    const isDiagramRoot = arePathsEqual(node.path, props.diagramRootPath);
+
+    if (isDiagramRoot) {
+      return {
+        arcFillColor: "transparent",
+        arcPressedColor: "transparent",
+      };
+    }
+
+    const isHighlighted = arePathsEqual(props.highlightedPath, node.path);
+
+    return {
+      arcFillColor: isHighlighted ? node.colors.highlighted : node.colors.base,
+      arcPressedColor: node.colors.pressed,
+    };
+  }
+
   const nodes = () =>
-    // TODO: Move exclusion and grouping to an earlier stage, for easy consistency with list and breadcrumbs
     getDescendants(diagramRoot(), {
       exclude: {
         // Can't render arcs for nodes with 0 lines
         minLines: 1,
         maxDepth: diagramRoot().depth + maxDepthFromRoot(),
       },
-    }).map((node, i) => ({
-      ...node,
-      ...getTargetPaths(node),
-      arc: getNodeArc(getArcDimensions(node)),
-      colors:
-        i === 0 && node.type !== NODE_TYPE.FILE
-          ? {
-              base: "transparent",
-              highlighted: "transparent",
-              pressed: "transparent",
-            }
-          : node.colors,
-    }));
+    }).map((node) => {
+      return {
+        ...node,
+        ...getTargetPaths(node),
+        ...getArcColors(node),
+        arc: getNodeArc(getArcDimensions(node)),
+      };
+    });
 
   function navigate(path: Path) {
     batch(() => {
@@ -126,10 +138,6 @@ export default function Sunburst(props: SunburstProps) {
     });
   }
 
-  // TODO:
-  // - Add padding between segments?
-  // - Leave some room for stroke, between svg width / height and the outermost arcs
-  // - Zoom "slider"?
   return (
     <svg ref={setSvg} style={{ flex: "1 1 0%" }}>
       <g transform={`translate(${center().x},${center().y})`}>
@@ -138,13 +146,8 @@ export default function Sunburst(props: SunburstProps) {
             <path
               d={node.arc}
               style={{
-                "--arc-fill-color": arePathsEqual(
-                  props.highlightedPath,
-                  node.path,
-                )
-                  ? node.colors.highlighted
-                  : node.colors.base,
-                "--arc-pressed-color": node.colors.pressed,
+                "--arc-fill-color": node.arcFillColor,
+                "--arc-pressed-color": node.arcPressedColor,
               }}
               class={styles.sunburst__arc}
               onMouseEnter={[props.setHoverArcPath, node.hoverTarget]}
