@@ -1,10 +1,17 @@
-import { createMemo, For, type Setter } from "solid-js";
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  For,
+  type Setter,
+} from "solid-js";
 import {
   getNodeByPath,
   NODE_TYPE,
   type Path,
   type Node,
   getDisplayName,
+  getPathString,
 } from "../../utils/zon";
 
 type ReportListProps = {
@@ -15,6 +22,15 @@ type ReportListProps = {
 };
 
 export default function ReportList(props: ReportListProps) {
+  const [showGroup, setShowGroup] = createSignal(false);
+
+  createEffect((prevRoot) => {
+    if (prevRoot !== props.listRootPath) {
+      setShowGroup(false);
+    }
+    return props.listRootPath;
+  });
+
   // Select root node for the list view (either root or the file of the hovered arc)
   const listRoot = createMemo(() =>
     props.listRootPath != null
@@ -29,21 +45,34 @@ export default function ReportList(props: ReportListProps) {
       return [];
     }
 
-    return root.type === NODE_TYPE.FOLDER
-      ? root.children
-      : root.groupedChildren;
+    if (root.type === NODE_TYPE.GROUP) {
+      return root.groupedChildren;
+    }
+
+    if (root.type !== NODE_TYPE.FOLDER) {
+      throw new Error(
+        `Node "${getPathString(root.path)}" has unknown type ${root.type.toString()}`,
+      );
+    }
+
+    const lastChild = root.children.at(-1);
+
+    if (lastChild?.type !== NODE_TYPE.GROUP || !showGroup()) {
+      return root.children;
+    }
+
+    const directChildren = root.children.slice(0, -1);
+    const { groupedChildren } = lastChild;
+
+    return [...directChildren, ...groupedChildren];
   };
 
   function onListItemClick(node: Node) {
-    const isFile = node.type === NODE_TYPE.FILE;
-    // TODO: When node is group, toggle smaller items visibility
-    const isGroup = node.type === NODE_TYPE.GROUP;
-
-    if (isFile || isGroup) {
-      return;
+    if (node.type === NODE_TYPE.GROUP) {
+      setShowGroup(true);
+    } else if (node.type === NODE_TYPE.FOLDER) {
+      props.setSelectedRootPath(node.path);
     }
-
-    props.setSelectedRootPath(node.path);
   }
 
   return (
