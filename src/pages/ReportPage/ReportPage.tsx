@@ -1,9 +1,7 @@
 import { createEffect, createMemo, createSignal } from "solid-js";
 import {
   getNodeByPath,
-  getParentPath,
   groupSmallestNodes,
-  NODE_TYPE,
   withNode,
   type Node,
   type Path,
@@ -24,15 +22,10 @@ export default function ReportPage(props: ReportPageProps) {
     null,
   );
   const defaultRootPath = () => props.root.path.slice(-1);
-  const currentRootPath = createMemo(
+  const diagramRootPath = createMemo(
     () => selectedRootPath() ?? defaultRootPath(),
   );
 
-  const diagramRootPath = createMemo(() =>
-    currentRootPath().at(-1) === NODE_TYPE.GROUP
-      ? getParentPath(currentRootPath())
-      : currentRootPath(),
-  );
   const diagramRoot = createMemo(() =>
     getNodeByPath(props.root, diagramRootPath()),
   );
@@ -56,7 +49,7 @@ export default function ReportPage(props: ReportPageProps) {
 
   // TODO: Move "highlighted" into reactive state, so that SolidJS can update only the needed elements
 
-  const breadcrumbPath = () => hoverArcPath() ?? currentRootPath();
+  const breadcrumbPath = () => hoverArcPath() ?? diagramRootPath();
 
   return (
     <main
@@ -97,7 +90,7 @@ export default function ReportPage(props: ReportPageProps) {
         />
         <ReportList
           root={groupedReportRoot()}
-          listRootPath={hoverArcPath() ?? currentRootPath()}
+          listRootPath={hoverArcPath() ?? diagramRootPath()}
           setHoverListPath={setHoverListPath}
           setSelectedRootPath={setSelectedRootPath}
         />

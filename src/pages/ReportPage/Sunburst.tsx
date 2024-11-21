@@ -77,13 +77,16 @@ export default function Sunburst(props: SunburstProps) {
 
   function getTargetPaths(node: Node) {
     const isReportRoot = arePathsEqual(node.path, props.root.path);
-    const isDiagramRoot = arePathsEqual(node.path, props.diagramRootPath);
 
     if (isReportRoot) {
       return { clickTarget: null, hoverTarget: null };
     }
 
-    if (isDiagramRoot) {
+    const isDiagramRoot = arePathsEqual(node.path, props.diagramRootPath);
+    const isFile = node.type === NODE_TYPE.FILE;
+    const isGroup = node.type === NODE_TYPE.GROUP;
+
+    if (isDiagramRoot || isFile || isGroup) {
       return { clickTarget: getParentPath(node.path), hoverTarget: node.path };
     }
 

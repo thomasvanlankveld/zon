@@ -34,6 +34,18 @@ export default function ReportList(props: ReportListProps) {
       : root.groupedChildren;
   };
 
+  function onListItemClick(node: Node) {
+    const isFile = node.type === NODE_TYPE.FILE;
+    // TODO: When node is group, toggle smaller items visibility
+    const isGroup = node.type === NODE_TYPE.GROUP;
+
+    if (isFile || isGroup) {
+      return;
+    }
+
+    props.setSelectedRootPath(node.path);
+  }
+
   return (
     <div style={{ flex: "1 1 0%" }}>
       <h4
@@ -59,7 +71,7 @@ export default function ReportList(props: ReportListProps) {
               }}
               onMouseEnter={[props.setHoverListPath, child.path]}
               onMouseLeave={[props.setHoverListPath, null]}
-              onClick={[props.setSelectedRootPath, child.path]}
+              onClick={[onListItemClick, child]}
             >
               {getDisplayName(child.name)} {child.numberOfLines}
             </button>
