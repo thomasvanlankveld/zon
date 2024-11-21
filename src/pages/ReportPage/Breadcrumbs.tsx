@@ -29,7 +29,13 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   const lastNodeIndex = () => nodes().length - 1;
 
   return (
-    <nav style={{ "margin-bottom": "20px" }} aria-label="breadcrumbs">
+    <nav
+      style={{
+        "min-height": "calc(2 * var(--line-height))",
+        "max-height": "calc(2 * var(--line-height))",
+      }}
+      aria-label="breadcrumbs"
+    >
       <For each={nodes()}>
         {(node, i) => (
           <>

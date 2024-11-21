@@ -54,8 +54,9 @@ export default function ReportPage(props: ReportPageProps) {
         height: "100%",
         "max-height": "100%",
         "box-sizing": "border-box",
-        padding: "1rem",
+        padding: "2rem",
         display: "grid",
+        gap: "1rem",
         "grid-auto-rows": "min-content min-content 1fr",
         overflow: "hidden",
       }}
@@ -74,7 +75,7 @@ export default function ReportPage(props: ReportPageProps) {
       <div
         style={{
           display: "flex",
-          gap: "1rem",
+          gap: "2rem",
           "align-items": "stretch",
           overflow: "hidden",
         }}

@@ -28,9 +28,11 @@ body,
 }
 
 :root {
+  --line-height: 1.5rem;
+
   font-family: "Fira Code";
   font-size: 1rem;
-  line-height: 1.5rem;
+  line-height: var(--line-height);
   font-weight: 400;
 
   font-synthesis: none;
