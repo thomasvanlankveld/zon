@@ -1,0 +1,10 @@
+.sunburst__arc {
+  cursor: pointer;
+  stroke: black;
+  stroke-width: 1px;
+  fill-rule: evenodd;
+  fill: var(--arc-fill-color);
+}
+.sunburst__arc:active {
+  fill: var(--arc-pressed-color);
+}

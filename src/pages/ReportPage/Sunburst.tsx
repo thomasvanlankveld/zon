@@ -11,6 +11,7 @@ import {
   arePathsEqual,
 } from "../../utils/zon.ts";
 import createElementSize from "../../primitives/createElementSize.ts";
+import styles from "./Sunburst.module.css";
 
 type Dimensions = {
   x0: number;
@@ -22,6 +23,7 @@ type Dimensions = {
 type SunburstProps = {
   root: Node;
   diagramRootPath: Path;
+  highlightedPath: Path | null;
   setHoverArcPath: Setter<Path | null>;
   setSelectedRootPath: Setter<Path | null>;
 };
@@ -105,8 +107,14 @@ export default function Sunburst(props: SunburstProps) {
       ...node,
       ...getTargetPaths(node),
       arc: getNodeArc(getArcDimensions(node)),
-      color:
-        i === 0 && node.type !== NODE_TYPE.FILE ? "transparent" : node.color,
+      colors:
+        i === 0 && node.type !== NODE_TYPE.FILE
+          ? {
+              base: "transparent",
+              highlighted: "transparent",
+              pressed: "transparent",
+            }
+          : node.colors,
     }));
 
   function navigate(path: Path) {
@@ -129,10 +137,16 @@ export default function Sunburst(props: SunburstProps) {
           {(node) => (
             <path
               d={node.arc}
-              fill-rule="evenodd"
-              fill={node.color}
-              stroke="black"
-              style={{ "stroke-width": "2px; opacity: 0.7", cursor: "pointer" }}
+              style={{
+                "--arc-fill-color": arePathsEqual(
+                  props.highlightedPath,
+                  node.path,
+                )
+                  ? node.colors.highlighted
+                  : node.colors.base,
+                "--arc-pressed-color": node.colors.pressed,
+              }}
+              class={styles.sunburst__arc}
               onMouseEnter={[props.setHoverArcPath, node.hoverTarget]}
               onMouseLeave={[props.setHoverArcPath, null]}
               onClick={[navigate, node.clickTarget]}

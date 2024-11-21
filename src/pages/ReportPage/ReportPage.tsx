@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal } from "solid-js";
+import { createMemo, createSignal } from "solid-js";
 import {
   getNodeByPath,
   groupSmallestNodes,
@@ -44,12 +44,9 @@ export default function ReportPage(props: ReportPageProps) {
 
   // Path of the hovered list item
   const [hoverListPath, setHoverListPath] = createSignal<Path | null>(null);
-  // TODO: Actually use hoverListPath
-  createEffect(() => console.log("hoverListPath", hoverListPath()));
-
-  // TODO: Move "highlighted" into reactive state, so that SolidJS can update only the needed elements
 
   const breadcrumbPath = () => hoverArcPath() ?? diagramRootPath();
+  const highlightedPath = () => hoverListPath() ?? hoverArcPath();
 
   return (
     <main
@@ -70,7 +67,7 @@ export default function ReportPage(props: ReportPageProps) {
       {/* TODO: Add line count? Maybe keep hashmap of all root descendants for fast lookup? */}
       <Breadcrumbs
         root={groupedReportRoot()}
-        path={breadcrumbPath()}
+        breadcrumbPath={breadcrumbPath()}
         setSelectedRootPath={setSelectedRootPath}
       />
       {/* TODO: Fix scrolling down the list */}
@@ -85,6 +82,7 @@ export default function ReportPage(props: ReportPageProps) {
         <Sunburst
           root={groupedReportRoot()}
           diagramRootPath={diagramRootPath()}
+          highlightedPath={highlightedPath()}
           setHoverArcPath={setHoverArcPath}
           setSelectedRootPath={setSelectedRootPath}
         />

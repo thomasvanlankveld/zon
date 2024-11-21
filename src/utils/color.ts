@@ -11,9 +11,7 @@ export function rainbow(t: number) {
 
   const ts = Math.abs(t - 0.5);
 
-  return cubehelix(360 * t - 100, 1.5 - 1.5 * ts, 0.8 - 0.9 * ts)
-    .toRgb()
-    .toString();
+  return cubehelix(360 * t - 100, 1.5 - 1.5 * ts, 0.8 - 0.9 * ts).toRgb();
 }
 
 const radians = Math.PI / 180;
@@ -65,7 +63,10 @@ function clampi(value: number) {
   return Math.max(0, Math.min(255, Math.round(value) || 0));
 }
 
-class Rgb {
+const darker = 0.7;
+const brighter = 1 / darker;
+
+export class Rgb {
   private r: number;
   private g: number;
   private b: number;
@@ -76,6 +77,16 @@ class Rgb {
     this.g = +g;
     this.b = +b;
     this.opacity = +opacity;
+  }
+
+  brighter(k?: number) {
+    k = k == null ? brighter : Math.pow(brighter, k);
+    return new Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
+  }
+
+  darker(k?: number) {
+    k = k == null ? darker : Math.pow(darker, k);
+    return new Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
   }
 
   toString() {

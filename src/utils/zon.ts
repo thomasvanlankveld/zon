@@ -18,13 +18,19 @@ export type NODE_TYPE = keyof typeof NODE_TYPE;
 export type SegmentName = string | typeof NODE_TYPE.GROUP;
 export type Path = SegmentName[];
 
+type Colors = {
+  base: string;
+  highlighted: string;
+  pressed: string;
+};
+
 type NodeBase = {
   stats: CodeStats;
   path: Path;
   name: SegmentName;
   numberOfLines: number;
   firstLine: number;
-  color: string;
+  colors: Colors;
   depth: number;
 };
 
@@ -90,7 +96,15 @@ export function getPathString(path: Path | null): string {
     .join("/");
 }
 
-export function arePathsEqual(left: Path, right: Path): boolean {
+export function arePathsEqual(left: Path | null, right: Path | null): boolean {
+  if (left == null && right == null) {
+    return true;
+  }
+
+  if (left == null || right == null) {
+    return false;
+  }
+
   if (left.length !== right.length) {
     return false;
   }
@@ -139,7 +153,7 @@ export function createTree(
             depth: i,
             // Actual values of `firstLine` and `color` can only be determined after sorting
             firstLine: 0,
-            color: "",
+            colors: { base: "", highlighted: "", pressed: "" },
           };
 
           const isFile = i === filePathSegments.length - 1;
@@ -221,7 +235,16 @@ function addDeduced(
     child.firstLine = lineNumber;
 
     const middleLine = lineNumber + child.numberOfLines / 2;
-    child.color = rainbow(middleLine / totalNumberOfLines);
+
+    const baseColor = rainbow(middleLine / totalNumberOfLines);
+    const highlightedColor = baseColor.brighter(0.5);
+    const pressedColor = baseColor.darker(1);
+
+    child.colors = {
+      base: baseColor.toString(),
+      highlighted: highlightedColor.toString(),
+      pressed: pressedColor.toString(),
+    };
 
     addDeduced(child, totalNumberOfLines, lineNumber);
 
@@ -304,7 +327,11 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
     name: NODE_TYPE.GROUP,
     numberOfLines: hiddenNumberOfLines,
     firstLine: firstHiddenLine,
-    color: "grey",
+    colors: {
+      base: "grey",
+      highlighted: "grey",
+      pressed: "grey",
+    },
     depth: node.depth + 1,
     height: 0,
     groupedChildren: hiddenChildren,

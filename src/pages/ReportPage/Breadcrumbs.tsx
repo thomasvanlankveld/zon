@@ -9,7 +9,7 @@ import {
 
 type BreadcrumbsProps = {
   root: Node;
-  path: Path;
+  breadcrumbPath: Path;
   setSelectedRootPath: Setter<Path | null>;
 };
 
@@ -20,7 +20,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   }
 
   const nodes = createMemo(() =>
-    getNodesAlongPath(props.root, props.path).map((node) => ({
+    getNodesAlongPath(props.root, props.breadcrumbPath).map((node) => ({
       ...node,
       targetPath: getTargetPath(node),
     })),
@@ -35,7 +35,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
             <button
               {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
               style={{
-                color: node.color,
+                color: node.colors.base,
                 cursor: "pointer",
               }}
               onClick={[props.setSelectedRootPath, node.targetPath]}

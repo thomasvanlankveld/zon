@@ -92,7 +92,7 @@ export default function ReportList(props: ReportListProps) {
           {(child) => (
             <button
               style={{
-                color: child.color,
+                color: child.colors.base,
                 cursor: "pointer",
                 display: "block",
                 margin: 0,
