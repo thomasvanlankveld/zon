@@ -6,6 +6,7 @@ import {
   getDisplayName,
   arePathsEqual,
 } from "../../utils/zon";
+import styles from "../../styles/reset-button.module.css";
 
 type BreadcrumbsProps = {
   root: Node;
@@ -38,6 +39,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
                 color: node.colors.base,
                 cursor: "pointer",
               }}
+              class={styles["reset-button"]}
               onClick={[props.setSelectedRootPath, node.targetPath]}
             >
               <span>{getDisplayName(node.name)}</span>

@@ -1,5 +1,5 @@
 import { Show } from "solid-js";
-import UploadButton from "../components/UploadButton";
+import UploadButton from "../components/UploadButton/UploadButton";
 import CountingLines from "../components/CountingLines";
 
 type LandingPageProps = {

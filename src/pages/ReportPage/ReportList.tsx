@@ -13,6 +13,7 @@ import {
   getDisplayName,
   getPathString,
 } from "../../utils/zon";
+import styles from "../../styles/reset-button.module.css";
 
 type ReportListProps = {
   root: Node;
@@ -98,6 +99,7 @@ export default function ReportList(props: ReportListProps) {
                 margin: 0,
                 "white-space": "pre",
               }}
+              class={styles["reset-button"]}
               onMouseEnter={[props.setHoverListPath, child.path]}
               onMouseLeave={[props.setHoverListPath, null]}
               onClick={[onListItemClick, child]}

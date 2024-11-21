@@ -8,7 +8,7 @@ import {
 } from "../../utils/zon.ts";
 import Sunburst from "./Sunburst.tsx";
 import ReportList from "./ReportList.tsx";
-import UploadButton from "../../components/UploadButton.tsx";
+import UploadButton from "../../components/UploadButton/UploadButton.tsx";
 import Breadcrumbs from "./Breadcrumbs.tsx";
 
 type ReportPageProps = {
