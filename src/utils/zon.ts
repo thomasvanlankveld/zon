@@ -222,6 +222,14 @@ function sortTree(node: Node): void {
   }
 }
 
+function getColors(base: Rgb): Colors {
+  return {
+    base: base.toString(),
+    highlighted: base.brighter(0.5).toString(),
+    pressed: base.darker(1).toString(),
+  };
+}
+
 function addDeduced(
   node: Node,
   totalNumberOfLines: number,
@@ -235,16 +243,7 @@ function addDeduced(
     child.firstLine = lineNumber;
 
     const middleLine = lineNumber + child.numberOfLines / 2;
-
-    const baseColor = rainbow(middleLine / totalNumberOfLines);
-    const highlightedColor = baseColor.brighter(0.5);
-    const pressedColor = baseColor.darker(1);
-
-    child.colors = {
-      base: baseColor.toString(),
-      highlighted: highlightedColor.toString(),
-      pressed: pressedColor.toString(),
-    };
+    child.colors = getColors(rainbow(middleLine / totalNumberOfLines));
 
     addDeduced(child, totalNumberOfLines, lineNumber);
 
@@ -283,9 +282,7 @@ type GroupOptions = {
   maxChildren: number;
 };
 
-const greyBase = new Rgb(125, 125, 125);
-const greyHighlighted = greyBase.brighter(0.5);
-const greyPressed = greyBase.darker(1);
+const greyColors = getColors(new Rgb(125, 125, 125));
 
 /**
  * Travels down the root and recursively replaces the smallest nodes with a group of the same size
@@ -331,11 +328,7 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
     name: NODE_TYPE.GROUP,
     numberOfLines: hiddenNumberOfLines,
     firstLine: firstHiddenLine,
-    colors: {
-      base: greyBase.toString(),
-      highlighted: greyHighlighted.toString(),
-      pressed: greyPressed.toString(),
-    },
+    colors: greyColors,
     depth: node.depth + 1,
     height: 0,
     groupedChildren: hiddenChildren,
