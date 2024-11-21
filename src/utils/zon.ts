@@ -1,4 +1,4 @@
-import { rainbow } from "./color.ts";
+import { rainbow, Rgb } from "./color.ts";
 import { CodeStats, Languages } from "./tokei.ts";
 
 export const LineType = {
@@ -283,6 +283,10 @@ type GroupOptions = {
   maxChildren: number;
 };
 
+const greyBase = new Rgb(125, 125, 125);
+const greyHighlighted = greyBase.brighter(0.5);
+const greyPressed = greyBase.darker(1);
+
 /**
  * Travels down the root and recursively replaces the smallest nodes with a group of the same size
  * @param node
@@ -328,9 +332,9 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
     numberOfLines: hiddenNumberOfLines,
     firstLine: firstHiddenLine,
     colors: {
-      base: "grey",
-      highlighted: "grey",
-      pressed: "grey",
+      base: greyBase.toString(),
+      highlighted: greyHighlighted.toString(),
+      pressed: greyPressed.toString(),
     },
     depth: node.depth + 1,
     height: 0,

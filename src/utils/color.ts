@@ -72,11 +72,11 @@ export class Rgb {
   private b: number;
   private opacity: number;
 
-  constructor(r: number, g: number, b: number, opacity: number) {
+  constructor(r: number, g: number, b: number, opacity?: number) {
     this.r = +r;
     this.g = +g;
     this.b = +b;
-    this.opacity = +opacity;
+    this.opacity = +(opacity ?? 1);
   }
 
   brighter(k?: number) {
