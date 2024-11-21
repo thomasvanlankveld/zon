@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, type Setter } from "solid-js";
+import { batch, createMemo, createSignal, For, type Setter } from "solid-js";
 import { getArc } from "../../utils/svg.ts";
 import {
   NODE_TYPE,
@@ -109,6 +109,15 @@ export default function Sunburst(props: SunburstProps) {
         i === 0 && node.type !== NODE_TYPE.FILE ? "transparent" : node.color,
     }));
 
+  function navigate(path: Path) {
+    batch(() => {
+      props.setSelectedRootPath(path);
+      // If the path targets a group, we set the hovered arc path to it as well. This prevents breaking breadcrumbs
+      // when clicking a group that will not exist anymore after "regrouping" due to the diagram root change.
+      props.setHoverArcPath(path);
+    });
+  }
+
   // TODO:
   // - Add padding between segments?
   // - Leave some room for stroke, between svg width / height and the outermost arcs
@@ -126,7 +135,7 @@ export default function Sunburst(props: SunburstProps) {
               style={{ "stroke-width": "2px; opacity: 0.7", cursor: "pointer" }}
               onMouseEnter={[props.setHoverArcPath, node.hoverTarget]}
               onMouseLeave={[props.setHoverArcPath, null]}
-              onClick={[props.setSelectedRootPath, node.clickTarget]}
+              onClick={[navigate, node.clickTarget]}
             />
           )}
         </For>
