@@ -77,40 +77,64 @@ export default function ReportList(props: ReportListProps) {
   }
 
   return (
-    <div style={{ flex: "1 1 0%" }}>
+    <div style={{ "overflow-x": "hidden" }}>
       <h4
         style={{
+          margin: "0",
           color: "white",
-          "margin-bottom": "22px",
           "font-weight": "normal",
           display: "flex",
           "justify-content": "space-between",
         }}
       >
-        <span>{getDisplayName(listRoot().name)}</span>
-        <span>{listRoot().numberOfLines} lines</span>
+        {/* TODO: Reuse ellipsis span between root and children */}
+        <span
+          style={{
+            "white-space": "nowrap",
+            overflow: "hidden",
+            "text-overflow": "ellipsis",
+          }}
+        >
+          {getDisplayName(listRoot().name)}
+        </span>
+        <span style={{ "white-space": "nowrap" }}>
+          {listRoot().numberOfLines} lines
+        </span>
       </h4>
       <nav
-        style={{ display: "grid" }}
+        style={{ display: "grid", "overflow-x": "hidden" }}
         aria-label={`${listRoot.name} content list`}
       >
         <For each={listNodes()}>
           {(child) => (
             <button
               style={{
+                margin: 0,
                 color: child.colors.base,
                 cursor: "pointer",
                 display: "flex",
                 "justify-content": "space-between",
-                margin: 0,
+                gap: "1rem",
+                "overflow-x": "hidden",
               }}
               class={styles["reset-button"]}
               onMouseEnter={[props.setHoverListPath, child.path]}
               onMouseLeave={[props.setHoverListPath, null]}
               onClick={[onListItemClick, child]}
             >
-              <span>{getDisplayName(child.name)}</span>
-              <span>{child.numberOfLines} lines</span>
+              {/* TODO: Reuse ellipsis span between root and children */}
+              <span
+                style={{
+                  "white-space": "nowrap",
+                  overflow: "hidden",
+                  "text-overflow": "ellipsis",
+                }}
+              >
+                {getDisplayName(child.name)}
+              </span>
+              <span style={{ "white-space": "nowrap" }}>
+                {child.numberOfLines} lines
+              </span>
             </button>
           )}
         </For>

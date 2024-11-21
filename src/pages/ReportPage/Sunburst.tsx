@@ -129,7 +129,7 @@ export default function Sunburst(props: SunburstProps) {
       };
     });
 
-  function navigate(path: Path) {
+  function navigate(path: Path | null) {
     batch(() => {
       props.setSelectedRootPath(path);
       // If the path targets a group, we set the hovered arc path to it as well. This prevents breaking breadcrumbs
@@ -139,7 +139,7 @@ export default function Sunburst(props: SunburstProps) {
   }
 
   return (
-    <svg ref={setSvg} style={{ flex: "1 1 0%" }}>
+    <svg ref={setSvg}>
       <g transform={`translate(${center().x},${center().y})`}>
         <For each={nodes()}>
           {(node) => (

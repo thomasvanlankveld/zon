@@ -57,43 +57,41 @@ export default function ReportPage(props: ReportPageProps) {
         padding: "2rem",
         display: "grid",
         gap: "1rem",
-        "grid-auto-rows": "min-content min-content 1fr",
+        "grid-template-rows": "min-content min-content 1fr",
+        "grid-template-columns": "4fr 3fr",
         overflow: "hidden",
+        "align-items": "stretch",
+        "justify-items": "stretch",
       }}
     >
-      <div style={{ display: "flex", "justify-content": "space-between" }}>
+      <div
+        style={{
+          "grid-column": "span 2 / span 2",
+          display: "flex",
+          "justify-content": "space-between",
+        }}
+      >
         <h1>Zon</h1>
         <UploadButton countLinesInFolder={props.countLinesInFolder} />
       </div>
-      {/* TODO: Add line count? Maybe keep hashmap of all root descendants for fast lookup? */}
       <Breadcrumbs
         root={groupedReportRoot()}
         breadcrumbPath={breadcrumbPath()}
         setSelectedRootPath={setSelectedRootPath}
       />
-      {/* TODO: Fix scrolling down the list */}
-      <div
-        style={{
-          display: "flex",
-          gap: "2rem",
-          "align-items": "stretch",
-          overflow: "hidden",
-        }}
-      >
-        <Sunburst
-          root={groupedReportRoot()}
-          diagramRootPath={diagramRootPath()}
-          highlightedPath={highlightedPath()}
-          setHoverArcPath={setHoverArcPath}
-          setSelectedRootPath={setSelectedRootPath}
-        />
-        <ReportList
-          root={groupedReportRoot()}
-          listRootPath={hoverArcPath() ?? diagramRootPath()}
-          setHoverListPath={setHoverListPath}
-          setSelectedRootPath={setSelectedRootPath}
-        />
-      </div>
+      <Sunburst
+        root={groupedReportRoot()}
+        diagramRootPath={diagramRootPath()}
+        highlightedPath={highlightedPath()}
+        setHoverArcPath={setHoverArcPath}
+        setSelectedRootPath={setSelectedRootPath}
+      />
+      <ReportList
+        root={groupedReportRoot()}
+        listRootPath={hoverArcPath() ?? diagramRootPath()}
+        setHoverListPath={setHoverListPath}
+        setSelectedRootPath={setSelectedRootPath}
+      />
       {/* For debugging: */}
       {/* <pre>{JSON.stringify(props.root, null, 2)}</pre> */}
     </main>

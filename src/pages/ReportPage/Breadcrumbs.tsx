@@ -31,8 +31,10 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   return (
     <nav
       style={{
+        "grid-column": "span 2 / span 2",
         "min-height": "calc(2 * var(--line-height))",
         "max-height": "calc(2 * var(--line-height))",
+        overflow: "hidden",
       }}
       aria-label="breadcrumbs"
     >
