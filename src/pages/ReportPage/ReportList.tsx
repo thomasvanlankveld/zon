@@ -83,28 +83,34 @@ export default function ReportList(props: ReportListProps) {
           color: "white",
           "margin-bottom": "22px",
           "font-weight": "normal",
-          "white-space": "pre",
+          display: "flex",
+          "justify-content": "space-between",
         }}
       >
-        {getDisplayName(listRoot().name)} {listRoot().numberOfLines}
+        <span>{getDisplayName(listRoot().name)}</span>
+        <span>{listRoot().numberOfLines} lines</span>
       </h4>
-      <nav aria-label={`${listRoot.name} content list`}>
+      <nav
+        style={{ display: "grid" }}
+        aria-label={`${listRoot.name} content list`}
+      >
         <For each={listNodes()}>
           {(child) => (
             <button
               style={{
                 color: child.colors.base,
                 cursor: "pointer",
-                display: "block",
+                display: "flex",
+                "justify-content": "space-between",
                 margin: 0,
-                "white-space": "pre",
               }}
               class={styles["reset-button"]}
               onMouseEnter={[props.setHoverListPath, child.path]}
               onMouseLeave={[props.setHoverListPath, null]}
               onClick={[onListItemClick, child]}
             >
-              {getDisplayName(child.name)} {child.numberOfLines}
+              <span>{getDisplayName(child.name)}</span>
+              <span>{child.numberOfLines} lines</span>
             </button>
           )}
         </For>
