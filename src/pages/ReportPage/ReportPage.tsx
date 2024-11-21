@@ -32,7 +32,7 @@ export default function ReportPage(props: ReportPageProps) {
   const groupedDiagramRoot = createMemo(() =>
     groupSmallestNodes(diagramRoot(), {
       minLines: Math.floor(diagramRoot().numberOfLines / 150),
-      maxChildren: 11, // TODO: Depend on list height?
+      maxChildren: 16,
     }),
   );
   const groupedReportRoot = createMemo(() =>
