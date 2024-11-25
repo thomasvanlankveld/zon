@@ -112,6 +112,10 @@ export function arePathsEqual(left: Path | null, right: Path | null): boolean {
   return left.every((segment, i) => segment === right[i]);
 }
 
+export function getParentPath(path: Path) {
+  return path.slice(0, -1);
+}
+
 export function createTree(
   projectPath: string,
   languages: Languages,
@@ -560,8 +564,4 @@ export function getNodesAlongPath(root: Node, path: Path): Node[] {
       return match;
     })
     .filter((node) => node !== null);
-}
-
-export function getParentPath(path: Path) {
-  return path.slice(0, -1);
 }
