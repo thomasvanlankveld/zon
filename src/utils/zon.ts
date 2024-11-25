@@ -432,76 +432,110 @@ export function getDescendants(
   return [node, ...childDescendants];
 }
 
+/**
+ * Get a child by its name.
+ *
+ * If the child is not in its parent's `children`, it will look for it in the parent's "group". This function throws an
+ * error if it does not find the child. This function is not recursive, the child has to be a direct child of the
+ * parent, or a direct child of the parent's group.
+ *
+ * @param parent
+ * @param childName
+ * @param errorPrefix
+ * @returns The child
+ */
+function getChild(
+  parent: Node,
+  childName: SegmentName,
+  errorPrefix: string,
+): Node {
+  if (parent.type !== NODE_TYPE.FOLDER) {
+    throw new Error(
+      `${errorPrefix}: "${getPathString(parent.path)}" is not a folder"`,
+    );
+  }
+
+  const topLevelMatch = parent.children.find(
+    (child) => child.name === childName,
+  );
+
+  if (topLevelMatch != null) {
+    return topLevelMatch;
+  }
+
+  const lastChild = parent.children.at(-1);
+
+  if (lastChild == null) {
+    throw new Error(
+      `${errorPrefix}: "${getPathString(parent.path)}" has no children`,
+    );
+  }
+
+  if (lastChild.type !== NODE_TYPE.GROUP) {
+    throw new Error(
+      `${errorPrefix}: "${getPathString(parent.path)}" does not have a child named "${getPathString([childName])}" and it has no grouped children`,
+    );
+  }
+
+  const groupedChildrenMatch = lastChild.groupedChildren.find(
+    (child) => child.name === childName,
+  );
+
+  if (groupedChildrenMatch == null) {
+    throw new Error(
+      `${errorPrefix}: "${getPathString(parent.path)}" has neither a direct child nor a grouped child named "${getPathString([childName])}"`,
+    );
+  }
+
+  return groupedChildrenMatch;
+}
+
+/**
+ * Get a node by its path.
+ *
+ * This function ignores groups unless they are at the end of the path. The root node must contain the entire path. This
+ * function throws an error if it can not find the node.
+ *
+ * @param root
+ * @param path
+ * @returns The found node
+ */
 export function getNodeByPath(root: Node, path: Path): Node {
+  const errorPrefix = `Can't find node "${getPathString(path)}" in "${getPathString([root.name])}"`;
   let node = root;
 
   for (let i = 1; i < path.length; i++) {
     const segment = path[i];
 
+    if (segment === NODE_TYPE.GROUP && i !== path.length - 1) {
+      continue;
+    }
+
     if (node.type !== NODE_TYPE.FOLDER) {
       throw new Error(
-        `Can't find node "${getPathString(path)}" in "${getPathString([root.name])}": ${getPathString(node.path)} is not a folder`,
+        `${errorPrefix}: ${getPathString(node.path)} is not a folder`,
       );
     }
 
-    const match = node.children.find((child) => child.name === segment);
-
-    if (match == null) {
-      throw new Error(
-        `Can't find node "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(node.path)}" does not have a child named "${getPathString([segment])}"`,
-      );
-    }
-
-    node = match;
+    node = getChild(node, segment, errorPrefix);
   }
 
   return node;
 }
 
+/**
+ * Get an array of the nodes along a given path.
+ *
+ * This function ignores groups unless they are at the end of the path. The root node must contain the entire path. This
+ * function throws an error if any of the nodes can not be found.
+ *
+ * @param root
+ * @param path
+ * @returns The found node
+ */
 export function getNodesAlongPath(root: Node, path: Path): Node[] {
+  const errorPrefix = `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}"`;
   let parent = root;
-
-  function findChild(childName: SegmentName): Node {
-    if (parent.type !== NODE_TYPE.FOLDER) {
-      throw new Error(
-        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" is not a folder"`,
-      );
-    }
-
-    const topLevelMatch = parent.children.find(
-      (child) => child.name === childName,
-    );
-
-    if (topLevelMatch != null) {
-      return topLevelMatch;
-    }
-
-    const lastChild = parent.children.at(-1);
-
-    if (lastChild == null) {
-      throw new Error(
-        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" has no children`,
-      );
-    }
-
-    if (lastChild.type !== NODE_TYPE.GROUP) {
-      throw new Error(
-        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" does not have a child named "${getPathString([childName])}" and it has no grouped children`,
-      );
-    }
-
-    const groupedChildrenMatch = lastChild.groupedChildren.find(
-      (child) => child.name === childName,
-    );
-
-    if (groupedChildrenMatch == null) {
-      throw new Error(
-        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" has neither a direct child nor a grouped child named "${getPathString([childName])}"`,
-      );
-    }
-
-    return groupedChildrenMatch;
-  }
 
   return path
     .map((segment, i) => {
@@ -515,11 +549,11 @@ export function getNodesAlongPath(root: Node, path: Path): Node[] {
 
       if (parent.type !== NODE_TYPE.FOLDER) {
         throw new Error(
-          `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" is not a folder"`,
+          `${errorPrefix}: "${getPathString(parent.path)}" is not a folder"`,
         );
       }
 
-      const match = findChild(segment);
+      const match = getChild(parent, segment, errorPrefix);
 
       parent = match;
 
