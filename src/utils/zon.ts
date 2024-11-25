@@ -461,29 +461,71 @@ export function getNodeByPath(root: Node, path: Path): Node {
 export function getNodesAlongPath(root: Node, path: Path): Node[] {
   let parent = root;
 
-  return path.map((segment, i) => {
-    if (i === 0) {
-      return root;
-    }
-
+  function findChild(childName: SegmentName): Node {
     if (parent.type !== NODE_TYPE.FOLDER) {
       throw new Error(
-        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" is not a"`,
+        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" is not a folder"`,
       );
     }
 
-    const match = parent.children.find((child) => child.name === segment);
+    const topLevelMatch = parent.children.find(
+      (child) => child.name === childName,
+    );
 
-    if (match == null) {
+    if (topLevelMatch != null) {
+      return topLevelMatch;
+    }
+
+    const lastChild = parent.children.at(-1);
+
+    if (lastChild == null) {
       throw new Error(
-        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" does not have a child named "${getPathString([segment])}"`,
+        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" has no children`,
       );
     }
 
-    parent = match;
+    if (lastChild.type !== NODE_TYPE.GROUP) {
+      throw new Error(
+        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" does not have a child named "${getPathString([childName])}" and it has no grouped children`,
+      );
+    }
 
-    return match;
-  });
+    const groupedChildrenMatch = lastChild.groupedChildren.find(
+      (child) => child.name === childName,
+    );
+
+    if (groupedChildrenMatch == null) {
+      throw new Error(
+        `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" has neither a direct child nor a grouped child named "${getPathString([childName])}"`,
+      );
+    }
+
+    return groupedChildrenMatch;
+  }
+
+  return path
+    .map((segment, i) => {
+      if (i === 0) {
+        return root;
+      }
+
+      if (segment === NODE_TYPE.GROUP && i !== path.length - 1) {
+        return null;
+      }
+
+      if (parent.type !== NODE_TYPE.FOLDER) {
+        throw new Error(
+          `Can't get nodes along path "${getPathString(path)}" in "${getPathString([root.name])}": "${getPathString(parent.path)}" is not a folder"`,
+        );
+      }
+
+      const match = findChild(segment);
+
+      parent = match;
+
+      return match;
+    })
+    .filter((node) => node !== null);
 }
 
 export function getParentPath(path: Path) {
