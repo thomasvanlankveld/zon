@@ -393,7 +393,6 @@ export function withNode(root: Node, insertion: Node): Node {
     const newNode: Node =
       i === path.length - 1 ? insertion : { ...nextNode.children[matchIndex] };
 
-    // eslint-disable-next-line
     nextNode.children = nextNode.children.with(matchIndex, newNode);
     nextNode = newNode;
   }
