@@ -5,6 +5,9 @@
   fill-rule: evenodd;
   fill: var(--arc-fill-color);
 }
+.sunburst__arc:hover {
+  fill: var(--arc-highlighted-color);
+}
 .sunburst__arc:active {
   fill: var(--arc-pressed-color);
 }

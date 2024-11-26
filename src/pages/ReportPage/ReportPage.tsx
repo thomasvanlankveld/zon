@@ -46,7 +46,6 @@ export default function ReportPage(props: ReportPageProps) {
   const [hoverListPath, setHoverListPath] = createSignal<Path | null>(null);
 
   const breadcrumbPath = () => hoverArcPath() ?? diagramRootPath();
-  const highlightedPath = () => hoverListPath() ?? hoverArcPath();
 
   return (
     <main
@@ -82,7 +81,7 @@ export default function ReportPage(props: ReportPageProps) {
       <Sunburst
         root={groupedReportRoot()}
         diagramRootPath={diagramRootPath()}
-        highlightedPath={highlightedPath()}
+        highlightedPath={hoverListPath()}
         setHoverArcPath={setHoverArcPath}
         setSelectedRootPath={setSelectedRootPath}
       />

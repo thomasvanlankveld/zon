@@ -100,16 +100,17 @@ export default function Sunburst(props: SunburstProps) {
 
     if (isDiagramRoot) {
       return {
-        arcFillColor: "transparent",
-        arcPressedColor: "transparent",
+        fill: "transparent",
+        highlighted: "transparent",
+        pressed: "transparent",
       };
     }
 
     const isHighlighted = arePathsEqual(props.highlightedPath, node.path);
 
     return {
-      arcFillColor: isHighlighted ? node.colors.highlighted : node.colors.base,
-      arcPressedColor: node.colors.pressed,
+      ...node.colors,
+      fill: isHighlighted ? node.colors.highlighted : node.colors.base,
     };
   }
 
@@ -124,8 +125,8 @@ export default function Sunburst(props: SunburstProps) {
       return {
         ...node,
         ...getTargetPaths(node),
-        ...getArcColors(node),
         arc: getNodeArc(getArcDimensions(node)),
+        arcColors: getArcColors(node),
       };
     });
 
@@ -146,8 +147,9 @@ export default function Sunburst(props: SunburstProps) {
             <path
               d={node.arc}
               style={{
-                "--arc-fill-color": node.arcFillColor,
-                "--arc-pressed-color": node.arcPressedColor,
+                "--arc-fill-color": node.arcColors.fill,
+                "--arc-highlighted-color": node.arcColors.highlighted,
+                "--arc-pressed-color": node.arcColors.pressed,
               }}
               class={styles.sunburst__arc}
               onMouseEnter={[props.setHoverArcPath, node.hoverTarget]}
