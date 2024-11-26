@@ -32,6 +32,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
     <nav
       style={{
         "grid-column": "span 2 / span 2",
+        // TODO: Make breadcrumbs height depend on window height
         "min-height": "calc(2 * var(--line-height))",
         "max-height": "calc(2 * var(--line-height))",
         overflow: "hidden",
