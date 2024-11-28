@@ -10,6 +10,7 @@ import Sunburst from "./Sunburst.tsx";
 import ReportList from "./ReportList/ReportList.tsx";
 import UploadButton from "../../components/UploadButton/UploadButton.tsx";
 import Breadcrumbs from "./Breadcrumbs.tsx";
+import styles from "./ReportPage.module.css";
 
 type ReportPageProps = {
   root: Node;
@@ -48,21 +49,7 @@ export default function ReportPage(props: ReportPageProps) {
   const breadcrumbPath = () => hoverArcPath() ?? diagramRootPath();
 
   return (
-    <main
-      style={{
-        height: "100%",
-        "max-height": "100%",
-        "box-sizing": "border-box",
-        padding: "2rem",
-        display: "grid",
-        gap: "1rem",
-        "grid-template-rows": "min-content min-content 1fr",
-        "grid-template-columns": "4fr 3fr",
-        overflow: "hidden",
-        "align-items": "stretch",
-        "justify-items": "stretch",
-      }}
-    >
+    <main class={styles["report-page"]}>
       <div
         style={{
           "grid-column": "span 2 / span 2",

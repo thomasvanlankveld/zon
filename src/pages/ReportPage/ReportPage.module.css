@@ -1,0 +1,12 @@
+.report-page {
+  height: 100dvh;
+  box-sizing: border-box;
+  padding: 2rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-rows: min-content min-content 1fr;
+  grid-template-columns: 4fr 3fr;
+  overflow: hidden;
+  align-items: stretch;
+  justify-items: stretch;
+}

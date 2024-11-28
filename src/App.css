@@ -1,9 +1,5 @@
-html,
-body,
-#root {
+* {
   margin: 0;
-  /* TODO: Replace with a 100dvh in the `main`? */
-  height: 100%;
 }
 
 /* Font for old browsers, see: https://web.dev/variable-fonts/#fallbacks */
