@@ -7,7 +7,7 @@ import {
   type Path,
 } from "../../utils/zon";
 import Sunburst from "./Sunburst.tsx";
-import ReportList from "./ReportList.tsx";
+import ReportList from "./ReportList/ReportList.tsx";
 import UploadButton from "../../components/UploadButton/UploadButton.tsx";
 import Breadcrumbs from "./Breadcrumbs.tsx";
 

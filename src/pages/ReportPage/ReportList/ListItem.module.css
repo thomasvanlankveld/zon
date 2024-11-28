@@ -1,0 +1,16 @@
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  overflow-x: hidden;
+}
+
+.list-item__display-name {
+  white-space: "nowrap";
+  overflow: "hidden";
+  text-overflow: "ellipsis";
+}
+
+.list-item__number-of-lines {
+  white-space: "nowrap";
+}

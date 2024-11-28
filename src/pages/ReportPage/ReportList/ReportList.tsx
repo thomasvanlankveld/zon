@@ -10,10 +10,10 @@ import {
   NODE_TYPE,
   type Path,
   type Node,
-  getDisplayName,
   getPathString,
-} from "../../utils/zon";
-import styles from "../../styles/reset-button.module.css";
+} from "../../../utils/zon";
+import styles from "../../../styles/reset-button.module.css";
+import ListItem from "./ListItem";
 
 type ReportListProps = {
   root: Node;
@@ -78,30 +78,16 @@ export default function ReportList(props: ReportListProps) {
 
   return (
     <div style={{ "overflow-x": "hidden" }}>
-      <h4
+      <ListItem
+        component="h4"
         style={{
           "margin-top": "0",
           "margin-bottom": "var(--line-height)",
           color: "white",
           "font-weight": "normal",
-          display: "flex",
-          "justify-content": "space-between",
         }}
-      >
-        {/* TODO: Reuse ellipsis span between root and children */}
-        <span
-          style={{
-            "white-space": "nowrap",
-            overflow: "hidden",
-            "text-overflow": "ellipsis",
-          }}
-        >
-          {getDisplayName(listRoot().name)}
-        </span>
-        <span style={{ "white-space": "nowrap" }}>
-          {listRoot().numberOfLines} lines
-        </span>
-      </h4>
+        node={listRoot()}
+      />
       {/* TODO: Maybe this shouldn't be a nav? Check https://a11y-style-guide.com/style-guide/section-navigation.html */}
       <nav
         style={{ display: "grid", "overflow-x": "hidden" }}
@@ -109,35 +95,19 @@ export default function ReportList(props: ReportListProps) {
       >
         <For each={listNodes()}>
           {(child) => (
-            <button
+            <ListItem
+              component="button"
               style={{
                 margin: 0,
                 color: child.colors.base,
                 cursor: "pointer",
-                display: "flex",
-                "justify-content": "space-between",
-                gap: "1rem",
-                "overflow-x": "hidden",
               }}
               class={styles["reset-button"]}
+              node={child}
               onMouseEnter={[props.setHoverListPath, child.path]}
               onMouseLeave={[props.setHoverListPath, null]}
               onClick={[onListItemClick, child]}
-            >
-              {/* TODO: Reuse ellipsis span between root and children */}
-              <span
-                style={{
-                  "white-space": "nowrap",
-                  overflow: "hidden",
-                  "text-overflow": "ellipsis",
-                }}
-              >
-                {getDisplayName(child.name)}
-              </span>
-              <span style={{ "white-space": "nowrap" }}>
-                {child.numberOfLines} lines
-              </span>
-            </button>
+            />
           )}
         </For>
       </nav>
