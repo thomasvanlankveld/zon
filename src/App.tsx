@@ -3,7 +3,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import "./App.css";
 import type { Languages } from "./utils/tokei.ts";
-import { type Node, LineType, createTree } from "./utils/zon.ts";
+import { type Node, LineType, createTree } from "./utils/zon";
 import logAsyncErrors from "./utils/async/logErrors.ts";
 import LandingPage from "./pages/LandingPage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";

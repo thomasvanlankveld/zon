@@ -5,7 +5,7 @@ import {
   withNode,
   type Node,
   type Path,
-} from "../../utils/zon.ts";
+} from "../../utils/zon";
 import Sunburst from "./Sunburst.tsx";
 import ReportList from "./ReportList.tsx";
 import UploadButton from "../../components/UploadButton/UploadButton.tsx";

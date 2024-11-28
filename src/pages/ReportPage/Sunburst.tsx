@@ -9,7 +9,7 @@ import {
   getParentPath,
   getPathString,
   arePathsEqual,
-} from "../../utils/zon.ts";
+} from "../../utils/zon";
 import createElementSize from "../../primitives/createElementSize.ts";
 import styles from "./Sunburst.module.css";
 
