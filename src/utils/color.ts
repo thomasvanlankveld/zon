@@ -2,6 +2,9 @@
 // https://github.com/d3/d3-color
 // https://github.com/d3/d3-scale-chromatic
 // https://observablehq.com/@mbostock/sinebow
+// https://github.com/d3/d3-scale-chromatic/blob/2c52792197299346b7bdb94322bb4dff8f554fea/src/sequential-multi/rainbow.js
+// https://github.com/d3/d3-color/blob/71c7f100f9fa85a1c70fcbaeb5f803ee8db5620d/src/cubehelix.js
+// https://github.com/d3/d3-color/blob/71c7f100f9fa85a1c70fcbaeb5f803ee8db5620d/src/color.js
 
 // TODO: Clean up anything unneeded
 
@@ -34,6 +37,7 @@ function cubehelix(h: number, s: number, l: number, opacity?: number) {
   return new Cubehelix(h, s, l, opacity == null ? 1 : opacity);
 }
 
+// https://people.phy.cam.ac.uk/dag9/CUBEHELIX/
 export class Cubehelix {
   private h: number;
   private s: number;
