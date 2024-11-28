@@ -81,7 +81,6 @@ export default function ReportList(props: ReportListProps) {
       <ListItem
         component="h4"
         style={{
-          "margin-top": "0",
           "margin-bottom": "var(--line-height)",
           color: "white",
           "font-weight": "normal",
@@ -98,7 +97,6 @@ export default function ReportList(props: ReportListProps) {
             <ListItem
               component="button"
               style={{
-                margin: 0,
                 color: child.colors.base,
                 cursor: "pointer",
               }}

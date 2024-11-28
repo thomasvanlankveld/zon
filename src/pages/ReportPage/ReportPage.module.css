@@ -10,3 +10,16 @@
   align-items: stretch;
   justify-items: stretch;
 }
+
+.report-page__header {
+  grid-column: span 2;
+  display: flex;
+  justify-content: space-between;
+}
+
+.report-page__breadcrumbs {
+  grid-column: span 2;
+  min-height: calc(2 * var(--line-height));
+  max-height: calc(2 * var(--line-height));
+  overflow: hidden;
+}

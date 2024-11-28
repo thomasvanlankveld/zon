@@ -9,6 +9,7 @@ import {
 import styles from "../../styles/reset-button.module.css";
 
 type BreadcrumbsProps = {
+  class?: string;
   root: Node;
   breadcrumbPath: Path;
   setSelectedRootPath: Setter<Path | null>;
@@ -29,16 +30,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   const lastNodeIndex = () => nodes().length - 1;
 
   return (
-    <nav
-      style={{
-        "grid-column": "span 2 / span 2",
-        // TODO: Make breadcrumbs height depend on window height
-        "min-height": "calc(2 * var(--line-height))",
-        "max-height": "calc(2 * var(--line-height))",
-        overflow: "hidden",
-      }}
-      aria-label="breadcrumbs"
-    >
+    <nav class={props.class} aria-label="breadcrumbs">
       <For each={nodes()}>
         {(node, i) => (
           <>

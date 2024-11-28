@@ -50,17 +50,12 @@ export default function ReportPage(props: ReportPageProps) {
 
   return (
     <main class={styles["report-page"]}>
-      <div
-        style={{
-          "grid-column": "span 2 / span 2",
-          display: "flex",
-          "justify-content": "space-between",
-        }}
-      >
+      <div class={styles["report-page__header"]}>
         <h1>Zon</h1>
         <UploadButton countLinesInFolder={props.countLinesInFolder} />
       </div>
       <Breadcrumbs
+        class={styles["report-page__breadcrumbs"]}
         root={groupedReportRoot()}
         breadcrumbPath={breadcrumbPath()}
         setSelectedRootPath={setSelectedRootPath}

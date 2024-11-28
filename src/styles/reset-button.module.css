@@ -7,9 +7,6 @@
   font: inherit; /* 1 */
   color: inherit;
 
-  /* Remove the margin in Firefox and Safari. */
-  margin: 0; /* 2 */
-
   /* Show the overflow in Edge. */
   overflow: visible;
 
