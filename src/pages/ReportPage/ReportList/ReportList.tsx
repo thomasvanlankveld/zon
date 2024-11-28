@@ -12,8 +12,9 @@ import {
   type Node,
   getPathString,
 } from "../../../utils/zon";
-import styles from "../../../styles/reset-button.module.css";
+import resetButtonStyles from "../../../styles/reset-button.module.css";
 import ListItem from "./ListItem";
+import styles from "./ReportList.module.css";
 
 type ReportListProps = {
   root: Node;
@@ -77,30 +78,23 @@ export default function ReportList(props: ReportListProps) {
   }
 
   return (
-    <div style={{ "overflow-x": "hidden" }}>
+    <div class={styles["report-list"]}>
       <ListItem
-        component="h4"
-        style={{
-          "margin-bottom": "var(--line-height)",
-          color: "white",
-          "font-weight": "normal",
-        }}
+        component="h2"
+        class={styles["report-list__heading"]}
         node={listRoot()}
       />
       {/* TODO: Maybe this shouldn't be a nav? Check https://a11y-style-guide.com/style-guide/section-navigation.html */}
       <nav
-        style={{ display: "grid", "overflow-x": "hidden" }}
+        class={styles["report-list__nav"]}
         aria-label={`${listRoot.name} content list`}
       >
         <For each={listNodes()}>
           {(child) => (
             <ListItem
               component="button"
-              style={{
-                color: child.colors.base,
-                cursor: "pointer",
-              }}
-              class={styles["reset-button"]}
+              style={{ color: child.colors.base }}
+              class={`${resetButtonStyles["reset-button"]} ${styles["report-list__list-item"]}`}
               node={child}
               onMouseEnter={[props.setHoverListPath, child.path]}
               onMouseLeave={[props.setHoverListPath, null]}

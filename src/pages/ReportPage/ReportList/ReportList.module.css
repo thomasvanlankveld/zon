@@ -1,0 +1,19 @@
+.report-list {
+  overflow-x: hidden;
+}
+
+.report-list__heading {
+  margin-bottom: var(--line-height);
+  color: white;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+}
+
+.report-list__nav {
+  display: grid;
+  overflow-x: hidden;
+}
+
+.report-list__list-item {
+  cursor: pointer;
+}

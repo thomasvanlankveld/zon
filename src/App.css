@@ -25,11 +25,13 @@
 
 :root {
   --line-height: 1.5rem;
+  --font-size-base: 1rem;
+  --font-weight-normal: 400;
 
   font-family: "Fira Code";
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   line-height: var(--line-height);
-  font-weight: 400;
+  font-weight: var(--font-weight-normal);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
