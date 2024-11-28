@@ -1,17 +1,25 @@
 // Thanks to the d3 authors!
 // https://github.com/d3/d3-color
 // https://github.com/d3/d3-scale-chromatic
+// https://observablehq.com/@mbostock/sinebow
+
+// TODO: Clean up anything unneeded
 
 /**
  * Take a number between 0 and 1 (inclusive), and produce the corresponding color along the "less-angry-rainbow" scheme
  * @param t
  */
 export function rainbow(t: number) {
-  if (t < 0 || t > 1) t -= Math.floor(t);
+  t %= 1;
 
-  const ts = Math.abs(t - 0.5);
+  // TODO: Only use Math.min for dark color scheme
+  const ts = Math.min(Math.abs(t - 0.5), 0.3);
 
-  return cubehelix(360 * t - 100, 1.5 - 1.5 * ts, 0.8 - 0.9 * ts).toRgb();
+  const hue = 360 * t - 100;
+  const saturation = 1.5 - 1.5 * ts;
+  const lightness = 0.8 - 0.9 * ts;
+
+  return cubehelix(hue, saturation, lightness);
 }
 
 const radians = Math.PI / 180;
@@ -26,7 +34,7 @@ function cubehelix(h: number, s: number, l: number, opacity?: number) {
   return new Cubehelix(h, s, l, opacity == null ? 1 : opacity);
 }
 
-class Cubehelix {
+export class Cubehelix {
   private h: number;
   private s: number;
   private l: number;
@@ -53,6 +61,20 @@ class Cubehelix {
       this.opacity,
     );
   }
+
+  brighter(k?: number) {
+    const newLightness = this.l + (1 - this.l) * (k ?? 0.5);
+    return new Cubehelix(this.h, this.s, newLightness, this.opacity);
+  }
+
+  darker(k: number) {
+    const newLightness = this.l - this.l * (k ?? 0.5);
+    return new Cubehelix(this.h, this.s, newLightness, this.opacity);
+  }
+
+  toRgbString() {
+    return this.toRgb().toString();
+  }
 }
 
 function clampa(opacity: number) {
@@ -62,9 +84,6 @@ function clampa(opacity: number) {
 function clampi(value: number) {
   return Math.max(0, Math.min(255, Math.round(value) || 0));
 }
-
-const darker = 0.7;
-const brighter = 1 / darker;
 
 export class Rgb {
   private r: number;
@@ -77,16 +96,6 @@ export class Rgb {
     this.g = +g;
     this.b = +b;
     this.opacity = +(opacity ?? 1);
-  }
-
-  brighter(k?: number) {
-    k = k == null ? brighter : Math.pow(brighter, k);
-    return new Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
-  }
-
-  darker(k?: number) {
-    k = k == null ? darker : Math.pow(darker, k);
-    return new Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
   }
 
   toString() {

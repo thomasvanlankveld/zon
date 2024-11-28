@@ -1,4 +1,4 @@
-import { rainbow, Rgb } from "./color.ts";
+import { rainbow, Cubehelix } from "./color.ts";
 import { CodeStats, Languages } from "./tokei.ts";
 
 export const LineType = {
@@ -226,11 +226,11 @@ function sortTree(node: Node): void {
   }
 }
 
-function getColors(base: Rgb): Colors {
+function getColors(base: Cubehelix): Colors {
   return {
-    base: base.toString(),
-    highlighted: base.brighter(0.5).toString(),
-    pressed: base.darker(1).toString(),
+    base: base.toRgbString(),
+    highlighted: base.brighter(0.5).toRgbString(),
+    pressed: base.darker(0.25).toRgbString(),
   };
 }
 
@@ -286,7 +286,8 @@ type GroupOptions = {
   maxChildren: number;
 };
 
-const greyColors = getColors(new Rgb(125, 125, 125));
+// TODO: Use darker colors here
+const greyColors = getColors(new Cubehelix(0, 0, 0.5, 1));
 
 /**
  * Travels down the root and recursively replaces the smallest nodes with a group of the same size
