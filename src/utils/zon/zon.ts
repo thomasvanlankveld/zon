@@ -1,5 +1,5 @@
 import { rainbow, Cubehelix } from "../color.ts";
-import { CodeStats, Languages } from "../tokei.ts";
+import { Languages } from "../tokei.ts";
 import {
   type Colors,
   type LineType,
@@ -14,6 +14,7 @@ import {
   getParentPath,
   arePathsEqual,
 } from "./path.ts";
+import { getNumberOfLines, sumStats, subtractStats } from "./stats.ts";
 
 export function createTree(
   projectPath: string,
@@ -107,10 +108,6 @@ export function createTree(
   return root;
 }
 
-function getNumberOfLines(stats: CodeStats, lineTypes: LineType[]): number {
-  return lineTypes.reduce((total, type) => total + stats[type], 0);
-}
-
 function sortTree(node: Node): void {
   if (node.type !== NODE_TYPE.FOLDER) {
     return;
@@ -152,32 +149,6 @@ function addDeduced(
 
     lineNumber += child.numberOfLines;
   }
-}
-
-function sumStats(statArr: CodeStats[]): CodeStats {
-  const sumStat: CodeStats = {
-    blanks: 0,
-    code: 0,
-    comments: 0,
-    blobs: {},
-  };
-
-  for (const stats of statArr) {
-    sumStat.blanks += stats.blanks;
-    sumStat.comments += stats.comments;
-    sumStat.code += stats.code;
-  }
-
-  return sumStat;
-}
-
-function subtractStats(left: CodeStats, right: CodeStats): CodeStats {
-  return {
-    blanks: left.blanks - right.blanks,
-    comments: left.comments - right.comments,
-    code: left.code - right.code,
-    blobs: {},
-  };
 }
 
 type GroupOptions = {
