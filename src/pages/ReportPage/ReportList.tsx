@@ -80,7 +80,8 @@ export default function ReportList(props: ReportListProps) {
     <div style={{ "overflow-x": "hidden" }}>
       <h4
         style={{
-          margin: "0",
+          "margin-top": "0",
+          "margin-bottom": "var(--line-height)",
           color: "white",
           "font-weight": "normal",
           display: "flex",
@@ -101,6 +102,7 @@ export default function ReportList(props: ReportListProps) {
           {listRoot().numberOfLines} lines
         </span>
       </h4>
+      {/* TODO: Maybe this shouldn't be a nav? Check https://a11y-style-guide.com/style-guide/section-navigation.html */}
       <nav
         style={{ display: "grid", "overflow-x": "hidden" }}
         aria-label={`${listRoot.name} content list`}
