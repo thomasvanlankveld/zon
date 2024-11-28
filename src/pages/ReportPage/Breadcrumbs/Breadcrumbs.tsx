@@ -5,8 +5,9 @@ import {
   type Node,
   getDisplayName,
   arePathsEqual,
-} from "../../utils/zon";
-import styles from "../../styles/reset-button.module.css";
+} from "../../../utils/zon";
+import styles from "./Breadcrumbs.module.css";
+import resetButtonStyles from "../../../styles/reset-button.module.css";
 
 type BreadcrumbsProps = {
   class?: string;
@@ -36,17 +37,16 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
           <>
             <button
               {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
-              style={{
-                color: node.colors.base,
-                cursor: "pointer",
-              }}
-              class={styles["reset-button"]}
+              style={{ color: node.colors.base }}
+              class={`${resetButtonStyles["reset-button"]} ${styles["breadcrumbs__breadcrumb-button"]}`}
               onClick={[props.setSelectedRootPath, node.targetPath]}
             >
               <span>{getDisplayName(node.name)}</span>
             </button>
             <Show when={i() !== lastNodeIndex()}>
-              <span style={{ color: "white" }}>{" / "}</span>
+              <span class={styles.breadcrumbs__breadcrumb_separator}>
+                {" / "}
+              </span>
             </Show>
           </>
         )}

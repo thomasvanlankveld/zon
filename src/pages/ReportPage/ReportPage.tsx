@@ -9,7 +9,7 @@ import {
 import Sunburst from "./Sunburst.tsx";
 import ReportList from "./ReportList/ReportList.tsx";
 import UploadButton from "../../components/UploadButton/UploadButton.tsx";
-import Breadcrumbs from "./Breadcrumbs.tsx";
+import Breadcrumbs from "./Breadcrumbs/Breadcrumbs.tsx";
 import styles from "./ReportPage.module.css";
 
 type ReportPageProps = {
