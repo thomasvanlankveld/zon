@@ -34,10 +34,6 @@ export default function Sunburst(props: SunburstProps) {
 
   const maxRadius = createMemo(() => Math.min(width(), height()) / 2);
   const centerRadius = 1;
-  const center = createMemo(() => ({
-    x: width() / 2,
-    y: height() / 2,
-  }));
 
   const diagramRoot = createMemo(() =>
     getNodeByPath(props.root, props.diagramRootPath),
@@ -140,25 +136,26 @@ export default function Sunburst(props: SunburstProps) {
   }
 
   return (
-    <svg ref={setSvg}>
-      <g transform={`translate(${center().x},${center().y})`}>
-        <For each={nodes()}>
-          {(node) => (
-            <path
-              d={node.arc}
-              style={{
-                "--arc-fill-color": node.arcColors.fill,
-                "--arc-highlighted-color": node.arcColors.highlighted,
-                "--arc-pressed-color": node.arcColors.pressed,
-              }}
-              class={styles.sunburst__arc}
-              onMouseEnter={[props.setHoverArcPath, node.hoverTarget]}
-              onMouseLeave={[props.setHoverArcPath, null]}
-              onClick={[navigate, node.clickTarget]}
-            />
-          )}
-        </For>
-      </g>
+    <svg
+      ref={setSvg}
+      viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}
+    >
+      <For each={nodes()}>
+        {(node) => (
+          <path
+            d={node.arc}
+            style={{
+              "--arc-fill-color": node.arcColors.fill,
+              "--arc-highlighted-color": node.arcColors.highlighted,
+              "--arc-pressed-color": node.arcColors.pressed,
+            }}
+            class={styles.sunburst__arc}
+            onMouseEnter={[props.setHoverArcPath, node.hoverTarget]}
+            onMouseLeave={[props.setHoverArcPath, null]}
+            onClick={[navigate, node.clickTarget]}
+          />
+        )}
+      </For>
     </svg>
   );
 }
