@@ -1,5 +1,5 @@
 import { batch, createMemo, createSignal, For, type Setter } from "solid-js";
-import { getArc } from "../../utils/svg.ts";
+import { getArc } from "../../../utils/svg.ts";
 import {
   NODE_TYPE,
   type Node,
@@ -9,8 +9,8 @@ import {
   getParentPath,
   getPathString,
   arePathsEqual,
-} from "../../utils/zon";
-import createElementSize from "../../primitives/createElementSize.ts";
+} from "../../../utils/zon/index.ts";
+import createElementSize from "../../../primitives/createElementSize.ts";
 import styles from "./Sunburst.module.css";
 
 type Dimensions = {
