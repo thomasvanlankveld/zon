@@ -37,7 +37,11 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
           <>
             <button
               {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
-              style={{ color: node.colors.base }}
+              style={{
+                "--base-color": node.colors.base,
+                "--highlighted-color": node.colors.highlighted,
+                "--pressed-color": node.colors.pressed,
+              }}
               class={`${resetButtonStyles["reset-button"]} ${styles["breadcrumbs__breadcrumb-button"]}`}
               onClick={[props.setSelectedRootPath, node.targetPath]}
             >
