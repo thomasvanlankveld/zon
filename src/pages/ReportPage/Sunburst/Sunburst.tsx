@@ -6,7 +6,7 @@ import {
   Show,
   type Setter,
 } from "solid-js";
-import { getArc } from "../../../utils/svg.ts";
+import { getArc as getArcD } from "../../../utils/svg.ts";
 import {
   NODE_TYPE,
   type Node,
@@ -77,31 +77,39 @@ export default function Sunburst(props: SunburstProps) {
     return { x0, x1, y0, y1 };
   }
 
-  function getNodeArc(dimensions: Dimensions): string {
+  function getNodeArcD(dimensions: Dimensions): string {
     const outerRadius = dimensions.y0 * maxRadius();
     const innerRadius = dimensions.y1 * maxRadius();
     const startAngle = dimensions.x0 * 2 * Math.PI;
     const endAngle = dimensions.x1 * 2 * Math.PI;
 
-    return getArc({ innerRadius, outerRadius, startAngle, endAngle });
+    return getArcD({ innerRadius, outerRadius, startAngle, endAngle });
   }
 
-  function getTargetPaths(node: Node) {
-    const isReportRoot = arePathsEqual(node.path, props.root.path);
+  const rootArc = createMemo(() => {
+    const baseColor = new Cubehelix(0, 0, 1, 0.1);
+    const highlightedColor = baseColor.cloudier(1).toRgbString();
+    const pressedColor = baseColor.clearer(0.25).toRgbString();
 
-    if (isReportRoot) {
-      return { clickTarget: null, hoverTarget: null };
-    }
+    const diagramParentPath = getParentPath(diagramRoot().path);
 
-    const isDiagramRoot = arePathsEqual(node.path, props.diagramRootPath);
+    return {
+      d: getNodeArcD(getArcDimensions(diagramRoot())),
+      clickTarget: diagramParentPath,
+      hoverTarget: diagramParentPath,
+      arcColors: {
+        fill: baseColor.toRgbString(),
+        highlighted: highlightedColor,
+        pressed: pressedColor,
+      },
+    };
+  });
+
+  function getArcClickTarget(node: Node) {
     const isFile = node.type === NODE_TYPE.FILE;
     const isGroup = node.type === NODE_TYPE.GROUP;
 
-    if (isDiagramRoot || isFile || isGroup) {
-      return { clickTarget: getParentPath(node.path), hoverTarget: node.path };
-    }
-
-    return { clickTarget: node.path, hoverTarget: node.path };
+    return isFile || isGroup ? getParentPath(node.path) : node.path;
   }
 
   function getArcColors(node: Node) {
@@ -113,24 +121,6 @@ export default function Sunburst(props: SunburstProps) {
     };
   }
 
-  const rootArc = createMemo(() => {
-    const baseColor = new Cubehelix(0, 0, 1, 0.1);
-    const highlightedColor = baseColor.cloudier(1).toRgbString();
-    const pressedColor = baseColor.clearer(0.25).toRgbString();
-
-    return {
-      ...diagramRoot(),
-      // TODO: Extract root target path logic from getTargetPaths
-      ...getTargetPaths(diagramRoot()),
-      d: getNodeArc(getArcDimensions(diagramRoot())),
-      arcColors: {
-        fill: baseColor.toRgbString(),
-        highlighted: highlightedColor,
-        pressed: pressedColor,
-      },
-    };
-  });
-
   const arcs = () =>
     getDescendants(diagramRoot(), {
       exclude: {
@@ -139,12 +129,13 @@ export default function Sunburst(props: SunburstProps) {
         maxDepth: diagramRoot().depth + maxDepthFromRoot(),
       },
     })
+      // Skip the root arc, which is rendered separately
       .slice(1)
       .map((node) => {
         return {
-          ...node,
-          ...getTargetPaths(node),
-          d: getNodeArc(getArcDimensions(node)),
+          d: getNodeArcD(getArcDimensions(node)),
+          clickTarget: getArcClickTarget(node),
+          hoverTarget: node.path,
           arcColors: getArcColors(node),
         };
       });
