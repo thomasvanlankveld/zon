@@ -93,7 +93,11 @@ export default function ReportList(props: ReportListProps) {
           {(child) => (
             <ListItem
               component="button"
-              style={{ color: child.colors.base }}
+              style={{
+                "--base-color": child.colors.base,
+                "--highlighted-color": child.colors.highlighted,
+                "--pressed-color": child.colors.pressed,
+              }}
               class={`${resetButtonStyles["reset-button"]} ${styles["report-list__list-item"]}`}
               node={child}
               onMouseEnter={[props.setHoverListPath, child.path]}

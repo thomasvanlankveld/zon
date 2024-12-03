@@ -1,7 +1,7 @@
-import { ValidComponent } from "solid-js";
+import { Show, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { JSX } from "solid-js/h/jsx-runtime";
-import { getDisplayName, type Node } from "../../../utils/zon";
+import { getDisplayName, NODE_TYPE, type Node } from "../../../utils/zon";
 import styles from "./ListItem.module.css";
 
 type ListItemProps = {
@@ -26,6 +26,9 @@ export default function ListItem(props: ListItemProps) {
     >
       <span class={styles["list-item__display-name"]}>
         {getDisplayName(props.node.name)}
+        <Show when={props.node.type === NODE_TYPE.FOLDER}>
+          <span class={styles["list-item__folder-separator"]}> /</span>
+        </Show>
       </span>
       <span class={styles["list-item__number-of-lines"]}>
         {props.node.numberOfLines} lines

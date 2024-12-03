@@ -3,6 +3,7 @@
   justify-content: space-between;
   gap: 1rem;
   overflow-x: hidden;
+  color: var(--base-color);
 }
 
 .list-item__display-name {
@@ -13,4 +14,16 @@
 
 .list-item__number-of-lines {
   white-space: nowrap;
+}
+
+.list-item:hover {
+  color: var(--highlighted-color);
+}
+
+.list-item:active {
+  color: var(--pressed-color);
+}
+
+.list-item__folder-separator {
+  color: white;
 }
