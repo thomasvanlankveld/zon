@@ -157,7 +157,6 @@ export default function Sunburst(props: SunburstProps) {
       <Show when={!isReportRoot()}>
         <path
           d={rootArc().d}
-          fill="red"
           style={{
             "--arc-fill-color": rootArc().arcColors.fill,
             "--arc-highlighted-color": rootArc().arcColors.highlighted,
