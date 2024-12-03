@@ -4,6 +4,8 @@ import { type Colors, type LineType, type Node, NODE_TYPE } from "./types.ts";
 import { getProjectName, getPathString, getParentPath } from "./path.ts";
 import { getNumberOfLines, sumStats, subtractStats } from "./stats.ts";
 
+const rootColors = getColors(new Cubehelix(0, 0, 0.75, 1));
+
 export function createTree(
   projectPath: string,
   languages: Languages,
@@ -45,7 +47,7 @@ export function createTree(
             depth: i,
             // Actual values of `firstLine` and `color` can only be determined after sorting
             firstLine: 0,
-            colors: { base: "", highlighted: "", pressed: "" },
+            colors: { ...rootColors },
           };
 
           const isFile = i === filePathSegments.length - 1;
