@@ -28,6 +28,17 @@ type Dimensions = {
   y1: number;
 };
 
+type Arc = {
+  d: string;
+  clickTarget: Path;
+  hoverTarget: Path;
+  arcColors: {
+    fill: string;
+    highlighted: string;
+    pressed: string;
+  };
+};
+
 type SunburstProps = {
   root: Node;
   diagramRootPath: Path;
@@ -86,7 +97,7 @@ export default function Sunburst(props: SunburstProps) {
     return getArcD({ innerRadius, outerRadius, startAngle, endAngle });
   }
 
-  const rootArc = createMemo(() => {
+  const rootArc = createMemo((): Arc => {
     const baseColor = new Cubehelix(0, 0, 1, 0.1);
     const highlightedColor = baseColor.cloudier(1).toRgbString();
     const pressedColor = baseColor.clearer(0.25).toRgbString();
@@ -131,14 +142,14 @@ export default function Sunburst(props: SunburstProps) {
     })
       // Skip the root arc, which is rendered separately
       .slice(1)
-      .map((node) => {
-        return {
+      .map(
+        (node): Arc => ({
           d: getNodeArcD(getArcDimensions(node)),
           clickTarget: getArcClickTarget(node),
           hoverTarget: node.path,
           arcColors: getArcColors(node),
-        };
-      });
+        }),
+      );
 
   function navigate(path: Path | null) {
     batch(() => {
