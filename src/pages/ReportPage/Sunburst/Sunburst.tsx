@@ -1,4 +1,11 @@
-import { batch, createMemo, createSignal, For, type Setter } from "solid-js";
+import {
+  batch,
+  createMemo,
+  createSignal,
+  For,
+  Show,
+  type Setter,
+} from "solid-js";
 import { getArc } from "../../../utils/svg.ts";
 import {
   NODE_TYPE,
@@ -12,6 +19,7 @@ import {
 } from "../../../utils/zon/index.ts";
 import createElementSize from "../../../primitives/createElementSize.ts";
 import styles from "./Sunburst.module.css";
+import { Cubehelix } from "../../../utils/color.ts";
 
 type Dimensions = {
   x0: number;
@@ -38,6 +46,11 @@ export default function Sunburst(props: SunburstProps) {
   const diagramRoot = createMemo(() =>
     getNodeByPath(props.root, props.diagramRootPath),
   );
+
+  const isReportRoot = createMemo(() =>
+    arePathsEqual(diagramRoot().path, props.root.path),
+  );
+
   const maxDepthFromRoot = createMemo(() => Math.min(8, diagramRoot().height));
 
   function getArcDimensions(node: Node): Dimensions {
@@ -92,16 +105,6 @@ export default function Sunburst(props: SunburstProps) {
   }
 
   function getArcColors(node: Node) {
-    const isDiagramRoot = arePathsEqual(node.path, props.diagramRootPath);
-
-    if (isDiagramRoot) {
-      return {
-        fill: "transparent",
-        highlighted: "transparent",
-        pressed: "transparent",
-      };
-    }
-
     const isHighlighted = arePathsEqual(props.highlightedPath, node.path);
 
     return {
@@ -110,21 +113,41 @@ export default function Sunburst(props: SunburstProps) {
     };
   }
 
-  const nodes = () =>
+  const rootArc = createMemo(() => {
+    const baseColor = new Cubehelix(0, 0, 1, 0.1);
+    const highlightedColor = baseColor.cloudier(1).toRgbString();
+    const pressedColor = baseColor.clearer(0.25).toRgbString();
+
+    return {
+      ...diagramRoot(),
+      // TODO: Extract root target path logic from getTargetPaths
+      ...getTargetPaths(diagramRoot()),
+      d: getNodeArc(getArcDimensions(diagramRoot())),
+      arcColors: {
+        fill: baseColor.toRgbString(),
+        highlighted: highlightedColor,
+        pressed: pressedColor,
+      },
+    };
+  });
+
+  const arcs = () =>
     getDescendants(diagramRoot(), {
       exclude: {
         // Can't render arcs for nodes with 0 lines
         minLines: 1,
         maxDepth: diagramRoot().depth + maxDepthFromRoot(),
       },
-    }).map((node) => {
-      return {
-        ...node,
-        ...getTargetPaths(node),
-        arc: getNodeArc(getArcDimensions(node)),
-        arcColors: getArcColors(node),
-      };
-    });
+    })
+      .slice(1)
+      .map((node) => {
+        return {
+          ...node,
+          ...getTargetPaths(node),
+          d: getNodeArc(getArcDimensions(node)),
+          arcColors: getArcColors(node),
+        };
+      });
 
   function navigate(path: Path | null) {
     batch(() => {
@@ -140,19 +163,34 @@ export default function Sunburst(props: SunburstProps) {
       ref={setSvg}
       viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}
     >
-      <For each={nodes()}>
-        {(node) => (
+      <Show when={!isReportRoot()}>
+        <path
+          d={rootArc().d}
+          fill="red"
+          style={{
+            "--arc-fill-color": rootArc().arcColors.fill,
+            "--arc-highlighted-color": rootArc().arcColors.highlighted,
+            "--arc-pressed-color": rootArc().arcColors.pressed,
+          }}
+          class={styles.sunburst__arc}
+          onMouseEnter={() => props.setHoverArcPath(rootArc().hoverTarget)}
+          onMouseLeave={() => props.setHoverArcPath(null)}
+          onClick={() => navigate(rootArc().clickTarget)}
+        />
+      </Show>
+      <For each={arcs()}>
+        {(arc) => (
           <path
-            d={node.arc}
+            d={arc.d}
             style={{
-              "--arc-fill-color": node.arcColors.fill,
-              "--arc-highlighted-color": node.arcColors.highlighted,
-              "--arc-pressed-color": node.arcColors.pressed,
+              "--arc-fill-color": arc.arcColors.fill,
+              "--arc-highlighted-color": arc.arcColors.highlighted,
+              "--arc-pressed-color": arc.arcColors.pressed,
             }}
             class={styles.sunburst__arc}
-            onMouseEnter={[props.setHoverArcPath, node.hoverTarget]}
+            onMouseEnter={[props.setHoverArcPath, arc.hoverTarget]}
             onMouseLeave={[props.setHoverArcPath, null]}
-            onClick={[navigate, node.clickTarget]}
+            onClick={[navigate, arc.clickTarget]}
           />
         )}
       </For>

@@ -76,6 +76,16 @@ export class Cubehelix {
     return new Cubehelix(this.h, this.s, newLightness, this.opacity);
   }
 
+  clearer(k: number) {
+    const newOpacity = this.opacity - this.opacity * (k ?? 0.5);
+    return new Cubehelix(this.h, this.s, this.l, newOpacity);
+  }
+
+  cloudier(k: number) {
+    const newOpacity = this.opacity + this.opacity * (k ?? 0.5);
+    return new Cubehelix(this.h, this.s, this.l, newOpacity);
+  }
+
   toRgbString() {
     return this.toRgb().toString();
   }
