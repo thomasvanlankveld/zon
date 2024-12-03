@@ -11,9 +11,11 @@ import {
   type Path,
   type Node,
   getPathString,
+  rootColors,
+  getParentPath,
+  arePathsEqual,
 } from "../../../utils/zon";
-import resetButtonStyles from "../../../styles/reset-button.module.css";
-import ListItem from "./ListItem";
+import ListItem, { ARROW_DIRECTION } from "./ListItem";
 import styles from "./ReportList.module.css";
 
 type ReportListProps = {
@@ -38,6 +40,10 @@ export default function ReportList(props: ReportListProps) {
     props.listRootPath != null
       ? getNodeByPath(props.root, props.listRootPath)
       : props.root,
+  );
+
+  const isReportRoot = createMemo(() =>
+    arePathsEqual(listRoot().path, props.root.path),
   );
 
   const listNodes = () => {
@@ -69,6 +75,12 @@ export default function ReportList(props: ReportListProps) {
     return [...directChildren, ...groupedChildren];
   };
 
+  function onHeadingClick() {
+    const target = isReportRoot() ? null : getParentPath(listRoot().path);
+
+    props.setSelectedRootPath(target);
+  }
+
   function onListItemClick(node: Node) {
     if (node.type === NODE_TYPE.GROUP) {
       setShowGroup(true);
@@ -79,26 +91,42 @@ export default function ReportList(props: ReportListProps) {
 
   return (
     <div class={styles["report-list"]}>
-      <ListItem
-        component="h2"
-        class={styles["report-list__heading"]}
-        node={listRoot()}
-      />
       {/* TODO: Maybe this shouldn't be a nav? Check https://a11y-style-guide.com/style-guide/section-navigation.html */}
       <nav
         class={styles["report-list__nav"]}
         aria-label={`${listRoot.name} content list`}
       >
+        <ListItem
+          component={isReportRoot() ? "span" : "button"}
+          style={{
+            "--base-color": rootColors.base,
+            "--highlighted-color": rootColors.highlighted,
+            "--pressed-color": rootColors.pressed,
+          }}
+          class={styles["report-list__heading"]}
+          arrowDirection={isReportRoot() ? undefined : ARROW_DIRECTION.LEFT}
+          node={listRoot()}
+          onClick={() => onHeadingClick()}
+        />
         <For each={listNodes()}>
           {(child) => (
             <ListItem
-              component="button"
+              component={
+                child.type === NODE_TYPE.FOLDER ||
+                child.type === NODE_TYPE.GROUP
+                  ? "button"
+                  : "span"
+              }
               style={{
                 "--base-color": child.colors.base,
                 "--highlighted-color": child.colors.highlighted,
                 "--pressed-color": child.colors.pressed,
               }}
-              class={`${resetButtonStyles["reset-button"]} ${styles["report-list__list-item"]}`}
+              arrowDirection={
+                child.type === NODE_TYPE.FOLDER
+                  ? ARROW_DIRECTION.RIGHT
+                  : undefined
+              }
               node={child}
               onMouseEnter={[props.setHoverListPath, child.path]}
               onMouseLeave={[props.setHoverListPath, null]}

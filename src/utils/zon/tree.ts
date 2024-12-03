@@ -4,7 +4,7 @@ import { type Colors, type LineType, type Node, NODE_TYPE } from "./types.ts";
 import { getProjectName, getPathString, getParentPath } from "./path.ts";
 import { getNumberOfLines, sumStats, subtractStats } from "./stats.ts";
 
-const rootColors = getColors(new Cubehelix(0, 0, 0.75, 1));
+export const rootColors = getColors(new Cubehelix(0, 0, 0.8, 1));
 
 export function createTree(
   projectPath: string,
