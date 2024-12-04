@@ -1,4 +1,3 @@
-// TODO: Maybe add a "padding" prop?
 // Steal ideas from:
 // - https://github.com/thomasvanlankveld/zon/blob/master/src-ui/LineView/Diagram/LineDiagramPath.tsx
 // - https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
@@ -25,7 +24,6 @@ export type ArcSpecs = {
   endAngle: number;
 };
 
-// TODO: If circle, do something else
 /**
  * Return the `d` string for an `svg` path to represent an arc around point `{x: 0, y: 0}`
  * @param arcSpecs

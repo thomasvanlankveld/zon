@@ -154,7 +154,6 @@ type GroupOptions = {
   maxChildren: number;
 };
 
-// TODO: Use darker colors here
 const greyColors = getColors(new Cubehelix(0, 0, 0.6, 1));
 
 /**

@@ -131,9 +131,7 @@ export function getNodesAlongPath(root: Node, path: Path): Node[] {
     .filter((node) => node !== null);
 }
 
-// TODO: Move grouping into a tree manipulation function, to maintain consistency between different UI elements?
 type GetDescendantsOptions = {
-  // TODO: Maybe make `exclude` into a callback?
   exclude?: {
     minLines?: number;
     maxDepth?: number;

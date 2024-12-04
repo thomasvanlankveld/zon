@@ -4,7 +4,6 @@ use tokei::{Config, Languages};
 async fn count_lines(path: String) -> Languages {
     let config = Config::default();
     let mut languages = Languages::new();
-    // TODO: Support multiple paths? Support excludes?
     languages.get_statistics(&[path], &[], &config);
 
     languages

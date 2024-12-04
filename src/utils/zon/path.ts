@@ -13,7 +13,6 @@ export function getProjectName(projectPath: string): string {
  */
 export function getDisplayName(name: SegmentName, groupName: string): string {
   if (name === NODE_TYPE.GROUP) {
-    // TODO: i18n
     return groupName;
   }
 
