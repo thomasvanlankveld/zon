@@ -7,6 +7,7 @@ import { type Node, LineType, createTree } from "./utils/zon";
 import logAsyncErrors from "./utils/async/logErrors.ts";
 import LandingPage from "./pages/LandingPage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
+import { TranslationsProvider } from "./utils/translations.tsx";
 
 // Test:
 // /Users/thomasvanlankveld/Code/zon/src-tauri
@@ -49,24 +50,26 @@ function App() {
   }
 
   return (
-    <Show
-      when={root()}
-      keyed
-      fallback={
-        <LandingPage
-          path={path()}
-          isLoading={isLoading()}
-          countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-        />
-      }
-    >
-      {(rootVal) => (
-        <ReportPage
-          root={rootVal}
-          countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-        />
-      )}
-    </Show>
+    <TranslationsProvider>
+      <Show
+        when={root()}
+        keyed
+        fallback={
+          <LandingPage
+            path={path()}
+            isLoading={isLoading()}
+            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+          />
+        }
+      >
+        {(rootVal) => (
+          <ReportPage
+            root={rootVal}
+            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+          />
+        )}
+      </Show>
+    </TranslationsProvider>
   );
 }
 

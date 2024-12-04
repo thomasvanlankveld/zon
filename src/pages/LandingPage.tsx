@@ -1,6 +1,7 @@
 import { Show } from "solid-js";
 import UploadButton from "../components/UploadButton/UploadButton";
 import CountingLines from "../components/CountingLines";
+import { useTranslations } from "../utils/translations";
 
 type LandingPageProps = {
   isLoading: boolean;
@@ -9,9 +10,11 @@ type LandingPageProps = {
 };
 
 export default function LandingPage(props: LandingPageProps) {
+  const { t } = useTranslations();
+
   return (
     <main>
-      <h1>Zon</h1>
+      <h1>{t("app-title")}</h1>
 
       <UploadButton countLinesInFolder={props.countLinesInFolder} />
       <Show when={props.isLoading}>
