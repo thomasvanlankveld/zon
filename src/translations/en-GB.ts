@@ -1,6 +1,6 @@
 import { Translations } from "./types";
 
-const enGB: Translations = {
+const enGBTranslations: Translations = {
   "app.title": "Zon",
   "upload-button.label": "Select folder",
   "counting-lines.text": ({ path }) => `Counting lines in ${path}`,
@@ -10,4 +10,4 @@ const enGB: Translations = {
   "list-item.number-of-lines": ({ numberOfLines }) => `${numberOfLines} lines`,
 };
 
-export default enGB;
+export default enGBTranslations;
