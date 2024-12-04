@@ -102,12 +102,10 @@ export default function Sunburst(props: SunburstProps) {
     const highlightedColor = baseColor.cloudier(1).toRgbString();
     const pressedColor = baseColor.clearer(0.25).toRgbString();
 
-    const diagramParentPath = getParentPath(diagramRoot().path);
-
     return {
       d: getNodeArcD(getArcDimensions(diagramRoot())),
-      clickTarget: diagramParentPath,
-      hoverTarget: diagramParentPath,
+      clickTarget: getParentPath(diagramRoot().path),
+      hoverTarget: diagramRoot().path,
       arcColors: {
         fill: baseColor.toRgbString(),
         highlighted: highlightedColor,
