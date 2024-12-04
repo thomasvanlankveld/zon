@@ -4,7 +4,15 @@ import { type Colors, type LineType, type Node, NODE_TYPE } from "./types.ts";
 import { getProjectName, getPathString, getParentPath } from "./path.ts";
 import { getNumberOfLines, sumStats, subtractStats } from "./stats.ts";
 
-export const rootColors = getColors(new Cubehelix(0, 0, 0.8, 1));
+export const rootColors = (() => {
+  const base = new Cubehelix(0, 0, 0.8, 1);
+
+  return {
+    base: base.toRgbString(),
+    highlighted: base.brighter(1).toRgbString(),
+    pressed: base.darker(0.25).toRgbString(),
+  };
+})();
 
 export function createTree(
   projectPath: string,
@@ -147,7 +155,7 @@ type GroupOptions = {
 };
 
 // TODO: Use darker colors here
-const greyColors = getColors(new Cubehelix(0, 0, 0.5, 1));
+const greyColors = getColors(new Cubehelix(0, 0, 0.6, 1));
 
 /**
  * Travels down the root and recursively replaces the smallest nodes with a group of the same size
