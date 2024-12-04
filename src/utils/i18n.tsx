@@ -26,7 +26,11 @@ function createI18n() {
     return entry;
   }
 
-  return { t, locale, setLocale };
+  function formatNumber(number: number) {
+    return new Intl.NumberFormat(locale()).format(number);
+  }
+
+  return { t, locale, setLocale, formatNumber };
 }
 
 const I18nContext = createContext();

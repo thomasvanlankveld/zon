@@ -25,7 +25,7 @@ export type ArrowDirection =
   (typeof ARROW_DIRECTION)[keyof typeof ARROW_DIRECTION];
 
 export default function ListItem(props: ListItemProps) {
-  const { t } = useI18n();
+  const { t, formatNumber } = useI18n();
 
   return (
     <Dynamic
@@ -54,7 +54,7 @@ export default function ListItem(props: ListItemProps) {
       </span>
       <span class={styles["list-item__number-of-lines"]}>
         {t("list-item.number-of-lines", {
-          numberOfLines: String(props.node.numberOfLines),
+          numberOfLines: formatNumber(props.node.numberOfLines),
         })}
       </span>
     </Dynamic>
