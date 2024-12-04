@@ -6,9 +6,10 @@ import {
   type Node,
   type Path,
 } from "../../utils/zon";
+import { useTranslations } from "../../utils/translations.tsx";
+import UploadButton from "../../components/UploadButton/UploadButton.tsx";
 import Sunburst from "./Sunburst/Sunburst.tsx";
 import ReportList from "./ReportList/ReportList.tsx";
-import UploadButton from "../../components/UploadButton/UploadButton.tsx";
 import Breadcrumbs from "./Breadcrumbs/Breadcrumbs.tsx";
 import styles from "./ReportPage.module.css";
 
@@ -18,6 +19,8 @@ type ReportPageProps = {
 };
 
 export default function ReportPage(props: ReportPageProps) {
+  const { t } = useTranslations();
+
   // Path of the selected file
   const [selectedRootPath, setSelectedRootPath] = createSignal<Path | null>(
     null,
@@ -51,7 +54,7 @@ export default function ReportPage(props: ReportPageProps) {
   return (
     <main class={styles["report-page"]}>
       <div class={styles["report-page__header"]}>
-        <h1>Zon</h1>
+        <h1>{t("app.title")}</h1>
         <UploadButton countLinesInFolder={props.countLinesInFolder} />
       </div>
       <Breadcrumbs

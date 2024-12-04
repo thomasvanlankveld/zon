@@ -14,7 +14,7 @@ export default function LandingPage(props: LandingPageProps) {
 
   return (
     <main>
-      <h1>{t("app-title")}</h1>
+      <h1>{t("app.title")}</h1>
 
       <UploadButton countLinesInFolder={props.countLinesInFolder} />
       <Show when={props.isLoading}>
