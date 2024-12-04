@@ -1,0 +1,41 @@
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  overflow-x: hidden;
+  color: var(--base-color);
+}
+
+.list-item__button {
+  cursor: pointer;
+}
+
+.list-item__arrow {
+  display: none;
+}
+
+.list-item:hover .list-item__arrow {
+  display: initial;
+}
+
+.list-item__display-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-item__number-of-lines {
+  white-space: nowrap;
+}
+
+.list-item__button:hover {
+  color: var(--highlighted-color);
+}
+
+.list-item__button:active {
+  color: var(--pressed-color);
+}
+
+.list-item__folder-separator {
+  color: white;
+}

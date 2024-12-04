@@ -1,0 +1,2 @@
+deno task lint-staged
+deno task test

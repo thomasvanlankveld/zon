@@ -1,0 +1,59 @@
+* {
+  margin: 0;
+}
+
+/* Font for old browsers, see: https://web.dev/variable-fonts/#fallbacks */
+@font-face {
+  font-family: "Fira Code";
+  src: url("./assets/fonts/Fira_Code/static/FiraCode-Regular.ttf");
+  font-weight: normal;
+}
+
+/* Font for modern browsers, see: https://web.dev/variable-fonts/#fallbacks */
+@supports (font-variation-settings: normal) {
+  @font-face {
+    font-family: "Fira Code";
+    src:
+      url("./assets/fonts/Fira_Code/FiraCode-VariableFont_wght.ttf")
+        format("woff2 supports variations"),
+      url("./assets/fonts/Fira_Code/FiraCode-VariableFont_wght.ttf")
+        format("woff2-variations");
+    font-weight: 100 1000;
+    font-stretch: 25% 151%;
+  }
+}
+
+:root {
+  --line-height: 1.5rem;
+  --font-size-base: 1rem;
+  --font-weight-normal: 400;
+
+  font-family: "Fira Code";
+  font-size: var(--font-size-base);
+  line-height: var(--line-height);
+  font-weight: var(--font-weight-normal);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* TODO: Remove Tauri starter styles */
+
+:root {
+  color: #0f0f0f;
+  background-color: #f6f6f6;
+}
+
+h1 {
+  text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #f6f6f6;
+    background-color: rgb(3, 4, 0);
+  }
+}

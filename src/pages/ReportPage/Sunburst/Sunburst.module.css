@@ -1,0 +1,13 @@
+.sunburst__arc {
+  cursor: pointer;
+  stroke: rgba(0, 0, 0, 0.3);
+  stroke-width: 1px;
+  fill-rule: evenodd;
+  fill: var(--arc-fill-color);
+}
+.sunburst__arc:hover {
+  fill: var(--arc-highlighted-color);
+}
+.sunburst__arc:active {
+  fill: var(--arc-pressed-color);
+}
