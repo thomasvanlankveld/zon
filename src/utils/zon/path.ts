@@ -11,10 +11,10 @@ export function getProjectName(projectPath: string): string {
  * @param name
  * @returns
  */
-export function getDisplayName(name: SegmentName): string {
+export function getDisplayName(name: SegmentName, groupName: string): string {
   if (name === NODE_TYPE.GROUP) {
     // TODO: i18n
-    return "Smaller items";
+    return groupName;
   }
 
   if (typeof name === "symbol") {

@@ -14,7 +14,9 @@ import {
   rootColors,
   getParentPath,
   arePathsEqual,
+  getDisplayName,
 } from "../../../utils/zon";
+import { useTranslations } from "../../../utils/translations";
 import ListItem, { ARROW_DIRECTION } from "./ListItem";
 import styles from "./ReportList.module.css";
 
@@ -26,6 +28,8 @@ type ReportListProps = {
 };
 
 export default function ReportList(props: ReportListProps) {
+  const { t } = useTranslations();
+
   const [showGroup, setShowGroup] = createSignal(false);
 
   createEffect((prevRoot) => {
@@ -94,7 +98,9 @@ export default function ReportList(props: ReportListProps) {
       {/* TODO: Maybe this shouldn't be a nav? Check https://a11y-style-guide.com/style-guide/section-navigation.html */}
       <nav
         class={styles["report-list__nav"]}
-        aria-label={`${listRoot.name} content list`}
+        aria-label={t("report-list.nav.label", {
+          name: getDisplayName(listRoot().name, t("group-name")),
+        })}
       >
         <ListItem
           component={isReportRoot() ? "span" : "button"}

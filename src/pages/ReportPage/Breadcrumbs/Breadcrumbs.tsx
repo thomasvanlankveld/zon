@@ -6,8 +6,9 @@ import {
   getDisplayName,
   arePathsEqual,
 } from "../../../utils/zon";
-import styles from "./Breadcrumbs.module.css";
+import { useTranslations } from "../../../utils/translations";
 import resetButtonStyles from "../../../styles/reset-button.module.css";
+import styles from "./Breadcrumbs.module.css";
 
 type BreadcrumbsProps = {
   class?: string;
@@ -17,6 +18,8 @@ type BreadcrumbsProps = {
 };
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
+  const { t } = useTranslations();
+
   function getTargetPath(node: Node): Path | null {
     const isReportRoot = arePathsEqual(node.path, props.root.path);
     return isReportRoot ? null : node.path;
@@ -31,7 +34,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   const lastNodeIndex = () => nodes().length - 1;
 
   return (
-    <nav class={props.class} aria-label="breadcrumbs">
+    <nav class={props.class} aria-label={t("breadcrumbs.label")}>
       <For each={nodes()}>
         {(node, i) => (
           <>
@@ -45,7 +48,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
               class={`${resetButtonStyles["reset-button"]} ${styles["breadcrumbs__breadcrumb-button"]}`}
               onClick={[props.setSelectedRootPath, node.targetPath]}
             >
-              <span>{getDisplayName(node.name)}</span>
+              <span>{getDisplayName(node.name, t("group-name"))}</span>
             </button>
             <Show when={i() !== lastNodeIndex()}>
               <span class={styles.breadcrumbs__breadcrumb_separator}>

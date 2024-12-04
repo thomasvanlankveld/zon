@@ -1,6 +1,7 @@
 import { Show } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { JSX } from "solid-js/h/jsx-runtime";
+import { useTranslations } from "../../../utils/translations";
 import { getDisplayName, NODE_TYPE, type Node } from "../../../utils/zon";
 import resetButtonStyles from "../../../styles/reset-button.module.css";
 import styles from "./ListItem.module.css";
@@ -24,6 +25,8 @@ export type ArrowDirection =
   (typeof ARROW_DIRECTION)[keyof typeof ARROW_DIRECTION];
 
 export default function ListItem(props: ListItemProps) {
+  const { t } = useTranslations();
+
   return (
     <Dynamic
       component={props.component}
@@ -41,7 +44,7 @@ export default function ListItem(props: ListItemProps) {
         <Show when={props.arrowDirection === ARROW_DIRECTION.LEFT}>
           <span class={styles["list-item__arrow"]}>{"<- "}</span>
         </Show>
-        {getDisplayName(props.node.name)}
+        {getDisplayName(props.node.name, t("group-name"))}
         <Show when={props.node.type === NODE_TYPE.FOLDER}>
           <span class={styles["list-item__folder-separator"]}> /</span>
         </Show>
@@ -50,7 +53,9 @@ export default function ListItem(props: ListItemProps) {
         </Show>
       </span>
       <span class={styles["list-item__number-of-lines"]}>
-        {props.node.numberOfLines} lines
+        {t("list-item.number-of-lines", {
+          numberOfLines: String(props.node.numberOfLines),
+        })}
       </span>
     </Dynamic>
   );
