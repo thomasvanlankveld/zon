@@ -84,7 +84,6 @@ export default function Sunburst(props: SunburstProps) {
       (depthFromRoot + centerRadius) / (maxDepthFromRoot() + centerRadius);
     const y1 = Math.max(y0 - dy, 0);
 
-    // TODO: Instead of a continuous scale, make a cutoff between wide inner segments and thin outer ones
     return { x0, x1, y0, y1 };
   }
 
