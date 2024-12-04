@@ -6,7 +6,7 @@ import {
   type Node,
   type Path,
 } from "../../utils/zon";
-import { useTranslations } from "../../utils/translations.tsx";
+import { useI18n } from "../../utils/i18n.tsx";
 import UploadButton from "../../components/UploadButton/UploadButton.tsx";
 import Sunburst from "./Sunburst/Sunburst.tsx";
 import ReportList from "./ReportList/ReportList.tsx";
@@ -19,7 +19,7 @@ type ReportPageProps = {
 };
 
 export default function ReportPage(props: ReportPageProps) {
-  const { t } = useTranslations();
+  const { t } = useI18n();
 
   // Path of the selected file
   const [selectedRootPath, setSelectedRootPath] = createSignal<Path | null>(

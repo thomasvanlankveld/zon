@@ -7,7 +7,7 @@ import { type Node, LineType, createTree } from "./utils/zon";
 import logAsyncErrors from "./utils/async/logErrors.ts";
 import LandingPage from "./pages/LandingPage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
-import { TranslationsProvider } from "./utils/translations.tsx";
+import { I18nProvider } from "./utils/i18n.tsx";
 
 // Test:
 // /Users/thomasvanlankveld/Code/zon/src-tauri
@@ -50,7 +50,7 @@ function App() {
   }
 
   return (
-    <TranslationsProvider>
+    <I18nProvider>
       <Show
         when={root()}
         keyed
@@ -69,7 +69,7 @@ function App() {
           />
         )}
       </Show>
-    </TranslationsProvider>
+    </I18nProvider>
   );
 }
 

@@ -1,11 +1,11 @@
 import styles from "./UploadButton.module.css";
-import { useTranslations } from "../../utils/translations";
+import { useI18n } from "../../utils/i18n";
 type UploadButtonProps = {
   countLinesInFolder: () => void;
 };
 
 export default function UploadButton(props: UploadButtonProps) {
-  const { t } = useTranslations();
+  const { t } = useI18n();
 
   return (
     <button

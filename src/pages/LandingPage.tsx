@@ -1,7 +1,7 @@
 import { Show } from "solid-js";
 import UploadButton from "../components/UploadButton/UploadButton";
 import CountingLines from "../components/CountingLines";
-import { useTranslations } from "../utils/translations";
+import { useI18n } from "../utils/i18n";
 
 type LandingPageProps = {
   isLoading: boolean;
@@ -10,7 +10,7 @@ type LandingPageProps = {
 };
 
 export default function LandingPage(props: LandingPageProps) {
-  const { t } = useTranslations();
+  const { t } = useI18n();
 
   return (
     <main>

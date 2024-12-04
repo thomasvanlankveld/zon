@@ -16,7 +16,7 @@ import {
   arePathsEqual,
   getDisplayName,
 } from "../../../utils/zon";
-import { useTranslations } from "../../../utils/translations";
+import { useI18n } from "../../../utils/i18n";
 import ListItem, { ARROW_DIRECTION } from "./ListItem";
 import styles from "./ReportList.module.css";
 
@@ -28,7 +28,7 @@ type ReportListProps = {
 };
 
 export default function ReportList(props: ReportListProps) {
-  const { t } = useTranslations();
+  const { t } = useI18n();
 
   const [showGroup, setShowGroup] = createSignal(false);
 

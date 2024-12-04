@@ -8,7 +8,7 @@ const mapping: Record<Locale, Translations> = {
   "en-GB": enGB,
 };
 
-function createInternationalization() {
+function createI18n() {
   const [locale, setLocale] = createSignal<Locale>("en-GB");
 
   function t(key: string, args?: Record<string, string>) {
@@ -29,20 +29,18 @@ function createInternationalization() {
   return { t, locale, setLocale };
 }
 
-const TranslationsContext = createContext();
+const I18nContext = createContext();
 
-export function TranslationsProvider(props: { children: JSX.Element }) {
-  const internationalization = createInternationalization();
+export function I18nProvider(props: { children: JSX.Element }) {
+  const i18n = createI18n();
 
   return (
-    <TranslationsContext.Provider value={internationalization}>
-      {props.children}
-    </TranslationsContext.Provider>
+    <I18nContext.Provider value={i18n}>{props.children}</I18nContext.Provider>
   );
 }
 
-type Internationalization = ReturnType<typeof createInternationalization>;
+type I18n = ReturnType<typeof createI18n>;
 
-export function useTranslations(): Internationalization {
-  return useContext(TranslationsContext) as Internationalization;
+export function useI18n(): I18n {
+  return useContext(I18nContext) as I18n;
 }

@@ -1,7 +1,7 @@
 import { Show } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { JSX } from "solid-js/h/jsx-runtime";
-import { useTranslations } from "../../../utils/translations";
+import { useI18n } from "../../../utils/i18n";
 import { getDisplayName, NODE_TYPE, type Node } from "../../../utils/zon";
 import resetButtonStyles from "../../../styles/reset-button.module.css";
 import styles from "./ListItem.module.css";
@@ -25,7 +25,7 @@ export type ArrowDirection =
   (typeof ARROW_DIRECTION)[keyof typeof ARROW_DIRECTION];
 
 export default function ListItem(props: ListItemProps) {
-  const { t } = useTranslations();
+  const { t } = useI18n();
 
   return (
     <Dynamic

@@ -6,7 +6,7 @@ import {
   getDisplayName,
   arePathsEqual,
 } from "../../../utils/zon";
-import { useTranslations } from "../../../utils/translations";
+import { useI18n } from "../../../utils/i18n";
 import resetButtonStyles from "../../../styles/reset-button.module.css";
 import styles from "./Breadcrumbs.module.css";
 
@@ -18,7 +18,7 @@ type BreadcrumbsProps = {
 };
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
-  const { t } = useTranslations();
+  const { t } = useI18n();
 
   function getTargetPath(node: Node): Path | null {
     const isReportRoot = arePathsEqual(node.path, props.root.path);
