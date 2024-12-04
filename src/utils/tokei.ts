@@ -3,7 +3,6 @@ export type CodeStats = {
   blanks: number;
   code: number;
   comments: number;
-  // TODO: Figure out if I need to do anything with `blobs`
   // blobs: BTreeMap<LanguageType, CodeStats>
   blobs: Record<string, never>;
 };
@@ -20,7 +19,6 @@ export type Language = {
   code: number;
   comments: number;
   reports: Report[];
-  // TODO: Figure out if I need to do anything with `children`
   // children: BTreeMap<LanguageType, Vec<Report>>
   children: Record<string, never>;
   inaccurate: boolean;
