@@ -63,7 +63,7 @@ export default function Sunburst(props: SunburstProps) {
   );
 
   const numberOfFullLayers = 5;
-  const numberOfNarrowLayers = 4;
+  const numberOfNarrowLayers = 5;
   const totalLayers = numberOfFullLayers + numberOfNarrowLayers;
   const maxDepthFromRoot = createMemo(() =>
     Math.min(totalLayers, diagramRoot().height),
