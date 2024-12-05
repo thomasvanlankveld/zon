@@ -5,6 +5,7 @@ import {
   type Node,
   getDisplayName,
   arePathsEqual,
+  NODE_TYPE,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import resetButtonStyles from "../../../styles/reset-button.module.css";
@@ -50,7 +51,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
             >
               <span>{getDisplayName(node.name, t("group-name"))}</span>
             </button>
-            <Show when={i() !== lastNodeIndex()}>
+            <Show when={node.type === NODE_TYPE.FOLDER}>
               <span class={styles.breadcrumbs__breadcrumb_separator}>
                 {" / "}
               </span>
