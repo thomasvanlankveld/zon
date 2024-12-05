@@ -62,7 +62,12 @@ export default function Sunburst(props: SunburstProps) {
     arePathsEqual(diagramRoot().path, props.root.path),
   );
 
-  const maxDepthFromRoot = createMemo(() => Math.min(8, diagramRoot().height));
+  const numberOfFullLayers = 5;
+  const numberOfNarrowLayers = 4;
+  const totalLayers = numberOfFullLayers + numberOfNarrowLayers;
+  const maxDepthFromRoot = createMemo(() =>
+    Math.min(totalLayers, diagramRoot().height),
+  );
 
   function getArcDimensions(node: Node): Dimensions {
     const root = diagramRoot();
@@ -79,9 +84,27 @@ export default function Sunburst(props: SunburstProps) {
     const x1 = x0 + dx;
 
     const depthFromRoot = node.depth - root.depth;
-    const dy = 1 / (maxDepthFromRoot() + centerRadius);
-    const y0 =
-      (depthFromRoot + centerRadius) / (maxDepthFromRoot() + centerRadius);
+
+    const distanceFull = 1;
+    // All narrow layers together take up the same distance as one full layer
+    const distanceNarrow = distanceFull / numberOfNarrowLayers;
+    const isNarrow = depthFromRoot > numberOfFullLayers;
+
+    const maxDistance =
+      centerRadius +
+      Math.max(0, Math.min(maxDepthFromRoot(), numberOfFullLayers)) *
+        distanceFull +
+      Math.max(0, maxDepthFromRoot() - numberOfFullLayers) * distanceNarrow;
+
+    const nodeOuterDistance =
+      centerRadius +
+      Math.max(0, Math.min(depthFromRoot, numberOfFullLayers)) * distanceFull +
+      Math.max(0, depthFromRoot - numberOfFullLayers) * distanceNarrow;
+
+    const dDistance = isNarrow ? distanceNarrow : distanceFull;
+    const dy = dDistance / maxDistance;
+
+    const y0 = nodeOuterDistance / maxDistance;
     const y1 = Math.max(y0 - dy, 0);
 
     return { x0, x1, y0, y1 };
