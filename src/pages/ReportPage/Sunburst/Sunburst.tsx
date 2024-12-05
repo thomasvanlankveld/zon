@@ -85,6 +85,8 @@ export default function Sunburst(props: SunburstProps) {
     );
   }
 
+  const maxDistance = createMemo(() => getDistance(maxDepthFromRoot()));
+
   /**
    * Determines the dimensions of a node's arc
    * The dimensions are returned in a range of 0-1
@@ -107,13 +109,12 @@ export default function Sunburst(props: SunburstProps) {
     // First determine y positions in "distance", where "1" is the default "depth" of a single arc
     const depthFromRoot = node.depth - root.depth;
     const isNarrow = depthFromRoot > numberOfFullLayers;
-    const maxDistance = getDistance(maxDepthFromRoot());
     const nodeOuterDistance = getDistance(depthFromRoot);
     const dDistance = isNarrow ? distanceNarrow : distanceFull;
 
     // Then scale to a range of 0-1
-    const dy = dDistance / maxDistance;
-    const y0 = nodeOuterDistance / maxDistance;
+    const dy = dDistance / maxDistance();
+    const y0 = nodeOuterDistance / maxDistance();
     const y1 = Math.max(y0 - dy, 0);
 
     return { x0, x1, y0, y1 };
