@@ -157,6 +157,13 @@ type GroupOptions = {
 const greyColors = getColors(new Cubehelix(0, 0, 0.6, 1));
 
 /**
+ * Determines the height of a node based on its children
+ */
+function getHeight(children: Node[]): number {
+  return Math.max(...children.map((child) => child.height)) + 1;
+}
+
+/**
  * Travels down the root and recursively replaces the smallest nodes with a group of the same size
  * @param node
  * @param options
@@ -173,7 +180,11 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
     .map((child) => groupSmallestNodes(child, options));
 
   if (visibleChildren.length === node.children.length) {
-    return { ...node, children: visibleChildren };
+    return {
+      ...node,
+      children: visibleChildren,
+      height: getHeight(visibleChildren),
+    };
   }
 
   const hiddenChildren = node.children.slice(visibleChildren.length);
@@ -211,6 +222,6 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
   return {
     ...node,
     children: newChildren,
-    height: Math.max(...newChildren.map((child) => child.height)) + 1,
+    height: getHeight(newChildren),
   };
 }
