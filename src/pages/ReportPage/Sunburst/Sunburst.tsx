@@ -1,8 +1,11 @@
 import {
+  Accessor,
   batch,
+  createEffect,
   createMemo,
   createSignal,
   For,
+  onMount,
   Show,
   type Setter,
 } from "solid-js";
@@ -28,8 +31,23 @@ type Dimensions = {
   y1: number;
 };
 
+type Descendant = Node & {
+  zIndex: Accessor<number>;
+  setZIndex: Setter<number>;
+  opacity: Accessor<number>;
+  setOpacity: Setter<number>;
+  targetOpacity: Accessor<number>;
+  setTargetOpacity: Setter<number>;
+  dimensions: Accessor<Dimensions>;
+  setDimensions: Setter<Dimensions>;
+  targetDimensions: Accessor<Dimensions>;
+  setTargetDimensions: Setter<Dimensions>;
+};
+
 type Arc = {
   d: string;
+  zIndex: number;
+  opacity: number;
   clickTarget: Path;
   hoverTarget: Path;
   arcColors: {
@@ -47,6 +65,16 @@ type SunburstProps = {
   setSelectedRootPath: Setter<Path | null>;
 };
 
+function areNumbersEqual(a: number, b: number, tolerance?: number) {
+  tolerance ??= Math.min(Math.abs(a), Math.abs(b)) * Number.EPSILON;
+
+  return Math.abs(a - b) < tolerance;
+}
+
+function getAnimationTarget(value: number, target: number, dt: number) {
+  return value + (target - value) * (1 - Math.exp(-dt * 0.01));
+}
+
 export default function Sunburst(props: SunburstProps) {
   const [svg, setSvg] = createSignal<SVGSVGElement>();
   const { width, height } = createElementSize(svg, { width: 500, height: 500 });
@@ -54,19 +82,26 @@ export default function Sunburst(props: SunburstProps) {
   const maxRadius = createMemo(() => Math.min(width(), height()) / 2);
   const centerRadius = 1;
 
-  const diagramRoot = createMemo(() =>
+  const targetDiagramRoot = createMemo(() =>
     getNodeByPath(props.root, props.diagramRootPath),
   );
 
+  const [actualDiagramRoot, setActualDiagramRoot] = createSignal<Node | null>(
+    null,
+  );
+  onMount(() => {
+    setActualDiagramRoot(targetDiagramRoot());
+  });
+
   const isReportRoot = createMemo(() =>
-    arePathsEqual(diagramRoot().path, props.root.path),
+    arePathsEqual(targetDiagramRoot().path, props.root.path),
   );
 
   const numberOfFullLayers = 5;
   const numberOfNarrowLayers = 5;
   const totalLayers = numberOfFullLayers + numberOfNarrowLayers;
-  const maxDepthFromRoot = createMemo(() =>
-    Math.min(totalLayers, diagramRoot().height),
+  const targetMaxDepthFromRoot = createMemo(() =>
+    Math.min(totalLayers, targetDiagramRoot().height),
   );
 
   const distanceFull = 1;
@@ -85,15 +120,23 @@ export default function Sunburst(props: SunburstProps) {
     );
   }
 
-  const maxDistance = createMemo(() => getDistance(maxDepthFromRoot()));
+  const targetMaxDistance = createMemo(() =>
+    getDistance(targetMaxDepthFromRoot()),
+  );
+  const [actualMaxDistance, setActualMaxDistance] = createSignal(totalLayers);
+  onMount(() => {
+    setActualMaxDistance(targetMaxDistance());
+  });
 
   /**
    * Determines the dimensions of a node's arc
    * The dimensions are returned in a range of 0-1
    */
-  function getArcDimensions(node: Node): Dimensions {
-    const root = diagramRoot();
-
+  function getArcDimensions(
+    node: Node,
+    diagramRoot: Node,
+    maxDistance: number,
+  ): Dimensions {
     if (node.numberOfLines === 0) {
       throw new Error(
         `Can't draw an arc for node ${getPathString(node.path)} because it has 0 lines`,
@@ -101,20 +144,20 @@ export default function Sunburst(props: SunburstProps) {
     }
 
     // First determine x positions in "lines", then scale to a range of 0-1
-    const firstLineFromRoot = node.firstLine - root.firstLine;
-    const dx = node.numberOfLines / root.numberOfLines;
-    const x0 = firstLineFromRoot / root.numberOfLines;
+    const firstLineFromRoot = node.firstLine - diagramRoot.firstLine;
+    const dx = node.numberOfLines / diagramRoot.numberOfLines;
+    const x0 = firstLineFromRoot / diagramRoot.numberOfLines;
     const x1 = x0 + dx;
 
     // First determine y positions in "distance", where "1" is the default "depth" of a single arc
-    const depthFromRoot = node.depth - root.depth;
+    const depthFromRoot = node.depth - diagramRoot.depth;
     const isNarrow = depthFromRoot > numberOfFullLayers;
     const nodeOuterDistance = getDistance(depthFromRoot);
     const dDistance = isNarrow ? distanceNarrow : distanceFull;
 
     // Then scale to a range of 0-1
-    const dy = dDistance / maxDistance();
-    const y0 = nodeOuterDistance / maxDistance();
+    const dy = dDistance / maxDistance;
+    const y0 = nodeOuterDistance / maxDistance;
     const y1 = Math.max(y0 - dy, 0);
 
     return { x0, x1, y0, y1 };
@@ -138,9 +181,17 @@ export default function Sunburst(props: SunburstProps) {
     const pressedColor = baseColor.clearer(0.25).toRgbString();
 
     return {
-      d: getNodeArcD(getArcDimensions(diagramRoot())),
-      clickTarget: getParentPath(diagramRoot().path),
-      hoverTarget: diagramRoot().path,
+      d: getNodeArcD(
+        getArcDimensions(
+          targetDiagramRoot(),
+          targetDiagramRoot(),
+          targetMaxDistance(),
+        ),
+      ),
+      zIndex: 2,
+      opacity: 1,
+      clickTarget: getParentPath(targetDiagramRoot().path),
+      hoverTarget: targetDiagramRoot().path,
       arcColors: {
         fill: baseColor.toRgbString(),
         highlighted: highlightedColor,
@@ -171,24 +222,161 @@ export default function Sunburst(props: SunburstProps) {
     };
   }
 
-  const arcs = () =>
-    getDescendants(diagramRoot(), {
+  const targetDescendants = createMemo(() =>
+    getDescendants(targetDiagramRoot(), {
       exclude: {
-        // Can't render arcs for nodes with 0 lines
         minLines: 1,
-        maxDepth: diagramRoot().depth + maxDepthFromRoot(),
+        maxDepth: targetDiagramRoot().depth + targetMaxDepthFromRoot(),
       },
-    })
-      // Skip the root arc, which is rendered separately
-      .slice(1)
+    }).slice(1),
+  );
+
+  const [visibleDescendants, setVisibleDescendants] = createSignal<
+    Descendant[]
+  >([]);
+
+  createEffect((prevTargetDescendants) => {
+    // Only run this effect if the target descendants have changed
+    if (prevTargetDescendants === targetDescendants()) {
+      return targetDescendants();
+    }
+
+    const newDescendants: Descendant[] = [];
+
+    targetDescendants().forEach((node) => {
+      const matchingDescendant = visibleDescendants().find((descendant) =>
+        arePathsEqual(descendant.path, node.path),
+      );
+
+      if (matchingDescendant) {
+        matchingDescendant.setZIndex(1);
+        matchingDescendant.setTargetOpacity(1);
+        matchingDescendant.setTargetDimensions(
+          getArcDimensions(node, targetDiagramRoot(), targetMaxDistance()),
+        );
+      } else {
+        const [zIndex, setZIndex] = createSignal(1);
+        const [opacity, setOpacity] = createSignal(0);
+        const [targetOpacity, setTargetOpacity] = createSignal(1);
+        const [dimensions, setDimensions] = createSignal(
+          getArcDimensions(
+            node,
+            actualDiagramRoot() as Node,
+            actualMaxDistance(),
+          ),
+        );
+        const [targetDimensions, setTargetDimensions] = createSignal(
+          getArcDimensions(node, targetDiagramRoot(), targetMaxDistance()),
+        );
+
+        newDescendants.push({
+          ...node,
+          zIndex,
+          setZIndex,
+          opacity,
+          setOpacity,
+          targetOpacity,
+          setTargetOpacity,
+          dimensions,
+          setDimensions,
+          targetDimensions,
+          setTargetDimensions,
+        });
+      }
+    });
+
+    visibleDescendants().forEach((descendant) => {
+      const matchingNewDescendant = targetDescendants().find((newDescendant) =>
+        arePathsEqual(newDescendant.path, descendant.path),
+      );
+
+      if (!matchingNewDescendant) {
+        descendant.setZIndex(0);
+        descendant.setTargetOpacity(0);
+        descendant.setTargetDimensions(
+          getArcDimensions(
+            descendant,
+            targetDiagramRoot(),
+            targetMaxDistance(),
+          ),
+        );
+      }
+    });
+
+    setVisibleDescendants([...visibleDescendants(), ...newDescendants]);
+    setActualDiagramRoot(targetDiagramRoot());
+    setActualMaxDistance(targetMaxDistance());
+
+    setTime(Date.now());
+    animate();
+
+    return targetDescendants();
+  });
+
+  const [time, setTime] = createSignal(Date.now());
+
+  function animate() {
+    requestAnimationFrame(() => {
+      // position.x += (target - position.x) * (1 - exp(- dt * speed));
+      const dt = Date.now() - time();
+      const nodePathsToRemove: Path[] = [];
+
+      visibleDescendants().forEach((node) => {
+        const newOpacity = getAnimationTarget(
+          node.opacity(),
+          node.targetOpacity(),
+          dt,
+        );
+        const dimensions = Object.entries(node.dimensions());
+        const targetDimensions = Object.values(node.targetDimensions());
+        const newDimensions = dimensions.map(([key, value], index) => [
+          key,
+          getAnimationTarget(value, targetDimensions[index], dt),
+        ]);
+
+        batch(() => {
+          node.setOpacity(newOpacity);
+          node.setDimensions(Object.fromEntries(newDimensions) as Dimensions);
+        });
+
+        if (
+          node.targetOpacity() === 0 &&
+          areNumbersEqual(node.opacity(), node.targetOpacity(), 0.01)
+        ) {
+          nodePathsToRemove.push(node.path);
+        }
+      });
+
+      setTime(Date.now());
+
+      if (nodePathsToRemove.length > 0) {
+        setVisibleDescendants((visibleDescendants) =>
+          visibleDescendants.filter(
+            (visibleNode) =>
+              !nodePathsToRemove.some((pathToRemove) =>
+                arePathsEqual(visibleNode.path, pathToRemove),
+              ),
+          ),
+        );
+      } else {
+        animate();
+      }
+    });
+  }
+
+  const arcs = () =>
+    visibleDescendants()
       .map(
         (node): Arc => ({
-          d: getNodeArcD(getArcDimensions(node)),
+          d: getNodeArcD(node.dimensions()),
+          zIndex: node.zIndex(),
+          opacity: node.opacity(),
           clickTarget: getArcClickTarget(node),
           hoverTarget: node.path,
           arcColors: getArcColors(node),
         }),
-      );
+      )
+      .toSorted((a, b) => a.zIndex - b.zIndex);
 
   function navigate(path: Path | null) {
     batch(() => {
@@ -226,6 +414,8 @@ export default function Sunburst(props: SunburstProps) {
               "--arc-fill-color": arc.arcColors.fill,
               "--arc-highlighted-color": arc.arcColors.highlighted,
               "--arc-pressed-color": arc.arcColors.pressed,
+              "z-index": arc.zIndex,
+              opacity: arc.opacity,
             }}
             class={styles.sunburst__arc}
             onMouseEnter={[props.setHoverArcPath, arc.hoverTarget]}
