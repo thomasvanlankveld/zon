@@ -69,6 +69,26 @@ export default function Sunburst(props: SunburstProps) {
     Math.min(totalLayers, diagramRoot().height),
   );
 
+  const distanceFull = 1;
+  // All narrow layers together take up the same distance as one full layer
+  const distanceNarrow = distanceFull / numberOfNarrowLayers;
+
+  /**
+   * Determines the outer "distance" of a node's arc based on its depth
+   * In "distance", "1" is the default width of an arc
+   */
+  function getDistance(depthFromRoot: number) {
+    return (
+      centerRadius +
+      Math.max(0, Math.min(depthFromRoot, numberOfFullLayers)) * distanceFull +
+      Math.max(0, depthFromRoot - numberOfFullLayers) * distanceNarrow
+    );
+  }
+
+  /**
+   * Determines the dimensions of a node's arc
+   * The dimensions are returned in a range of 0-1
+   */
   function getArcDimensions(node: Node): Dimensions {
     const root = diagramRoot();
 
@@ -78,38 +98,30 @@ export default function Sunburst(props: SunburstProps) {
       );
     }
 
+    // First determine x positions in "lines", then scale to a range of 0-1
     const firstLineFromRoot = node.firstLine - root.firstLine;
     const dx = node.numberOfLines / root.numberOfLines;
     const x0 = firstLineFromRoot / root.numberOfLines;
     const x1 = x0 + dx;
 
+    // First determine y positions in "distance", where "1" is the default "depth" of a single arc
     const depthFromRoot = node.depth - root.depth;
-
-    const distanceFull = 1;
-    // All narrow layers together take up the same distance as one full layer
-    const distanceNarrow = distanceFull / numberOfNarrowLayers;
     const isNarrow = depthFromRoot > numberOfFullLayers;
-
-    const maxDistance =
-      centerRadius +
-      Math.max(0, Math.min(maxDepthFromRoot(), numberOfFullLayers)) *
-        distanceFull +
-      Math.max(0, maxDepthFromRoot() - numberOfFullLayers) * distanceNarrow;
-
-    const nodeOuterDistance =
-      centerRadius +
-      Math.max(0, Math.min(depthFromRoot, numberOfFullLayers)) * distanceFull +
-      Math.max(0, depthFromRoot - numberOfFullLayers) * distanceNarrow;
-
+    const maxDistance = getDistance(maxDepthFromRoot());
+    const nodeOuterDistance = getDistance(depthFromRoot);
     const dDistance = isNarrow ? distanceNarrow : distanceFull;
-    const dy = dDistance / maxDistance;
 
+    // Then scale to a range of 0-1
+    const dy = dDistance / maxDistance;
     const y0 = nodeOuterDistance / maxDistance;
     const y1 = Math.max(y0 - dy, 0);
 
     return { x0, x1, y0, y1 };
   }
 
+  /**
+   * Determines the SVG path data for a node's arc
+   */
   function getNodeArcD(dimensions: Dimensions): string {
     const outerRadius = dimensions.y0 * maxRadius();
     const innerRadius = dimensions.y1 * maxRadius();
@@ -136,6 +148,9 @@ export default function Sunburst(props: SunburstProps) {
     };
   });
 
+  /**
+   * Determines the target path for a node's arc click
+   */
   function getArcClickTarget(node: Node) {
     const isFile = node.type === NODE_TYPE.FILE;
     const isGroup = node.type === NODE_TYPE.GROUP;
@@ -143,6 +158,9 @@ export default function Sunburst(props: SunburstProps) {
     return isFile || isGroup ? getParentPath(node.path) : node.path;
   }
 
+  /**
+   * Determines the colors of a node's arc
+   */
   function getArcColors(node: Node) {
     const isHighlighted = arePathsEqual(props.highlightedPath, node.path);
 
