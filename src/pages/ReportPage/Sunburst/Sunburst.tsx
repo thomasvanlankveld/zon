@@ -33,8 +33,6 @@ type Dimensions = {
 };
 
 type Descendant = Node & {
-  zIndex: Accessor<number>;
-  setZIndex: Setter<number>;
   opacity: Accessor<number>;
   setOpacity: Setter<number>;
   targetOpacity: Accessor<number>;
@@ -47,7 +45,6 @@ type Descendant = Node & {
 
 type Arc = {
   d: string;
-  zIndex: number;
   opacity: number;
   clickTarget: Path;
   hoverTarget: Path;
@@ -194,7 +191,6 @@ export default function Sunburst(props: SunburstProps) {
           targetMaxDistance(),
         ),
       ),
-      zIndex: 2,
       opacity: 1,
       clickTarget: getParentPath(targetDiagramRoot().path),
       hoverTarget: targetDiagramRoot().path,
@@ -255,13 +251,11 @@ export default function Sunburst(props: SunburstProps) {
       );
 
       if (matchingDescendant) {
-        matchingDescendant.setZIndex(1);
         matchingDescendant.setTargetOpacity(1);
         matchingDescendant.setTargetDimensions(
           getArcDimensions(node, targetDiagramRoot(), targetMaxDistance()),
         );
       } else {
-        const [zIndex, setZIndex] = createSignal(1);
         const [opacity, setOpacity] = createSignal(0);
         const [targetOpacity, setTargetOpacity] = createSignal(1);
         const [dimensions, setDimensions] = createSignal(
@@ -277,8 +271,6 @@ export default function Sunburst(props: SunburstProps) {
 
         newDescendants.push({
           ...node,
-          zIndex,
-          setZIndex,
           opacity,
           setOpacity,
           targetOpacity,
@@ -297,7 +289,6 @@ export default function Sunburst(props: SunburstProps) {
       );
 
       if (!matchingNewDescendant) {
-        descendant.setZIndex(0);
         descendant.setTargetOpacity(0);
         descendant.setTargetDimensions(
           getArcDimensions(
@@ -408,18 +399,15 @@ export default function Sunburst(props: SunburstProps) {
   }
 
   const arcs = () =>
-    visibleDescendants()
-      .map(
-        (node): Arc => ({
-          d: getNodeArcD(node.dimensions()),
-          zIndex: node.zIndex(),
-          opacity: node.opacity(),
-          clickTarget: getArcClickTarget(node),
-          hoverTarget: node.path,
-          arcColors: getArcColors(node),
-        }),
-      )
-      .toSorted((a, b) => a.zIndex - b.zIndex);
+    visibleDescendants().map(
+      (node): Arc => ({
+        d: getNodeArcD(node.dimensions()),
+        opacity: node.opacity(),
+        clickTarget: getArcClickTarget(node),
+        hoverTarget: node.path,
+        arcColors: getArcColors(node),
+      }),
+    );
 
   function navigate(path: Path | null) {
     batch(() => {
@@ -457,7 +445,6 @@ export default function Sunburst(props: SunburstProps) {
               "--arc-fill-color": arc.arcColors.fill,
               "--arc-highlighted-color": arc.arcColors.highlighted,
               "--arc-pressed-color": arc.arcColors.pressed,
-              "z-index": arc.zIndex,
               opacity: arc.opacity,
             }}
             class={styles.sunburst__arc}
