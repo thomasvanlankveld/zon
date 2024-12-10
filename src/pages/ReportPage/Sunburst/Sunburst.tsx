@@ -8,7 +8,6 @@ import {
   Show,
   type Setter,
 } from "solid-js";
-import { getArc as getArcD } from "../../../utils/svg.ts";
 import {
   NODE_TYPE,
   type Node,
@@ -135,43 +134,6 @@ export default function Sunburst(props: SunburstProps) {
 
     return { x0: clamp(x0, 0, 1), x1: clamp(x1, 0, 1), y0, y1 };
   }
-
-  // TODO: Get rid of this in favor of drawing the root as a circle
-  /**
-   * Determines the SVG path data for a node's arc
-   */
-  function getNodeArcD(dimensions: Dimensions): string {
-    const outerRadius = dimensions.y0 * maxRadius();
-    const innerRadius = dimensions.y1 * maxRadius();
-    const startAngle = dimensions.x0 * 2 * Math.PI;
-    const endAngle = dimensions.x1 * 2 * Math.PI;
-
-    return getArcD({ innerRadius, outerRadius, startAngle, endAngle });
-  }
-
-  const rootArc = createMemo(() => {
-    const baseColor = new Cubehelix(0, 0, 1, 0.1);
-    const highlightedColor = baseColor.cloudier(1).toRgbString();
-    const pressedColor = baseColor.clearer(0.25).toRgbString();
-
-    return {
-      d: getNodeArcD(
-        getArcDimensions(
-          targetDiagramRoot(),
-          targetDiagramRoot(),
-          targetMaxDistance(),
-        ),
-      ),
-      opacity: 1,
-      clickTarget: getParentPath(targetDiagramRoot().path),
-      hoverTarget: targetDiagramRoot().path,
-      arcColors: {
-        fill: baseColor.toRgbString(),
-        highlighted: highlightedColor,
-        pressed: pressedColor,
-      },
-    };
-  });
 
   /**
    * Determines the target path for a node's arc click
@@ -368,25 +330,23 @@ export default function Sunburst(props: SunburstProps) {
     });
   }
 
+  const rootColors = (() => {
+    const baseColor = new Cubehelix(0, 0, 1, 0.1);
+    const highlightedColor = baseColor.cloudier(1).toRgbString();
+    const pressedColor = baseColor.clearer(0.25).toRgbString();
+
+    return {
+      fill: baseColor.toRgbString(),
+      highlighted: highlightedColor,
+      pressed: pressedColor,
+    };
+  })();
+
   return (
     <svg
       ref={setSvg}
       viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}
     >
-      <Show when={!isReportRoot()}>
-        <path
-          d={rootArc().d}
-          style={{
-            "--arc-fill-color": rootArc().arcColors.fill,
-            "--arc-highlighted-color": rootArc().arcColors.highlighted,
-            "--arc-pressed-color": rootArc().arcColors.pressed,
-          }}
-          class={styles.sunburst__arc}
-          onMouseEnter={() => props.setHoverArcPath(rootArc().hoverTarget)}
-          onMouseLeave={() => props.setHoverArcPath(null)}
-          onClick={() => navigate(rootArc().clickTarget)}
-        />
-      </Show>
       <For each={visibleDescendants()}>
         {(descendant) => (
           <Arc
@@ -399,6 +359,22 @@ export default function Sunburst(props: SunburstProps) {
           />
         )}
       </For>
+      <Show when={!isReportRoot()}>
+        <circle
+          cx={0}
+          cy={0}
+          r={(1 / targetMaxDistance()) * maxRadius()}
+          style={{
+            "--arc-fill-color": rootColors.fill,
+            "--arc-highlighted-color": rootColors.highlighted,
+            "--arc-pressed-color": rootColors.pressed,
+          }}
+          class={styles.sunburst__arc}
+          onMouseEnter={() => props.setHoverArcPath(targetDiagramRoot().path)}
+          onMouseLeave={() => props.setHoverArcPath(null)}
+          onClick={() => navigate(getParentPath(targetDiagramRoot().path))}
+        />
+      </Show>
     </svg>
   );
 }
