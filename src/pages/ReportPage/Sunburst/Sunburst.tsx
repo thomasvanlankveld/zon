@@ -75,7 +75,7 @@ function areNumbersEqual(a: number, b: number, tolerance?: number) {
 }
 
 function getAnimationTarget(value: number, target: number, dt: number) {
-  return value + (target - value) * (1 - Math.exp(-dt * 0.01));
+  return value + (target - value) * (1 - Math.exp(-dt * 0.013));
 }
 
 export default function Sunburst(props: SunburstProps) {
