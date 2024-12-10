@@ -335,9 +335,12 @@ export default function Sunburst(props: SunburstProps) {
       }[] = [];
 
       visibleDescendants().forEach((node) => {
+        const targetOpacity = node.targetOpacity();
+        const targetDimensions = node.targetDimensions();
+
         const newOpacity = getAnimationTarget(
           node.opacity(),
-          node.targetOpacity(),
+          targetOpacity,
           dt,
         );
 
@@ -347,19 +350,22 @@ export default function Sunburst(props: SunburstProps) {
         ][];
         const newDimEntries = dimEntries.map(([key, value]) => [
           key,
-          getAnimationTarget(value, node.targetDimensions()[key], dt),
+          getAnimationTarget(value, targetDimensions[key], dt),
         ]);
         const newDimensions = Object.fromEntries(newDimEntries) as Dimensions;
 
         if (
-          node.targetOpacity() === 0 &&
-          areNumbersEqual(node.opacity(), node.targetOpacity(), 0.01)
+          areNumbersEqual(newOpacity, targetOpacity, 0.001) &&
+          areNumbersEqual(newDimensions.x0, targetDimensions.x0, 0.001) &&
+          areNumbersEqual(newDimensions.x1, targetDimensions.x1, 0.001) &&
+          areNumbersEqual(newDimensions.y0, targetDimensions.y0, 0.001) &&
+          areNumbersEqual(newDimensions.y1, targetDimensions.y1, 0.001)
         ) {
           // TODO: Set opacity and dimensions to their exact target values
           updates.push({
             node,
-            newOpacity: node.targetOpacity(),
-            newDimensions: node.targetDimensions(),
+            newOpacity: targetOpacity,
+            newDimensions: targetDimensions,
             isDoneAnimating: true,
           });
         } else {
@@ -372,9 +378,11 @@ export default function Sunburst(props: SunburstProps) {
         }
       });
 
-      const nodePathsToRemove: Path[] = updates
-        .filter((update) => update.isDoneAnimating)
-        .map((update) => update.node.path);
+      const animationsThatAreDone = updates.filter(
+        (update) => update.isDoneAnimating,
+      );
+      const allDone =
+        animationsThatAreDone.length === visibleDescendants().length;
 
       // Need to batch updates for all nodes together, or the animation crashes to a halt
       batch(() => {
@@ -384,19 +392,16 @@ export default function Sunburst(props: SunburstProps) {
         });
         setTime(animationTime);
 
-        if (nodePathsToRemove.length > 0) {
+        if (allDone) {
           setVisibleDescendants((visibleDescendants) =>
             visibleDescendants.filter(
-              (visibleNode) =>
-                !nodePathsToRemove.some((pathToRemove) =>
-                  arePathsEqual(visibleNode.path, pathToRemove),
-                ),
+              (visibleNode) => visibleNode.targetOpacity() === 1,
             ),
           );
         }
       });
 
-      if (nodePathsToRemove.length === 0) {
+      if (!allDone) {
         animate();
       }
     });
