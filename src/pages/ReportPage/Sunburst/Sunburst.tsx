@@ -1,5 +1,4 @@
 import {
-  Accessor,
   batch,
   createEffect,
   createMemo,
@@ -21,39 +20,10 @@ import {
   arePathsEqual,
 } from "../../../utils/zon/index.ts";
 import createElementSize from "../../../primitives/createElementSize.ts";
-import styles from "./Sunburst.module.css";
+import styles from "./Arc.module.css";
 import { Cubehelix } from "../../../utils/color.ts";
-
-type DimensionKey = "x0" | "x1" | "y0" | "y1";
-type Dimensions = {
-  x0: number;
-  x1: number;
-  y0: number;
-  y1: number;
-};
-
-type Descendant = Node & {
-  opacity: Accessor<number>;
-  setOpacity: Setter<number>;
-  targetOpacity: Accessor<number>;
-  setTargetOpacity: Setter<number>;
-  dimensions: Accessor<Dimensions>;
-  setDimensions: Setter<Dimensions>;
-  targetDimensions: Accessor<Dimensions>;
-  setTargetDimensions: Setter<Dimensions>;
-};
-
-type Arc = {
-  d: string;
-  opacity: number;
-  clickTarget: Path;
-  hoverTarget: Path;
-  arcColors: {
-    fill: string;
-    highlighted: string;
-    pressed: string;
-  };
-};
+import { Dimensions, Descendant, DimensionKey } from "./types.ts";
+import Arc from "./Arc.tsx";
 
 type SunburstProps = {
   root: Node;
@@ -166,6 +136,7 @@ export default function Sunburst(props: SunburstProps) {
     return { x0: clamp(x0, 0, 1), x1: clamp(x1, 0, 1), y0, y1 };
   }
 
+  // TODO: Get rid of this in favor of drawing the root as a circle
   /**
    * Determines the SVG path data for a node's arc
    */
@@ -178,7 +149,7 @@ export default function Sunburst(props: SunburstProps) {
     return getArcD({ innerRadius, outerRadius, startAngle, endAngle });
   }
 
-  const rootArc = createMemo((): Arc => {
+  const rootArc = createMemo(() => {
     const baseColor = new Cubehelix(0, 0, 1, 0.1);
     const highlightedColor = baseColor.cloudier(1).toRgbString();
     const pressedColor = baseColor.clearer(0.25).toRgbString();
@@ -210,18 +181,6 @@ export default function Sunburst(props: SunburstProps) {
     const isGroup = node.type === NODE_TYPE.GROUP;
 
     return isFile || isGroup ? getParentPath(node.path) : node.path;
-  }
-
-  /**
-   * Determines the colors of a node's arc
-   */
-  function getArcColors(node: Node) {
-    const isHighlighted = arePathsEqual(props.highlightedPath, node.path);
-
-    return {
-      ...node.colors,
-      fill: isHighlighted ? node.colors.highlighted : node.colors.base,
-    };
   }
 
   const targetDescendants = createMemo(() =>
@@ -400,17 +359,6 @@ export default function Sunburst(props: SunburstProps) {
     });
   }
 
-  const arcs = () =>
-    visibleDescendants().map(
-      (node): Arc => ({
-        d: getNodeArcD(node.dimensions()),
-        opacity: node.opacity(),
-        clickTarget: getArcClickTarget(node),
-        hoverTarget: node.path,
-        arcColors: getArcColors(node),
-      }),
-    );
-
   function navigate(path: Path | null) {
     batch(() => {
       props.setSelectedRootPath(path);
@@ -439,20 +387,15 @@ export default function Sunburst(props: SunburstProps) {
           onClick={() => navigate(rootArc().clickTarget)}
         />
       </Show>
-      <For each={arcs()}>
-        {(arc) => (
-          <path
-            d={arc.d}
-            style={{
-              "--arc-fill-color": arc.arcColors.fill,
-              "--arc-highlighted-color": arc.arcColors.highlighted,
-              "--arc-pressed-color": arc.arcColors.pressed,
-              opacity: arc.opacity,
-            }}
-            class={styles.sunburst__arc}
-            onMouseEnter={[props.setHoverArcPath, arc.hoverTarget]}
-            onMouseLeave={[props.setHoverArcPath, null]}
-            onClick={[navigate, arc.clickTarget]}
+      <For each={visibleDescendants()}>
+        {(descendant) => (
+          <Arc
+            node={descendant}
+            maxRadius={maxRadius()}
+            highlightedPath={props.highlightedPath}
+            onMouseEnter={() => props.setHoverArcPath(descendant.path)}
+            onMouseLeave={() => props.setHoverArcPath(null)}
+            onClick={() => navigate(getArcClickTarget(descendant))}
           />
         )}
       </For>
