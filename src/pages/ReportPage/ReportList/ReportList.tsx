@@ -93,6 +93,18 @@ export default function ReportList(props: ReportListProps) {
     }
   }
 
+  function getChildArrowDirection(node: Node) {
+    if (node.type === NODE_TYPE.FOLDER) {
+      return ARROW_DIRECTION.RIGHT;
+    }
+
+    if (node.type === NODE_TYPE.GROUP) {
+      return ARROW_DIRECTION.DOWN;
+    }
+
+    return undefined;
+  }
+
   return (
     <div class={styles["report-list"]}>
       {/* TODO: Maybe this shouldn't be a nav? Check https://a11y-style-guide.com/style-guide/section-navigation.html */}
@@ -129,11 +141,7 @@ export default function ReportList(props: ReportListProps) {
                 "--highlighted-color": child.colors.highlighted,
                 "--pressed-color": child.colors.pressed,
               }}
-              arrowDirection={
-                child.type === NODE_TYPE.FOLDER
-                  ? ARROW_DIRECTION.RIGHT
-                  : undefined
-              }
+              arrowDirection={getChildArrowDirection(child)}
               node={child}
               onMouseEnter={[props.setHoverListPath, child.path]}
               onMouseLeave={[props.setHoverListPath, null]}

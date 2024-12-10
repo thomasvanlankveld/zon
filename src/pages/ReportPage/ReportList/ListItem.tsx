@@ -20,6 +20,7 @@ type ListItemProps = {
 export const ARROW_DIRECTION = {
   LEFT: "left",
   RIGHT: "right",
+  DOWN: "down",
 } as const;
 export type ArrowDirection =
   (typeof ARROW_DIRECTION)[keyof typeof ARROW_DIRECTION];
@@ -50,6 +51,9 @@ export default function ListItem(props: ListItemProps) {
         </Show>
         <Show when={props.arrowDirection === ARROW_DIRECTION.RIGHT}>
           <span class={styles["list-item__arrow"]}>{" ->"}</span>
+        </Show>
+        <Show when={props.arrowDirection === ARROW_DIRECTION.DOWN}>
+          <span class={styles["list-item__arrow"]}>{" ↓"}</span>
         </Show>
       </span>
       <span class={styles["list-item__number-of-lines"]}>
