@@ -65,6 +65,10 @@ type SunburstProps = {
   setSelectedRootPath: Setter<Path | null>;
 };
 
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(value, max));
+}
+
 function areNumbersEqual(a: number, b: number, tolerance?: number) {
   tolerance ??= Math.min(Math.abs(a), Math.abs(b)) * Number.EPSILON;
 
@@ -160,7 +164,7 @@ export default function Sunburst(props: SunburstProps) {
     const y0 = nodeOuterDistance / maxDistance;
     const y1 = Math.max(y0 - dy, 0);
 
-    return { x0, x1, y0, y1 };
+    return { x0: clamp(x0, 0, 1), x1: clamp(x1, 0, 1), y0, y1 };
   }
 
   /**
