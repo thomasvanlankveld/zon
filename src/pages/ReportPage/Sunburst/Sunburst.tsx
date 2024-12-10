@@ -24,6 +24,7 @@ import createElementSize from "../../../primitives/createElementSize.ts";
 import styles from "./Sunburst.module.css";
 import { Cubehelix } from "../../../utils/color.ts";
 
+type DimensionKey = "x0" | "x1" | "y0" | "y1";
 type Dimensions = {
   x0: number;
   x1: number;
@@ -70,7 +71,8 @@ function clamp(value: number, min: number, max: number) {
 }
 
 function areNumbersEqual(a: number, b: number, tolerance?: number) {
-  tolerance ??= Math.min(Math.abs(a), Math.abs(b)) * Number.EPSILON;
+  tolerance ??=
+    Math.max(Math.min(Math.abs(a), Math.abs(b)), 1) * Number.EPSILON;
 
   return Math.abs(a - b) < tolerance;
 }
@@ -320,7 +322,7 @@ export default function Sunburst(props: SunburstProps) {
   const [time, setTime] = createSignal(Date.now());
 
   function animate() {
-    requestAnimationFrame(() => {
+    requestAnimationFrame(function executeAnimationStep() {
       const animationTime = Date.now();
 
       // position.x += (target - position.x) * (1 - exp(- dt * speed));
@@ -339,14 +341,15 @@ export default function Sunburst(props: SunburstProps) {
           dt,
         );
 
-        const dimensions = Object.entries(node.dimensions());
-        const targetDimensions = Object.values(node.targetDimensions());
-        const newDimensions = Object.fromEntries(
-          dimensions.map(([key, value], index) => [
-            key,
-            getAnimationTarget(value, targetDimensions[index], dt),
-          ]),
-        ) as Dimensions;
+        const dimEntries = Object.entries(node.dimensions()) as [
+          DimensionKey,
+          number,
+        ][];
+        const newDimEntries = dimEntries.map(([key, value]) => [
+          key,
+          getAnimationTarget(value, node.targetDimensions()[key], dt),
+        ]);
+        const newDimensions = Object.fromEntries(newDimEntries) as Dimensions;
 
         if (
           node.targetOpacity() === 0 &&
