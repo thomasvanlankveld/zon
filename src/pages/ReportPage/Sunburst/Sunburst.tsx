@@ -235,7 +235,7 @@ export default function Sunburst(props: SunburstProps) {
     Descendant[]
   >([]);
 
-  createEffect((prevTargetDescendants) => {
+  createEffect(function updateVisibleDescendants(prevTargetDescendants) {
     // Only run this effect if the target descendants have changed
     if (prevTargetDescendants === targetDescendants()) {
       return targetDescendants();
@@ -317,8 +317,10 @@ export default function Sunburst(props: SunburstProps) {
 
   function animate() {
     requestAnimationFrame(() => {
+      const animationTime = Date.now();
+
       // position.x += (target - position.x) * (1 - exp(- dt * speed));
-      const dt = Date.now() - time();
+      const dt = animationTime - time();
       const nodePathsToRemove: Path[] = [];
 
       visibleDescendants().forEach((node) => {
@@ -343,11 +345,12 @@ export default function Sunburst(props: SunburstProps) {
           node.targetOpacity() === 0 &&
           areNumbersEqual(node.opacity(), node.targetOpacity(), 0.01)
         ) {
+          // TODO: Set opacity and dimensions to their exact target values
           nodePathsToRemove.push(node.path);
         }
       });
 
-      setTime(Date.now());
+      setTime(animationTime);
 
       if (nodePathsToRemove.length > 0) {
         setVisibleDescendants((visibleDescendants) =>
