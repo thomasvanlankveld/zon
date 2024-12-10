@@ -345,12 +345,14 @@ export default function Sunburst(props: SunburstProps) {
         ]);
         const newDimensions = Object.fromEntries(newDimEntries) as Dimensions;
 
+        const tolerance = 0.001;
+
         if (
-          areNumbersEqual(newOpacity, targetOpacity, 0.001) &&
-          areNumbersEqual(newDimensions.x0, targetDimensions.x0, 0.001) &&
-          areNumbersEqual(newDimensions.x1, targetDimensions.x1, 0.001) &&
-          areNumbersEqual(newDimensions.y0, targetDimensions.y0, 0.001) &&
-          areNumbersEqual(newDimensions.y1, targetDimensions.y1, 0.001)
+          areNumbersEqual(newOpacity, targetOpacity, tolerance) &&
+          areNumbersEqual(newDimensions.x0, targetDimensions.x0, tolerance) &&
+          areNumbersEqual(newDimensions.x1, targetDimensions.x1, tolerance) &&
+          areNumbersEqual(newDimensions.y0, targetDimensions.y0, tolerance) &&
+          areNumbersEqual(newDimensions.y1, targetDimensions.y1, tolerance)
         ) {
           // TODO: Set opacity and dimensions to their exact target values
           updates.push({
