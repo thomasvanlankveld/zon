@@ -325,7 +325,12 @@ export default function Sunburst(props: SunburstProps) {
 
       // position.x += (target - position.x) * (1 - exp(- dt * speed));
       const dt = animationTime - time();
-      const nodePathsToRemove: Path[] = [];
+      const updates: {
+        node: Descendant;
+        newOpacity: number;
+        newDimensions: Dimensions;
+        isDoneAnimating: boolean;
+      }[] = [];
 
       visibleDescendants().forEach((node) => {
         const newOpacity = getAnimationTarget(
@@ -333,39 +338,62 @@ export default function Sunburst(props: SunburstProps) {
           node.targetOpacity(),
           dt,
         );
+
         const dimensions = Object.entries(node.dimensions());
         const targetDimensions = Object.values(node.targetDimensions());
-        const newDimensions = dimensions.map(([key, value], index) => [
-          key,
-          getAnimationTarget(value, targetDimensions[index], dt),
-        ]);
-
-        batch(() => {
-          node.setOpacity(newOpacity);
-          node.setDimensions(Object.fromEntries(newDimensions) as Dimensions);
-        });
+        const newDimensions = Object.fromEntries(
+          dimensions.map(([key, value], index) => [
+            key,
+            getAnimationTarget(value, targetDimensions[index], dt),
+          ]),
+        ) as Dimensions;
 
         if (
           node.targetOpacity() === 0 &&
           areNumbersEqual(node.opacity(), node.targetOpacity(), 0.01)
         ) {
           // TODO: Set opacity and dimensions to their exact target values
-          nodePathsToRemove.push(node.path);
+          updates.push({
+            node,
+            newOpacity: node.targetOpacity(),
+            newDimensions: node.targetDimensions(),
+            isDoneAnimating: true,
+          });
+        } else {
+          updates.push({
+            node,
+            newOpacity,
+            newDimensions,
+            isDoneAnimating: false,
+          });
         }
       });
 
-      setTime(animationTime);
+      const nodePathsToRemove: Path[] = updates
+        .filter((update) => update.isDoneAnimating)
+        .map((update) => update.node.path);
 
-      if (nodePathsToRemove.length > 0) {
-        setVisibleDescendants((visibleDescendants) =>
-          visibleDescendants.filter(
-            (visibleNode) =>
-              !nodePathsToRemove.some((pathToRemove) =>
-                arePathsEqual(visibleNode.path, pathToRemove),
-              ),
-          ),
-        );
-      } else {
+      // Need to batch updates for all nodes together, or the animation crashes to a halt
+      batch(() => {
+        updates.forEach((update) => {
+          update.node.setOpacity(update.newOpacity);
+          update.node.setDimensions(update.newDimensions);
+        });
+        setTime(animationTime);
+
+        if (nodePathsToRemove.length > 0) {
+          setVisibleDescendants((visibleDescendants) =>
+            visibleDescendants.filter(
+              (visibleNode) =>
+                !nodePathsToRemove.some((pathToRemove) =>
+                  arePathsEqual(visibleNode.path, pathToRemove),
+                ),
+            ),
+          );
+        }
+      });
+
+      if (nodePathsToRemove.length === 0) {
         animate();
       }
     });
