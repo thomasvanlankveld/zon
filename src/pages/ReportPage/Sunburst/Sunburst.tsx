@@ -21,7 +21,7 @@ import {
 import createElementSize from "../../../primitives/createElementSize.ts";
 import styles from "./Arc.module.css";
 import { Cubehelix } from "../../../utils/color.ts";
-import { Dimensions, Descendant, DimensionKey } from "./types.ts";
+import { Dimensions, SunburstNode, DimensionKey } from "./types.ts";
 import Arc from "./Arc.tsx";
 
 type SunburstProps = {
@@ -145,7 +145,7 @@ export default function Sunburst(props: SunburstProps) {
     return isFile || isGroup ? getParentPath(node.path) : node.path;
   }
 
-  const targetDescendants = createMemo(() =>
+  const targetNodes = createMemo(() =>
     getDescendants(targetDiagramRoot(), {
       exclude: {
         minLines: 1,
@@ -154,26 +154,24 @@ export default function Sunburst(props: SunburstProps) {
     }).slice(1),
   );
 
-  const [visibleDescendants, setVisibleDescendants] = createSignal<
-    Descendant[]
-  >([]);
+  const [visibleNodes, setVisibleNodes] = createSignal<SunburstNode[]>([]);
 
-  createEffect(function updateVisibleDescendants(prevTargetDescendants) {
-    // Only run this effect if the target descendants have changed
-    if (prevTargetDescendants === targetDescendants()) {
-      return targetDescendants();
+  createEffect(function updateVisibleNodes(prevTargetNodes) {
+    // Only run this effect if the target nodes have changed
+    if (prevTargetNodes === targetNodes()) {
+      return targetNodes();
     }
 
-    const newDescendants: Descendant[] = [];
+    const newNodes: SunburstNode[] = [];
 
-    targetDescendants().forEach((node) => {
-      const matchingDescendant = visibleDescendants().find((descendant) =>
-        arePathsEqual(descendant.path, node.path),
+    targetNodes().forEach((node) => {
+      const matchingNodes = visibleNodes().find((node) =>
+        arePathsEqual(node.path, node.path),
       );
 
-      if (matchingDescendant) {
-        matchingDescendant.setTargetOpacity(1);
-        matchingDescendant.setTargetDimensions(
+      if (matchingNodes) {
+        matchingNodes.setTargetOpacity(1);
+        matchingNodes.setTargetDimensions(
           getArcDimensions(node, targetDiagramRoot(), targetMaxDistance()),
         );
       } else {
@@ -190,7 +188,7 @@ export default function Sunburst(props: SunburstProps) {
           getArcDimensions(node, targetDiagramRoot(), targetMaxDistance()),
         );
 
-        newDescendants.push({
+        newNodes.push({
           ...node,
           opacity,
           setOpacity,
@@ -204,31 +202,27 @@ export default function Sunburst(props: SunburstProps) {
       }
     });
 
-    visibleDescendants().forEach((descendant) => {
-      const matchingNewDescendant = targetDescendants().find((newDescendant) =>
-        arePathsEqual(newDescendant.path, descendant.path),
+    visibleNodes().forEach((node) => {
+      const matchingNewNodes = targetNodes().find((targetNode) =>
+        arePathsEqual(targetNode.path, node.path),
       );
 
-      if (!matchingNewDescendant) {
-        descendant.setTargetOpacity(0);
-        descendant.setTargetDimensions(
-          getArcDimensions(
-            descendant,
-            targetDiagramRoot(),
-            targetMaxDistance(),
-          ),
+      if (!matchingNewNodes) {
+        node.setTargetOpacity(0);
+        node.setTargetDimensions(
+          getArcDimensions(node, targetDiagramRoot(), targetMaxDistance()),
         );
       }
     });
 
-    setVisibleDescendants([...visibleDescendants(), ...newDescendants]);
+    setVisibleNodes([...visibleNodes(), ...newNodes]);
     setActualDiagramRoot(targetDiagramRoot());
     setActualMaxDistance(targetMaxDistance());
 
     setTime(Date.now());
     animate();
 
-    return targetDescendants();
+    return targetNodes();
   });
 
   const [time, setTime] = createSignal(Date.now());
@@ -240,13 +234,13 @@ export default function Sunburst(props: SunburstProps) {
       // position.x += (target - position.x) * (1 - exp(- dt * speed));
       const dt = animationTime - time();
       const updates: {
-        node: Descendant;
+        node: SunburstNode;
         newOpacity: number;
         newDimensions: Dimensions;
         isDoneAnimating: boolean;
       }[] = [];
 
-      visibleDescendants().forEach((node) => {
+      visibleNodes().forEach((node) => {
         const targetOpacity = node.targetOpacity();
         const targetDimensions = node.targetDimensions();
 
@@ -295,8 +289,7 @@ export default function Sunburst(props: SunburstProps) {
       const animationsThatAreDone = updates.filter(
         (update) => update.isDoneAnimating,
       );
-      const allDone =
-        animationsThatAreDone.length === visibleDescendants().length;
+      const allDone = animationsThatAreDone.length === visibleNodes().length;
 
       // Need to batch updates for all nodes together, or the animation crashes to a halt
       batch(() => {
@@ -307,8 +300,8 @@ export default function Sunburst(props: SunburstProps) {
         setTime(animationTime);
 
         if (allDone) {
-          setVisibleDescendants((visibleDescendants) =>
-            visibleDescendants.filter(
+          setVisibleNodes((visibleNodes) =>
+            visibleNodes.filter(
               (visibleNode) => visibleNode.targetOpacity() === 1,
             ),
           );
@@ -347,15 +340,15 @@ export default function Sunburst(props: SunburstProps) {
       ref={setSvg}
       viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}
     >
-      <For each={visibleDescendants()}>
-        {(descendant) => (
+      <For each={visibleNodes()}>
+        {(node) => (
           <Arc
-            node={descendant}
+            node={node}
             maxRadius={maxRadius()}
             highlightedPath={props.highlightedPath}
-            onMouseEnter={() => props.setHoverArcPath(descendant.path)}
+            onMouseEnter={() => props.setHoverArcPath(node.path)}
             onMouseLeave={() => props.setHoverArcPath(null)}
-            onClick={() => navigate(getArcClickTarget(descendant))}
+            onClick={() => navigate(getArcClickTarget(node))}
           />
         )}
       </For>
