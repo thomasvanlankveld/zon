@@ -1,12 +1,12 @@
 import { JSX } from "solid-js/h/jsx-runtime";
 import { getArc as getArcD } from "../../../utils/svg.ts";
-import { Descendant, Dimensions } from "./types.ts";
+import { SunburstNode, Dimensions } from "./types.ts";
 import { arePathsEqual } from "../../../utils/zon/path.ts";
 import { Path } from "../../../utils/zon/types.ts";
 import styles from "./Arc.module.css";
 
 type ArcProps = {
-  node: Descendant;
+  node: SunburstNode;
   maxRadius: number;
   highlightedPath: Path | null;
   onMouseEnter?: JSX.EventHandler<SVGPathElement, MouseEvent>;
@@ -32,7 +32,7 @@ function Arc(props: ArcProps) {
   /**
    * Determines the colors of a node's arc
    */
-  function getArcColors(node: Descendant) {
+  function getArcColors(node: SunburstNode) {
     const isHighlighted = arePathsEqual(props.highlightedPath, node.path);
 
     return {

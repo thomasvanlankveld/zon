@@ -21,7 +21,7 @@ import {
 import createElementSize from "../../../primitives/createElementSize.ts";
 import styles from "./Arc.module.css";
 import { Cubehelix } from "../../../utils/color.ts";
-import { Dimensions, Descendant, DimensionKey } from "./types.ts";
+import { Dimensions, SunburstNode, DimensionKey } from "./types.ts";
 import Arc from "./Arc.tsx";
 
 type SunburstProps = {
@@ -155,7 +155,7 @@ export default function Sunburst(props: SunburstProps) {
   );
 
   const [visibleDescendants, setVisibleDescendants] = createSignal<
-    Descendant[]
+    SunburstNode[]
   >([]);
 
   createEffect(function updateVisibleDescendants(prevTargetDescendants) {
@@ -164,7 +164,7 @@ export default function Sunburst(props: SunburstProps) {
       return targetDescendants();
     }
 
-    const newDescendants: Descendant[] = [];
+    const newDescendants: SunburstNode[] = [];
 
     targetDescendants().forEach((node) => {
       const matchingDescendant = visibleDescendants().find((descendant) =>
@@ -240,7 +240,7 @@ export default function Sunburst(props: SunburstProps) {
       // position.x += (target - position.x) * (1 - exp(- dt * speed));
       const dt = animationTime - time();
       const updates: {
-        node: Descendant;
+        node: SunburstNode;
         newOpacity: number;
         newDimensions: Dimensions;
         isDoneAnimating: boolean;

@@ -9,7 +9,7 @@ export type Dimensions = {
   y1: number;
 };
 
-export type Descendant = Node & {
+export type SunburstNode = Node & {
   opacity: Accessor<number>;
   setOpacity: Setter<number>;
   targetOpacity: Accessor<number>;
