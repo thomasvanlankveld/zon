@@ -145,7 +145,7 @@ export default function Sunburst(props: SunburstProps) {
     return isFile || isGroup ? getParentPath(node.path) : node.path;
   }
 
-  const targetDescendants = createMemo(() =>
+  const targetNodes = createMemo(() =>
     getDescendants(targetDiagramRoot(), {
       exclude: {
         minLines: 1,
@@ -154,44 +154,50 @@ export default function Sunburst(props: SunburstProps) {
     }).slice(1),
   );
 
-  const [visibleDescendants, setVisibleDescendants] = createSignal<
-    SunburstNode[]
-  >([]);
+  const [visibleNodes, setVisibleNodes] = createSignal<SunburstNode[]>([]);
 
-  createEffect(function updateVisibleDescendants(prevTargetDescendants) {
+  createEffect(function updateVisibleNodes(prevTargetNodes) {
     // Only run this effect if the target descendants have changed
-    if (prevTargetDescendants === targetDescendants()) {
-      return targetDescendants();
+    if (prevTargetNodes === targetNodes()) {
+      return targetNodes();
     }
 
-    const newDescendants: SunburstNode[] = [];
+    const newNodes: SunburstNode[] = [];
 
-    targetDescendants().forEach((node) => {
-      const matchingDescendant = visibleDescendants().find((descendant) =>
-        arePathsEqual(descendant.path, node.path),
+    targetNodes().forEach((targetNode) => {
+      const matchingNode = visibleNodes().find((visibleNode) =>
+        arePathsEqual(visibleNode.path, targetNode.path),
       );
 
-      if (matchingDescendant) {
-        matchingDescendant.setTargetOpacity(1);
-        matchingDescendant.setTargetDimensions(
-          getArcDimensions(node, targetDiagramRoot(), targetMaxDistance()),
+      if (matchingNode) {
+        matchingNode.setTargetOpacity(1);
+        matchingNode.setTargetDimensions(
+          getArcDimensions(
+            targetNode,
+            targetDiagramRoot(),
+            targetMaxDistance(),
+          ),
         );
       } else {
         const [opacity, setOpacity] = createSignal(0);
         const [targetOpacity, setTargetOpacity] = createSignal(1);
         const [dimensions, setDimensions] = createSignal(
           getArcDimensions(
-            node,
+            targetNode,
             actualDiagramRoot() as Node,
             actualMaxDistance(),
           ),
         );
         const [targetDimensions, setTargetDimensions] = createSignal(
-          getArcDimensions(node, targetDiagramRoot(), targetMaxDistance()),
+          getArcDimensions(
+            targetNode,
+            targetDiagramRoot(),
+            targetMaxDistance(),
+          ),
         );
 
-        newDescendants.push({
-          ...node,
+        newNodes.push({
+          ...targetNode,
           opacity,
           setOpacity,
           targetOpacity,
@@ -204,31 +210,30 @@ export default function Sunburst(props: SunburstProps) {
       }
     });
 
-    visibleDescendants().forEach((descendant) => {
-      const matchingNewDescendant = targetDescendants().find((newDescendant) =>
-        arePathsEqual(newDescendant.path, descendant.path),
+    visibleNodes().forEach((visibleNode) => {
+      const shouldStillBeVisible = targetNodes().some((targetNode) =>
+        arePathsEqual(targetNode.path, visibleNode.path),
       );
 
-      if (!matchingNewDescendant) {
-        descendant.setTargetOpacity(0);
-        descendant.setTargetDimensions(
-          getArcDimensions(
-            descendant,
-            targetDiagramRoot(),
-            targetMaxDistance(),
-          ),
-        );
+      if (shouldStillBeVisible) {
+        return;
       }
+
+      visibleNode.setTargetOpacity(0);
+      // Even though the node will be removed, we still need to animate it to its target position
+      visibleNode.setTargetDimensions(
+        getArcDimensions(visibleNode, targetDiagramRoot(), targetMaxDistance()),
+      );
     });
 
-    setVisibleDescendants([...visibleDescendants(), ...newDescendants]);
+    setVisibleNodes([...visibleNodes(), ...newNodes]);
     setActualDiagramRoot(targetDiagramRoot());
     setActualMaxDistance(targetMaxDistance());
 
     setTime(Date.now());
     animate();
 
-    return targetDescendants();
+    return targetNodes();
   });
 
   const [time, setTime] = createSignal(Date.now());
@@ -246,7 +251,7 @@ export default function Sunburst(props: SunburstProps) {
         isDoneAnimating: boolean;
       }[] = [];
 
-      visibleDescendants().forEach((node) => {
+      visibleNodes().forEach((node) => {
         const targetOpacity = node.targetOpacity();
         const targetDimensions = node.targetDimensions();
 
@@ -295,8 +300,7 @@ export default function Sunburst(props: SunburstProps) {
       const animationsThatAreDone = updates.filter(
         (update) => update.isDoneAnimating,
       );
-      const allDone =
-        animationsThatAreDone.length === visibleDescendants().length;
+      const allDone = animationsThatAreDone.length === visibleNodes().length;
 
       // Need to batch updates for all nodes together, or the animation crashes to a halt
       batch(() => {
@@ -307,8 +311,8 @@ export default function Sunburst(props: SunburstProps) {
         setTime(animationTime);
 
         if (allDone) {
-          setVisibleDescendants((visibleDescendants) =>
-            visibleDescendants.filter(
+          setVisibleNodes((oldVisibleNodes) =>
+            oldVisibleNodes.filter(
               (visibleNode) => visibleNode.targetOpacity() === 1,
             ),
           );
@@ -347,15 +351,15 @@ export default function Sunburst(props: SunburstProps) {
       ref={setSvg}
       viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}
     >
-      <For each={visibleDescendants()}>
-        {(descendant) => (
+      <For each={visibleNodes()}>
+        {(node) => (
           <Arc
-            node={descendant}
+            node={node}
             maxRadius={maxRadius()}
             highlightedPath={props.highlightedPath}
-            onMouseEnter={() => props.setHoverArcPath(descendant.path)}
+            onMouseEnter={() => props.setHoverArcPath(node.path)}
             onMouseLeave={() => props.setHoverArcPath(null)}
-            onClick={() => navigate(getArcClickTarget(descendant))}
+            onClick={() => navigate(getArcClickTarget(node))}
           />
         )}
       </For>
