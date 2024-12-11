@@ -22,4 +22,8 @@
   min-height: calc(2 * var(--line-height));
   max-height: calc(2 * var(--line-height));
   overflow: hidden;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
