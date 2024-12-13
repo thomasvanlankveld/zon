@@ -34,7 +34,14 @@ export function getArc(arcSpecs: ArcSpecs) {
   const startAngle = Math.PI - arcSpecs.startAngle;
   const endAngle = Math.PI - arcSpecs.endAngle;
 
-  const isCircle = Math.abs(startAngle) === Math.abs(endAngle) % (Math.PI * 2);
+  const negativeValues = Object.values(arcSpecs).filter((val) => val < 0);
+  if (negativeValues.length > 0) {
+    throw new Error(
+      `Can't get arc path definition for negative values in ${JSON.stringify(arcSpecs)}`,
+    );
+  }
+
+  const isCircle = arcSpecs.startAngle === arcSpecs.endAngle % (Math.PI * 2);
   const isOpen = innerRadius > 0;
 
   if (isCircle && !isOpen) {
