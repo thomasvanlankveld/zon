@@ -1,18 +1,20 @@
 import type { CodeStats } from "../tokei.ts";
 
-export const LineType = {
-  blanks: "blanks",
-  code: "code",
-  comments: "comments",
+type ValueOf<T> = T[keyof T];
+
+export const LINE_TYPE = {
+  BLANKS: "blanks",
+  CODE: "code",
+  COMMENTS: "comments",
 } as const;
-export type LineType = keyof typeof LineType;
+export type LINE_TYPE = ValueOf<typeof LINE_TYPE>;
 
 export const NODE_TYPE = {
   FILE: "FILE",
   FOLDER: "FOLDER",
   GROUP: Symbol("GROUP"),
 } as const;
-export type NODE_TYPE = keyof typeof NODE_TYPE;
+export type NODE_TYPE = ValueOf<typeof NODE_TYPE>;
 
 export type SegmentName = string | typeof NODE_TYPE.GROUP;
 export type Path = SegmentName[];

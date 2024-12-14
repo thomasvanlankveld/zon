@@ -1,6 +1,6 @@
 import { rainbow, Cubehelix } from "../color.ts";
 import { Languages } from "../tokei.ts";
-import { type Colors, type LineType, type Node, NODE_TYPE } from "./types.ts";
+import { type Colors, type LINE_TYPE, type Node, NODE_TYPE } from "./types.ts";
 import { getProjectName, getPathString, getParentPath } from "./path.ts";
 import { getNumberOfLines, sumStats, subtractStats } from "./stats.ts";
 
@@ -17,7 +17,7 @@ export const rootColors = (() => {
 export function createTree(
   projectPath: string,
   languages: Languages,
-  lineTypes: LineType[],
+  lineTypes: LINE_TYPE[],
 ) {
   const projectName = getProjectName(projectPath);
   const numberOfCharactersToRemove = projectPath.length - projectName.length;

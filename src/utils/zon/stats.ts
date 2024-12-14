@@ -1,9 +1,9 @@
 import type { CodeStats } from "../tokei.ts";
-import type { LineType } from "./types.ts";
+import type { LINE_TYPE } from "./types.ts";
 
 export function getNumberOfLines(
   stats: CodeStats,
-  lineTypes: LineType[],
+  lineTypes: LINE_TYPE[],
 ): number {
   return lineTypes.reduce((total, type) => total + stats[type], 0);
 }
