@@ -18,15 +18,14 @@ export type StaticSize = { width: number; height: number };
  * @returns Accessors for the observed element's width and height
  * @example
  * const [svg, setSvg] = createSignal<SVGSVGElement>();
- * const { width, height } = createElementSize(svg, { width: 500, height: 500 });
+ * const { width, height } = createElementSize(svg);
  * return <svg ref={setSvg} style={{ flex: "1 1 0%" }} />;
  */
 export default function createElementSize(
   target: Accessor<Element | false | undefined | null>,
-  defaults: StaticSize,
 ): Readonly<Size> {
-  const [width, setWidth] = createSignal(defaults.width);
-  const [height, setHeight] = createSignal(defaults.height);
+  const [width, setWidth] = createSignal<number>();
+  const [height, setHeight] = createSignal<number>();
 
   function setSize(size: StaticSize) {
     batch(() => {
@@ -53,5 +52,8 @@ export default function createElementSize(
     resizeObserver.disconnect();
   });
 
-  return { width, height };
+  return {
+    width: width as Accessor<number>,
+    height: height as Accessor<number>,
+  };
 }
