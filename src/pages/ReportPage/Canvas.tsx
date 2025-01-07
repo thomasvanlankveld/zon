@@ -83,8 +83,8 @@ export default function Canvas() {
       0.85,
     );
     bloomPass.threshold = 0.2;
-    bloomPass.strength = 0.25;
-    bloomPass.radius = 0.1;
+    bloomPass.strength = 0.3;
+    bloomPass.radius = 0.2;
 
     const outputPass = new OutputPass();
 
@@ -95,13 +95,21 @@ export default function Canvas() {
 
     new OrbitControls(cameraVal, rendererVal.domElement);
 
-    const geometry = new TorusGeometry(10, 3, 16, 100);
-    const material = new MeshStandardMaterial({
+    // Orange torus
+    const geometry0 = new TorusGeometry(10, 3, 16, 100);
+    const material0 = new MeshStandardMaterial({
       color: 0xff6347,
     });
-    const torus = new Mesh(geometry, material);
+    const torus0 = new Mesh(geometry0, material0);
+    scene.add(torus0);
 
-    scene.add(torus);
+    // Teal torus
+    const geometry1 = new TorusGeometry(20, 2, 16, 100);
+    const material1 = new MeshStandardMaterial({
+      color: 0x00b3b3,
+    });
+    const torus1 = new Mesh(geometry1, material1);
+    scene.add(torus1);
 
     // GUI
     const gui = new GUI();
@@ -122,9 +130,13 @@ export default function Canvas() {
       // rendererVal.render(scene, cameraVal);
       composer.render();
 
-      torus.rotation.x += 0.01;
-      torus.rotation.y += 0.005;
-      torus.rotation.z += 0.01;
+      torus0.rotation.x += 0.01;
+      torus0.rotation.y += 0.005;
+      torus0.rotation.z += 0.01;
+
+      torus1.rotation.x += 0.005;
+      torus1.rotation.y += 0.01;
+      torus1.rotation.z += 0.015;
 
       // TODO: Move into window.addEventListener('resize', ...)
       rendererVal.setSize(window.innerWidth, window.innerHeight);
