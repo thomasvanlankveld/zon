@@ -49,7 +49,7 @@ function getAnimationTarget(value: number, target: number, dt: number) {
 
 export default function Sunburst(props: SunburstProps) {
   const [svg, setSvg] = createSignal<SVGSVGElement>();
-  const { width, height } = createElementSize(svg, { width: 500, height: 500 });
+  const { width, height } = createElementSize(svg);
 
   const maxRadius = createMemo(() => Math.min(width(), height()) / 2);
   const centerRadius = 1;
