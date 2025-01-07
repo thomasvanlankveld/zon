@@ -8,8 +8,12 @@ import {
   type Accessor,
 } from "solid-js";
 
-export type Size = { width: Accessor<number>; height: Accessor<number> };
-export type StaticSize = { width: number; height: number };
+export type Size = {
+  x: Accessor<number>;
+  y: Accessor<number>;
+  width: Accessor<number>;
+  height: Accessor<number>;
+};
 
 /**
  * Get signals that represent a given element's size
@@ -24,11 +28,15 @@ export type StaticSize = { width: number; height: number };
 export default function createElementSize(
   target: Accessor<Element | false | undefined | null>,
 ): Readonly<Size> {
+  const [x, setX] = createSignal<number>();
+  const [y, setY] = createSignal<number>();
   const [width, setWidth] = createSignal<number>();
   const [height, setHeight] = createSignal<number>();
 
-  function setSize(size: StaticSize) {
+  function setSize(size: DOMRectReadOnly) {
     batch(() => {
+      setX(size.x);
+      setY(size.y);
       setWidth(size.width);
       setHeight(size.height);
     });
@@ -53,6 +61,8 @@ export default function createElementSize(
   });
 
   return {
+    x: x as Accessor<number>,
+    y: y as Accessor<number>,
     width: width as Accessor<number>,
     height: height as Accessor<number>,
   };
