@@ -8,6 +8,7 @@ import logAsyncErrors from "./utils/async/logErrors.ts";
 import LandingPage from "./pages/LandingPage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
 import { I18nProvider } from "./utils/i18n.tsx";
+import Canvas from "./pages/ReportPage/Canvas.tsx";
 
 // Test:
 // /Users/thomasvanlankveld/Code/zon/src-tauri
@@ -50,26 +51,27 @@ function App() {
   }
 
   return (
-    <I18nProvider>
-      <Show
-        when={root()}
-        keyed
-        fallback={
-          <LandingPage
-            path={path()}
-            isLoading={isLoading()}
-            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-          />
-        }
-      >
-        {(rootVal) => (
-          <ReportPage
-            root={rootVal}
-            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-          />
-        )}
-      </Show>
-    </I18nProvider>
+    <Canvas />
+    // <I18nProvider>
+    //   <Show
+    //     when={root()}
+    //     keyed
+    //     fallback={
+    //       <LandingPage
+    //         path={path()}
+    //         isLoading={isLoading()}
+    //         countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+    //       />
+    //     }
+    //   >
+    //     {(rootVal) => (
+    //       <ReportPage
+    //         root={rootVal}
+    //         countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+    //       />
+    //     )}
+    //   </Show>
+    // </I18nProvider>
   );
 }
 
