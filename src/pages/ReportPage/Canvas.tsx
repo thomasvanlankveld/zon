@@ -45,7 +45,6 @@ export default function Canvas(props: CanvasProps) {
   const [renderer, setRenderer] = createSignal<WebGLRenderer>();
   const [composer, setComposer] = createSignal<EffectComposer>();
   const [torus, setTorus] = createSignal<Mesh>();
-  const [animationRequestId, setAnimationRequestId] = createSignal<number>();
 
   function onChartResize() {
     const [torusVal, cameraVal, rendererVal] = [torus(), camera(), renderer()];
@@ -85,9 +84,6 @@ export default function Canvas(props: CanvasProps) {
     torusVal.rotation.z += 0.01;
 
     composerVal.render();
-
-    const requestId = requestAnimationFrame(animate);
-    setAnimationRequestId(requestId);
   }
 
   onMount(() => {
@@ -116,6 +112,7 @@ export default function Canvas(props: CanvasProps) {
     rendererVal.setPixelRatio(window.devicePixelRatio);
     rendererVal.setSize(window.innerWidth, window.innerHeight);
     rendererVal.toneMapping = ReinhardToneMapping;
+    rendererVal.setAnimationLoop(animate);
     setRenderer(rendererVal);
 
     const pointLight = new PointLight(0xffffff, 400_000_000);
@@ -166,19 +163,12 @@ export default function Canvas(props: CanvasProps) {
       rendererVal.toneMappingExposure = Math.pow(value, 4.0);
     });
 
-    // Start loop
-    if (!animationRequestId()) {
-      onChartResize();
-      animate();
-    }
+    // Run resize logic before starting the animation
+    onChartResize();
   });
 
   onCleanup(() => {
-    // Stop loop
-    const requestId = animationRequestId();
-    if (requestId) {
-      cancelAnimationFrame(requestId);
-    }
+    renderer()?.setAnimationLoop(null);
   });
 
   return (
