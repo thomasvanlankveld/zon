@@ -88,8 +88,8 @@ export default function Canvas(props: CanvasProps) {
     const cameraVal = new PerspectiveCamera(
       FIELD_OF_VIEW,
       width / height,
-      10,
-      100_000,
+      1000,
+      4000,
     );
 
     setCamera(cameraVal);
