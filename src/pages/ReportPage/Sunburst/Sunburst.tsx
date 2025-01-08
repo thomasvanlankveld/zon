@@ -23,6 +23,7 @@ import styles from "./Arc.module.css";
 import { Cubehelix } from "../../../utils/color.ts";
 import { Dimensions, SunburstNode, DimensionKey } from "./types.ts";
 import Arc from "./Arc.tsx";
+import Canvas from "../Canvas.tsx";
 
 type SunburstProps = {
   root: Node;
@@ -49,7 +50,8 @@ function getAnimationTarget(value: number, target: number, dt: number) {
 
 export default function Sunburst(props: SunburstProps) {
   const [svg, setSvg] = createSignal<SVGSVGElement>();
-  const { width, height } = createElementSize(svg);
+  const chartSize = createElementSize(svg);
+  const { width, height } = chartSize;
 
   const maxRadius = createMemo(() => Math.min(width(), height()) / 2);
   const centerRadius = 1;
@@ -347,38 +349,41 @@ export default function Sunburst(props: SunburstProps) {
   })();
 
   return (
-    <svg
-      ref={setSvg}
-      viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}
-    >
-      <For each={visibleNodes()}>
-        {(node) => (
-          <Arc
-            node={node}
-            maxRadius={maxRadius()}
-            highlightedPath={props.highlightedPath}
-            onMouseEnter={() => props.setHoverArcPath(node.path)}
+    <>
+      <Canvas chartSize={chartSize} />
+      <svg
+        ref={setSvg}
+        viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}
+      >
+        <For each={visibleNodes()}>
+          {(node) => (
+            <Arc
+              node={node}
+              maxRadius={maxRadius()}
+              highlightedPath={props.highlightedPath}
+              onMouseEnter={() => props.setHoverArcPath(node.path)}
+              onMouseLeave={() => props.setHoverArcPath(null)}
+              onClick={() => navigate(getArcClickTarget(node))}
+            />
+          )}
+        </For>
+        <Show when={!isReportRoot()}>
+          <circle
+            cx={0}
+            cy={0}
+            r={(1 / targetMaxDistance()) * maxRadius()}
+            style={{
+              "--arc-fill-color": rootColors.fill,
+              "--arc-highlighted-color": rootColors.highlighted,
+              "--arc-pressed-color": rootColors.pressed,
+            }}
+            class={styles.sunburst__arc}
+            onMouseEnter={() => props.setHoverArcPath(targetDiagramRoot().path)}
             onMouseLeave={() => props.setHoverArcPath(null)}
-            onClick={() => navigate(getArcClickTarget(node))}
+            onClick={() => navigate(getParentPath(targetDiagramRoot().path))}
           />
-        )}
-      </For>
-      <Show when={!isReportRoot()}>
-        <circle
-          cx={0}
-          cy={0}
-          r={(1 / targetMaxDistance()) * maxRadius()}
-          style={{
-            "--arc-fill-color": rootColors.fill,
-            "--arc-highlighted-color": rootColors.highlighted,
-            "--arc-pressed-color": rootColors.pressed,
-          }}
-          class={styles.sunburst__arc}
-          onMouseEnter={() => props.setHoverArcPath(targetDiagramRoot().path)}
-          onMouseLeave={() => props.setHoverArcPath(null)}
-          onClick={() => navigate(getParentPath(targetDiagramRoot().path))}
-        />
-      </Show>
-    </svg>
+        </Show>
+      </svg>
+    </>
   );
 }

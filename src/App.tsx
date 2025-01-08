@@ -51,27 +51,26 @@ function App() {
   }
 
   return (
-    <Canvas />
-    // <I18nProvider>
-    //   <Show
-    //     when={root()}
-    //     keyed
-    //     fallback={
-    //       <LandingPage
-    //         path={path()}
-    //         isLoading={isLoading()}
-    //         countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-    //       />
-    //     }
-    //   >
-    //     {(rootVal) => (
-    //       <ReportPage
-    //         root={rootVal}
-    //         countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-    //       />
-    //     )}
-    //   </Show>
-    // </I18nProvider>
+    <I18nProvider>
+      <Show
+        when={root()}
+        keyed
+        fallback={
+          <LandingPage
+            path={path()}
+            isLoading={isLoading()}
+            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+          />
+        }
+      >
+        {(rootVal) => (
+          <ReportPage
+            root={rootVal}
+            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+          />
+        )}
+      </Show>
+    </I18nProvider>
   );
 }
 

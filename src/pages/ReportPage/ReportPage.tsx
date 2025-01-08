@@ -12,7 +12,6 @@ import Sunburst from "./Sunburst/Sunburst.tsx";
 import ReportList from "./ReportList/ReportList.tsx";
 import Breadcrumbs from "./Breadcrumbs/Breadcrumbs.tsx";
 import styles from "./ReportPage.module.css";
-import Canvas from "./Canvas.tsx";
 
 type ReportPageProps = {
   root: Node;
@@ -54,7 +53,6 @@ export default function ReportPage(props: ReportPageProps) {
 
   return (
     <main class={styles["report-page"]}>
-      <Canvas />
       <div class={styles["report-page__header"]}>
         <h1>{t("app.title")}</h1>
         <UploadButton countLinesInFolder={props.countLinesInFolder} />

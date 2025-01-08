@@ -10,16 +10,22 @@ import {
   MeshStandardMaterial,
   ReinhardToneMapping,
   Vector2,
+  PlaneGeometry,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
-export default function Canvas() {
+import { Size } from "../../primitives/createElementSize";
+
+type CanvasProps = {
+  chartSize: Size;
+};
+
+export default function Canvas(props: CanvasProps) {
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
   const [camera, setCamera] = createSignal<PerspectiveCamera>();
   const [renderer, setRenderer] = createSignal<WebGLRenderer>();
@@ -33,22 +39,43 @@ export default function Canvas() {
       const height = window.innerHeight;
 
       cameraVal.aspect = width / height;
+      cameraVal.position.set(width / 2, -height / 2, 2000);
+      cameraVal.lookAt(width / 2, -height / 2, 0);
       cameraVal.updateProjectionMatrix();
 
       rendererVal.setSize(width, height);
     }
   }
 
+  // Loop function
+  function createAnimation(
+    composer: EffectComposer,
+    torus0: Mesh,
+    torus1: Mesh,
+  ) {
+    function animate() {
+      torus0.rotation.x += 0.01;
+      torus0.rotation.y += 0.005;
+      torus0.rotation.z += 0.01;
+
+      torus1.rotation.x += 0.005;
+      torus1.rotation.y += 0.01;
+      torus1.rotation.z += 0.015;
+
+      composer.render();
+
+      const requestId = requestAnimationFrame(animate);
+      setAnimationRequestId(requestId);
+    }
+
+    return animate;
+  }
+
   onMount(() => {
+    const [width, height] = [window.innerWidth, window.innerHeight];
+
     const scene = new Scene();
-    const cameraVal = new PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000,
-    );
-    cameraVal.position.set(0, 0, 30);
-    cameraVal.lookAt(0, 0, 0);
+    const cameraVal = new PerspectiveCamera(22, width / height, 10, 100_000);
 
     setCamera(cameraVal);
 
@@ -69,8 +96,8 @@ export default function Canvas() {
 
     window.addEventListener("resize", onWindowResize);
 
-    const pointLight = new PointLight(0xffffff, 4000);
-    pointLight.position.set(20, 20, 20);
+    const pointLight = new PointLight(0xffffff, 400_000_000);
+    pointLight.position.set(10_000, 10_000, 10_000);
     scene.add(pointLight);
     scene.add(new AmbientLight(0xcccccc, 0.1));
 
@@ -95,13 +122,49 @@ export default function Canvas() {
 
     new OrbitControls(cameraVal, rendererVal.domElement);
 
+    console.log({
+      x: props.chartSize.x(),
+      y: props.chartSize.y(),
+      height: props.chartSize.height(),
+      width: props.chartSize.width(),
+    });
+
     // Orange torus
-    const geometry0 = new TorusGeometry(10, 3, 16, 100);
+    const geometry0 = new TorusGeometry(0.4, 0.1, 16, 100);
     const material0 = new MeshStandardMaterial({
       color: 0xff6347,
     });
     const torus0 = new Mesh(geometry0, material0);
+    torus0.position.x = props.chartSize.x() + props.chartSize.width() / 2;
+    torus0.position.y = -props.chartSize.y() - props.chartSize.height() / 2;
+    const scale = Math.min(props.chartSize.height(), props.chartSize.width());
+    torus0.scale.set(scale, scale, scale);
     scene.add(torus0);
+
+    const plane1Geometry = new PlaneGeometry(
+      window.innerWidth,
+      window.innerHeight,
+    );
+    const plane1Material = new MeshStandardMaterial({
+      color: 0xcccccc,
+    });
+    const plane1 = new Mesh(plane1Geometry, plane1Material);
+    plane1.position.x = 0 + window.innerWidth / 2;
+    plane1.position.y = 0 - window.innerHeight / 2;
+    plane1.position.z = -0.1;
+    scene.add(plane1);
+
+    const plane0Geometry = new PlaneGeometry(
+      props.chartSize.width(),
+      props.chartSize.height(),
+    );
+    const plane0Material = new MeshStandardMaterial({
+      color: 0x888888,
+    });
+    const plane0 = new Mesh(plane0Geometry, plane0Material);
+    plane0.position.x = props.chartSize.x() + props.chartSize.width() / 2;
+    plane0.position.y = -props.chartSize.y() - props.chartSize.height() / 2;
+    scene.add(plane0);
 
     // Teal torus
     const geometry1 = new TorusGeometry(20, 2, 16, 100);
@@ -115,7 +178,7 @@ export default function Canvas() {
     const gui = new GUI();
     const params = { exposure: 1 };
     const lighting = gui.addFolder("lighting");
-    lighting.add(pointLight, "intensity", 0, 10000);
+    lighting.add(pointLight, "intensity", 0, 10_0000_000);
     const bloomFolder = gui.addFolder("bloom");
     bloomFolder.add(bloomPass, "threshold", 0.0, 0.4);
     bloomFolder.add(bloomPass, "strength", 0.0, 2.0);
@@ -125,30 +188,10 @@ export default function Canvas() {
       rendererVal.toneMappingExposure = Math.pow(value, 4.0);
     });
 
-    // Loop function
-    function animate() {
-      // rendererVal.render(scene, cameraVal);
-      composer.render();
-
-      torus0.rotation.x += 0.01;
-      torus0.rotation.y += 0.005;
-      torus0.rotation.z += 0.01;
-
-      torus1.rotation.x += 0.005;
-      torus1.rotation.y += 0.01;
-      torus1.rotation.z += 0.015;
-
-      // TODO: Move into window.addEventListener('resize', ...)
-      rendererVal.setSize(window.innerWidth, window.innerHeight);
-      cameraVal.aspect = window.innerWidth / window.innerHeight;
-      cameraVal.updateProjectionMatrix();
-
-      const requestId = requestAnimationFrame(animate);
-      setAnimationRequestId(requestId);
-    }
-
     // Start loop
     if (!animationRequestId()) {
+      onWindowResize();
+      const animate = createAnimation(composer, torus0, torus1);
       animate();
     }
   });
@@ -170,7 +213,7 @@ export default function Canvas() {
         position: "fixed",
         top: 0,
         left: 0,
-        // "z-index": "-1",
+        "z-index": "-1",
       }}
     />
   );
