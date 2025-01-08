@@ -115,7 +115,7 @@ export default function Canvas(props: CanvasProps) {
     rendererVal.setAnimationLoop(animate);
     setRenderer(rendererVal);
 
-    const pointLight = new PointLight(0xffffff, 400_000_000);
+    const pointLight = new PointLight(0xffffff, 750_000_000);
     pointLight.position.set(10_000, 10_000, 10_000);
     scene.add(pointLight);
     scene.add(new AmbientLight(0xcccccc, 0.1));
@@ -129,8 +129,8 @@ export default function Canvas(props: CanvasProps) {
       0.85,
     );
     bloomPass.threshold = 0.2;
-    bloomPass.strength = 0.3;
-    bloomPass.radius = 0.2;
+    bloomPass.strength = 0.4;
+    bloomPass.radius = 0.3;
 
     const outputPass = new OutputPass();
 
@@ -153,7 +153,7 @@ export default function Canvas(props: CanvasProps) {
     const gui = new GUI();
     const params = { exposure: 1 };
     const lighting = gui.addFolder("lighting");
-    lighting.add(pointLight, "intensity", 0, 10_0000_000);
+    lighting.add(pointLight, "intensity", 0, 100_0000_000);
     const bloomFolder = gui.addFolder("bloom");
     bloomFolder.add(bloomPass, "threshold", 0.0, 0.4);
     bloomFolder.add(bloomPass, "strength", 0.0, 2.0);
