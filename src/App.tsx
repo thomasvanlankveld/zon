@@ -8,7 +8,6 @@ import logAsyncErrors from "./utils/async/logErrors.ts";
 import LandingPage from "./pages/LandingPage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
 import { I18nProvider } from "./utils/i18n.tsx";
-import Canvas from "./pages/ReportPage/Canvas.tsx";
 
 // Test:
 // /Users/thomasvanlankveld/Code/zon/src-tauri
