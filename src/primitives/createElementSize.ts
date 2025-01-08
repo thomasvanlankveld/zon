@@ -33,7 +33,10 @@ export default function createElementSize(
   const [width, setWidth] = createSignal<number>();
   const [height, setHeight] = createSignal<number>();
 
-  function setSize(size: DOMRectReadOnly) {
+  function setSize(element: Element) {
+    // ResizeObserver does not contain the element's x and y positions
+    const size = element.getBoundingClientRect();
+
     batch(() => {
       setX(size.x);
       setY(size.y);
@@ -42,15 +45,13 @@ export default function createElementSize(
     });
   }
 
-  const resizeObserver = new ResizeObserver(([entry]) =>
-    setSize(entry.contentRect),
-  );
+  const resizeObserver = new ResizeObserver(([entry]) => setSize(entry.target));
 
   createEffect(() => {
     const element = target();
 
     if (element) {
-      setSize(element.getBoundingClientRect());
+      setSize(element);
       resizeObserver.observe(element);
       onCleanup(() => resizeObserver.unobserve(element));
     }

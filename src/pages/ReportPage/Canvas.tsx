@@ -1,4 +1,4 @@
-import { createSignal, onCleanup, onMount } from "solid-js";
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import {
   PerspectiveCamera,
   Mesh,
@@ -10,7 +10,6 @@ import {
   MeshStandardMaterial,
   ReinhardToneMapping,
   Vector2,
-  PlaneGeometry,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -36,49 +35,59 @@ function getCameraZ(screenHeight: number) {
 }
 
 export default function Canvas(props: CanvasProps) {
+  const chartX = () => props.chartSize.x();
+  const chartY = () => props.chartSize.y();
+  const chartHeight = () => props.chartSize.height();
+  const chartWidth = () => props.chartSize.width();
+
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
   const [camera, setCamera] = createSignal<PerspectiveCamera>();
   const [renderer, setRenderer] = createSignal<WebGLRenderer>();
+  const [composer, setComposer] = createSignal<EffectComposer>();
+  const [torus, setTorus] = createSignal<Mesh>();
   const [animationRequestId, setAnimationRequestId] = createSignal<number>();
 
-  function onWindowResize() {
-    const [cameraVal, rendererVal] = [camera(), renderer()];
+  function onChartResize() {
+    const [torusVal, cameraVal, rendererVal] = [torus(), camera(), renderer()];
 
-    if (cameraVal && rendererVal) {
-      const [width, height] = [window.innerWidth, window.innerHeight];
-      const cameraZ = getCameraZ(height);
-
-      cameraVal.aspect = width / height;
-      cameraVal.position.set(width / 2, -height / 2, cameraZ);
-      cameraVal.lookAt(width / 2, -height / 2, 0);
-      cameraVal.updateProjectionMatrix();
-
-      rendererVal.setSize(width, height);
+    if (!torusVal || !cameraVal || !rendererVal) {
+      return;
     }
+
+    torusVal.position.x = chartX() + chartWidth() / 2;
+    torusVal.position.y = -chartY() - chartHeight() / 2;
+    const torusScale = Math.min(chartHeight(), chartWidth());
+    torusVal.scale.set(torusScale, torusScale, torusScale);
+
+    const [windowWidth, windowHeight] = [window.innerWidth, window.innerHeight];
+    const cameraZ = getCameraZ(windowHeight);
+
+    cameraVal.aspect = windowWidth / windowHeight;
+    cameraVal.position.set(windowWidth / 2, -windowHeight / 2, cameraZ);
+    cameraVal.lookAt(windowWidth / 2, -windowHeight / 2, 0);
+    cameraVal.updateProjectionMatrix();
+
+    rendererVal.setSize(windowWidth, windowHeight);
   }
 
+  createEffect(onChartResize);
+
   // Loop function
-  function createAnimation(
-    composer: EffectComposer,
-    torus0: Mesh,
-    torus1: Mesh,
-  ) {
-    function animate() {
-      torus0.rotation.x += 0.01;
-      torus0.rotation.y += 0.005;
-      torus0.rotation.z += 0.01;
+  function animate() {
+    const [torusVal, composerVal] = [torus(), composer()];
 
-      torus1.rotation.x += 0.005;
-      torus1.rotation.y += 0.01;
-      torus1.rotation.z += 0.015;
-
-      composer.render();
-
-      const requestId = requestAnimationFrame(animate);
-      setAnimationRequestId(requestId);
+    if (!torusVal || !composerVal) {
+      return;
     }
 
-    return animate;
+    torusVal.rotation.x += 0.01;
+    torusVal.rotation.y += 0.005;
+    torusVal.rotation.z += 0.01;
+
+    composerVal.render();
+
+    const requestId = requestAnimationFrame(animate);
+    setAnimationRequestId(requestId);
   }
 
   onMount(() => {
@@ -109,8 +118,6 @@ export default function Canvas(props: CanvasProps) {
     rendererVal.toneMapping = ReinhardToneMapping;
     setRenderer(rendererVal);
 
-    window.addEventListener("resize", onWindowResize);
-
     const pointLight = new PointLight(0xffffff, 400_000_000);
     pointLight.position.set(10_000, 10_000, 10_000);
     scene.add(pointLight);
@@ -130,66 +137,20 @@ export default function Canvas(props: CanvasProps) {
 
     const outputPass = new OutputPass();
 
-    const composer = new EffectComposer(rendererVal);
-    composer.addPass(renderScene);
-    composer.addPass(bloomPass);
-    composer.addPass(outputPass);
+    const composerVal = new EffectComposer(rendererVal);
+    composerVal.addPass(renderScene);
+    composerVal.addPass(bloomPass);
+    composerVal.addPass(outputPass);
+    setComposer(composerVal);
 
     new OrbitControls(cameraVal, rendererVal.domElement);
 
-    console.log({
-      x: props.chartSize.x(),
-      y: props.chartSize.y(),
-      height: props.chartSize.height(),
-      width: props.chartSize.width(),
-    });
-
     // Orange torus
-    const geometry0 = new TorusGeometry(0.4, 0.1, 16, 100);
-    const material0 = new MeshStandardMaterial({
-      color: 0xff6347,
-    });
-    const torus0 = new Mesh(geometry0, material0);
-    torus0.position.x = props.chartSize.x() + props.chartSize.width() / 2;
-    torus0.position.y = -props.chartSize.y() - props.chartSize.height() / 2;
-    const scale = Math.min(props.chartSize.height(), props.chartSize.width());
-    torus0.scale.set(scale, scale, scale);
-    scene.add(torus0);
-
-    // Plane representing the entire window
-    const plane1Geometry = new PlaneGeometry(
-      window.innerWidth,
-      window.innerHeight,
-    );
-    const plane1Material = new MeshStandardMaterial({
-      color: 0xcccccc,
-    });
-    const plane1 = new Mesh(plane1Geometry, plane1Material);
-    plane1.position.x = 0 + window.innerWidth / 2;
-    plane1.position.y = 0 - window.innerHeight / 2;
-    plane1.position.z = -0.1;
-    scene.add(plane1);
-
-    // Plane representing the space occupied by the chart
-    const plane0Geometry = new PlaneGeometry(
-      props.chartSize.width(),
-      props.chartSize.height(),
-    );
-    const plane0Material = new MeshStandardMaterial({
-      color: 0x888888,
-    });
-    const plane0 = new Mesh(plane0Geometry, plane0Material);
-    plane0.position.x = props.chartSize.x() + props.chartSize.width() / 2;
-    plane0.position.y = -props.chartSize.y() - props.chartSize.height() / 2;
-    scene.add(plane0);
-
-    // Teal torus
-    const geometry1 = new TorusGeometry(20, 2, 16, 100);
-    const material1 = new MeshStandardMaterial({
-      color: 0x00b3b3,
-    });
-    const torus1 = new Mesh(geometry1, material1);
-    scene.add(torus1);
+    const torusGeometry = new TorusGeometry(0.4, 0.1, 16, 100);
+    const torusMaterial = new MeshStandardMaterial({ color: 0xff6347 });
+    const torusVal = new Mesh(torusGeometry, torusMaterial);
+    setTorus(torusVal);
+    scene.add(torusVal);
 
     // GUI
     const gui = new GUI();
@@ -207,15 +168,12 @@ export default function Canvas(props: CanvasProps) {
 
     // Start loop
     if (!animationRequestId()) {
-      onWindowResize();
-      const animate = createAnimation(composer, torus0, torus1);
+      onChartResize();
       animate();
     }
   });
 
   onCleanup(() => {
-    window.addEventListener("resize", onWindowResize);
-
     // Stop loop
     const requestId = animationRequestId();
     if (requestId) {
