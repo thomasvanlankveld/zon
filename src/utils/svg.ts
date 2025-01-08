@@ -29,7 +29,7 @@ export type ArcSpecs = {
  * @param arcSpecs
  * @returns
  */
-export function getArc(arcSpecs: ArcSpecs) {
+export function getArcD(arcSpecs: ArcSpecs) {
   const { innerRadius, outerRadius } = arcSpecs;
   const startAngle = Math.PI - arcSpecs.startAngle;
   const endAngle = Math.PI - arcSpecs.endAngle;

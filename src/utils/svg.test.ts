@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { getArc } from "./svg.ts";
+import { getArcD } from "./svg.ts";
 
 describe("getArc", () => {
   it("returns an arc definition", () => {
     expect(
-      getArc({
+      getArcD({
         innerRadius: 1,
         outerRadius: 2,
         startAngle: 0.25 * Math.PI,

@@ -1,5 +1,5 @@
 import { JSX } from "solid-js/h/jsx-runtime";
-import { getArc as getArcD } from "../../../utils/svg.ts";
+import { getArcD } from "../../../utils/svg.ts";
 import { SunburstNode, Dimensions } from "./types.ts";
 import { arePathsEqual } from "../../../utils/zon/path.ts";
 import { Path } from "../../../utils/zon/types.ts";
