@@ -141,6 +141,7 @@ export default function Canvas(props: CanvasProps) {
     torus0.scale.set(scale, scale, scale);
     scene.add(torus0);
 
+    // Plane representing the entire window
     const plane1Geometry = new PlaneGeometry(
       window.innerWidth,
       window.innerHeight,
@@ -154,6 +155,7 @@ export default function Canvas(props: CanvasProps) {
     plane1.position.z = -0.1;
     scene.add(plane1);
 
+    // Plane representing the space occupied by the chart
     const plane0Geometry = new PlaneGeometry(
       props.chartSize.width(),
       props.chartSize.height(),
