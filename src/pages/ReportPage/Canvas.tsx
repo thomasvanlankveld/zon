@@ -25,6 +25,16 @@ type CanvasProps = {
   chartSize: Size;
 };
 
+const FIELD_OF_VIEW = 22; // Degrees vertically, from top to bottom of the screen
+
+function cot(x: number) {
+  return Math.cos(x) / Math.sin(x);
+}
+
+function getCameraZ(screenHeight: number) {
+  return 0.5 * screenHeight * cot(0.5 * FIELD_OF_VIEW * (Math.PI / 180));
+}
+
 export default function Canvas(props: CanvasProps) {
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
   const [camera, setCamera] = createSignal<PerspectiveCamera>();
@@ -35,11 +45,11 @@ export default function Canvas(props: CanvasProps) {
     const [cameraVal, rendererVal] = [camera(), renderer()];
 
     if (cameraVal && rendererVal) {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      const [width, height] = [window.innerWidth, window.innerHeight];
+      const cameraZ = getCameraZ(height);
 
       cameraVal.aspect = width / height;
-      cameraVal.position.set(width / 2, -height / 2, 2000);
+      cameraVal.position.set(width / 2, -height / 2, cameraZ);
       cameraVal.lookAt(width / 2, -height / 2, 0);
       cameraVal.updateProjectionMatrix();
 
@@ -75,7 +85,12 @@ export default function Canvas(props: CanvasProps) {
     const [width, height] = [window.innerWidth, window.innerHeight];
 
     const scene = new Scene();
-    const cameraVal = new PerspectiveCamera(22, width / height, 10, 100_000);
+    const cameraVal = new PerspectiveCamera(
+      FIELD_OF_VIEW,
+      width / height,
+      10,
+      100_000,
+    );
 
     setCamera(cameraVal);
 
