@@ -10,6 +10,7 @@ import {
   MeshStandardMaterial,
   ReinhardToneMapping,
   Vector2,
+  Group,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -19,9 +20,12 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 import { Size } from "../../primitives/createElementSize";
+// import { SunburstNode } from "./Sunburst/types";
 
 type CanvasProps = {
   chartSize: Size;
+  // visibleNodes: SunburstNode[];
+  // maxRadius: number;
 };
 
 const FIELD_OF_VIEW = 22; // Degrees vertically, from top to bottom of the screen
@@ -44,19 +48,22 @@ export default function Canvas(props: CanvasProps) {
   const [camera, setCamera] = createSignal<PerspectiveCamera>();
   const [renderer, setRenderer] = createSignal<WebGLRenderer>();
   const [composer, setComposer] = createSignal<EffectComposer>();
-  const [torus, setTorus] = createSignal<Mesh>();
+  const [group, setGroup] = createSignal<Group>();
+
+  // createEffect(() => console.log(props.visibleNodes));
+  // createEffect(() => console.log(props.maxRadius));
 
   function onChartResize() {
-    const [torusVal, cameraVal, rendererVal] = [torus(), camera(), renderer()];
+    const [groupVal, cameraVal, rendererVal] = [group(), camera(), renderer()];
 
-    if (!torusVal || !cameraVal || !rendererVal) {
+    if (!groupVal || !cameraVal || !rendererVal) {
       return;
     }
 
-    torusVal.position.x = chartX() + chartWidth() / 2;
-    torusVal.position.y = -chartY() - chartHeight() / 2;
+    groupVal.position.x = chartX() + chartWidth() / 2;
+    groupVal.position.y = -chartY() - chartHeight() / 2;
     const torusScale = Math.min(chartHeight(), chartWidth());
-    torusVal.scale.set(torusScale, torusScale, torusScale);
+    groupVal.scale.set(torusScale, torusScale, torusScale);
 
     const [windowWidth, windowHeight] = [window.innerWidth, window.innerHeight];
     const cameraZ = getCameraZ(windowHeight);
@@ -73,15 +80,15 @@ export default function Canvas(props: CanvasProps) {
 
   // Loop function
   function animate() {
-    const [torusVal, composerVal] = [torus(), composer()];
+    const [groupVal, composerVal] = [group(), composer()];
 
-    if (!torusVal || !composerVal) {
+    if (!groupVal || !composerVal) {
       return;
     }
 
-    torusVal.rotation.x += 0.01;
-    torusVal.rotation.y += 0.005;
-    torusVal.rotation.z += 0.01;
+    groupVal.rotation.x += 0.01;
+    groupVal.rotation.y += 0.005;
+    groupVal.rotation.z += 0.01;
 
     composerVal.render();
   }
@@ -142,12 +149,27 @@ export default function Canvas(props: CanvasProps) {
 
     new OrbitControls(cameraVal, rendererVal.domElement);
 
-    // Orange torus
-    const torusGeometry = new TorusGeometry(0.4, 0.1, 16, 100);
-    const torusMaterial = new MeshStandardMaterial({ color: 0xff6347 });
-    const torusVal = new Mesh(torusGeometry, torusMaterial);
-    setTorus(torusVal);
-    scene.add(torusVal);
+    // Orange toruses
+    const groupVal = new Group();
+    const toruses = Array.from({ length: 4 }, () => {
+      const torusGeometry = new TorusGeometry(0.4, 0.1, 16, 100);
+      const torusMaterial = new MeshStandardMaterial({ color: 0xff6347 });
+
+      torusGeometry.scale(0.5, 0.5, 0.5);
+
+      return new Mesh(torusGeometry, torusMaterial);
+    });
+    toruses[0].position.x = -0.25;
+    toruses[0].position.y = -0.25;
+    toruses[1].position.x = -0.25;
+    toruses[1].position.y = 0.25;
+    toruses[2].position.x = 0.25;
+    toruses[2].position.y = -0.25;
+    toruses[3].position.x = 0.25;
+    toruses[3].position.y = 0.25;
+    toruses.forEach((torus) => groupVal.add(torus));
+    setGroup(groupVal);
+    scene.add(groupVal);
 
     // GUI
     const gui = new GUI();
