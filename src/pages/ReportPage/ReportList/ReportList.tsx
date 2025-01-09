@@ -117,9 +117,9 @@ export default function ReportList(props: ReportListProps) {
         <ListItem
           component={isReportRoot() ? "span" : "button"}
           style={{
-            "--base-color": rootColors.base,
-            "--highlighted-color": rootColors.highlighted,
-            "--pressed-color": rootColors.pressed,
+            "--base-color": rootColors.base.toRgbString(),
+            "--highlighted-color": rootColors.highlighted.toRgbString(),
+            "--pressed-color": rootColors.pressed.toRgbString(),
           }}
           class={styles["report-list__heading"]}
           arrowDirection={isReportRoot() ? undefined : ARROW_DIRECTION.LEFT}
@@ -137,9 +137,9 @@ export default function ReportList(props: ReportListProps) {
                   : "span"
               }
               style={{
-                "--base-color": child.colors.base,
-                "--highlighted-color": child.colors.highlighted,
-                "--pressed-color": child.colors.pressed,
+                "--base-color": child.colors.base.toRgbString(),
+                "--highlighted-color": child.colors.highlighted.toRgbString(),
+                "--pressed-color": child.colors.pressed.toRgbString(),
               }}
               arrowDirection={getChildArrowDirection(child)}
               node={child}
