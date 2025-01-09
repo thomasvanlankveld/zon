@@ -89,6 +89,10 @@ export class Cubehelix {
   toRgbString() {
     return this.toRgb().toString();
   }
+
+  toRgbNumber() {
+    return this.toRgb().toNumber();
+  }
 }
 
 function clampa(opacity: number) {
@@ -115,5 +119,9 @@ export class Rgb {
   toString() {
     const a = clampa(this.opacity);
     return `${a === 1 ? "rgb(" : "rgba("}${clampi(this.r)}, ${clampi(this.g)}, ${clampi(this.b)}${a === 1 ? ")" : `, ${a})`}`;
+  }
+
+  toNumber() {
+    return clampi(this.r) * 256 * 256 + clampi(this.g) * 256 + clampi(this.b);
   }
 }
