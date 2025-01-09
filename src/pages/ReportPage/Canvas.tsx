@@ -94,12 +94,16 @@ export default function Canvas(props: CanvasProps) {
   }
 
   onMount(() => {
-    const [width, height] = [window.innerWidth, window.innerHeight];
+    const [windowWidth, windowHeight, pixelRatio] = [
+      window.innerWidth,
+      window.innerHeight,
+      window.devicePixelRatio,
+    ];
 
     const scene = new Scene();
     const cameraVal = new PerspectiveCamera(
       FIELD_OF_VIEW,
-      width / height,
+      windowWidth / windowHeight,
       1000,
       4000,
     );
@@ -116,8 +120,8 @@ export default function Canvas(props: CanvasProps) {
       canvas: canvasVal,
       antialias: true,
     });
-    rendererVal.setPixelRatio(window.devicePixelRatio);
-    rendererVal.setSize(window.innerWidth, window.innerHeight);
+    rendererVal.setPixelRatio(pixelRatio);
+    rendererVal.setSize(windowWidth, windowHeight);
     rendererVal.toneMapping = ReinhardToneMapping;
     rendererVal.setAnimationLoop(animate);
     setRenderer(rendererVal);
@@ -130,7 +134,7 @@ export default function Canvas(props: CanvasProps) {
     const renderScene = new RenderPass(scene, cameraVal);
 
     const bloomPass = new UnrealBloomPass(
-      new Vector2(window.innerWidth, window.innerHeight),
+      new Vector2(windowWidth, windowHeight),
       1.5,
       0.4,
       0.85,
