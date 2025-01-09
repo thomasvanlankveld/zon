@@ -56,6 +56,16 @@ function arcHasPath(arc: Object3D, path: Path) {
   return arc.name === getPathString(path);
 }
 
+const EXTRUDE_SETTINGS = {
+  steps: 1,
+  depth: 1,
+  bevelEnabled: true,
+  bevelThickness: 0,
+  bevelSize: 0,
+  bevelOffset: 0,
+  bevelSegments: 0,
+};
+
 export default function Canvas(props: CanvasProps) {
   const chartX = () => props.chartSize.x();
   const chartY = () => props.chartSize.y();
@@ -86,16 +96,7 @@ export default function Canvas(props: CanvasProps) {
         endAngle: dimensions.x1 * 2 * Math.PI,
       });
       const arcName = getArcName(node.path);
-      const extrudeSettings = {
-        steps: 1,
-        depth: 1,
-        bevelEnabled: true,
-        bevelThickness: 0,
-        bevelSize: 0,
-        bevelOffset: 0,
-        bevelSegments: 0,
-      };
-      const arcGeometry = new ExtrudeGeometry(arcShape, extrudeSettings);
+      const arcGeometry = new ExtrudeGeometry(arcShape, EXTRUDE_SETTINGS);
       const arcMaterial = new MeshStandardMaterial({
         color: node.colors.base.toRgbNumber(),
       });
