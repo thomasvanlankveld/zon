@@ -114,7 +114,7 @@ export default function Canvas(props: CanvasProps) {
   function onChartResize() {
     const [cameraVal, rendererVal] = [camera(), renderer()];
 
-    if (!chartGroup || !cameraVal || !rendererVal) {
+    if (!cameraVal || !rendererVal) {
       return;
     }
 
@@ -140,7 +140,7 @@ export default function Canvas(props: CanvasProps) {
   function animate() {
     const composerVal = composer();
 
-    if (!chartGroup || !composerVal) {
+    if (!composerVal) {
       return;
     }
 
