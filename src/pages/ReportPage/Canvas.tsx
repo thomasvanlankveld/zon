@@ -1,3 +1,5 @@
+// TODO: Fix black flicker when resizing the screen.
+
 import {
   createEffect,
   createSignal,
