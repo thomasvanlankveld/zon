@@ -48,22 +48,22 @@ export default function Canvas(props: CanvasProps) {
   const [camera, setCamera] = createSignal<PerspectiveCamera>();
   const [renderer, setRenderer] = createSignal<WebGLRenderer>();
   const [composer, setComposer] = createSignal<EffectComposer>();
-  const [group, setGroup] = createSignal<Group>();
+  const chartGroup = new Group();
 
   // createEffect(() => console.log(props.visibleNodes));
   // createEffect(() => console.log(props.maxRadius));
 
   function onChartResize() {
-    const [groupVal, cameraVal, rendererVal] = [group(), camera(), renderer()];
+    const [cameraVal, rendererVal] = [camera(), renderer()];
 
-    if (!groupVal || !cameraVal || !rendererVal) {
+    if (!chartGroup || !cameraVal || !rendererVal) {
       return;
     }
 
-    groupVal.position.x = chartX() + chartWidth() / 2;
-    groupVal.position.y = -chartY() - chartHeight() / 2;
+    chartGroup.position.x = chartX() + chartWidth() / 2;
+    chartGroup.position.y = -chartY() - chartHeight() / 2;
     const torusScale = Math.min(chartHeight(), chartWidth());
-    groupVal.scale.set(torusScale, torusScale, torusScale);
+    chartGroup.scale.set(torusScale, torusScale, torusScale);
 
     const [windowWidth, windowHeight] = [window.innerWidth, window.innerHeight];
     const cameraZ = getCameraZ(windowHeight);
@@ -80,15 +80,15 @@ export default function Canvas(props: CanvasProps) {
 
   // Loop function
   function animate() {
-    const [groupVal, composerVal] = [group(), composer()];
+    const composerVal = composer();
 
-    if (!groupVal || !composerVal) {
+    if (!chartGroup || !composerVal) {
       return;
     }
 
-    groupVal.rotation.x += 0.01;
-    groupVal.rotation.y += 0.005;
-    groupVal.rotation.z += 0.01;
+    chartGroup.rotation.x += 0.01;
+    chartGroup.rotation.y += 0.005;
+    chartGroup.rotation.z += 0.01;
 
     composerVal.render();
   }
@@ -150,7 +150,6 @@ export default function Canvas(props: CanvasProps) {
     new OrbitControls(cameraVal, rendererVal.domElement);
 
     // Orange toruses
-    const groupVal = new Group();
     const toruses = Array.from({ length: 4 }, () => {
       const torusGeometry = new TorusGeometry(0.4, 0.1, 16, 100);
       const torusMaterial = new MeshStandardMaterial({ color: 0xff6347 });
@@ -167,9 +166,8 @@ export default function Canvas(props: CanvasProps) {
     toruses[2].position.y = -0.25;
     toruses[3].position.x = 0.25;
     toruses[3].position.y = 0.25;
-    toruses.forEach((torus) => groupVal.add(torus));
-    setGroup(groupVal);
-    scene.add(groupVal);
+    toruses.forEach((torus) => chartGroup.add(torus));
+    scene.add(chartGroup);
 
     // GUI
     const gui = new GUI();
