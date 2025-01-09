@@ -8,9 +8,9 @@ export const rootColors = (() => {
   const base = new Cubehelix(0, 0, 0.8, 1);
 
   return {
-    base: base.toRgbString(),
-    highlighted: base.brighter(1).toRgbString(),
-    pressed: base.darker(0.25).toRgbString(),
+    base: base,
+    highlighted: base.brighter(1),
+    pressed: base.darker(0.25),
   };
 })();
 
@@ -122,9 +122,9 @@ function sortTree(node: Node): void {
 
 function getColors(base: Cubehelix): Colors {
   return {
-    base: base.toRgbString(),
-    highlighted: base.brighter(0.5).toRgbString(),
-    pressed: base.darker(0.25).toRgbString(),
+    base: base,
+    highlighted: base.brighter(0.5),
+    pressed: base.darker(0.25),
   };
 }
 

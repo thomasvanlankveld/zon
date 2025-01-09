@@ -1,3 +1,4 @@
+import type { Cubehelix } from "../color.ts";
 import type { CodeStats } from "../tokei.ts";
 
 type ValueOf<T> = T[keyof T];
@@ -20,9 +21,9 @@ export type SegmentName = string | typeof NODE_TYPE.GROUP;
 export type Path = SegmentName[];
 
 export type Colors = {
-  base: string;
-  highlighted: string;
-  pressed: string;
+  base: Cubehelix;
+  highlighted: Cubehelix;
+  pressed: Cubehelix;
 };
 
 type NodeBase = {

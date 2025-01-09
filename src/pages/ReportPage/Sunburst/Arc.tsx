@@ -47,10 +47,10 @@ function Arc(props: ArcProps) {
     <path
       d={d()}
       style={{
-        "--arc-fill-color": arcColors().fill,
-        "--arc-highlighted-color": arcColors().highlighted,
-        "--arc-pressed-color": arcColors().pressed,
-        opacity: props.node.opacity(),
+        "--arc-fill-color": arcColors().fill.toRgbString(),
+        "--arc-highlighted-color": arcColors().highlighted.toRgbString(),
+        "--arc-pressed-color": arcColors().pressed.toRgbString(),
+        opacity: 0.5 * props.node.opacity(),
       }}
       class={styles.sunburst__arc}
       onMouseEnter={(e) => props.onMouseEnter?.(e)}
