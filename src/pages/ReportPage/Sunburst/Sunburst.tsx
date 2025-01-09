@@ -350,7 +350,7 @@ export default function Sunburst(props: SunburstProps) {
 
   return (
     <>
-      <Canvas chartSize={chartSize} />
+      <Canvas chartSize={chartSize} visibleNodes={visibleNodes()} />
       <svg
         ref={setSvg}
         viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}

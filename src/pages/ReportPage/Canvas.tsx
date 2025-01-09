@@ -1,9 +1,14 @@
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import {
+  createEffect,
+  createSignal,
+  onCleanup,
+  onMount,
+  untrack,
+} from "solid-js";
 import {
   PerspectiveCamera,
   Mesh,
   Scene,
-  TorusGeometry,
   WebGLRenderer,
   AmbientLight,
   PointLight,
@@ -11,6 +16,8 @@ import {
   ReinhardToneMapping,
   Vector2,
   Group,
+  Object3D,
+  ExtrudeGeometry,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -20,12 +27,13 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 import { Size } from "../../primitives/createElementSize";
-// import { SunburstNode } from "./Sunburst/types";
+import { SunburstNode } from "./Sunburst/types";
+import { getPathString, Path } from "../../utils/zon";
+import { getArcShape } from "../../utils/shape";
 
 type CanvasProps = {
   chartSize: Size;
-  // visibleNodes: SunburstNode[];
-  // maxRadius: number;
+  visibleNodes: SunburstNode[];
 };
 
 const FIELD_OF_VIEW = 22; // Degrees vertically, from top to bottom of the screen
@@ -36,6 +44,14 @@ function cot(x: number) {
 
 function getCameraZ(screenHeight: number) {
   return 0.5 * screenHeight * cot(0.5 * FIELD_OF_VIEW * (Math.PI / 180));
+}
+
+function getArcName(path: Path) {
+  return getPathString(path);
+}
+
+function arcHasPath(arc: Object3D, path: Path) {
+  return arc.name === getPathString(path);
 }
 
 export default function Canvas(props: CanvasProps) {
@@ -50,8 +66,47 @@ export default function Canvas(props: CanvasProps) {
   const [composer, setComposer] = createSignal<EffectComposer>();
   const chartGroup = new Group();
 
-  // createEffect(() => console.log(props.visibleNodes));
-  // createEffect(() => console.log(props.maxRadius));
+  createEffect(() => {
+    const nodesToAdd = props.visibleNodes.filter(
+      (node) => !chartGroup.children.some((arc) => arcHasPath(arc, node.path)),
+    );
+    const arcsToRemove = chartGroup.children.filter(
+      (arc) => !props.visibleNodes.some((node) => arcHasPath(arc, node.path)),
+    );
+
+    nodesToAdd.forEach((node) => {
+      const dimensions = untrack(node.targetDimensions);
+
+      const arcShape = getArcShape({
+        outerRadius: 0.1 * dimensions.y0,
+        innerRadius: 0.1 * dimensions.y1,
+        startAngle: dimensions.x0 * 2 * Math.PI,
+        endAngle: dimensions.x1 * 2 * Math.PI,
+      });
+      const arcName = getArcName(node.path);
+      const extrudeSettings = {
+        steps: 1,
+        depth: 1,
+        bevelEnabled: true,
+        bevelThickness: 0,
+        bevelSize: 0,
+        bevelOffset: 0,
+        bevelSegments: 0,
+      };
+      const arcGeometry = new ExtrudeGeometry(arcShape, extrudeSettings);
+      const arcMaterial = new MeshStandardMaterial({
+        color: node.colors.base.toRgbNumber(),
+      });
+
+      const arcMesh = new Mesh(arcGeometry, arcMaterial);
+      arcMesh.name = arcName;
+      chartGroup.add(arcMesh);
+    });
+
+    arcsToRemove.forEach((arc) => {
+      chartGroup.remove(arc);
+    });
+  });
 
   function onChartResize() {
     const [cameraVal, rendererVal] = [camera(), renderer()];
@@ -86,9 +141,9 @@ export default function Canvas(props: CanvasProps) {
       return;
     }
 
-    chartGroup.rotation.x += 0.01;
-    chartGroup.rotation.y += 0.005;
-    chartGroup.rotation.z += 0.01;
+    // chartGroup.rotation.x += 0.01;
+    // chartGroup.rotation.y += 0.005;
+    // chartGroup.rotation.z += 0.01;
 
     composerVal.render();
   }
@@ -104,8 +159,8 @@ export default function Canvas(props: CanvasProps) {
     const cameraVal = new PerspectiveCamera(
       FIELD_OF_VIEW,
       windowWidth / windowHeight,
-      1000,
-      4000,
+      100,
+      40_000,
     );
 
     setCamera(cameraVal);
@@ -153,24 +208,7 @@ export default function Canvas(props: CanvasProps) {
 
     new OrbitControls(cameraVal, rendererVal.domElement);
 
-    // Orange toruses
-    const toruses = Array.from({ length: 4 }, () => {
-      const torusGeometry = new TorusGeometry(0.4, 0.1, 16, 100);
-      const torusMaterial = new MeshStandardMaterial({ color: 0xff6347 });
-
-      torusGeometry.scale(0.5, 0.5, 0.5);
-
-      return new Mesh(torusGeometry, torusMaterial);
-    });
-    toruses[0].position.x = -0.25;
-    toruses[0].position.y = -0.25;
-    toruses[1].position.x = -0.25;
-    toruses[1].position.y = 0.25;
-    toruses[2].position.x = 0.25;
-    toruses[2].position.y = -0.25;
-    toruses[3].position.x = 0.25;
-    toruses[3].position.y = 0.25;
-    toruses.forEach((torus) => chartGroup.add(torus));
+    // Add our objects to the scene!
     scene.add(chartGroup);
 
     // GUI
