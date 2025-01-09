@@ -1,12 +1,6 @@
 // TODO: Fix black flicker when resizing the screen.
 
-import {
-  createEffect,
-  createSignal,
-  onCleanup,
-  onMount,
-  untrack,
-} from "solid-js";
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import {
   PerspectiveCamera,
   Mesh,
@@ -18,7 +12,6 @@ import {
   ReinhardToneMapping,
   Vector2,
   Group,
-  Object3D,
   ExtrudeGeometry,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
@@ -30,7 +23,6 @@ import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 import { Size } from "../../primitives/createElementSize";
 import { SunburstNode } from "./Sunburst/types";
-import { getPathString, Path } from "../../utils/zon";
 import { getArcShape } from "../../utils/shape";
 
 type CanvasProps = {
@@ -48,23 +40,34 @@ function getCameraZ(screenHeight: number) {
   return 0.5 * screenHeight * cot(0.5 * FIELD_OF_VIEW * (Math.PI / 180));
 }
 
-function getArcName(path: Path) {
-  return getPathString(path);
-}
-
-function arcHasPath(arc: Object3D, path: Path) {
-  return arc.name === getPathString(path);
-}
-
 const EXTRUDE_SETTINGS = {
   steps: 1,
-  depth: 1,
+  depth: 0.25,
   bevelEnabled: true,
   bevelThickness: 0,
   bevelSize: 0,
   bevelOffset: 0,
   bevelSegments: 0,
 };
+
+function createArcMesh(node: SunburstNode) {
+  const dimensions = node.dimensions();
+
+  const arcShape = getArcShape({
+    outerRadius: 0.25 * dimensions.y0,
+    innerRadius: 0.25 * dimensions.y1,
+    startAngle: dimensions.x0 * 2 * Math.PI,
+    endAngle: dimensions.x1 * 2 * Math.PI,
+  });
+  const arcGeometry = new ExtrudeGeometry(arcShape, EXTRUDE_SETTINGS);
+  const arcMaterial = new MeshStandardMaterial({
+    color: node.colors.base.toRgbNumber(),
+  });
+  const arcMesh = new Mesh(arcGeometry, arcMaterial);
+  arcMesh.position.z = -EXTRUDE_SETTINGS.depth;
+
+  return arcMesh;
+}
 
 export default function Canvas(props: CanvasProps) {
   const chartX = () => props.chartSize.x();
@@ -77,39 +80,6 @@ export default function Canvas(props: CanvasProps) {
   const [renderer, setRenderer] = createSignal<WebGLRenderer>();
   const [composer, setComposer] = createSignal<EffectComposer>();
   const chartGroup = new Group();
-
-  createEffect(() => {
-    const nodesToAdd = props.visibleNodes.filter(
-      (node) => !chartGroup.children.some((arc) => arcHasPath(arc, node.path)),
-    );
-    const arcsToRemove = chartGroup.children.filter(
-      (arc) => !props.visibleNodes.some((node) => arcHasPath(arc, node.path)),
-    );
-
-    nodesToAdd.forEach((node) => {
-      const dimensions = untrack(node.targetDimensions);
-
-      const arcShape = getArcShape({
-        outerRadius: 0.1 * dimensions.y0,
-        innerRadius: 0.1 * dimensions.y1,
-        startAngle: dimensions.x0 * 2 * Math.PI,
-        endAngle: dimensions.x1 * 2 * Math.PI,
-      });
-      const arcName = getArcName(node.path);
-      const arcGeometry = new ExtrudeGeometry(arcShape, EXTRUDE_SETTINGS);
-      const arcMaterial = new MeshStandardMaterial({
-        color: node.colors.base.toRgbNumber(),
-      });
-
-      const arcMesh = new Mesh(arcGeometry, arcMaterial);
-      arcMesh.name = arcName;
-      chartGroup.add(arcMesh);
-    });
-
-    arcsToRemove.forEach((arc) => {
-      chartGroup.remove(arc);
-    });
-  });
 
   function onChartResize() {
     const [cameraVal, rendererVal] = [camera(), renderer()];
@@ -143,6 +113,10 @@ export default function Canvas(props: CanvasProps) {
     if (!composerVal) {
       return;
     }
+
+    // TODO: only run this code when visibleNodes or dimensions has changed
+    chartGroup.clear();
+    props.visibleNodes.forEach((node) => chartGroup.add(createArcMesh(node)));
 
     // chartGroup.rotation.x += 0.01;
     // chartGroup.rotation.y += 0.005;
