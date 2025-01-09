@@ -1,3 +1,22 @@
+// TODO: Make arcs work properly
+// - [ExtrudeGeometry – three.js docs](https://threejs.org/docs/#api/en/geometries/ExtrudeGeometry)
+// - [Shape – three.js docs](https://threejs.org/docs/#api/en/extras/core/Shape)
+// - [Path – three.js docs](https://threejs.org/docs/index.html#api/en/extras/core/Path)
+
+// TODO: Mouse interactions
+// - [How to highlight 3d object on mouse hover - Questions - three.js forum](https://discourse.threejs.org/t/how-to-highlight-3d-object-on-mouse-hover/18139)
+
+// TODO: Make sure there's no memory leaking
+// Not sure if this is handled by Object3D's `clear` and `remove` or not
+// - [Disposing resources – three.js docs](https://threejs.org/docs/#manual/en/introduction/How-to-dispose-of-objects)
+// - [three.js/src/core/Object3D.js at dev · mrdoob/three.js · GitHub](https://github.com/mrdoob/three.js/blob/dev/src/core/Object3D.js#L356)
+
+// TODO: See if on screen resize we can change only the camera perspective, and nothing else
+// - [Fundamentals - three.js manual](https://threejs.org/manual/#en/fundamentals)
+// - [Cameras - three.js manual](https://threejs.org/manual/#en/cameras)
+// - [Camera – three.js docs](https://threejs.org/docs/#api/en/cameras/Camera)
+// - [PerspectiveCamera – three.js docs](https://threejs.org/docs/#api/en/cameras/PerspectiveCamera)
+
 // TODO: Fix black flicker when resizing the screen.
 
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
@@ -115,6 +134,10 @@ export default function Canvas(props: CanvasProps) {
     }
 
     // TODO: only run this code when visibleNodes or dimensions has changed
+    // Also, check if we really need to remove and recreate all meshes when the shape changes
+    // - [Updating resources – three.js docs](https://threejs.org/docs/#manual/en/introduction/How-to-update-things)
+    // - [ExtrudeGeometry – three.js docs](https://threejs.org/docs/#api/en/geometries/ExtrudeGeometry)
+    // - [how to update shape (not geometry) in three.js? - Stack Overflow](https://stackoverflow.com/questions/25898697/how-to-update-shape-not-geometry-in-three-js)
     chartGroup.clear();
     props.visibleNodes.forEach((node) => chartGroup.add(createArcMesh(node)));
 
