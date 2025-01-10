@@ -32,7 +32,6 @@ import {
   Vector2,
   Group,
   ExtrudeGeometry,
-  // GridHelper,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -141,12 +140,6 @@ export default function Canvas(props: CanvasProps) {
     // - [how to update shape (not geometry) in three.js? - Stack Overflow](https://stackoverflow.com/questions/25898697/how-to-update-shape-not-geometry-in-three-js)
     chartGroup.clear();
     props.visibleNodes.forEach((node) => chartGroup.add(createArcMesh(node)));
-
-    // const size = 1;
-    // const divisions = 10;
-    // const gridHelper = new GridHelper(size, divisions);
-    // gridHelper.rotation.x = Math.PI / 2;
-    // chartGroup.add(gridHelper);
 
     // chartGroup.rotation.x += 0.01;
     // chartGroup.rotation.y += 0.005;
