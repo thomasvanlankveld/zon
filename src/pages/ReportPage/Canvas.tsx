@@ -1,8 +1,3 @@
-// TODO: Make arcs work properly
-// - [ExtrudeGeometry – three.js docs](https://threejs.org/docs/#api/en/geometries/ExtrudeGeometry)
-// - [Shape – three.js docs](https://threejs.org/docs/#api/en/extras/core/Shape)
-// - [Path – three.js docs](https://threejs.org/docs/index.html#api/en/extras/core/Path)
-
 // TODO: Mouse interactions
 // - [How to highlight 3d object on mouse hover - Questions - three.js forum](https://discourse.threejs.org/t/how-to-highlight-3d-object-on-mouse-hover/18139)
 
