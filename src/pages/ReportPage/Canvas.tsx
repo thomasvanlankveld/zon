@@ -32,6 +32,7 @@ import {
   Vector2,
   Group,
   ExtrudeGeometry,
+  // GridHelper,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -61,7 +62,7 @@ function getCameraZ(screenHeight: number) {
 
 const EXTRUDE_SETTINGS = {
   steps: 1,
-  depth: 0.25,
+  depth: 0.2,
   bevelEnabled: true,
   bevelThickness: 0,
   bevelSize: 0,
@@ -73,8 +74,8 @@ function createArcMesh(node: SunburstNode) {
   const dimensions = node.dimensions();
 
   const arcShape = getArcShape({
-    outerRadius: 0.25 * dimensions.y0,
-    innerRadius: 0.25 * dimensions.y1,
+    outerRadius: 0.5 * dimensions.y0,
+    innerRadius: 0.5 * dimensions.y1,
     startAngle: dimensions.x0 * 2 * Math.PI,
     endAngle: dimensions.x1 * 2 * Math.PI,
   });
@@ -141,6 +142,12 @@ export default function Canvas(props: CanvasProps) {
     chartGroup.clear();
     props.visibleNodes.forEach((node) => chartGroup.add(createArcMesh(node)));
 
+    // const size = 1;
+    // const divisions = 10;
+    // const gridHelper = new GridHelper(size, divisions);
+    // gridHelper.rotation.x = Math.PI / 2;
+    // chartGroup.add(gridHelper);
+
     // chartGroup.rotation.x += 0.01;
     // chartGroup.rotation.y += 0.005;
     // chartGroup.rotation.z += 0.01;
@@ -194,9 +201,12 @@ export default function Canvas(props: CanvasProps) {
       0.4,
       0.85,
     );
-    bloomPass.threshold = 0.2;
-    bloomPass.strength = 0.4;
-    bloomPass.radius = 0.3;
+    bloomPass.threshold = 0;
+    bloomPass.strength = 0.25;
+    bloomPass.radius = 0.5;
+    // bloomPass.threshold = 0.2;
+    // bloomPass.strength = 0.4;
+    // bloomPass.radius = 0.3;
 
     const outputPass = new OutputPass();
 

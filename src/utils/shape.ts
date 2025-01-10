@@ -2,8 +2,8 @@ import { Shape } from "three";
 
 function point(radius: number, angle: number) {
   return {
-    x: radius * Math.sin(angle),
-    y: radius * Math.cos(angle),
+    x: radius * Math.cos(angle),
+    y: radius * Math.sin(angle),
   };
 }
 
@@ -21,8 +21,8 @@ export type ArcSpecs = {
  */
 export function getArcShape(arcSpecs: ArcSpecs) {
   const { innerRadius, outerRadius } = arcSpecs;
-  const startAngle = Math.PI - arcSpecs.startAngle;
-  const endAngle = Math.PI - arcSpecs.endAngle;
+  const startAngle = 0.5 * Math.PI - arcSpecs.startAngle;
+  const endAngle = 0.5 * Math.PI - arcSpecs.endAngle;
 
   const negativeValues = Object.values(arcSpecs).filter((val) => val < 0);
   if (negativeValues.length > 0) {
@@ -46,11 +46,13 @@ export function getArcShape(arcSpecs: ArcSpecs) {
   const innerEnd = point(innerRadius, endAngle);
 
   const arcShape = new Shape();
+
   arcShape.moveTo(outerStart.x, outerStart.y);
-  arcShape.arc(0, 0, outerRadius, startAngle, endAngle);
+  arcShape.absarc(0, 0, outerRadius, startAngle, endAngle, true);
   arcShape.lineTo(innerEnd.x, innerEnd.y);
-  arcShape.arc(0, 0, innerRadius, startAngle, endAngle);
+  arcShape.absarc(0, 0, innerRadius, endAngle, startAngle, false);
   arcShape.lineTo(outerStart.x, outerStart.y);
+  arcShape.closePath();
 
   return arcShape;
 }
@@ -59,8 +61,8 @@ function getClosedCircleArc(radius: number) {
   const arcShape = new Shape();
 
   arcShape.moveTo(radius, 0);
-  arcShape.arc(0, 0, radius, 0, Math.PI);
-  arcShape.arc(0, 0, radius, Math.PI, 2 * Math.PI);
+  arcShape.absarc(0, 0, radius, 0, Math.PI);
+  arcShape.absarc(0, 0, radius, Math.PI, 2 * Math.PI);
 
   return arcShape;
 }
