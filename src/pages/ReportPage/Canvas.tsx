@@ -1,3 +1,18 @@
+// TODO: Make colors look better
+// - [Drawing lines – three.js docs](https://threejs.org/docs/#manual/en/introduction/Drawing-lines)
+
+// TODO: Make edges more clear
+// - [three.js - Transparent cube with stroke only - Stack Overflow](https://stackoverflow.com/questions/54986604/transparent-cube-with-stroke-only)
+// - [Edit fiddle - JSFiddle - Code Playground](https://jsfiddle.net/L21ozkdq/2/)
+// - [What's your approach to edges/outlines? : r/threejs](https://www.reddit.com/r/threejs/comments/n660xk/whats_your_approach_to_edgesoutlines/)
+// - [App.js — nodebox — CodeSandbox](https://codesandbox.io/p/sandbox/basic-demo-forked-d36mw?file=%2Fsrc%2FApp.js)
+// - [javascript - three.js Highlighting the edge of a cube on hover LineSegmentsGeometry - Stack Overflow](https://stackoverflow.com/questions/68581321/three-js-highlighting-the-edge-of-a-cube-on-hover-linesegmentsgeometry)
+// - [Highlighting the edge of a cube on hover LineSegmentsGeometry - Questions - three.js forum](https://discourse.threejs.org/t/highlighting-the-edge-of-a-cube-on-hover-linesegmentsgeometry/28480)
+// - [Edit fiddle - JSFiddle - Code Playground](https://jsfiddle.net/prisoner849/9pwozejq/)
+// - [Edge finding and highlighting - Resources - three.js forum](https://discourse.threejs.org/t/edge-finding-and-highlighting/47827)
+// - [EdgesGeometry – three.js docs](https://threejs.org/docs/#api/en/geometries/EdgesGeometry)
+// - [LineSegmentsGeometry – three.js docs](https://threejs.org/docs/#examples/en/lines/LineSegmentsGeometry)
+
 // TODO: Mouse interactions
 // - [How to highlight 3d object on mouse hover - Questions - three.js forum](https://discourse.threejs.org/t/how-to-highlight-3d-object-on-mouse-hover/18139)
 
@@ -27,6 +42,8 @@ import {
   Vector2,
   Group,
   ExtrudeGeometry,
+  // EdgesGeometry,
+  // LineBasicMaterial,
 } from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -38,6 +55,8 @@ import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { Size } from "../../primitives/createElementSize";
 import { SunburstNode } from "./Sunburst/types";
 import { getArcShape } from "../../utils/shape";
+// import { LineSegmentsGeometry } from "three/examples/jsm/Addons.js";
+// import { LineMaterial } from "three/examples/jsm/Addons.js";
 
 type CanvasProps = {
   chartSize: Size;
@@ -81,6 +100,18 @@ function createArcMesh(node: SunburstNode) {
   arcMesh.position.z = -EXTRUDE_SETTINGS.depth;
 
   return arcMesh;
+
+  // const edgesGeometry = new EdgesGeometry(arcGeometry, 20);
+  // const edgesMaterial = new LineBasicMaterial({
+  //   color: node.colors.base.toRgbNumber(),
+  // });
+  // const lineSegmentsGeometry = new LineSegmentsGeometry().fromEdgesGeometry(
+  //   edgesGeometry,
+  // );
+  // const edgesMesh = new Mesh(lineSegmentsGeometry, edgesMaterial);
+  // edgesMesh.position.z = -EXTRUDE_SETTINGS.depth;
+
+  // return edgesMesh;
 }
 
 export default function Canvas(props: CanvasProps) {
