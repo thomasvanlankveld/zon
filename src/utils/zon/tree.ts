@@ -1,4 +1,4 @@
-import { rainbow, Cubehelix } from "../color.ts";
+import { Cubehelix } from "../color.ts";
 import { Languages } from "../tokei.ts";
 import { type Colors, type LINE_TYPE, type Node, NODE_TYPE } from "./types.ts";
 import { getProjectName, getPathString, getParentPath } from "./path.ts";
@@ -120,6 +120,21 @@ function sortTree(node: Node): void {
   }
 }
 
+function getRainbowColors(value: number) {
+  const position = (value + 0.8) % 1;
+
+  const baseLightness = 82;
+  const chroma = 0.31;
+  const hue = position * 360;
+  const chromaCorrection = Math.abs(0.5 - ((value + 0.25) % 1));
+
+  return {
+    base: `oklch(${baseLightness}% ${chroma} ${hue})`,
+    highlighted: `oklch(${baseLightness + 12}% ${(1 - chromaCorrection) * chroma} ${hue})`,
+    pressed: `oklch(${baseLightness + 20}% ${(1 - 1.5 * chromaCorrection) * chroma} ${hue})`,
+  };
+}
+
 function getColors(base: Cubehelix): Colors {
   return {
     base: base.toRgbString(),
@@ -141,7 +156,7 @@ function addDeduced(
     child.firstLine = lineNumber;
 
     const middleLine = lineNumber + child.numberOfLines / 2;
-    child.colors = getColors(rainbow(middleLine / totalNumberOfLines));
+    child.colors = getRainbowColors(middleLine / totalNumberOfLines);
 
     addDeduced(child, totalNumberOfLines, lineNumber);
 
