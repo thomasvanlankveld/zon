@@ -1,9 +1,9 @@
 import { JSX } from "solid-js/h/jsx-runtime";
 import { getArcD } from "../../../utils/svg.ts";
 import { SunburstNode, Dimensions } from "./types.ts";
-import { arePathsEqual } from "../../../utils/zon/path.ts";
 import { Path } from "../../../utils/zon/types.ts";
 import styles from "./Arc.module.css";
+import { getBaseColor } from "../../../utils/zon/color.ts";
 
 type ArcProps = {
   node: SunburstNode;
@@ -29,22 +29,11 @@ function Arc(props: ArcProps) {
 
   const d = () => getNodeArcD(props.node.dimensions());
 
-  /**
-   * When the node is highlighted, use the highlight color for its fill
-   */
-  function arcColorFill() {
-    const isHighlighted = arePathsEqual(props.highlightedPath, props.node.path);
-
-    return isHighlighted
-      ? props.node.colors.highlighted
-      : props.node.colors.default;
-  }
-
   return (
     <path
       d={d()}
       style={{
-        "--arc-fill-color": arcColorFill(),
+        "--arc-fill-color": getBaseColor(props.node, props.highlightedPath),
         "--arc-highlighted-color": props.node.colors.highlighted,
         "--arc-pressed-color": props.node.colors.pressed,
         opacity: props.node.opacity(),
