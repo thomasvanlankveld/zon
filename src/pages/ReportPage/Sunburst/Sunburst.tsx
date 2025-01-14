@@ -68,7 +68,7 @@ export default function Sunburst(props: SunburstProps) {
     arePathsEqual(targetDiagramRoot().path, props.root.path),
   );
 
-  const numberOfFullLayers = 5;
+  const numberOfFullLayers = 3;
   const numberOfNarrowLayers = 5;
   const totalLayers = numberOfFullLayers + numberOfNarrowLayers;
   const targetMaxDepthFromRoot = createMemo(() =>
