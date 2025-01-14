@@ -20,7 +20,6 @@ import {
 } from "../../../utils/zon/index.ts";
 import createElementSize from "../../../primitives/createElementSize.ts";
 import styles from "./Arc.module.css";
-import { Cubehelix } from "../../../utils/color.ts";
 import { Dimensions, SunburstNode, DimensionKey } from "./types.ts";
 import Arc from "./Arc.tsx";
 
@@ -334,17 +333,11 @@ export default function Sunburst(props: SunburstProps) {
     });
   }
 
-  const rootColors = (() => {
-    const baseColor = new Cubehelix(0, 0, 1, 0.1);
-    const highlightedColor = baseColor.cloudier(1).toRgbString();
-    const pressedColor = baseColor.clearer(0.25).toRgbString();
-
-    return {
-      fill: baseColor.toRgbString(),
-      highlighted: highlightedColor,
-      pressed: pressedColor,
-    };
-  })();
+  const rootColors = {
+    fill: "rgba(255, 255, 255, 0.1)",
+    highlighted: "rgba(255, 255, 255, 0.2)",
+    pressed: "rgba(255, 255, 255, 0.075)",
+  };
 
   return (
     <svg
