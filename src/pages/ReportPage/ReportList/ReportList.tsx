@@ -11,7 +11,6 @@ import {
   type Path,
   type Node,
   getPathString,
-  rootColors,
   getParentPath,
   arePathsEqual,
   getDisplayName,
@@ -117,9 +116,9 @@ export default function ReportList(props: ReportListProps) {
         <ListItem
           component={isReportRoot() ? "span" : "button"}
           style={{
-            "--base-color": rootColors.base,
-            "--highlighted-color": rootColors.highlighted,
-            "--pressed-color": rootColors.pressed,
+            "--base-color": listRoot().colors.base,
+            "--highlighted-color": listRoot().colors.highlighted,
+            "--pressed-color": listRoot().colors.pressed,
           }}
           class={styles["report-list__heading"]}
           arrowDirection={isReportRoot() ? undefined : ARROW_DIRECTION.LEFT}
