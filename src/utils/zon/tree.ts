@@ -126,12 +126,12 @@ export function getRainbowColors(value: number) {
   const baseLightness = 82;
   const chroma = 0.31;
   const hue = position * 360;
-  const chromaCorrection = Math.abs(0.5 - ((value + 0.25) % 1));
+  const chromaCorrection = 0.15 + Math.abs(0.5 - ((value + 0.25) % 1));
 
   return {
     base: `oklch(${baseLightness}% ${chroma} ${hue})`,
-    highlighted: `oklch(${baseLightness + 12}% ${(1 - chromaCorrection) * chroma} ${hue})`,
-    pressed: `oklch(${baseLightness + 20}% ${(1 - 1.5 * chromaCorrection) * chroma} ${hue})`,
+    highlighted: `oklch(${baseLightness + 10}% ${(1 - chromaCorrection) * chroma} ${hue})`,
+    pressed: `oklch(${baseLightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
   };
 }
 
