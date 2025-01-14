@@ -42,9 +42,9 @@ export default function LandingPage(props: LandingPageProps) {
 
   return (
     <main>
-      <ColorTest />
       <h1>{t("app.title")}</h1>
 
+      <ColorTest />
       <UploadButton countLinesInFolder={props.countLinesInFolder} />
       <Show when={props.isLoading}>
         <CountingLines path={props.path as string} />
