@@ -73,6 +73,7 @@ export default function ReportPage(props: ReportPageProps) {
       <ReportList
         root={groupedReportRoot()}
         listRootPath={hoverArcPath() ?? diagramRootPath()}
+        highlightedPath={hoverArcPath()}
         setHoverListPath={setHoverListPath}
         setSelectedRootPath={setSelectedRootPath}
       />

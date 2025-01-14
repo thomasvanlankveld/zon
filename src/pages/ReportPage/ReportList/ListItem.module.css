@@ -3,7 +3,7 @@
   justify-content: space-between;
   gap: 1rem;
   overflow-x: hidden;
-  color: var(--default-color);
+  color: var(--base-color);
 }
 
 .list-item__button {

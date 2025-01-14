@@ -18,10 +18,12 @@ import {
 import { useI18n } from "../../../utils/i18n";
 import ListItem, { ARROW_DIRECTION } from "./ListItem";
 import styles from "./ReportList.module.css";
+import { getBaseColor } from "../../../utils/zon/color";
 
 type ReportListProps = {
   root: Node;
   listRootPath: Path | null;
+  highlightedPath: Path | null;
   setHoverListPath: Setter<Path | null>;
   setSelectedRootPath: Setter<Path | null>;
 };
@@ -116,7 +118,11 @@ export default function ReportList(props: ReportListProps) {
         <ListItem
           component={isReportRoot() ? "span" : "button"}
           style={{
-            "--default-color": listRoot().colors.default,
+            "--base-color": getBaseColor(
+              listRoot().colors,
+              listRoot().path,
+              props.highlightedPath,
+            ),
             "--highlighted-color": listRoot().colors.highlighted,
             "--pressed-color": listRoot().colors.pressed,
           }}
@@ -137,7 +143,7 @@ export default function ReportList(props: ReportListProps) {
                   : "span"
               }
               style={{
-                "--default-color": child.colors.default,
+                "--base-color": child.colors.default,
                 "--highlighted-color": child.colors.highlighted,
                 "--pressed-color": child.colors.pressed,
               }}
