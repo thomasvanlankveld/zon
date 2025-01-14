@@ -120,7 +120,7 @@ function sortTree(node: Node): void {
   }
 }
 
-function getRainbowColors(value: number) {
+export function getRainbowColors(value: number) {
   const position = (value + 0.8) % 1;
 
   const baseLightness = 82;
