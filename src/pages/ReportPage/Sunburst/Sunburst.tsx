@@ -17,11 +17,13 @@ import {
   getParentPath,
   getPathString,
   arePathsEqual,
+  Colors,
 } from "../../../utils/zon/index.ts";
 import createElementSize from "../../../primitives/createElementSize.ts";
 import styles from "./Arc.module.css";
 import { Dimensions, SunburstNode, DimensionKey } from "./types.ts";
 import Arc from "./Arc.tsx";
+import { getBaseColor } from "../../../utils/zon/color.ts";
 
 type SunburstProps = {
   root: Node;
@@ -332,8 +334,8 @@ export default function Sunburst(props: SunburstProps) {
     });
   }
 
-  const rootColors = {
-    fill: "rgba(255, 255, 255, 0.1)",
+  const rootColors: Colors = {
+    default: "rgba(255, 255, 255, 0.1)",
     highlighted: "rgba(255, 255, 255, 0.2)",
     pressed: "rgba(255, 255, 255, 0.075)",
   };
@@ -361,7 +363,11 @@ export default function Sunburst(props: SunburstProps) {
           cy={0}
           r={(1 / targetMaxDistance()) * maxRadius()}
           style={{
-            "--arc-fill-color": rootColors.fill,
+            "--arc-fill-color": getBaseColor(
+              rootColors,
+              targetDiagramRoot().path,
+              props.highlightedPath,
+            ),
             "--arc-highlighted-color": rootColors.highlighted,
             "--arc-pressed-color": rootColors.pressed,
           }}

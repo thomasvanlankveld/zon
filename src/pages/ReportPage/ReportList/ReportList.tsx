@@ -123,7 +123,8 @@ export default function ReportList(props: ReportListProps) {
           class={styles["report-list__heading"]}
           arrowDirection={isReportRoot() ? undefined : ARROW_DIRECTION.LEFT}
           node={listRoot()}
-          // TODO: Hovering should activate diagram center highlight color
+          onMouseEnter={[props.setHoverListPath, listRoot().path]}
+          onMouseLeave={[props.setHoverListPath, null]}
           onClick={() => onHeadingClick()}
         />
         <For each={listNodes()}>

@@ -33,7 +33,11 @@ function Arc(props: ArcProps) {
     <path
       d={getNodeArcD()}
       style={{
-        "--arc-fill-color": getBaseColor(props.node, props.highlightedPath),
+        "--arc-fill-color": getBaseColor(
+          props.node.colors,
+          props.node.path,
+          props.highlightedPath,
+        ),
         "--arc-highlighted-color": props.node.colors.highlighted,
         "--arc-pressed-color": props.node.colors.pressed,
         opacity: props.node.opacity(),

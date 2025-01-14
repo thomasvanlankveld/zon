@@ -1,5 +1,5 @@
 import { arePathsEqual } from "./path";
-import type { Colors, Node, Path } from "./types";
+import type { Colors, Path } from "./types";
 
 /**
  * Take a number between 0 and 1 (inclusive), and produce a set of corresponding colors
@@ -24,8 +24,12 @@ export function rainbow(value: number): Colors {
  * Get a node's "dynamic" base color. When the node is highlighted (from an outside component), you want to use the
  * "highlight" color instead of the "default" color as its basis.
  */
-export function getBaseColor(node: Node, highlightedPath: Path | null): string {
-  const isHighlighted = arePathsEqual(highlightedPath, node.path);
+export function getBaseColor(
+  colors: Colors,
+  nodePath: Path,
+  highlightedPath: Path | null,
+): string {
+  const isHighlighted = arePathsEqual(highlightedPath, nodePath);
 
-  return isHighlighted ? node.colors.highlighted : node.colors.default;
+  return isHighlighted ? colors.highlighted : colors.default;
 }
