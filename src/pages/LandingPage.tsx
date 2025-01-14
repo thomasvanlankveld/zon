@@ -2,7 +2,7 @@ import { For, Show } from "solid-js";
 import UploadButton from "../components/UploadButton/UploadButton";
 import CountingLines from "../components/CountingLines";
 import { useI18n } from "../utils/i18n";
-import { getRainbowColors } from "../utils/zon";
+import { rainbow } from "../utils/color";
 
 type LandingPageProps = {
   isLoading: boolean;
@@ -30,9 +30,9 @@ function ColorSpread(props: { getColor: (val: number) => string }) {
 function ColorTest() {
   return (
     <div style={{ display: "grid", padding: "6rem" }}>
-      <ColorSpread getColor={(val) => getRainbowColors(val).base} />
-      <ColorSpread getColor={(val) => getRainbowColors(val).highlighted} />
-      <ColorSpread getColor={(val) => getRainbowColors(val).pressed} />
+      <ColorSpread getColor={(val) => rainbow(val).base} />
+      <ColorSpread getColor={(val) => rainbow(val).highlighted} />
+      <ColorSpread getColor={(val) => rainbow(val).pressed} />
     </div>
   );
 }

@@ -1,28 +1,20 @@
-// Thanks to the d3 authors!
-// https://github.com/d3/d3-color
-// https://github.com/d3/d3-scale-chromatic
-// https://observablehq.com/@mbostock/sinebow
-// https://github.com/d3/d3-scale-chromatic/blob/2c52792197299346b7bdb94322bb4dff8f554fea/src/sequential-multi/rainbow.js
-// https://github.com/d3/d3-color/blob/71c7f100f9fa85a1c70fcbaeb5f803ee8db5620d/src/cubehelix.js
-// https://github.com/d3/d3-color/blob/71c7f100f9fa85a1c70fcbaeb5f803ee8db5620d/src/color.js
-
-// TODO: Clean up anything unneeded
-
 /**
- * Take a number between 0 and 1 (inclusive), and produce the corresponding color along the "less-angry-rainbow" scheme
- * @param t
+ * Take a number between 0 and 1 (inclusive), and produce a set of corresponding colors
+ * @param value
  */
-export function rainbow(t: number) {
-  t %= 1;
+export function rainbow(value: number) {
+  const position = (value + 0.8) % 1;
 
-  // TODO: Only use Math.min for dark color scheme
-  const ts = Math.min(Math.abs(t - 0.5), 0.3);
+  const baseLightness = 82;
+  const chroma = 0.31;
+  const hue = position * 360;
+  const chromaCorrection = 0.15 + Math.abs(0.5 - ((value + 0.25) % 1));
 
-  const hue = 360 * t - 100;
-  const saturation = 1.5 - 1.5 * ts;
-  const lightness = 0.8 - 0.9 * ts;
-
-  return cubehelix(hue, saturation, lightness);
+  return {
+    base: `oklch(${baseLightness}% ${chroma} ${hue})`,
+    highlighted: `oklch(${baseLightness + 10}% ${(1 - chromaCorrection) * chroma} ${hue})`,
+    pressed: `oklch(${baseLightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
+  };
 }
 
 const radians = Math.PI / 180;
@@ -32,10 +24,6 @@ const A = -0.14861,
   C = -0.29227,
   D = -0.90649,
   E = +1.97294;
-
-function cubehelix(h: number, s: number, l: number, opacity?: number) {
-  return new Cubehelix(h, s, l, opacity == null ? 1 : opacity);
-}
 
 // https://people.phy.cam.ac.uk/dag9/CUBEHELIX/
 export class Cubehelix {
