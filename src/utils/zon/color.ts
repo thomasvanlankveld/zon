@@ -1,4 +1,4 @@
-import { Colors } from "./zon";
+import { Colors } from "./types";
 
 /**
  * Take a number between 0 and 1 (inclusive), and produce a set of corresponding colors

@@ -1,4 +1,4 @@
-import { rainbow } from "../color.ts";
+import { rainbow } from "./color.ts";
 import { Languages } from "../tokei.ts";
 import { type Colors, type LINE_TYPE, type Node, NODE_TYPE } from "./types.ts";
 import { getProjectName, getPathString, getParentPath } from "./path.ts";
