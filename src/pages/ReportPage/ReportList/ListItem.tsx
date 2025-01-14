@@ -41,19 +41,20 @@ export default function ListItem(props: ListItemProps) {
       onMouseLeave={props.onMouseLeave}
       onClick={props.onClick}
     >
-      <span class={styles["list-item__display-name"]}>
-        <Show when={props.arrowDirection === ARROW_DIRECTION.LEFT}>
-          <span class={styles["list-item__arrow"]}>{"<- "}</span>
-        </Show>
+      <span
+        classList={{
+          [styles["list-item__display-name"]]: true,
+          [styles["list-item__display-name--with-left-arrow"]]:
+            props.arrowDirection === ARROW_DIRECTION.LEFT,
+          [styles["list-item__display-name--with-right-arrow"]]:
+            props.arrowDirection === ARROW_DIRECTION.RIGHT,
+          [styles["list-item__display-name--with-down-arrow"]]:
+            props.arrowDirection === ARROW_DIRECTION.DOWN,
+        }}
+      >
         {getDisplayName(props.node.name, t("group-name"))}
         <Show when={props.node.type === NODE_TYPE.FOLDER}>
           <span class={styles["list-item__folder-separator"]}> /</span>
-        </Show>
-        <Show when={props.arrowDirection === ARROW_DIRECTION.RIGHT}>
-          <span class={styles["list-item__arrow"]}>{" ->"}</span>
-        </Show>
-        <Show when={props.arrowDirection === ARROW_DIRECTION.DOWN}>
-          <span class={styles["list-item__arrow"]}>{" ↓"}</span>
         </Show>
       </span>
       <span class={styles["list-item__number-of-lines"]}>

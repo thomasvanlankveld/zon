@@ -10,18 +10,22 @@
   cursor: pointer;
 }
 
-.list-item__arrow {
-  display: none;
-}
-
-.list-item:hover .list-item__arrow {
-  display: initial;
-}
-
 .list-item__display-name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.list-item:hover .list-item__display-name--with-left-arrow::before {
+  content: "<- ";
+}
+
+.list-item:hover .list-item__display-name--with-right-arrow::after {
+  content: " ->";
+}
+
+.list-item:hover .list-item__display-name--with-down-arrow::after {
+  content: " ↓";
 }
 
 .list-item__number-of-lines {
