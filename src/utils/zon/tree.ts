@@ -1,18 +1,14 @@
-import { Cubehelix, rainbow } from "../color.ts";
+import { rainbow } from "../color.ts";
 import { Languages } from "../tokei.ts";
 import { type Colors, type LINE_TYPE, type Node, NODE_TYPE } from "./types.ts";
 import { getProjectName, getPathString, getParentPath } from "./path.ts";
 import { getNumberOfLines, sumStats, subtractStats } from "./stats.ts";
 
-export const rootColors = (() => {
-  const base = new Cubehelix(0, 0, 0.8, 1);
-
-  return {
-    base: base.toRgbString(),
-    highlighted: base.brighter(1).toRgbString(),
-    pressed: base.darker(0.25).toRgbString(),
-  };
-})();
+export const rootColors: Colors = {
+  base: "rgb(204, 204, 204)",
+  highlighted: "rgb(255, 255, 255)",
+  pressed: "rgb(153, 153, 153)",
+};
 
 export function createTree(
   projectPath: string,
@@ -120,14 +116,6 @@ function sortTree(node: Node): void {
   }
 }
 
-function getColors(base: Cubehelix): Colors {
-  return {
-    base: base.toRgbString(),
-    highlighted: base.brighter(0.5).toRgbString(),
-    pressed: base.darker(0.25).toRgbString(),
-  };
-}
-
 function addDeduced(
   node: Node,
   totalNumberOfLines: number,
@@ -154,7 +142,11 @@ type GroupOptions = {
   maxChildren: number;
 };
 
-const greyColors = getColors(new Cubehelix(0, 0, 0.6, 1));
+const greyColors: Colors = {
+  base: "rgb(153, 153, 153)",
+  highlighted: "rgb(204, 204, 204)",
+  pressed: "rgb(115, 115, 115)",
+};
 
 /**
  * Determines the height of a node based on its children
