@@ -1,6 +1,6 @@
 import { JSX } from "solid-js/h/jsx-runtime";
 import { getArcD } from "../../../utils/svg.ts";
-import { SunburstNode, Dimensions } from "./types.ts";
+import { SunburstNode } from "./types.ts";
 import { Path } from "../../../utils/zon/types.ts";
 import styles from "./Arc.module.css";
 import { getBaseColor } from "../../../utils/zon/color.ts";
@@ -18,7 +18,9 @@ function Arc(props: ArcProps) {
   /**
    * Determines the SVG path data for a node's arc
    */
-  function getNodeArcD(dimensions: Dimensions): string {
+  function getNodeArcD(): string {
+    const dimensions = props.node.dimensions();
+
     const outerRadius = dimensions.y0 * props.maxRadius;
     const innerRadius = dimensions.y1 * props.maxRadius;
     const startAngle = dimensions.x0 * 2 * Math.PI;
@@ -27,11 +29,9 @@ function Arc(props: ArcProps) {
     return getArcD({ innerRadius, outerRadius, startAngle, endAngle });
   }
 
-  const d = () => getNodeArcD(props.node.dimensions());
-
   return (
     <path
-      d={d()}
+      d={getNodeArcD()}
       style={{
         "--arc-fill-color": getBaseColor(props.node, props.highlightedPath),
         "--arc-highlighted-color": props.node.colors.highlighted,
