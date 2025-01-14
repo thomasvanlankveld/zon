@@ -279,7 +279,6 @@ export default function Sunburst(props: SunburstProps) {
           areNumbersEqual(newDimensions.y0, targetDimensions.y0, tolerance) &&
           areNumbersEqual(newDimensions.y1, targetDimensions.y1, tolerance)
         ) {
-          // TODO: Set opacity and dimensions to their exact target values
           updates.push({
             node,
             newOpacity: targetOpacity,
