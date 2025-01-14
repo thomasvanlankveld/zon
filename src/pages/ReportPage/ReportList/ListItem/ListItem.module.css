@@ -28,10 +28,6 @@
   content: " ↓";
 }
 
-.list-item__number-of-lines {
-  white-space: nowrap;
-}
-
 .list-item__button:hover {
   color: var(--highlighted-color);
 }

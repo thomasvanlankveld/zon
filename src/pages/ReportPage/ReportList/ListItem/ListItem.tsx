@@ -5,6 +5,7 @@ import { useI18n } from "../../../../utils/i18n";
 import { getDisplayName, NODE_TYPE, type Node } from "../../../../utils/zon";
 import resetButtonStyles from "../../../../styles/reset-button.module.css";
 import styles from "./ListItem.module.css";
+import NumberOfLines from "./NumberOfLines";
 
 type ListItemProps = {
   component?: "button" | "span";
@@ -26,7 +27,7 @@ export type ArrowDirection =
   (typeof ARROW_DIRECTION)[keyof typeof ARROW_DIRECTION];
 
 export default function ListItem(props: ListItemProps) {
-  const { t, formatNumber } = useI18n();
+  const { t } = useI18n();
 
   return (
     <Dynamic
@@ -57,11 +58,7 @@ export default function ListItem(props: ListItemProps) {
           <span class={styles["list-item__folder-separator"]}> /</span>
         </Show>
       </span>
-      <span class={styles["list-item__number-of-lines"]}>
-        {t("list-item.number-of-lines", {
-          numberOfLines: formatNumber(props.node.numberOfLines),
-        })}
-      </span>
+      <NumberOfLines numberOfLines={props.node.numberOfLines} />
     </Dynamic>
   );
 }
