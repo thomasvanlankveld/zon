@@ -20,7 +20,7 @@ export type SegmentName = string | typeof NODE_TYPE.GROUP;
 export type Path = SegmentName[];
 
 export type Colors = {
-  base: string;
+  default: string;
   highlighted: string;
   pressed: string;
 };

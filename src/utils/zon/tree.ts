@@ -5,7 +5,7 @@ import { getProjectName, getPathString, getParentPath } from "./path.ts";
 import { getNumberOfLines, sumStats, subtractStats } from "./stats.ts";
 
 export const rootColors: Colors = {
-  base: "rgb(204, 204, 204)",
+  default: "rgb(204, 204, 204)",
   highlighted: "rgb(255, 255, 255)",
   pressed: "rgb(153, 153, 153)",
 };
@@ -143,7 +143,7 @@ type GroupOptions = {
 };
 
 const greyColors: Colors = {
-  base: "rgb(153, 153, 153)",
+  default: "rgb(153, 153, 153)",
   highlighted: "rgb(204, 204, 204)",
   pressed: "rgb(115, 115, 115)",
 };

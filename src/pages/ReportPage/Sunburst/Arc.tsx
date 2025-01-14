@@ -37,7 +37,7 @@ function Arc(props: ArcProps) {
 
     return isHighlighted
       ? props.node.colors.highlighted
-      : props.node.colors.base;
+      : props.node.colors.default;
   }
 
   return (

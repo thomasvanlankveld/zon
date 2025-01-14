@@ -116,7 +116,7 @@ export default function ReportList(props: ReportListProps) {
         <ListItem
           component={isReportRoot() ? "span" : "button"}
           style={{
-            "--base-color": listRoot().colors.base,
+            "--default-color": listRoot().colors.default,
             "--highlighted-color": listRoot().colors.highlighted,
             "--pressed-color": listRoot().colors.pressed,
           }}
@@ -136,7 +136,7 @@ export default function ReportList(props: ReportListProps) {
                   : "span"
               }
               style={{
-                "--base-color": child.colors.base,
+                "--default-color": child.colors.default,
                 "--highlighted-color": child.colors.highlighted,
                 "--pressed-color": child.colors.pressed,
               }}

@@ -42,7 +42,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
             <button
               {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
               style={{
-                "--base-color": node.colors.base,
+                "--default-color": node.colors.default,
                 "--highlighted-color": node.colors.highlighted,
                 "--pressed-color": node.colors.pressed,
               }}

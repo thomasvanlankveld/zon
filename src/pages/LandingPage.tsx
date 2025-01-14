@@ -30,7 +30,7 @@ function ColorSpread(props: { getColor: (val: number) => string }) {
 function ColorTest() {
   return (
     <div style={{ display: "grid", padding: "6rem" }}>
-      <ColorSpread getColor={(val) => rainbow(val).base} />
+      <ColorSpread getColor={(val) => rainbow(val).default} />
       <ColorSpread getColor={(val) => rainbow(val).highlighted} />
       <ColorSpread getColor={(val) => rainbow(val).pressed} />
     </div>
