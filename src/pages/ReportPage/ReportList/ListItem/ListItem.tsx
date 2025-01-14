@@ -26,6 +26,8 @@ export type ArrowDirection =
   (typeof ARROW_DIRECTION)[keyof typeof ARROW_DIRECTION];
 
 export default function ListItem(props: ListItemProps) {
+  // TODO: Centralize and simplify arrow direction logic
+  // TODO: Set arrows also on "highlight match"
   function hoverBeforeContent() {
     return props.arrowDirection === ARROW_DIRECTION.LEFT ? '"<- "' : "";
   }
