@@ -1,11 +1,10 @@
-import { Show } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { JSX } from "solid-js/h/jsx-runtime";
-import { useI18n } from "../../../../utils/i18n";
-import { getDisplayName, NODE_TYPE, type Node } from "../../../../utils/zon";
+import { type Node } from "../../../../utils/zon";
 import resetButtonStyles from "../../../../styles/reset-button.module.css";
 import styles from "./ListItem.module.css";
 import NumberOfLines from "./NumberOfLines";
+import DisplayName, { ArrowDirection } from "./DisplayName";
 
 type ListItemProps = {
   component?: "button" | "span";
@@ -18,17 +17,7 @@ type ListItemProps = {
   node: Node;
 };
 
-export const ARROW_DIRECTION = {
-  LEFT: "left",
-  RIGHT: "right",
-  DOWN: "down",
-} as const;
-export type ArrowDirection =
-  (typeof ARROW_DIRECTION)[keyof typeof ARROW_DIRECTION];
-
 export default function ListItem(props: ListItemProps) {
-  const { t } = useI18n();
-
   return (
     <Dynamic
       component={props.component}
@@ -42,22 +31,7 @@ export default function ListItem(props: ListItemProps) {
       onMouseLeave={props.onMouseLeave}
       onClick={props.onClick}
     >
-      <span
-        classList={{
-          [styles["list-item__display-name"]]: true,
-          [styles["list-item__display-name--with-left-arrow"]]:
-            props.arrowDirection === ARROW_DIRECTION.LEFT,
-          [styles["list-item__display-name--with-right-arrow"]]:
-            props.arrowDirection === ARROW_DIRECTION.RIGHT,
-          [styles["list-item__display-name--with-down-arrow"]]:
-            props.arrowDirection === ARROW_DIRECTION.DOWN,
-        }}
-      >
-        {getDisplayName(props.node.name, t("group-name"))}
-        <Show when={props.node.type === NODE_TYPE.FOLDER}>
-          <span class={styles["list-item__folder-separator"]}> /</span>
-        </Show>
-      </span>
+      <DisplayName node={props.node} arrowDirection={props.arrowDirection} />
       <NumberOfLines numberOfLines={props.node.numberOfLines} />
     </Dynamic>
   );
