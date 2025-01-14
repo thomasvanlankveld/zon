@@ -30,26 +30,23 @@ function Arc(props: ArcProps) {
   const d = () => getNodeArcD(props.node.dimensions());
 
   /**
-   * Determines the colors of a node's arc
+   * When the node is highlighted, use the highlight color for its fill
    */
-  function getArcColors(node: SunburstNode) {
-    const isHighlighted = arePathsEqual(props.highlightedPath, node.path);
+  function arcColorFill() {
+    const isHighlighted = arePathsEqual(props.highlightedPath, props.node.path);
 
-    return {
-      ...node.colors,
-      fill: isHighlighted ? node.colors.highlighted : node.colors.base,
-    };
+    return isHighlighted
+      ? props.node.colors.highlighted
+      : props.node.colors.base;
   }
-
-  const arcColors = () => getArcColors(props.node);
 
   return (
     <path
       d={d()}
       style={{
-        "--arc-fill-color": arcColors().fill,
-        "--arc-highlighted-color": arcColors().highlighted,
-        "--arc-pressed-color": arcColors().pressed,
+        "--arc-fill-color": arcColorFill(),
+        "--arc-highlighted-color": props.node.colors.highlighted,
+        "--arc-pressed-color": props.node.colors.pressed,
         opacity: props.node.opacity(),
       }}
       class={styles.sunburst__arc}
