@@ -16,8 +16,7 @@ import {
   getDisplayName,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
-import ListItem from "./ListItem/ListItem";
-import { ARROW_DIRECTION } from "./ListItem/DisplayName";
+import ListItem, { ARROW_DIRECTION } from "./ListItem/ListItem";
 import styles from "./ReportList.module.css";
 import { getBaseColor } from "../../../utils/zon/color";
 

@@ -16,16 +16,12 @@
   text-overflow: ellipsis;
 }
 
-.list-item:hover .list-item__display-name--with-left-arrow::before {
-  content: "<- ";
+.list-item:hover .list-item__display-name::before {
+  content: var(--hover-before-content);
 }
 
-.list-item:hover .list-item__display-name--with-right-arrow::after {
-  content: " ->";
-}
-
-.list-item:hover .list-item__display-name--with-down-arrow::after {
-  content: " ↓";
+.list-item:hover .list-item__display-name::after {
+  content: var(--hover-after-content);
 }
 
 .list-item__button:hover {
