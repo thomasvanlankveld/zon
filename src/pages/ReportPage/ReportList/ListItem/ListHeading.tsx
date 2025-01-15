@@ -1,6 +1,5 @@
 import { createMemo, Setter } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { JSX } from "solid-js/h/jsx-runtime";
 import {
   arePathsEqual,
   getParentPath,
@@ -14,8 +13,6 @@ import DisplayName from "./DisplayName";
 import { getBaseColor } from "../../../../utils/zon/color";
 
 type ListHeadingProps = {
-  onMouseEnter?: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
-  onMouseLeave?: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
   listRoot: Node;
   reportRootPath: Path;
   highlightedPath: Path | null;
