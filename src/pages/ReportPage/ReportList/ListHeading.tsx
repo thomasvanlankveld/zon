@@ -1,5 +1,4 @@
-import { createMemo, Setter } from "solid-js";
-import { Dynamic } from "solid-js/web";
+import { createMemo, Setter, Show } from "solid-js";
 import {
   arePathsEqual,
   getParentPath,
@@ -11,6 +10,8 @@ import styles from "./ReportList.module.css";
 import NumberOfLines from "./NumberOfLines";
 import DisplayName, { ARROW_BEFORE } from "./DisplayName";
 import { getBaseColor } from "../../../utils/zon/color";
+
+const buttonStyles = `${resetButtonStyles["reset-button"]} ${styles["report-list__button"]}`;
 
 type ListHeadingProps = {
   listRoot: Node;
@@ -37,44 +38,39 @@ export default function ListHeading(props: ListHeadingProps) {
   }
 
   return (
-    // TODO: Get rid of span
-    // TODO: Add h2
-    <Dynamic
-      component={isButton() ? "button" : "span"}
-      classList={{
-        [styles["report-list__heading"]]: true,
-        [styles["report-list__list-item"]]: true,
-        [resetButtonStyles["reset-button"]]: isButton(),
-        [styles["report-list__button"]]: isButton(),
-      }}
-      style={{
-        "--base-color": getBaseColor(
-          props.listRoot.colors,
-          props.listRoot.path,
-          props.highlightedPath,
-        ),
-        "--highlighted-color": props.listRoot.colors.highlighted,
-        "--pressed-color": props.listRoot.colors.pressed,
-      }}
-      onMouseEnter={[props.setHoverListPath, props.listRoot.path]}
-      onMouseLeave={[props.setHoverListPath, null]}
-      onClick={() => onHeadingClick()}
+    <Show
+      when={isButton()}
+      fallback={
+        <ListHeadingContent
+          isReportRoot={isReportRoot()}
+          listRoot={props.listRoot}
+          diagramRootPath={props.diagramRootPath}
+          highlightedPath={props.highlightedPath}
+          setHoverListPath={props.setHoverListPath}
+        />
+      }
     >
-      <ListHeadingContent
-        isReportRoot={isReportRoot()}
-        listRoot={props.listRoot}
-        diagramRootPath={props.diagramRootPath}
-        highlightedPath={props.highlightedPath}
-      />
-    </Dynamic>
+      <button class={buttonStyles} onClick={() => onHeadingClick()}>
+        <ListHeadingContent
+          isReportRoot={isReportRoot()}
+          listRoot={props.listRoot}
+          diagramRootPath={props.diagramRootPath}
+          highlightedPath={props.highlightedPath}
+          setHoverListPath={props.setHoverListPath}
+        />
+      </button>
+    </Show>
   );
 }
+
+const headingStyles = `${styles["report-list__heading"]} ${styles["report-list__list-item"]}`;
 
 type ListHeadingContentProps = {
   isReportRoot: boolean;
   listRoot: Node;
   diagramRootPath: Path;
   highlightedPath: Path | null;
+  setHoverListPath: Setter<Path | null>;
 };
 
 function ListHeadingContent(props: ListHeadingContentProps) {
@@ -98,7 +94,20 @@ function ListHeadingContent(props: ListHeadingContentProps) {
   }
 
   return (
-    <>
+    <h2
+      class={headingStyles}
+      style={{
+        "--base-color": getBaseColor(
+          props.listRoot.colors,
+          props.listRoot.path,
+          props.highlightedPath,
+        ),
+        "--highlighted-color": props.listRoot.colors.highlighted,
+        "--pressed-color": props.listRoot.colors.pressed,
+      }}
+      onMouseEnter={() => props.setHoverListPath(props.listRoot.path)}
+      onMouseLeave={() => props.setHoverListPath(null)}
+    >
       <DisplayName
         style={{
           "--before-content": beforeContent(),
@@ -107,6 +116,6 @@ function ListHeadingContent(props: ListHeadingContentProps) {
         node={props.listRoot}
       />
       <NumberOfLines numberOfLines={props.listRoot.numberOfLines} />
-    </>
+    </h2>
   );
 }
