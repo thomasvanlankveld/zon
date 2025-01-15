@@ -8,7 +8,7 @@ import { useReportStore } from "../ReportPage.store";
 
 export default function ReportList() {
   const { t } = useI18n();
-  const { listRoot, isListGroupExpanded } = useReportStore();
+  const { listRoot } = useReportStore();
 
   const listNodes = () => {
     const root = listRoot();
@@ -27,16 +27,7 @@ export default function ReportList() {
       );
     }
 
-    const lastChild = root.children.at(-1);
-
-    if (lastChild?.type !== NODE_TYPE.GROUP || !isListGroupExpanded()) {
-      return root.children;
-    }
-
-    const directChildren = root.children.slice(0, -1);
-    const { groupedChildren } = lastChild;
-
-    return [...directChildren, ...groupedChildren];
+    return root.children;
   };
 
   return (

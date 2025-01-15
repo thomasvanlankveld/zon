@@ -140,6 +140,7 @@ function addDeduced(
 type GroupOptions = {
   minLines: number;
   maxChildren: number;
+  ignoreMinLinesForRoot: boolean;
 };
 
 const greyColors: Colors = {
@@ -166,10 +167,14 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
     return node;
   }
 
+  const minLines = options.ignoreMinLinesForRoot ? 0 : options.minLines;
+
   const visibleChildren = node.children
     .slice(0, options.maxChildren)
-    .filter((child) => child.numberOfLines >= options.minLines)
-    .map((child) => groupSmallestNodes(child, options));
+    .filter((child) => child.numberOfLines >= minLines)
+    .map((child) =>
+      groupSmallestNodes(child, { ...options, ignoreMinLinesForRoot: false }),
+    );
 
   if (visibleChildren.length === node.children.length) {
     return {

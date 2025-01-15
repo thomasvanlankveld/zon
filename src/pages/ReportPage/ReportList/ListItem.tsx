@@ -11,7 +11,7 @@ type ListItemProps = {
 };
 
 export default function ListItem(props: ListItemProps) {
-  const { setSelectedRootPath, setHoverListPath, expandListGroup } =
+  const { setSelectedRootPath, setHoverListPath, expandGroup } =
     useReportStore();
 
   function hoverBeforeContent() {
@@ -31,7 +31,7 @@ export default function ListItem(props: ListItemProps) {
 
   function onClick() {
     if (props.node.type === NODE_TYPE.GROUP) {
-      expandListGroup();
+      expandGroup();
     } else if (props.node.type === NODE_TYPE.FOLDER) {
       setSelectedRootPath(props.node.path);
     }

@@ -15,6 +15,8 @@ import {
   withNode,
 } from "../../utils/zon";
 
+const DEFAULT_MAX_CHILDREN = 16;
+
 /**
  * This technically not a Solid.js "store", but it does hold state
  */
@@ -34,13 +36,26 @@ function createReportStore(initialReportRoot: Node) {
     () => selectedRootPath() ?? defaultRootPath(),
   );
 
+  const [maxChildren, setMaxChildren] = createSignal(DEFAULT_MAX_CHILDREN);
+  function expandGroup() {
+    setMaxChildren((prevMaxChildren) => prevMaxChildren + 30);
+  }
+  createEffect((prevRoot) => {
+    if (prevRoot !== diagramRootPath()) {
+      setMaxChildren(DEFAULT_MAX_CHILDREN);
+    }
+    return diagramRootPath();
+  });
+
   const diagramRootWithoutGroups = createMemo(() =>
     getNodeByPath(reportRootWithoutGroups(), diagramRootPath()),
   );
   const diagramRoot = createMemo(() =>
     groupSmallestNodes(diagramRootWithoutGroups(), {
       minLines: Math.floor(diagramRootWithoutGroups().numberOfLines / 150),
-      maxChildren: 16,
+      maxChildren: maxChildren(),
+      // When the user expands the diagram root's group, we also want to show items that are smaller than minLines
+      ignoreMinLinesForRoot: maxChildren() !== DEFAULT_MAX_CHILDREN,
     }),
   );
   const reportRoot = createMemo(() =>
@@ -70,16 +85,6 @@ function createReportStore(initialReportRoot: Node) {
   const isListRootReportRoot = createMemo(() =>
     arePathsEqual(listRootPath(), reportRoot().path),
   );
-  const [isListGroupExpanded, setIsListGroupExpanded] = createSignal(false);
-  function expandListGroup() {
-    setIsListGroupExpanded(true);
-  }
-  createEffect((prevRoot) => {
-    if (prevRoot !== diagramRootPath()) {
-      setIsListGroupExpanded(false);
-    }
-    return diagramRootPath();
-  });
 
   return {
     reportRoot,
@@ -95,8 +100,7 @@ function createReportStore(initialReportRoot: Node) {
     isListRootReportRoot,
     highlightedListPath,
     setHoverListPath,
-    isListGroupExpanded,
-    expandListGroup,
+    expandGroup,
   };
 }
 
