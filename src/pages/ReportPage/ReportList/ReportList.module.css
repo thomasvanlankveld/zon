@@ -39,6 +39,10 @@
   text-overflow: ellipsis;
 }
 
+.report-list__display-name::before {
+  content: var(--before-content);
+}
+
 .report-list__button:hover .report-list__display-name::before {
   content: var(--hover-before-content);
 }

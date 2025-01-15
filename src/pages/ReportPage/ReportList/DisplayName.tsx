@@ -4,6 +4,15 @@ import styles from "./ReportList.module.css";
 import { getDisplayName, type Node, NODE_TYPE } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 
+export const ARROW_BEFORE = {
+  LEFT: '"<- "',
+  RIGHT: '"-> "',
+};
+
+export const ARROW_AFTER = {
+  DOWN: '" ↓"',
+};
+
 type DisplayNameProps = {
   style?: JSX.CSSProperties;
   node: Node;

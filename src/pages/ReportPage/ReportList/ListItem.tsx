@@ -3,7 +3,7 @@ import { NODE_TYPE, Path, type Node } from "../../../utils/zon";
 import resetButtonStyles from "../../../styles/reset-button.module.css";
 import styles from "./ReportList.module.css";
 import NumberOfLines from "./NumberOfLines";
-import DisplayName from "./DisplayName";
+import DisplayName, { ARROW_AFTER, ARROW_BEFORE } from "./DisplayName";
 import { Setter } from "solid-js";
 
 type ListItemProps = {
@@ -14,16 +14,12 @@ type ListItemProps = {
 };
 
 export default function ListItem(props: ListItemProps) {
+  function hoverBeforeContent() {
+    return props.node.type === NODE_TYPE.FOLDER ? ARROW_BEFORE.RIGHT : "";
+  }
+
   function hoverAfterContent() {
-    if (props.node.type === NODE_TYPE.FOLDER) {
-      return '" ->"';
-    }
-
-    if (props.node.type === NODE_TYPE.GROUP) {
-      return '" ↓"';
-    }
-
-    return "";
+    return props.node.type === NODE_TYPE.GROUP ? ARROW_AFTER.DOWN : "";
   }
 
   function isButton() {
@@ -59,7 +55,10 @@ export default function ListItem(props: ListItemProps) {
       onClick={() => onClick()}
     >
       <DisplayName
-        style={{ "--hover-after-content": hoverAfterContent() }}
+        style={{
+          "--hover-before-content": hoverBeforeContent(),
+          "--hover-after-content": hoverAfterContent(),
+        }}
         node={props.node}
       />
       <NumberOfLines numberOfLines={props.node.numberOfLines} />

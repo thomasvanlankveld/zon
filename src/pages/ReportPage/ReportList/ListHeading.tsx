@@ -9,12 +9,13 @@ import {
 import resetButtonStyles from "../../../styles/reset-button.module.css";
 import styles from "./ReportList.module.css";
 import NumberOfLines from "./NumberOfLines";
-import DisplayName from "./DisplayName";
+import DisplayName, { ARROW_BEFORE } from "./DisplayName";
 import { getBaseColor } from "../../../utils/zon/color";
 
 type ListHeadingProps = {
   listRoot: Node;
   reportRootPath: Path;
+  diagramRootPath: Path;
   highlightedPath: Path | null;
   setHoverListPath: Setter<Path | null>;
   setSelectedRootPath: Setter<Path | null>;
@@ -31,9 +32,23 @@ export default function ListHeading(props: ListHeadingProps) {
     props.setSelectedRootPath(target);
   }
 
-  // TODO: Set arrows also on "highlight match"
+  function beforeContent() {
+    if (
+      isReportRoot() ||
+      !arePathsEqual(props.listRoot.path, props.highlightedPath)
+    ) {
+      return "";
+    }
+
+    if (arePathsEqual(props.listRoot.path, props.diagramRootPath)) {
+      return ARROW_BEFORE.LEFT;
+    } else {
+      return ARROW_BEFORE.RIGHT;
+    }
+  }
+
   function hoverBeforeContent() {
-    return isReportRoot() ? "" : '"<- "';
+    return !isReportRoot() ? ARROW_BEFORE.LEFT : "";
   }
 
   function isButton() {
@@ -66,6 +81,7 @@ export default function ListHeading(props: ListHeadingProps) {
     >
       <DisplayName
         style={{
+          "--before-content": beforeContent(),
           "--hover-before-content": hoverBeforeContent(),
         }}
         node={props.listRoot}

@@ -20,6 +20,7 @@ import ListHeading from "./ListHeading";
 
 type ReportListProps = {
   root: Node;
+  diagramRootPath: Path;
   listRootPath: Path | null;
   highlightedPath: Path | null;
   setHoverListPath: Setter<Path | null>;
@@ -86,6 +87,7 @@ export default function ReportList(props: ReportListProps) {
         <ListHeading
           listRoot={listRoot()}
           reportRootPath={props.root.path}
+          diagramRootPath={props.diagramRootPath}
           highlightedPath={props.highlightedPath}
           setHoverListPath={props.setHoverListPath}
           setSelectedRootPath={props.setSelectedRootPath}

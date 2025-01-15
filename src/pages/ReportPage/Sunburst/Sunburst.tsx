@@ -328,9 +328,9 @@ export default function Sunburst(props: SunburstProps) {
   function navigate(path: Path | null) {
     batch(() => {
       props.setSelectedRootPath(path);
-      // If the path targets a group, we set the hovered arc path to it as well. This prevents breaking breadcrumbs
+      // If the path targets a group, we also clear the hovered arc path. This prevents breaking breadcrumbs
       // when clicking a group that will not exist anymore after "regrouping" due to the diagram root change.
-      props.setHoverArcPath(path);
+      props.setHoverArcPath(null);
     });
   }
 
