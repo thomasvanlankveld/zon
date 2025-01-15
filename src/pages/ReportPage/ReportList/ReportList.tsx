@@ -1,10 +1,5 @@
-import { createEffect, createMemo, createSignal, For } from "solid-js";
-import {
-  getNodeByPath,
-  NODE_TYPE,
-  getPathString,
-  getDisplayName,
-} from "../../../utils/zon";
+import { createEffect, createSignal, For } from "solid-js";
+import { NODE_TYPE, getPathString, getDisplayName } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import ListItem from "./ListItem";
 import styles from "./ReportList.module.css";
@@ -13,14 +8,8 @@ import { useReportStore } from "../ReportPage.store";
 
 export default function ReportList() {
   const { t } = useI18n();
-  const {
-    reportRoot,
-    diagramRootPath,
-    listRootPath,
-    highlightedListPath,
-    setHoverListPath,
-    setSelectedRootPath,
-  } = useReportStore();
+  const { listRoot, listRootPath, setHoverListPath, setSelectedRootPath } =
+    useReportStore();
 
   const [showGroup, setShowGroup] = createSignal(false);
 
@@ -30,13 +19,6 @@ export default function ReportList() {
     }
     return listRootPath();
   });
-
-  // Select root node for the list view (either root or the file of the hovered arc)
-  const listRoot = createMemo(() =>
-    listRootPath() != null
-      ? getNodeByPath(reportRoot(), listRootPath())
-      : reportRoot(),
-  );
 
   const listNodes = () => {
     const root = listRoot();
@@ -76,14 +58,7 @@ export default function ReportList() {
           name: getDisplayName(listRoot().name, t("group-name")),
         })}
       >
-        <ListHeading
-          listRoot={listRoot()}
-          reportRootPath={reportRoot().path}
-          diagramRootPath={diagramRootPath()}
-          highlightedPath={highlightedListPath()}
-          setHoverListPath={setHoverListPath}
-          setSelectedRootPath={setSelectedRootPath}
-        />
+        <ListHeading />
         <For each={listNodes()}>
           {(child) => (
             <ListItem

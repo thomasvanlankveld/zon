@@ -7,6 +7,7 @@ import {
   useContext,
 } from "solid-js";
 import {
+  arePathsEqual,
   getNodeByPath,
   groupSmallestNodes,
   Node,
@@ -52,12 +53,23 @@ function createReportStore(initialReportRoot: Node) {
   // Path of the hovered list item
   const [hoverListPath, setHoverListPath] = createSignal<Path | null>(null);
 
+  // Breadcrumb setup
   const breadcrumbPath = () => hoverArcPath() ?? diagramRootPath();
 
+  // Diagram setup
   const highlightedDiagramPath = hoverListPath;
 
+  // List setup
   const listRootPath = createMemo(() => hoverArcPath() ?? diagramRootPath());
   const highlightedListPath = hoverArcPath;
+  const listRoot = createMemo(() =>
+    listRootPath() != null
+      ? getNodeByPath(reportRoot(), listRootPath())
+      : reportRoot(),
+  );
+  const isListRootReportRoot = createMemo(() =>
+    arePathsEqual(listRootPath(), reportRoot().path),
+  );
 
   return {
     reportRoot,
@@ -68,7 +80,9 @@ function createReportStore(initialReportRoot: Node) {
     diagramRootPath,
     highlightedDiagramPath,
     setHoverArcPath,
+    listRoot,
     listRootPath,
+    isListRootReportRoot,
     highlightedListPath,
     setHoverListPath,
   };

@@ -1,62 +1,33 @@
-import { createMemo, Setter, Show } from "solid-js";
-import {
-  arePathsEqual,
-  getParentPath,
-  Path,
-  type Node,
-} from "../../../utils/zon";
+import { Show } from "solid-js";
+import { getParentPath } from "../../../utils/zon";
 import resetButtonStyles from "../../../styles/reset-button.module.css";
 import styles from "./ReportList.module.css";
 import ListHeadingContent from "./ListHeadingContent";
+import { useReportStore } from "../ReportPage.store";
 
-type ListHeadingProps = {
-  listRoot: Node;
-  reportRootPath: Path;
-  diagramRootPath: Path;
-  highlightedPath: Path | null;
-  setHoverListPath: Setter<Path | null>;
-  setSelectedRootPath: Setter<Path | null>;
-};
-
-export default function ListHeading(props: ListHeadingProps) {
-  const isReportRoot = createMemo(() =>
-    arePathsEqual(props.listRoot.path, props.reportRootPath),
-  );
+export default function ListHeading() {
+  const { setSelectedRootPath, listRootPath, isListRootReportRoot } =
+    useReportStore();
 
   function onHeadingClick() {
-    const target = isReportRoot() ? null : getParentPath(props.listRoot.path);
+    const target = isListRootReportRoot()
+      ? null
+      : getParentPath(listRootPath());
 
-    props.setSelectedRootPath(target);
+    setSelectedRootPath(target);
   }
 
   function isButton() {
-    return !isReportRoot();
+    return !isListRootReportRoot();
   }
 
   return (
-    <Show
-      when={isButton()}
-      fallback={
-        <ListHeadingContent
-          isReportRoot={isReportRoot()}
-          listRoot={props.listRoot}
-          diagramRootPath={props.diagramRootPath}
-          highlightedPath={props.highlightedPath}
-          setHoverListPath={props.setHoverListPath}
-        />
-      }
-    >
+    <Show when={isButton()} fallback={<ListHeadingContent />}>
       <button
         class={`${resetButtonStyles["reset-button"]} ${styles["report-list__button"]}`}
         onClick={() => onHeadingClick()}
       >
-        <ListHeadingContent
-          isReportRoot={isReportRoot()}
-          listRoot={props.listRoot}
-          diagramRootPath={props.diagramRootPath}
-          highlightedPath={props.highlightedPath}
-          setHoverListPath={props.setHoverListPath}
-        />
+        <ListHeadingContent />
       </button>
     </Show>
   );
