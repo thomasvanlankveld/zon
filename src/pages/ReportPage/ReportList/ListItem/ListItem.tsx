@@ -1,69 +1,65 @@
 import { Dynamic } from "solid-js/web";
-import { JSX } from "solid-js/h/jsx-runtime";
-import { type Node } from "../../../../utils/zon";
+import { NODE_TYPE, Path, type Node } from "../../../../utils/zon";
 import resetButtonStyles from "../../../../styles/reset-button.module.css";
 import styles from "./ListItem.module.css";
 import NumberOfLines from "./NumberOfLines";
 import DisplayName from "./DisplayName";
+import { Setter } from "solid-js";
 
 type ListItemProps = {
-  component?: "button" | "span";
-  class?: string;
-  style?: JSX.CSSProperties;
-  arrowDirection?: ArrowDirection;
-  onMouseEnter?: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
-  onMouseLeave?: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
-  onClick?: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
   node: Node;
+  setHoverListPath: Setter<Path | null>;
+  setSelectedRootPath: Setter<Path | null>;
+  setShowGroup: Setter<boolean>;
 };
 
-export const ARROW_DIRECTION = {
-  LEFT: "left",
-  RIGHT: "right",
-  DOWN: "down",
-} as const;
-export type ArrowDirection =
-  (typeof ARROW_DIRECTION)[keyof typeof ARROW_DIRECTION];
-
 export default function ListItem(props: ListItemProps) {
-  // TODO: Centralize and simplify arrow direction logic
-  // TODO: Set arrows also on "highlight match"
-  function hoverBeforeContent() {
-    return props.arrowDirection === ARROW_DIRECTION.LEFT ? '"<- "' : "";
-  }
-
   function hoverAfterContent() {
-    if (props.arrowDirection === ARROW_DIRECTION.RIGHT) {
+    if (props.node.type === NODE_TYPE.FOLDER) {
       return '" ->"';
     }
 
-    if (props.arrowDirection === ARROW_DIRECTION.DOWN) {
+    if (props.node.type === NODE_TYPE.GROUP) {
       return '" ↓"';
     }
 
     return "";
   }
 
+  function isButton() {
+    return (
+      props.node.type === NODE_TYPE.FOLDER ||
+      props.node.type === NODE_TYPE.GROUP
+    );
+  }
+
+  function onClick() {
+    if (props.node.type === NODE_TYPE.GROUP) {
+      props.setShowGroup(true);
+    } else if (props.node.type === NODE_TYPE.FOLDER) {
+      props.setSelectedRootPath(props.node.path);
+    }
+  }
+
   return (
     <Dynamic
-      component={props.component}
-      class={`${styles["list-item"]} ${props.class}`}
+      component={isButton() ? "button" : "span"}
       classList={{
-        [resetButtonStyles["reset-button"]]: props.component === "button",
-        [styles["list-item__button"]]: props.component === "button",
+        [styles["list-item"]]: true,
+        [resetButtonStyles["reset-button"]]: isButton(),
+        [styles["list-item__button"]]: isButton(),
       }}
       style={{
-        ...props.style,
+        "--base-color": props.node.colors.default,
+        "--highlighted-color": props.node.colors.highlighted,
+        "--pressed-color": props.node.colors.pressed,
       }}
-      onMouseEnter={props.onMouseEnter}
-      onMouseLeave={props.onMouseLeave}
-      onClick={props.onClick}
+      onMouseEnter={[props.setHoverListPath, props.node.path]}
+      onMouseLeave={[props.setHoverListPath, null]}
+      onClick={() => onClick()}
     >
       <DisplayName
-        style={{
-          "--hover-before-content": hoverBeforeContent(),
-          "--hover-after-content": hoverAfterContent(),
-        }}
+        style={{ "--hover-after-content": hoverAfterContent() }}
         node={props.node}
       />
       <NumberOfLines numberOfLines={props.node.numberOfLines} />

@@ -14,7 +14,7 @@ import {
   getDisplayName,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
-import ListItem, { ARROW_DIRECTION } from "./ListItem/ListItem";
+import ListItem from "./ListItem/ListItem";
 import styles from "./ReportList.module.css";
 import ListHeading from "./ListItem/ListHeading";
 
@@ -74,26 +74,6 @@ export default function ReportList(props: ReportListProps) {
     return [...directChildren, ...groupedChildren];
   };
 
-  function onListItemClick(node: Node) {
-    if (node.type === NODE_TYPE.GROUP) {
-      setShowGroup(true);
-    } else if (node.type === NODE_TYPE.FOLDER) {
-      props.setSelectedRootPath(node.path);
-    }
-  }
-
-  function getChildArrowDirection(node: Node) {
-    if (node.type === NODE_TYPE.FOLDER) {
-      return ARROW_DIRECTION.RIGHT;
-    }
-
-    if (node.type === NODE_TYPE.GROUP) {
-      return ARROW_DIRECTION.DOWN;
-    }
-
-    return undefined;
-  }
-
   return (
     <div class={styles["report-list"]}>
       {/* TODO: Maybe this shouldn't be a nav? Check https://a11y-style-guide.com/style-guide/section-navigation.html */}
@@ -113,22 +93,10 @@ export default function ReportList(props: ReportListProps) {
         <For each={listNodes()}>
           {(child) => (
             <ListItem
-              component={
-                child.type === NODE_TYPE.FOLDER ||
-                child.type === NODE_TYPE.GROUP
-                  ? "button"
-                  : "span"
-              }
-              style={{
-                "--base-color": child.colors.default,
-                "--highlighted-color": child.colors.highlighted,
-                "--pressed-color": child.colors.pressed,
-              }}
-              arrowDirection={getChildArrowDirection(child)}
               node={child}
-              onMouseEnter={[props.setHoverListPath, child.path]}
-              onMouseLeave={[props.setHoverListPath, null]}
-              onClick={[onListItemClick, child]}
+              setHoverListPath={props.setHoverListPath}
+              setSelectedRootPath={props.setSelectedRootPath}
+              setShowGroup={setShowGroup}
             />
           )}
         </For>
