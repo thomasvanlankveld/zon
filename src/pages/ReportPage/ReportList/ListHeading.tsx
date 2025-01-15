@@ -32,25 +32,6 @@ export default function ListHeading(props: ListHeadingProps) {
     props.setSelectedRootPath(target);
   }
 
-  function beforeContent() {
-    if (
-      isReportRoot() ||
-      !arePathsEqual(props.listRoot.path, props.highlightedPath)
-    ) {
-      return "";
-    }
-
-    if (arePathsEqual(props.listRoot.path, props.diagramRootPath)) {
-      return ARROW_BEFORE.LEFT;
-    } else {
-      return ARROW_BEFORE.RIGHT;
-    }
-  }
-
-  function hoverBeforeContent() {
-    return !isReportRoot() ? ARROW_BEFORE.LEFT : "";
-  }
-
   function isButton() {
     return !isReportRoot();
   }
@@ -79,6 +60,45 @@ export default function ListHeading(props: ListHeadingProps) {
       onMouseLeave={[props.setHoverListPath, null]}
       onClick={() => onHeadingClick()}
     >
+      <ListHeadingContent
+        isReportRoot={isReportRoot()}
+        listRoot={props.listRoot}
+        diagramRootPath={props.diagramRootPath}
+        highlightedPath={props.highlightedPath}
+      />
+    </Dynamic>
+  );
+}
+
+type ListHeadingContentProps = {
+  isReportRoot: boolean;
+  listRoot: Node;
+  diagramRootPath: Path;
+  highlightedPath: Path | null;
+};
+
+function ListHeadingContent(props: ListHeadingContentProps) {
+  function beforeContent() {
+    if (
+      props.isReportRoot ||
+      !arePathsEqual(props.listRoot.path, props.highlightedPath)
+    ) {
+      return "";
+    }
+
+    if (arePathsEqual(props.listRoot.path, props.diagramRootPath)) {
+      return ARROW_BEFORE.LEFT;
+    } else {
+      return ARROW_BEFORE.RIGHT;
+    }
+  }
+
+  function hoverBeforeContent() {
+    return !props.isReportRoot ? ARROW_BEFORE.LEFT : "";
+  }
+
+  return (
+    <>
       <DisplayName
         style={{
           "--before-content": beforeContent(),
@@ -87,6 +107,6 @@ export default function ListHeading(props: ListHeadingProps) {
         node={props.listRoot}
       />
       <NumberOfLines numberOfLines={props.listRoot.numberOfLines} />
-    </Dynamic>
+    </>
   );
 }
