@@ -14,6 +14,9 @@ import {
   withNode,
 } from "../../utils/zon";
 
+/**
+ * This technically not a Solid.js "store", but it does hold state
+ */
 function createReportStore(initialReportRoot: Node) {
   const [reportRootWithoutGroups, setReportRoot] =
     createSignal(initialReportRoot);
