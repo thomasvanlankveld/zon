@@ -1,4 +1,4 @@
-import { createMemo, For, type Setter, Show } from "solid-js";
+import { createMemo, For, Show } from "solid-js";
 import {
   getNodesAlongPath,
   type Path,
@@ -10,24 +10,23 @@ import {
 import { useI18n } from "../../../utils/i18n";
 import resetButtonStyles from "../../../styles/reset-button.module.css";
 import styles from "./Breadcrumbs.module.css";
+import { useReportStore } from "../ReportPage.store";
 
 type BreadcrumbsProps = {
   class?: string;
-  root: Node;
-  breadcrumbPath: Path;
-  setSelectedRootPath: Setter<Path | null>;
 };
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
   const { t } = useI18n();
+  const { reportRoot, breadcrumbPath, setSelectedRootPath } = useReportStore();
 
   function getTargetPath(node: Node): Path | null {
-    const isReportRoot = arePathsEqual(node.path, props.root.path);
+    const isReportRoot = arePathsEqual(node.path, reportRoot().path);
     return isReportRoot ? null : node.path;
   }
 
   const nodes = createMemo(() =>
-    getNodesAlongPath(props.root, props.breadcrumbPath).map((node) => ({
+    getNodesAlongPath(reportRoot(), breadcrumbPath()).map((node) => ({
       ...node,
       targetPath: getTargetPath(node),
     })),
@@ -47,7 +46,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
                 "--pressed-color": node.colors.pressed,
               }}
               class={`${resetButtonStyles["reset-button"]} ${styles["breadcrumbs__breadcrumb-button"]}`}
-              onClick={[props.setSelectedRootPath, node.targetPath]}
+              onClick={[setSelectedRootPath, node.targetPath]}
             >
               <span>{getDisplayName(node.name, t("group-name"))}</span>
             </button>

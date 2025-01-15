@@ -6,14 +6,12 @@ import {
   For,
   onMount,
   Show,
-  type Setter,
 } from "solid-js";
 import {
   NODE_TYPE,
   type Node,
   type Path,
   getDescendants,
-  getNodeByPath,
   getParentPath,
   getPathString,
   arePathsEqual,
@@ -24,14 +22,7 @@ import styles from "./Arc.module.css";
 import { Dimensions, SunburstNode, DimensionKey } from "./types.ts";
 import Arc from "./Arc.tsx";
 import { getBaseColor } from "../../../utils/zon/color.ts";
-
-type SunburstProps = {
-  root: Node;
-  diagramRootPath: Path;
-  highlightedPath: Path | null;
-  setHoverArcPath: Setter<Path | null>;
-  setSelectedRootPath: Setter<Path | null>;
-};
+import { useReportStore } from "../ReportPage.store.tsx";
 
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(value, max));
@@ -48,16 +39,20 @@ function getAnimationTarget(value: number, target: number, dt: number) {
   return value + (target - value) * (1 - Math.exp(-dt * 0.013));
 }
 
-export default function Sunburst(props: SunburstProps) {
+export default function Sunburst() {
+  const {
+    reportRoot,
+    diagramRoot: targetDiagramRoot,
+    highlightedDiagramPath,
+    setHoverArcPath,
+    setSelectedRootPath,
+  } = useReportStore();
+
   const [svg, setSvg] = createSignal<SVGSVGElement>();
   const { width, height } = createElementSize(svg);
 
   const maxRadius = createMemo(() => Math.min(width(), height()) / 2);
   const centerRadius = 1;
-
-  const targetDiagramRoot = createMemo(() =>
-    getNodeByPath(props.root, props.diagramRootPath),
-  );
 
   const [actualDiagramRoot, setActualDiagramRoot] = createSignal<Node | null>(
     null,
@@ -67,7 +62,7 @@ export default function Sunburst(props: SunburstProps) {
   });
 
   const isReportRoot = createMemo(() =>
-    arePathsEqual(targetDiagramRoot().path, props.root.path),
+    arePathsEqual(targetDiagramRoot().path, reportRoot().path),
   );
 
   const numberOfFullLayers = 3;
@@ -327,10 +322,10 @@ export default function Sunburst(props: SunburstProps) {
 
   function navigate(path: Path | null) {
     batch(() => {
-      props.setSelectedRootPath(path);
+      setSelectedRootPath(path);
       // If the path targets a group, we also clear the hovered arc path. This prevents breaking breadcrumbs
       // when clicking a group that will not exist anymore after "regrouping" due to the diagram root change.
-      props.setHoverArcPath(null);
+      setHoverArcPath(null);
     });
   }
 
@@ -350,9 +345,9 @@ export default function Sunburst(props: SunburstProps) {
           <Arc
             node={node}
             maxRadius={maxRadius()}
-            highlightedPath={props.highlightedPath}
-            onMouseEnter={() => props.setHoverArcPath(node.path)}
-            onMouseLeave={() => props.setHoverArcPath(null)}
+            highlightedPath={highlightedDiagramPath()}
+            onMouseEnter={() => setHoverArcPath(node.path)}
+            onMouseLeave={() => setHoverArcPath(null)}
             onClick={() => navigate(getArcClickTarget(node))}
           />
         )}
@@ -366,14 +361,14 @@ export default function Sunburst(props: SunburstProps) {
             "--arc-fill-color": getBaseColor(
               rootColors,
               targetDiagramRoot().path,
-              props.highlightedPath,
+              highlightedDiagramPath(),
             ),
             "--arc-highlighted-color": rootColors.highlighted,
             "--arc-pressed-color": rootColors.pressed,
           }}
           class={styles.sunburst__arc}
-          onMouseEnter={() => props.setHoverArcPath(targetDiagramRoot().path)}
-          onMouseLeave={() => props.setHoverArcPath(null)}
+          onMouseEnter={() => setHoverArcPath(targetDiagramRoot().path)}
+          onMouseLeave={() => setHoverArcPath(null)}
           onClick={() => navigate(getParentPath(targetDiagramRoot().path))}
         />
       </Show>

@@ -1,15 +1,7 @@
-import {
-  createEffect,
-  createMemo,
-  createSignal,
-  For,
-  type Setter,
-} from "solid-js";
+import { createEffect, createMemo, createSignal, For } from "solid-js";
 import {
   getNodeByPath,
   NODE_TYPE,
-  type Path,
-  type Node,
   getPathString,
   getDisplayName,
 } from "../../../utils/zon";
@@ -17,33 +9,33 @@ import { useI18n } from "../../../utils/i18n";
 import ListItem from "./ListItem";
 import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
+import { useReportStore } from "../ReportPage.store";
 
-type ReportListProps = {
-  root: Node;
-  diagramRootPath: Path;
-  listRootPath: Path | null;
-  highlightedPath: Path | null;
-  setHoverListPath: Setter<Path | null>;
-  setSelectedRootPath: Setter<Path | null>;
-};
-
-export default function ReportList(props: ReportListProps) {
+export default function ReportList() {
   const { t } = useI18n();
+  const {
+    reportRoot,
+    diagramRootPath,
+    listRootPath,
+    highlightedListPath,
+    setHoverListPath,
+    setSelectedRootPath,
+  } = useReportStore();
 
   const [showGroup, setShowGroup] = createSignal(false);
 
   createEffect((prevRoot) => {
-    if (prevRoot !== props.listRootPath) {
+    if (prevRoot !== listRootPath()) {
       setShowGroup(false);
     }
-    return props.listRootPath;
+    return listRootPath();
   });
 
   // Select root node for the list view (either root or the file of the hovered arc)
   const listRoot = createMemo(() =>
-    props.listRootPath != null
-      ? getNodeByPath(props.root, props.listRootPath)
-      : props.root,
+    listRootPath() != null
+      ? getNodeByPath(reportRoot(), listRootPath())
+      : reportRoot(),
   );
 
   const listNodes = () => {
@@ -86,18 +78,18 @@ export default function ReportList(props: ReportListProps) {
       >
         <ListHeading
           listRoot={listRoot()}
-          reportRootPath={props.root.path}
-          diagramRootPath={props.diagramRootPath}
-          highlightedPath={props.highlightedPath}
-          setHoverListPath={props.setHoverListPath}
-          setSelectedRootPath={props.setSelectedRootPath}
+          reportRootPath={reportRoot().path}
+          diagramRootPath={diagramRootPath()}
+          highlightedPath={highlightedListPath()}
+          setHoverListPath={setHoverListPath}
+          setSelectedRootPath={setSelectedRootPath}
         />
         <For each={listNodes()}>
           {(child) => (
             <ListItem
               node={child}
-              setHoverListPath={props.setHoverListPath}
-              setSelectedRootPath={props.setSelectedRootPath}
+              setHoverListPath={setHoverListPath}
+              setSelectedRootPath={setSelectedRootPath}
               setShowGroup={setShowGroup}
             />
           )}
