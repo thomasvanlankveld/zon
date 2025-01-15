@@ -5,7 +5,7 @@ import "./App.css";
 import type { Languages } from "./utils/tokei.ts";
 import { type Node, LINE_TYPE, createTree } from "./utils/zon";
 import logAsyncErrors from "./utils/async/logErrors.ts";
-import LandingPage from "./pages/LandingPage.tsx";
+import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
 import { I18nProvider } from "./utils/i18n.tsx";
 

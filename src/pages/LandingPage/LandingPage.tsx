@@ -1,8 +1,8 @@
 import { For, Show } from "solid-js";
-import UploadButton from "../components/UploadButton/UploadButton";
-import CountingLines from "../components/CountingLines";
-import { useI18n } from "../utils/i18n";
-import { rainbow } from "../utils/zon/color";
+import UploadButton from "../../components/UploadButton/UploadButton";
+import CountingLines from "../../components/CountingLines";
+import { useI18n } from "../../utils/i18n";
+import { rainbow } from "../../utils/zon/color";
 
 type LandingPageProps = {
   isLoading: boolean;
