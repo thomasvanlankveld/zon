@@ -7,7 +7,8 @@ const enGBTranslations: Translations = {
   "group-name": "Smaller items",
   "breadcrumbs.label": "Breadcrumbs",
   "report-list.nav.label": ({ name }) => `${name} content list`,
-  "list-item.number-of-lines": ({ numberOfLines }) => `${numberOfLines} lines`,
+  "report-list.number-of-lines": ({ numberOfLines }) =>
+    `${numberOfLines} lines`,
 };
 
 export default enGBTranslations;

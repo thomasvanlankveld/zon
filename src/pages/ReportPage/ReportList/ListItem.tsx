@@ -1,7 +1,7 @@
 import { Dynamic } from "solid-js/web";
-import { NODE_TYPE, Path, type Node } from "../../../../utils/zon";
-import resetButtonStyles from "../../../../styles/reset-button.module.css";
-import styles from "./ListItem.module.css";
+import { NODE_TYPE, Path, type Node } from "../../../utils/zon";
+import resetButtonStyles from "../../../styles/reset-button.module.css";
+import styles from "./ReportList.module.css";
 import NumberOfLines from "./NumberOfLines";
 import DisplayName from "./DisplayName";
 import { Setter } from "solid-js";
@@ -45,9 +45,9 @@ export default function ListItem(props: ListItemProps) {
     <Dynamic
       component={isButton() ? "button" : "span"}
       classList={{
-        [styles["list-item"]]: true,
+        [styles["report-list__list-item"]]: true,
         [resetButtonStyles["reset-button"]]: isButton(),
-        [styles["list-item__button"]]: isButton(),
+        [styles["report-list__button"]]: isButton(),
       }}
       style={{
         "--base-color": props.node.colors.default,

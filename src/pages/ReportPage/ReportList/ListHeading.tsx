@@ -5,12 +5,12 @@ import {
   getParentPath,
   Path,
   type Node,
-} from "../../../../utils/zon";
-import resetButtonStyles from "../../../../styles/reset-button.module.css";
-import styles from "./ListItem.module.css";
+} from "../../../utils/zon";
+import resetButtonStyles from "../../../styles/reset-button.module.css";
+import styles from "./ReportList.module.css";
 import NumberOfLines from "./NumberOfLines";
 import DisplayName from "./DisplayName";
-import { getBaseColor } from "../../../../utils/zon/color";
+import { getBaseColor } from "../../../utils/zon/color";
 
 type ListHeadingProps = {
   listRoot: Node;
@@ -46,10 +46,10 @@ export default function ListHeading(props: ListHeadingProps) {
     <Dynamic
       component={isButton() ? "button" : "span"}
       classList={{
-        [styles["list-item"]]: true,
-        [styles["list-heading"]]: true,
+        [styles["report-list__heading"]]: true,
+        [styles["report-list__list-item"]]: true,
         [resetButtonStyles["reset-button"]]: isButton(),
-        [styles["list-item__button"]]: isButton(),
+        [styles["report-list__button"]]: isButton(),
       }}
       style={{
         "--base-color": getBaseColor(

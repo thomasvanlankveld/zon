@@ -14,9 +14,9 @@ import {
   getDisplayName,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
-import ListItem from "./ListItem/ListItem";
+import ListItem from "./ListItem";
 import styles from "./ReportList.module.css";
-import ListHeading from "./ListItem/ListHeading";
+import ListHeading from "./ListHeading";
 
 type ReportListProps = {
   root: Node;

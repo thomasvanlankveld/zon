@@ -6,3 +6,51 @@
   display: grid;
   overflow-x: hidden;
 }
+
+.report-list__heading {
+  margin-bottom: var(--line-height);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+}
+
+.report-list__list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  overflow-x: hidden;
+  color: var(--base-color);
+}
+
+.report-list__button {
+  cursor: pointer;
+}
+
+.report-list__button:hover {
+  color: var(--highlighted-color);
+}
+
+.report-list__button:active {
+  color: var(--pressed-color);
+}
+
+.report-list__display-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.report-list__button:hover .report-list__display-name::before {
+  content: var(--hover-before-content);
+}
+
+.report-list__button:hover .report-list__display-name::after {
+  content: var(--hover-after-content);
+}
+
+.report-list__folder-separator {
+  color: white;
+}
+
+.report-list__number-of-lines {
+  white-space: nowrap;
+}
