@@ -46,6 +46,7 @@ export default function Sunburst() {
     highlightedDiagramPath,
     setHoverArcPath,
     setSelectedRootPath,
+    expandGroup,
   } = useReportStore();
 
   const [svg, setSvg] = createSignal<SVGSVGElement>();
@@ -129,16 +130,6 @@ export default function Sunburst() {
     const y1 = Math.max(y0 - dy, 0);
 
     return { x0: clamp(x0, 0, 1), x1: clamp(x1, 0, 1), y0, y1 };
-  }
-
-  /**
-   * Determines the target path for a node's arc click
-   */
-  function getArcClickTarget(node: Node) {
-    const isFile = node.type === NODE_TYPE.FILE;
-    const isGroup = node.type === NODE_TYPE.GROUP;
-
-    return isFile || isGroup ? getParentPath(node.path) : node.path;
   }
 
   const targetNodes = createMemo(() =>
@@ -323,10 +314,29 @@ export default function Sunburst() {
   function navigate(path: Path | null) {
     batch(() => {
       setSelectedRootPath(path);
-      // If the path targets a group, we also clear the hovered arc path. This prevents breaking breadcrumbs
-      // when clicking a group that will not exist anymore after "regrouping" due to the diagram root change.
+      // Clearing the hovered arc path is not just for usability. If we set the root path to a group that will not exist
+      // anymore after "regrouping" due to the diagram root change, it will break the breadcrumbs.
       setHoverArcPath(null);
     });
+  }
+
+  function onArcClick(node: Node) {
+    const isFile = node.type === NODE_TYPE.FILE;
+    const isGroup = node.type === NODE_TYPE.GROUP;
+
+    const arcClickTarget =
+      isFile || isGroup ? getParentPath(node.path) : node.path;
+
+    if (isGroup && arePathsEqual(arcClickTarget, targetDiagramRoot().path)) {
+      batch(() => {
+        expandGroup();
+        // Clearing the hovered arc path is not just for usability. If we set the root path to a group that will not exist
+        // anymore after "regrouping" due to the diagram root change, it will break the breadcrumbs.
+        setHoverArcPath(null);
+      });
+    } else {
+      navigate(arcClickTarget);
+    }
   }
 
   const rootColors: Colors = {
@@ -348,7 +358,7 @@ export default function Sunburst() {
             highlightedPath={highlightedDiagramPath()}
             onMouseEnter={() => setHoverArcPath(node.path)}
             onMouseLeave={() => setHoverArcPath(null)}
-            onClick={() => navigate(getArcClickTarget(node))}
+            onClick={() => onArcClick(node)}
           />
         )}
       </For>
