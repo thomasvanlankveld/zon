@@ -11,14 +11,12 @@ import {
   type Path,
   type Node,
   getPathString,
-  getParentPath,
-  arePathsEqual,
   getDisplayName,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import ListItem, { ARROW_DIRECTION } from "./ListItem/ListItem";
 import styles from "./ReportList.module.css";
-import { getBaseColor } from "../../../utils/zon/color";
+import ListHeading from "./ListItem/ListHeading";
 
 type ReportListProps = {
   root: Node;
@@ -45,10 +43,6 @@ export default function ReportList(props: ReportListProps) {
     props.listRootPath != null
       ? getNodeByPath(props.root, props.listRootPath)
       : props.root,
-  );
-
-  const isReportRoot = createMemo(() =>
-    arePathsEqual(listRoot().path, props.root.path),
   );
 
   const listNodes = () => {
@@ -80,12 +74,6 @@ export default function ReportList(props: ReportListProps) {
     return [...directChildren, ...groupedChildren];
   };
 
-  function onHeadingClick() {
-    const target = isReportRoot() ? null : getParentPath(listRoot().path);
-
-    props.setSelectedRootPath(target);
-  }
-
   function onListItemClick(node: Node) {
     if (node.type === NODE_TYPE.GROUP) {
       setShowGroup(true);
@@ -115,23 +103,12 @@ export default function ReportList(props: ReportListProps) {
           name: getDisplayName(listRoot().name, t("group-name")),
         })}
       >
-        <ListItem
-          component={isReportRoot() ? "span" : "button"}
-          style={{
-            "--base-color": getBaseColor(
-              listRoot().colors,
-              listRoot().path,
-              props.highlightedPath,
-            ),
-            "--highlighted-color": listRoot().colors.highlighted,
-            "--pressed-color": listRoot().colors.pressed,
-          }}
-          class={styles["report-list__heading"]}
-          arrowDirection={isReportRoot() ? undefined : ARROW_DIRECTION.LEFT}
-          node={listRoot()}
-          onMouseEnter={[props.setHoverListPath, listRoot().path]}
-          onMouseLeave={[props.setHoverListPath, null]}
-          onClick={() => onHeadingClick()}
+        <ListHeading
+          listRoot={listRoot()}
+          reportRootPath={props.root.path}
+          highlightedPath={props.highlightedPath}
+          setHoverListPath={props.setHoverListPath}
+          setSelectedRootPath={props.setSelectedRootPath}
         />
         <For each={listNodes()}>
           {(child) => (

@@ -6,9 +6,3 @@
   display: grid;
   overflow-x: hidden;
 }
-
-.report-list__heading {
-  margin-bottom: var(--line-height);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-normal);
-}

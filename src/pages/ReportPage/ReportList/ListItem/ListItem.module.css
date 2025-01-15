@@ -1,3 +1,9 @@
+.list-heading {
+  margin-bottom: var(--line-height);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+}
+
 .list-item {
   display: flex;
   justify-content: space-between;
