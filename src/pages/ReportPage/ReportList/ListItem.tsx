@@ -1,19 +1,20 @@
 import { Dynamic } from "solid-js/web";
-import { NODE_TYPE, Path, type Node } from "../../../utils/zon";
+import { NODE_TYPE, type Node } from "../../../utils/zon";
 import resetButtonStyles from "../../../styles/reset-button.module.css";
 import styles from "./ReportList.module.css";
 import NumberOfLines from "./NumberOfLines";
 import DisplayName, { ARROW_AFTER, ARROW_BEFORE } from "./DisplayName";
 import { Setter } from "solid-js";
+import { useReportStore } from "../ReportPage.store";
 
 type ListItemProps = {
   node: Node;
-  setHoverListPath: Setter<Path | null>;
-  setSelectedRootPath: Setter<Path | null>;
   setShowGroup: Setter<boolean>;
 };
 
 export default function ListItem(props: ListItemProps) {
+  const { setSelectedRootPath, setHoverListPath } = useReportStore();
+
   function hoverBeforeContent() {
     return props.node.type === NODE_TYPE.FOLDER ? ARROW_BEFORE.RIGHT : "";
   }
@@ -33,7 +34,7 @@ export default function ListItem(props: ListItemProps) {
     if (props.node.type === NODE_TYPE.GROUP) {
       props.setShowGroup(true);
     } else if (props.node.type === NODE_TYPE.FOLDER) {
-      props.setSelectedRootPath(props.node.path);
+      setSelectedRootPath(props.node.path);
     }
   }
 
@@ -50,8 +51,8 @@ export default function ListItem(props: ListItemProps) {
         "--highlighted-color": props.node.colors.highlighted,
         "--pressed-color": props.node.colors.pressed,
       }}
-      onMouseEnter={[props.setHoverListPath, props.node.path]}
-      onMouseLeave={[props.setHoverListPath, null]}
+      onMouseEnter={[setHoverListPath, props.node.path]}
+      onMouseLeave={[setHoverListPath, null]}
       onClick={() => onClick()}
     >
       <DisplayName

@@ -8,8 +8,7 @@ import { useReportStore } from "../ReportPage.store";
 
 export default function ReportList() {
   const { t } = useI18n();
-  const { listRoot, listRootPath, setHoverListPath, setSelectedRootPath } =
-    useReportStore();
+  const { listRoot, listRootPath } = useReportStore();
 
   const [showGroup, setShowGroup] = createSignal(false);
 
@@ -60,14 +59,7 @@ export default function ReportList() {
       >
         <ListHeading />
         <For each={listNodes()}>
-          {(child) => (
-            <ListItem
-              node={child}
-              setHoverListPath={setHoverListPath}
-              setSelectedRootPath={setSelectedRootPath}
-              setShowGroup={setShowGroup}
-            />
-          )}
+          {(child) => <ListItem node={child} setShowGroup={setShowGroup} />}
         </For>
       </nav>
     </div>
