@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For } from "solid-js";
+import { For } from "solid-js";
 import { NODE_TYPE, getPathString, getDisplayName } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import ListItem from "./ListItem";
@@ -8,16 +8,7 @@ import { useReportStore } from "../ReportPage.store";
 
 export default function ReportList() {
   const { t } = useI18n();
-  const { listRoot, listRootPath } = useReportStore();
-
-  const [showGroup, setShowGroup] = createSignal(false);
-
-  createEffect((prevRoot) => {
-    if (prevRoot !== listRootPath()) {
-      setShowGroup(false);
-    }
-    return listRootPath();
-  });
+  const { listRoot, isListGroupExpanded } = useReportStore();
 
   const listNodes = () => {
     const root = listRoot();
@@ -38,7 +29,7 @@ export default function ReportList() {
 
     const lastChild = root.children.at(-1);
 
-    if (lastChild?.type !== NODE_TYPE.GROUP || !showGroup()) {
+    if (lastChild?.type !== NODE_TYPE.GROUP || !isListGroupExpanded()) {
       return root.children;
     }
 
@@ -58,9 +49,7 @@ export default function ReportList() {
         })}
       >
         <ListHeading />
-        <For each={listNodes()}>
-          {(child) => <ListItem node={child} setShowGroup={setShowGroup} />}
-        </For>
+        <For each={listNodes()}>{(child) => <ListItem node={child} />}</For>
       </nav>
     </div>
   );

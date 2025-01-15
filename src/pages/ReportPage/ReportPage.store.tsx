@@ -70,6 +70,16 @@ function createReportStore(initialReportRoot: Node) {
   const isListRootReportRoot = createMemo(() =>
     arePathsEqual(listRootPath(), reportRoot().path),
   );
+  const [isListGroupExpanded, setIsListGroupExpanded] = createSignal(false);
+  function expandListGroup() {
+    setIsListGroupExpanded(true);
+  }
+  createEffect((prevRoot) => {
+    if (prevRoot !== diagramRootPath()) {
+      setIsListGroupExpanded(false);
+    }
+    return diagramRootPath();
+  });
 
   return {
     reportRoot,
@@ -85,6 +95,8 @@ function createReportStore(initialReportRoot: Node) {
     isListRootReportRoot,
     highlightedListPath,
     setHoverListPath,
+    isListGroupExpanded,
+    expandListGroup,
   };
 }
 

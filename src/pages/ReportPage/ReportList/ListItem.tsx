@@ -4,16 +4,15 @@ import resetButtonStyles from "../../../styles/reset-button.module.css";
 import styles from "./ReportList.module.css";
 import NumberOfLines from "./NumberOfLines";
 import DisplayName, { ARROW_AFTER, ARROW_BEFORE } from "./DisplayName";
-import { Setter } from "solid-js";
 import { useReportStore } from "../ReportPage.store";
 
 type ListItemProps = {
   node: Node;
-  setShowGroup: Setter<boolean>;
 };
 
 export default function ListItem(props: ListItemProps) {
-  const { setSelectedRootPath, setHoverListPath } = useReportStore();
+  const { setSelectedRootPath, setHoverListPath, expandListGroup } =
+    useReportStore();
 
   function hoverBeforeContent() {
     return props.node.type === NODE_TYPE.FOLDER ? ARROW_BEFORE.RIGHT : "";
@@ -32,7 +31,7 @@ export default function ListItem(props: ListItemProps) {
 
   function onClick() {
     if (props.node.type === NODE_TYPE.GROUP) {
-      props.setShowGroup(true);
+      expandListGroup();
     } else if (props.node.type === NODE_TYPE.FOLDER) {
       setSelectedRootPath(props.node.path);
     }
