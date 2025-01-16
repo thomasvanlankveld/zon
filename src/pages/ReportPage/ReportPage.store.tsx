@@ -1,4 +1,5 @@
 import {
+  batch,
   createContext,
   createEffect,
   createMemo,
@@ -37,9 +38,6 @@ function createReportStore(initialReportRoot: Node) {
   );
 
   const [maxChildren, setMaxChildren] = createSignal(DEFAULT_MAX_CHILDREN);
-  function expandGroup() {
-    setMaxChildren((prevMaxChildren) => prevMaxChildren + 30);
-  }
   createEffect((prevRoot) => {
     if (prevRoot !== diagramRootPath()) {
       setMaxChildren(DEFAULT_MAX_CHILDREN);
@@ -86,10 +84,28 @@ function createReportStore(initialReportRoot: Node) {
     arePathsEqual(listRootPath(), reportRoot().path),
   );
 
+  // Clearing the hovered paths is not just for usability. Setting the selected root path and expanding the max children
+  // are interactions that can cause groups to cease to exist. By clearing hovered paths, we prevent the breadcrumbs
+  // from crashing because they target a non-existing group.
+  function navigate(path: Path | null) {
+    batch(() => {
+      setSelectedRootPath(path);
+      setHoverArcPath(null);
+      setHoverListPath(null);
+    });
+  }
+  function expandGroup() {
+    batch(() => {
+      setMaxChildren((prevMaxChildren) => prevMaxChildren + 30);
+      setHoverArcPath(null);
+      setHoverListPath(null);
+    });
+  }
+
   return {
     reportRoot,
     setReportRoot,
-    setSelectedRootPath,
+    navigate,
     breadcrumbPath,
     diagramRoot,
     diagramRootPath,

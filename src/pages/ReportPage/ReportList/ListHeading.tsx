@@ -6,15 +6,14 @@ import ListHeadingContent from "./ListHeadingContent";
 import { useReportStore } from "../ReportPage.store";
 
 export default function ListHeading() {
-  const { setSelectedRootPath, listRootPath, isListRootReportRoot } =
-    useReportStore();
+  const { navigate, listRootPath, isListRootReportRoot } = useReportStore();
 
   function onHeadingClick() {
     const target = isListRootReportRoot()
       ? null
       : getParentPath(listRootPath());
 
-    setSelectedRootPath(target);
+    navigate(target);
   }
 
   function isButton() {

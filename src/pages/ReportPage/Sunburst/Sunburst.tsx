@@ -10,7 +10,6 @@ import {
 import {
   NODE_TYPE,
   type Node,
-  type Path,
   getDescendants,
   getParentPath,
   getPathString,
@@ -42,10 +41,10 @@ function getAnimationTarget(value: number, target: number, dt: number) {
 export default function Sunburst() {
   const {
     reportRoot,
+    navigate,
     diagramRoot: targetDiagramRoot,
     highlightedDiagramPath,
     setHoverArcPath,
-    setSelectedRootPath,
     expandGroup,
   } = useReportStore();
 
@@ -311,15 +310,6 @@ export default function Sunburst() {
     });
   }
 
-  function navigate(path: Path | null) {
-    batch(() => {
-      setSelectedRootPath(path);
-      // Clearing the hovered arc path is not just for usability. If we set the root path to a group that will not exist
-      // anymore after "regrouping" due to the diagram root change, it will break the breadcrumbs.
-      setHoverArcPath(null);
-    });
-  }
-
   function onArcClick(node: Node) {
     const isFile = node.type === NODE_TYPE.FILE;
     const isGroup = node.type === NODE_TYPE.GROUP;
@@ -328,12 +318,7 @@ export default function Sunburst() {
       isFile || isGroup ? getParentPath(node.path) : node.path;
 
     if (isGroup && arePathsEqual(arcClickTarget, targetDiagramRoot().path)) {
-      batch(() => {
-        expandGroup();
-        // Clearing the hovered arc path is not just for usability. If we set the root path to a group that will not exist
-        // anymore after "regrouping" due to the diagram root change, it will break the breadcrumbs.
-        setHoverArcPath(null);
-      });
+      expandGroup();
     } else {
       navigate(arcClickTarget);
     }

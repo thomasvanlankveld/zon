@@ -18,7 +18,7 @@ type BreadcrumbsProps = {
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
   const { t } = useI18n();
-  const { reportRoot, breadcrumbPath, setSelectedRootPath } = useReportStore();
+  const { reportRoot, breadcrumbPath, navigate } = useReportStore();
 
   function getTargetPath(node: Node): Path | null {
     const isReportRoot = arePathsEqual(node.path, reportRoot().path);
@@ -46,7 +46,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
                 "--pressed-color": node.colors.pressed,
               }}
               class={`${resetButtonStyles["reset-button"]} ${styles["breadcrumbs__breadcrumb-button"]}`}
-              onClick={[setSelectedRootPath, node.targetPath]}
+              onClick={[navigate, node.targetPath]}
             >
               <span>{getDisplayName(node.name, t("group-name"))}</span>
             </button>
