@@ -35,7 +35,7 @@ export default function ListHeadingContent() {
 
   return (
     <h2
-      class={`${styles["report-list__heading"]} ${styles["report-list__list-item"]}`}
+      class={`${styles["report-list__heading"]} ${styles["report-list__list-text-row"]}`}
       style={{
         "--base-color": getBaseColor(
           listRoot().colors,

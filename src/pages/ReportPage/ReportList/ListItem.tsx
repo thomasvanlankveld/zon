@@ -7,6 +7,7 @@ import { useReportStore } from "../ReportPage.store";
 
 type ListItemProps = {
   node: Node;
+  numberOfLinesInRoot: number;
 };
 
 export default function ListItem(props: ListItemProps) {
@@ -27,15 +28,19 @@ export default function ListItem(props: ListItemProps) {
     }
   }
 
+  function barWidth() {
+    return `${(props.node.numberOfLines / props.numberOfLinesInRoot) * 100}%`;
+  }
+
   return (
     <Dynamic
-      component={isButton() ? "button" : "span"}
+      component={isButton() ? "button" : "div"}
       classList={{
-        [styles["report-list__list-item"]]: true,
         [resetButtonStyles["reset-button"]]: isButton(),
         [styles["report-list__button"]]: isButton(),
       }}
       style={{
+        display: "grid",
         "--base-color": props.node.colors.default,
         "--highlighted-color": props.node.colors.highlighted,
         "--pressed-color": props.node.colors.pressed,
@@ -45,6 +50,14 @@ export default function ListItem(props: ListItemProps) {
       onClick={() => onClick()}
     >
       <ListItemContent node={props.node} />
+      <div
+        style={{
+          background: props.node.colors.default,
+          height: "var(--spacing-4xs)",
+          width: barWidth(),
+          // "justify-self": "end",
+        }}
+      />
     </Dynamic>
   );
 }

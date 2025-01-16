@@ -5,6 +5,7 @@
 .report-list__nav {
   display: grid;
   overflow-x: hidden;
+  gap: var(--spacing-3xs);
 }
 
 .report-list__heading {
@@ -13,7 +14,7 @@
   font-weight: var(--font-weight-normal);
 }
 
-.report-list__list-item {
+.report-list__list-text-row {
   display: flex;
   justify-content: space-between;
   gap: var(--spacing-l);

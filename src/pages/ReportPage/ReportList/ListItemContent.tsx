@@ -1,6 +1,7 @@
 import { type Node, NODE_TYPE } from "../../../utils/zon";
 import DisplayName, { ARROW_AFTER, ARROW_BEFORE } from "./DisplayName";
 import NumberOfLines from "./NumberOfLines";
+import styles from "./ReportList.module.css";
 
 type ListItemContentProps = {
   node: Node;
@@ -16,7 +17,7 @@ export default function ListItemContent(props: ListItemContentProps) {
   }
 
   return (
-    <>
+    <span class={styles["report-list__list-text-row"]}>
       <DisplayName
         style={{
           "--hover-before-content": hoverBeforeContent(),
@@ -25,6 +26,6 @@ export default function ListItemContent(props: ListItemContentProps) {
         node={props.node}
       />
       <NumberOfLines numberOfLines={props.node.numberOfLines} />
-    </>
+    </span>
   );
 }
