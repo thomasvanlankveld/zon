@@ -4,6 +4,7 @@ import resetButtonStyles from "../../../styles/reset-button.module.css";
 import styles from "./ReportList.module.css";
 import ListItemContent from "./ListItemContent";
 import { useReportStore } from "../ReportPage.store";
+import Underline from "./Underline";
 
 type ListItemProps = {
   node: Node;
@@ -28,19 +29,15 @@ export default function ListItem(props: ListItemProps) {
     }
   }
 
-  function barWidth() {
-    return `${(props.node.numberOfLines / props.numberOfLinesInRoot) * 100}%`;
-  }
-
   return (
     <Dynamic
       component={isButton() ? "button" : "div"}
       classList={{
+        [styles["report-list__item-container"]]: true,
         [resetButtonStyles["reset-button"]]: isButton(),
         [styles["report-list__button"]]: isButton(),
       }}
       style={{
-        display: "grid",
         "--base-color": props.node.colors.default,
         "--highlighted-color": props.node.colors.highlighted,
         "--pressed-color": props.node.colors.pressed,
@@ -50,13 +47,9 @@ export default function ListItem(props: ListItemProps) {
       onClick={() => onClick()}
     >
       <ListItemContent node={props.node} />
-      <div
-        style={{
-          background: props.node.colors.default,
-          height: "var(--spacing-4xs)",
-          width: barWidth(),
-          // "justify-self": "end",
-        }}
+      <Underline
+        node={props.node}
+        numberOfLinesInRoot={props.numberOfLinesInRoot}
       />
     </Dynamic>
   );

@@ -5,7 +5,7 @@
 .report-list__nav {
   display: grid;
   overflow-x: hidden;
-  gap: var(--spacing-3xs);
+  gap: var(--spacing-xxs);
 }
 
 .report-list__heading {
@@ -58,4 +58,14 @@
 
 .report-list__number-of-lines {
   white-space: nowrap;
+}
+
+.report-list__item-underline {
+  background-color: var(--base-color);
+  height: var(--spacing-4xs);
+  opacity: 0.4;
+}
+
+.report-list__nav:hover .report-list__item-underline {
+  opacity: 1;
 }
