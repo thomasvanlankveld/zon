@@ -16,7 +16,7 @@
 .report-list__list-item {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--spacing-l);
   overflow-x: hidden;
   color: var(--base-color);
 }
@@ -52,7 +52,7 @@
 }
 
 .report-list__folder-separator {
-  color: white;
+  color: var(--text-color);
 }
 
 .report-list__number-of-lines {
