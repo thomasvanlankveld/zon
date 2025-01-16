@@ -34,7 +34,7 @@ export default function ReportList() {
     <div class={styles["report-list"]}>
       {/* TODO: Maybe this shouldn't be a nav? Check https://a11y-style-guide.com/style-guide/section-navigation.html */}
       <nav
-        class={styles["report-list__nav"]}
+        class={styles["report-list__list"]}
         aria-label={t("report-list.nav.label", {
           name: getDisplayName(listRoot().name, t("group-name")),
         })}

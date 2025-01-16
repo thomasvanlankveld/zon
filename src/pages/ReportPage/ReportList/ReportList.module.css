@@ -2,7 +2,7 @@
   overflow-x: hidden;
 }
 
-.report-list__nav {
+.report-list__list {
   display: grid;
   overflow-x: hidden;
   gap: var(--spacing-xxs);
@@ -66,6 +66,6 @@
   opacity: 0.4;
 }
 
-.report-list__nav:hover .report-list__item-underline {
+.report-list__list:hover .report-list__item-underline {
   opacity: 1;
 }
