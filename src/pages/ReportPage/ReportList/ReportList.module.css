@@ -9,7 +9,7 @@
 }
 
 .report-list__heading {
-  margin-bottom: var(--line-height);
+  margin-bottom: var(--line-height-m);
 }
 
 .report-list__list-text-row {

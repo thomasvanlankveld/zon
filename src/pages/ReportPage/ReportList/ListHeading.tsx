@@ -43,6 +43,7 @@ export default function ListHeading() {
     <Dynamic
       component={isButton() ? "button" : "div"}
       classList={{
+        "text-l": true,
         [styles["report-list__heading"]]: true,
         [resetButtonStyles["reset-button"]]: isButton(),
         [styles["report-list__button"]]: isButton(),

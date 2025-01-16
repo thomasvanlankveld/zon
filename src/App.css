@@ -31,9 +31,21 @@
   --spacing-xxl: 2rem; /* 24px */
   --spacing-3xl: 3rem; /* 36px */
 
-  --line-height: var(--spacing-xl);
+  --font-size-m: 1rem; /* 16px */
+  --line-height-m: 1.5rem; /* 20px */
+  --font-weight-m: 400;
+
+  --font-size-l: 1.25rem; /* 18px */
+  --line-height-l: 2rem; /* 24px */
+  --font-weight-l: 400;
+
+  --font-size-xl: 1.5rem; /* 20px */
+  --line-height-xl: 2rem; /* 24px */
+  --font-weight-xl: 600;
+
+  --font-size-base: var(--font-size-m);
+  --line-height-base: var(--spacing-xl);
   --font-family: "Fira Code";
-  --font-size-base: var(--spacing-l);
   --font-weight-normal: 400;
 
   --text-color: #f6f6f6;
@@ -41,7 +53,7 @@
 
   font-family: var(--font-family);
   font-size: var(--font-size-base);
-  line-height: var(--line-height);
+  line-height: var(--line-height-base);
   font-weight: var(--font-weight-normal);
 
   font-synthesis: none;
@@ -56,6 +68,35 @@
 
 * {
   margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
+}
+
+.text-m,
+.text-m * {
+  font-size: var(--font-size-m);
+  line-height: var(--line-height-m);
+  font-weight: var(--font-weight-m);
+}
+
+.text-l,
+.text-l * {
+  font-size: var(--font-size-l);
+  line-height: var(--line-height-l);
+  font-weight: var(--font-weight-l);
+}
+
+.text-xl,
+.text-xl * {
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-xl);
+  font-weight: var(--font-weight-xl);
 }

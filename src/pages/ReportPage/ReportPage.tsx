@@ -19,7 +19,7 @@ export default function ReportPage(props: ReportPageProps) {
     <ReportStoreProvider reportRoot={props.root}>
       <main class={styles["report-page"]}>
         <div class={styles["report-page__header"]}>
-          <h1>{t("app.title")}</h1>
+          <h1 class="text-xl">{t("app.title")}</h1>
           <UploadButton countLinesInFolder={props.countLinesInFolder} />
         </div>
         <Breadcrumbs class={styles["report-page__breadcrumbs"]} />
