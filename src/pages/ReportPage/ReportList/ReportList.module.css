@@ -39,7 +39,7 @@
   background: var(--base-color);
 }
 
-.report-list__list-text-row:hover::before {
+.report-list__button:hover .report-list__list-text-row::before {
   clip-path: inset(0 var(--non-bar-width) 0 0);
 }
 
