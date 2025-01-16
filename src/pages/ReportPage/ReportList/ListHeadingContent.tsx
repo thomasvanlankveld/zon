@@ -2,7 +2,6 @@ import { arePathsEqual } from "../../../utils/zon";
 import styles from "./ReportList.module.css";
 import NumberOfLines from "./NumberOfLines";
 import DisplayName, { ARROW_BEFORE } from "./DisplayName";
-import { getBaseColor } from "../../../utils/zon/color";
 import { useReportStore } from "../ReportPage.store";
 
 export default function ListHeadingContent() {
@@ -11,7 +10,6 @@ export default function ListHeadingContent() {
     isListRootReportRoot,
     diagramRootPath,
     highlightedListPath,
-    setHoverListPath,
   } = useReportStore();
 
   function beforeContent() {
@@ -34,20 +32,7 @@ export default function ListHeadingContent() {
   }
 
   return (
-    <h2
-      class={`${styles["report-list__heading"]} ${styles["report-list__list-text-row"]}`}
-      style={{
-        "--base-color": getBaseColor(
-          listRoot().colors,
-          listRoot().path,
-          highlightedListPath(),
-        ),
-        "--highlighted-color": listRoot().colors.highlighted,
-        "--pressed-color": listRoot().colors.pressed,
-      }}
-      onMouseEnter={() => setHoverListPath(listRoot().path)}
-      onMouseLeave={() => setHoverListPath(null)}
-    >
+    <h2 class={styles["report-list__list-text-row"]}>
       <DisplayName
         style={{
           "--before-content": beforeContent(),
