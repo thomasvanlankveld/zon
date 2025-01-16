@@ -12,12 +12,35 @@
   margin-bottom: var(--line-height-m);
 }
 
+.report-list__list-text-row-container {
+  position: relative;
+}
+
 .report-list__list-text-row {
   display: flex;
   justify-content: space-between;
   gap: var(--spacing-l);
   overflow-x: hidden;
   color: var(--base-color);
+}
+
+.report-list__list-text-row::before {
+  content: attr(data-text);
+  clip-path: inset(0 100% 0 0);
+  /*   transition: clip-path 0.3s ease-out; */
+  transition: clip-path 0.3s cubic-bezier(0.2, 0.7, 0.1, 1);
+  margin: 0;
+  text-align: start;
+  color: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--base-color);
+}
+
+.report-list__list-text-row:hover::before {
+  clip-path: inset(0 var(--non-bar-width) 0 0);
 }
 
 .report-list__button {

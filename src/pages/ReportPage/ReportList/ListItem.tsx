@@ -33,6 +33,7 @@ export default function ListItem(props: ListItemProps) {
     <Dynamic
       component={isButton() ? "button" : "div"}
       classList={{
+        [styles["report-list__list-text-row-container"]]: true,
         [resetButtonStyles["reset-button"]]: isButton(),
         [styles["report-list__button"]]: isButton(),
       }}
@@ -45,7 +46,10 @@ export default function ListItem(props: ListItemProps) {
       onMouseLeave={[setHoverListPath, null]}
       onClick={() => onClick()}
     >
-      <ListItemContent node={props.node} />
+      <ListItemContent
+        node={props.node}
+        numberOfLinesInRoot={props.numberOfLinesInRoot}
+      />
       <Underline
         node={props.node}
         numberOfLinesInRoot={props.numberOfLinesInRoot}

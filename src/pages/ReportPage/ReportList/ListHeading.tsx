@@ -45,6 +45,7 @@ export default function ListHeading() {
       classList={{
         "text-l": true,
         [styles["report-list__heading"]]: true,
+        [styles["report-list__list-text-row-container"]]: true,
         [resetButtonStyles["reset-button"]]: isButton(),
         [styles["report-list__button"]]: isButton(),
       }}
