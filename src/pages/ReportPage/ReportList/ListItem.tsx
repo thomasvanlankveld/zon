@@ -33,7 +33,6 @@ export default function ListItem(props: ListItemProps) {
     <Dynamic
       component={isButton() ? "button" : "div"}
       classList={{
-        [styles["report-list__item-container"]]: true,
         [resetButtonStyles["reset-button"]]: isButton(),
         [styles["report-list__button"]]: isButton(),
       }}
