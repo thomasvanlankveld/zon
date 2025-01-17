@@ -1,9 +1,9 @@
 @layer default {
   :root {
-    font-family: var(--ff-base);
-    font-size: var(--fs-base);
-    line-height: var(--lh-base);
-    font-weight: var(--fw-base);
+    font-family: var(--font-family-regular);
+    font-size: var(--font-size-regular);
+    line-height: var(--line-height-regular);
+    font-weight: var(--font-weight-regular);
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -11,8 +11,8 @@
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
 
-    color: var(--clr-text-primary);
-    background-color: var(--clr-background);
+    color: var(--color-text-primary);
+    background-color: var(--color-background);
   }
 
   h1,
@@ -34,8 +34,8 @@
   tr,
   td,
   th {
-    font-size: var(--fs-base);
-    font-weight: var(--fw-base);
+    font-size: var(--font-size-regular);
+    font-weight: var(--font-weight-regular);
 
     -webkit-user-select: none; /* Safari */
     user-select: none;

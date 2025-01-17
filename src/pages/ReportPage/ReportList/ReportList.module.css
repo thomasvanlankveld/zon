@@ -9,7 +9,7 @@
 }
 
 .report-list__heading {
-  margin-bottom: var(--lh-m);
+  margin-bottom: var(--line-height-regular);
 }
 
 .report-list__row-container {
@@ -55,7 +55,7 @@
 }
 
 .report-list__folder-separator {
-  color: var(--clr-text-primary);
+  color: var(--color-text-primary);
 }
 
 .report-list__number-of-lines {

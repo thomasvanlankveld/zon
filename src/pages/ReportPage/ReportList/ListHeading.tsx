@@ -62,7 +62,7 @@ export default function ListHeading() {
       node={listRoot()}
       numberOfLinesInRoot={numberOfLinesInRoot()}
       rowContainerClassList={{
-        "text-l": true,
+        "heading-regular": true,
         [styles["report-list__heading"]]: true,
       }}
       rowTextComponent={"h2"}

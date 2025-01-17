@@ -20,6 +20,28 @@
     }
   }
 
+  /* Primitives */
+  /* DO NOT USE DIRECTLY */
+  :root {
+    /* Typography */
+    --fs-m: 1rem; /* 16px */
+    --lh-m: 1.5rem; /* 20px */
+    --fw-m: 400;
+
+    --fs-l: 1.25rem; /* 18px */
+    --lh-l: 2rem; /* 24px */
+    --fw-l: 400;
+
+    --fs-xl: 1.5rem; /* 20px */
+    --lh-xl: 2rem; /* 24px */
+    --fw-xl: 600;
+
+    /* Colors */
+    --clr-white: #f6f6f6;
+    --clr-black: #030400;
+  }
+
+  /* Semantic properties */
   :root {
     /* Spacing */
     --spacing-4xs: 0.0625rem; /* 1px */
@@ -34,28 +56,21 @@
     --spacing-3xl: 3rem; /* 36px */
 
     /* Typography */
-    --fs-m: 1rem; /* 16px */
-    --lh-m: 1.5rem; /* 20px */
-    --fw-m: 400;
+    --font-family-regular: "Fira Code";
+    --font-size-regular: var(--fs-m);
+    --line-height-regular: var(--lh-m);
+    --font-weight-regular: var(--fw-m);
 
-    --fs-l: 1.25rem; /* 18px */
-    --lh-l: 2rem; /* 24px */
-    --fw-l: 400;
+    --font-size-heading-regular: var(--fs-l);
+    --line-height-heading-regular: var(--lh-l);
+    --font-weight-heading-regular: var(--fw-l);
 
-    --fs-xl: 1.5rem; /* 20px */
-    --lh-xl: 2rem; /* 24px */
-    --fw-xl: 600;
-
-    --ff-base: "Fira Code";
-    --fs-base: var(--fs-m);
-    --lh-base: var(--ls-m);
-    --fw-base: var(--fw-m);
+    --font-size-heading-l: var(--fs-xl);
+    --line-height-heading-l: var(--lh-xl);
+    --font-weight-heading-l: var(--fw-xl);
 
     /* Colors */
-    --clr-white: #f6f6f6;
-    --clr-black: #030400;
-
-    --clr-text-primary: var(--clr-white);
-    --clr-background: var(--clr-black);
+    --color-text-primary: var(--clr-white);
+    --color-background: var(--clr-black);
   }
 }
