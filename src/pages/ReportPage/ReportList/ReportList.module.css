@@ -28,11 +28,11 @@
   cursor: pointer;
 }
 
-.report-list__button:hover {
+.report-list__row-container:hover .report-list__row-text {
   color: var(--highlighted-color);
 }
 
-.report-list__button:active {
+.report-list__row-container:active .report-list__row-text {
   color: var(--pressed-color);
 }
 
