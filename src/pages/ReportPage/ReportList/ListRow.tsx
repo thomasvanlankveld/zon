@@ -1,7 +1,6 @@
 import { ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { JSX } from "solid-js/h/jsx-runtime";
-import resetButtonStyles from "../../../styles/reset-button.module.css";
 import { Node } from "../../../utils/zon";
 import DisplayName from "./DisplayName";
 import NumberOfLines from "./NumberOfLines";
@@ -33,7 +32,6 @@ export default function ListRow(props: ListRowProps) {
       component={isButton() ? "button" : "div"}
       classList={{
         [styles["report-list__row-container"]]: true,
-        [resetButtonStyles["reset-button"]]: isButton(),
         [styles["report-list__button"]]: isButton(),
         ...props.rowContainerClassList,
       }}

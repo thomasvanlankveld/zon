@@ -8,7 +8,6 @@ import {
   NODE_TYPE,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
-import resetButtonStyles from "../../../styles/reset-button.module.css";
 import styles from "./Breadcrumbs.module.css";
 import { useReportStore } from "../ReportPage.store";
 
@@ -45,7 +44,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
                 "--highlighted-color": node.colors.highlighted,
                 "--pressed-color": node.colors.pressed,
               }}
-              class={`${resetButtonStyles["reset-button"]} ${styles["breadcrumbs__breadcrumb-button"]}`}
+              class={styles["breadcrumbs__breadcrumb-button"]}
               onClick={[navigate, node.targetPath]}
             >
               <span>{getDisplayName(node.name, t("group-name"))}</span>
