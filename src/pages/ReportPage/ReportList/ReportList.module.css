@@ -71,3 +71,11 @@
 .report-list__list:hover .report-list__item-underline {
   opacity: 1;
 }
+
+.report-list__row-container:hover .report-list__item-underline {
+  background-color: var(--highlighted-color);
+}
+
+.report-list__button:active .report-list__item-underline {
+  background-color: var(--pressed-color);
+}
