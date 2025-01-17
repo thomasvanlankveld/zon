@@ -1,7 +1,7 @@
 import { createSignal, Show } from "solid-js";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
-import "./App.css";
+import "./styles/setup.css";
 import type { Languages } from "./utils/tokei.ts";
 import { type Node, LINE_TYPE, createTree } from "./utils/zon";
 import logAsyncErrors from "./utils/async/logErrors.ts";

@@ -1,0 +1,22 @@
+@layer utility {
+  .text-m,
+  .text-m * {
+    font-size: var(--font-size-m);
+    line-height: var(--line-height-m);
+    font-weight: var(--font-weight-m);
+  }
+
+  .text-l,
+  .text-l * {
+    font-size: var(--font-size-l);
+    line-height: var(--line-height-l);
+    font-weight: var(--font-weight-l);
+  }
+
+  .text-xl,
+  .text-xl * {
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-xl);
+    font-weight: var(--font-weight-xl);
+  }
+}

@@ -1,0 +1,41 @@
+@layer default {
+  :root {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    font-weight: var(--font-weight-normal);
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+
+    color: var(--text-color);
+    background-color: var(--background-color);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+
+    -webkit-user-select: none; /* Safari */
+    user-select: none;
+
+    cursor: default;
+  }
+
+  button,
+  button *,
+  a,
+  a * {
+    cursor: pointer;
+  }
+}
