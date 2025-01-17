@@ -3,7 +3,6 @@ import { Languages } from "../tokei.ts";
 import {
   type Colors,
   isFolder,
-  isGroup,
   type LINE_TYPE,
   type Node,
   NODE_TYPE,
