@@ -16,7 +16,7 @@
   overflow-x: hidden;
 }
 
-.report-list__list-row-text {
+.report-list__row-text {
   display: flex;
   justify-content: space-between;
   gap: var(--spacing-l);
