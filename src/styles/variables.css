@@ -37,8 +37,8 @@
     --fw-xl: 600;
 
     /* Colors */
-    --clr-white: #f6f6f6;
-    --clr-black: #030400;
+    --clr-white: hsl(0, 0%, 96%);
+    --clr-black: hsl(75, 100%, 1%);
   }
 
   /* Semantic properties */
