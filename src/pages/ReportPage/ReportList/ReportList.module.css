@@ -12,6 +12,10 @@
   margin-bottom: var(--line-height-m);
 }
 
+.report-list__row-container {
+  overflow-x: hidden;
+}
+
 .report-list__list-row-text {
   display: flex;
   justify-content: space-between;
