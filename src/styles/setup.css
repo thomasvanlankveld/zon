@@ -3,7 +3,7 @@
   /* Font for old browsers, see: https://web.dev/variable-fonts/#fallbacks */
   @font-face {
     font-family: "Fira Code";
-    src: url("./assets/fonts/Fira_Code/static/FiraCode-Regular.ttf");
+    src: url("../assets/fonts/Fira_Code/static/FiraCode-Regular.ttf");
     font-weight: normal;
   }
 
@@ -12,9 +12,9 @@
     @font-face {
       font-family: "Fira Code";
       src:
-        url("./assets/fonts/Fira_Code/FiraCode-VariableFont_wght.ttf")
+        url("../assets/fonts/Fira_Code/FiraCode-VariableFont_wght.ttf")
           format("woff2 supports variations"),
-        url("./assets/fonts/Fira_Code/FiraCode-VariableFont_wght.ttf")
+        url("../assets/fonts/Fira_Code/FiraCode-VariableFont_wght.ttf")
           format("woff2-variations");
       font-weight: 100 1000;
       font-stretch: 25% 151%;
@@ -73,9 +73,21 @@
   h3,
   h4,
   h5,
-  h6 {
+  h6,
+  p,
+  span {
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-normal);
+
+    -webkit-user-select: none; /* Safari */
+    user-select: none;
+
+    cursor: default;
+  }
+
+  button *,
+  a * {
+    cursor: pointer;
   }
 
   .text-m,
