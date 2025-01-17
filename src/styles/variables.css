@@ -70,7 +70,7 @@
     --font-weight-heading-l: var(--fw-xl);
 
     /* Colors */
-    --color-text-primary: var(--clr-white);
+    --color-text-highlight: var(--clr-white);
     --color-background: var(--clr-black);
   }
 }

@@ -11,7 +11,7 @@
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
 
-    color: var(--color-text-primary);
+    color: var(--color-text-highlight);
     background-color: var(--color-background);
   }
 

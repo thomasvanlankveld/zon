@@ -55,7 +55,7 @@
 }
 
 .report-list__folder-separator {
-  color: var(--color-text-primary);
+  color: var(--color-text-highlight);
 }
 
 .report-list__number-of-lines {
