@@ -34,19 +34,20 @@ type NodeBase = {
   name: SegmentName;
   numberOfLines: number;
   firstLine: number;
-  colors: Colors;
   depth: number;
 };
 
 export type File = NodeBase & {
   type: typeof NODE_TYPE.FILE;
   height: 0;
+  colors: Colors;
 };
 
 export type Folder = NodeBase & {
   type: typeof NODE_TYPE.FOLDER;
   children: Node[];
   height: number;
+  colors: Colors;
 };
 
 export type Group = NodeBase & {

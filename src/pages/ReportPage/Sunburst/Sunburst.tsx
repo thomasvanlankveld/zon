@@ -325,6 +325,7 @@ export default function Sunburst() {
     }
   }
 
+  // TODO: Move to CSS
   const rootColors: Colors = {
     default: "rgba(255, 255, 255, 0.1)",
     highlighted: "rgba(255, 255, 255, 0.2)",

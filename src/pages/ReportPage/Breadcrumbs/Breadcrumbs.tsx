@@ -6,10 +6,13 @@ import {
   getDisplayName,
   arePathsEqual,
   isFolder,
+  Colors,
+  isGroup,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import styles from "./Breadcrumbs.module.css";
 import { useReportStore } from "../ReportPage.store";
+import { GROUP_TEXT_COLORS } from "../../../utils/zon/color";
 
 type BreadcrumbsProps = {
   class?: string;
@@ -32,6 +35,10 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   );
   const lastNodeIndex = () => nodes().length - 1;
 
+  function getColors(node: Node): Colors {
+    return isGroup(node) ? GROUP_TEXT_COLORS : node.colors;
+  }
+
   return (
     <nav class={props.class} aria-label={t("breadcrumbs.label")}>
       <For each={nodes()}>
@@ -40,9 +47,9 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
             <button
               {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
               style={{
-                "--default-color": node.colors.default,
-                "--highlighted-color": node.colors.highlighted,
-                "--pressed-color": node.colors.pressed,
+                "--default-color": getColors(node).default,
+                "--highlighted-color": getColors(node).highlighted,
+                "--pressed-color": getColors(node).pressed,
               }}
               class={styles["breadcrumbs__breadcrumb-button"]}
               onClick={[navigate, node.targetPath]}

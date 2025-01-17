@@ -1,12 +1,12 @@
 import { ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { JSX } from "solid-js/h/jsx-runtime";
-import { Node } from "../../../utils/zon";
+import { isGroup, Node } from "../../../utils/zon";
 import DisplayName from "./DisplayName";
 import NumberOfLines from "./NumberOfLines";
 import styles from "./ReportList.module.css";
 import Underline from "./Underline";
-import { getBaseColor } from "../../../utils/zon/color";
+import { getBaseColor, GROUP_TEXT_COLORS } from "../../../utils/zon/color";
 import { useReportStore } from "../ReportPage.store";
 
 type ListRowProps = {
@@ -27,6 +27,10 @@ export default function ListRow(props: ListRowProps) {
     return props.onClick != null;
   }
 
+  function colors() {
+    return isGroup(props.node) ? GROUP_TEXT_COLORS : props.node.colors;
+  }
+
   return (
     <Dynamic
       component={isButton() ? "button" : "div"}
@@ -37,12 +41,12 @@ export default function ListRow(props: ListRowProps) {
       }}
       style={{
         "--base-color": getBaseColor(
-          props.node.colors,
+          colors(),
           props.node.path,
           highlightedListPath(),
         ),
-        "--highlighted-color": props.node.colors.highlighted,
-        "--pressed-color": props.node.colors.pressed,
+        "--highlighted-color": colors().highlighted,
+        "--pressed-color": colors().pressed,
       }}
       onMouseEnter={[setHoverListPath, props.node.path]}
       onMouseLeave={[setHoverListPath, null]}

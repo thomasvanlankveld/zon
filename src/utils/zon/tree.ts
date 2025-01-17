@@ -4,6 +4,7 @@ import {
   type Colors,
   GROUP_SEGMENT,
   isFolder,
+  isGroup,
   type LINE_TYPE,
   type Node,
   NODE_TYPE,
@@ -11,6 +12,8 @@ import {
 import { getProjectName, getPathString, getParentPath } from "./path.ts";
 import { getNumberOfLines, sumStats, subtractStats } from "./stats.ts";
 
+// TODO: Make bright red in dev mode to emphasize mistakes
+// TODO: Use CSS variables in prod mode for more consistency
 export const rootColors: Colors = {
   default: "rgb(204, 204, 204)",
   highlighted: "rgb(255, 255, 255)",
@@ -135,8 +138,10 @@ function addDeduced(
   for (const child of node.children) {
     child.firstLine = lineNumber;
 
-    const middleLine = lineNumber + child.numberOfLines / 2;
-    child.colors = rainbow(middleLine / totalNumberOfLines);
+    if (!isGroup(child)) {
+      const middleLine = lineNumber + child.numberOfLines / 2;
+      child.colors = rainbow(middleLine / totalNumberOfLines);
+    }
 
     addDeduced(child, totalNumberOfLines, lineNumber);
 
@@ -148,12 +153,6 @@ type GroupOptions = {
   minLines: number;
   maxChildren: number;
   ignoreMinLinesForRoot: boolean;
-};
-
-const greyColors: Colors = {
-  default: "rgb(153, 153, 153)",
-  highlighted: "rgb(204, 204, 204)",
-  pressed: "rgb(115, 115, 115)",
 };
 
 /**
@@ -215,7 +214,6 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
     name: GROUP_SEGMENT,
     numberOfLines: hiddenNumberOfLines,
     firstLine: firstHiddenLine,
-    colors: greyColors,
     depth: node.depth + 1,
     height: 0,
     groupedChildren: hiddenChildren,

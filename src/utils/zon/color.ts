@@ -33,3 +33,15 @@ export function getBaseColor(
 
   return isHighlighted ? colors.highlighted : colors.default;
 }
+
+export const GROUP_TEXT_COLORS: Colors = {
+  default: "var(--color-group-default)",
+  highlighted: "var(--color-group-highlighted)",
+  pressed: "var(--color-group-pressed)",
+};
+
+export const GROUP_ARC_COLORS: Colors = {
+  default: "var(--color-group-default)",
+  highlighted: "var(--color-group-highlighted)",
+  pressed: "var(--color-group-pressed)",
+};
