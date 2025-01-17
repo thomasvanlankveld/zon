@@ -1,5 +1,5 @@
 import { type Node, NODE_TYPE } from "../../../utils/zon";
-import DisplayName, { ARROW_AFTER, ARROW_BEFORE } from "./DisplayName";
+import DisplayName, { ARROW } from "./DisplayName";
 import NumberOfLines from "./NumberOfLines";
 import styles from "./ReportList.module.css";
 
@@ -9,11 +9,13 @@ type ListItemContentProps = {
 
 export default function ListItemContent(props: ListItemContentProps) {
   function hoverBeforeContent() {
-    return props.node.type === NODE_TYPE.FOLDER ? ARROW_BEFORE.RIGHT : "";
+    return props.node.type === NODE_TYPE.FOLDER
+      ? ARROW.BEFORE.RIGHT
+      : ARROW.EMPTY;
   }
 
   function hoverAfterContent() {
-    return props.node.type === NODE_TYPE.GROUP ? ARROW_AFTER.DOWN : "";
+    return props.node.type === NODE_TYPE.GROUP ? ARROW.AFTER.DOWN : ARROW.EMPTY;
   }
 
   return (

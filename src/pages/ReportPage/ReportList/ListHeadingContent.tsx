@@ -1,7 +1,7 @@
 import { arePathsEqual } from "../../../utils/zon";
 import styles from "./ReportList.module.css";
 import NumberOfLines from "./NumberOfLines";
-import DisplayName, { ARROW_BEFORE } from "./DisplayName";
+import DisplayName, { ARROW } from "./DisplayName";
 import { useReportStore } from "../ReportPage.store";
 
 export default function ListHeadingContent() {
@@ -21,14 +21,14 @@ export default function ListHeadingContent() {
     }
 
     if (arePathsEqual(listRoot().path, diagramRootPath())) {
-      return ARROW_BEFORE.LEFT;
+      return ARROW.BEFORE.LEFT;
     } else {
-      return ARROW_BEFORE.RIGHT;
+      return ARROW.BEFORE.RIGHT;
     }
   }
 
   function hoverBeforeContent() {
-    return !isListRootReportRoot() ? ARROW_BEFORE.LEFT : "";
+    return !isListRootReportRoot() ? ARROW.BEFORE.LEFT : ARROW.EMPTY;
   }
 
   return (
