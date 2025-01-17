@@ -1,34 +1,24 @@
-import { getNodeByPath, getParentPath, NODE_TYPE } from "../../../utils/zon";
-import resetButtonStyles from "../../../styles/reset-button.module.css";
+import {
+  arePathsEqual,
+  getNodeByPath,
+  getParentPath,
+  NODE_TYPE,
+} from "../../../utils/zon";
 import styles from "./ReportList.module.css";
-import ListHeadingContent from "./ListHeadingContent";
 import { useReportStore } from "../ReportPage.store";
-import Underline from "./Underline";
-import { Dynamic } from "solid-js/web";
-import { getBaseColor } from "../../../utils/zon/color";
+import ListRow from "./ListRow";
+import { ARROW } from "./DisplayName";
 
 export default function ListHeading() {
   const {
     reportRoot,
     navigate,
+    diagramRootPath,
     listRoot,
     listRootPath,
     highlightedListPath,
     isListRootReportRoot,
-    setHoverListPath,
   } = useReportStore();
-
-  function isButton() {
-    return !isListRootReportRoot();
-  }
-
-  function onClick() {
-    const target = isListRootReportRoot()
-      ? null
-      : getParentPath(listRootPath());
-
-    navigate(target);
-  }
 
   function numberOfLinesInRoot() {
     const root =
@@ -39,33 +29,46 @@ export default function ListHeading() {
     return root.numberOfLines;
   }
 
+  function nameBeforeContent() {
+    if (
+      isListRootReportRoot() ||
+      !arePathsEqual(listRoot().path, highlightedListPath())
+    ) {
+      return "";
+    }
+
+    if (arePathsEqual(listRoot().path, diagramRootPath())) {
+      return ARROW.BEFORE.LEFT;
+    } else {
+      return ARROW.BEFORE.RIGHT;
+    }
+  }
+
+  function nameHoverBeforeContent() {
+    return !isListRootReportRoot() ? ARROW.BEFORE.LEFT : ARROW.EMPTY;
+  }
+
+  function maybeOnHeaderClick() {
+    if (isListRootReportRoot()) {
+      return;
+    }
+
+    const parentPath = getParentPath(listRootPath());
+    return navigate.bind(null, parentPath);
+  }
+
   return (
-    <Dynamic
-      component={isButton() ? "button" : "div"}
-      classList={{
+    <ListRow
+      node={listRoot()}
+      numberOfLinesInRoot={numberOfLinesInRoot()}
+      rowContainerClassList={{
         "text-l": true,
         [styles["report-list__heading"]]: true,
-        [resetButtonStyles["reset-button"]]: isButton(),
-        [styles["report-list__button"]]: isButton(),
       }}
-      style={{
-        "--base-color": getBaseColor(
-          listRoot().colors,
-          listRoot().path,
-          highlightedListPath(),
-        ),
-        "--highlighted-color": listRoot().colors.highlighted,
-        "--pressed-color": listRoot().colors.pressed,
-      }}
-      onMouseEnter={[setHoverListPath, listRoot().path]}
-      onMouseLeave={[setHoverListPath, null]}
-      onClick={() => onClick()}
-    >
-      <ListHeadingContent />
-      <Underline
-        node={listRoot()}
-        numberOfLinesInRoot={numberOfLinesInRoot()}
-      />
-    </Dynamic>
+      rowContentComponent={"h2"}
+      nameBeforeContent={nameBeforeContent()}
+      nameHoverBeforeContent={nameHoverBeforeContent()}
+      onClick={maybeOnHeaderClick()}
+    />
   );
 }
