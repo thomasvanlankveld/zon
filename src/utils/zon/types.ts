@@ -9,14 +9,17 @@ export const LINE_TYPE = {
 } as const;
 export type LINE_TYPE = ValueOf<typeof LINE_TYPE>;
 
+export const GROUP_SEGMENT = Symbol("GROUP");
+export type GROUP_SEGMENT = typeof GROUP_SEGMENT;
+
 export const NODE_TYPE = {
   FILE: "FILE",
   FOLDER: "FOLDER",
-  GROUP: Symbol("GROUP"),
+  GROUP: GROUP_SEGMENT,
 } as const;
 export type NODE_TYPE = ValueOf<typeof NODE_TYPE>;
 
-export type SegmentName = string | typeof NODE_TYPE.GROUP;
+export type SegmentName = string | typeof GROUP_SEGMENT;
 export type Path = SegmentName[];
 
 export type Colors = {

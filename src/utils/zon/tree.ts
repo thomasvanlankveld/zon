@@ -2,6 +2,7 @@ import { rainbow } from "./color.ts";
 import { Languages } from "../tokei.ts";
 import {
   type Colors,
+  GROUP_SEGMENT,
   isFolder,
   type LINE_TYPE,
   type Node,
@@ -210,8 +211,8 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
   const group: Node = {
     type: NODE_TYPE.GROUP,
     stats: hiddenStats,
-    path: [...node.path, NODE_TYPE.GROUP],
-    name: NODE_TYPE.GROUP,
+    path: [...node.path, GROUP_SEGMENT],
+    name: GROUP_SEGMENT,
     numberOfLines: hiddenNumberOfLines,
     firstLine: firstHiddenLine,
     colors: greyColors,

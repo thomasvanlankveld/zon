@@ -1,4 +1,4 @@
-import { NODE_TYPE, type Path, type SegmentName } from "./types.ts";
+import { GROUP_SEGMENT, type Path, type SegmentName } from "./types.ts";
 
 export function getProjectName(projectPath: string): string {
   const projectPathSegments = projectPath.split("/");
@@ -12,14 +12,8 @@ export function getProjectName(projectPath: string): string {
  * @returns
  */
 export function getDisplayName(name: SegmentName, groupName: string): string {
-  if (name === NODE_TYPE.GROUP) {
+  if (name === GROUP_SEGMENT) {
     return groupName;
-  }
-
-  if (typeof name === "symbol") {
-    throw new Error(
-      `Can't convert segment name "${name.toString()}" into a string, unknown symbol type`,
-    );
   }
 
   return name;
@@ -36,9 +30,7 @@ export function getPathString(path: Path | null): string {
   }
 
   return path
-    .map((segment) =>
-      segment === NODE_TYPE.GROUP ? 'Symbol("group")' : segment,
-    )
+    .map((segment) => (segment === GROUP_SEGMENT ? 'Symbol("group")' : segment))
     .join("/");
 }
 

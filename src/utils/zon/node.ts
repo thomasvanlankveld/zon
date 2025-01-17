@@ -1,7 +1,7 @@
 import {
+  GROUP_SEGMENT,
   isFolder,
   isGroup,
-  NODE_TYPE,
   type Node,
   type Path,
   type SegmentName,
@@ -83,7 +83,7 @@ export function getNodeByPath(root: Node, path: Path): Node {
   for (let i = 1; i < path.length; i++) {
     const segment = path[i];
 
-    if (segment === NODE_TYPE.GROUP && i !== path.length - 1) {
+    if (segment === GROUP_SEGMENT && i !== path.length - 1) {
       continue;
     }
 
@@ -119,7 +119,7 @@ export function getNodesAlongPath(root: Node, path: Path): Node[] {
         return root;
       }
 
-      if (segment === NODE_TYPE.GROUP && i !== path.length - 1) {
+      if (segment === GROUP_SEGMENT && i !== path.length - 1) {
         return null;
       }
 
