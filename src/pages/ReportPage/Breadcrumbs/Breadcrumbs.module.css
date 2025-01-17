@@ -12,5 +12,5 @@
 }
 
 .breadcrumbs__breadcrumb-separator {
-  color: var(--text-color);
+  color: var(--clr-text-primary);
 }

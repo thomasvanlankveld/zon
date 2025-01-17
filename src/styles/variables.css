@@ -21,6 +21,7 @@
   }
 
   :root {
+    /* Spacing */
     --spacing-4xs: 0.0625rem; /* 1px */
     --spacing-3xs: 0.125rem; /* 2px */
     --spacing-xxs: 0.25rem; /* 4px */
@@ -32,6 +33,7 @@
     --spacing-xxl: 2rem; /* 24px */
     --spacing-3xl: 3rem; /* 36px */
 
+    /* Typography */
     --font-size-m: 1rem; /* 16px */
     --line-height-m: 1.5rem; /* 20px */
     --font-weight-m: 400;
@@ -49,7 +51,11 @@
     --font-family: "Fira Code";
     --font-weight-normal: 400;
 
-    --text-color: #f6f6f6;
-    --background-color: #030400;
+    /* Colors */
+    --clr-white: #f6f6f6;
+    --clr-black: #030400;
+
+    --clr-text-primary: var(--clr-white);
+    --clr-background: var(--clr-black);
   }
 }
