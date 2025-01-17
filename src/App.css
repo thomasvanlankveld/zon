@@ -1,4 +1,4 @@
 @import url("./styles/reset.css");
 @import url("./styles/setup.css");
 
-@layer reset, setup;
+@layer reset, setup, module;
