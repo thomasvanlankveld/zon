@@ -65,7 +65,7 @@ export default function ListHeading() {
         "text-l": true,
         [styles["report-list__heading"]]: true,
       }}
-      rowContentComponent={"h2"}
+      rowTextComponent={"h2"}
       nameBeforeContent={nameBeforeContent()}
       nameHoverBeforeContent={nameHoverBeforeContent()}
       onClick={maybeOnHeaderClick()}

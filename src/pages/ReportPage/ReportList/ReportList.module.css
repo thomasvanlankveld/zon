@@ -12,7 +12,7 @@
   margin-bottom: var(--line-height-m);
 }
 
-.report-list__list-row-content {
+.report-list__list-row-text {
   display: flex;
   justify-content: space-between;
   gap: var(--spacing-l);

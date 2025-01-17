@@ -14,7 +14,7 @@ type ListRowProps = {
   node: Node;
   numberOfLinesInRoot: number;
   rowContainerClassList?: { [k: string]: boolean | undefined };
-  rowContentComponent?: ValidComponent;
+  rowTextComponent?: ValidComponent;
   nameBeforeContent?: string;
   nameHoverBeforeContent?: string;
   nameHoverAfterContent?: string;
@@ -50,8 +50,8 @@ export default function ListRow(props: ListRowProps) {
       onClick={props.onClick}
     >
       <Dynamic
-        component={props.rowContentComponent ?? "span"}
-        class={styles["report-list__list-row-content"]}
+        component={props.rowTextComponent ?? "span"}
+        class={styles["report-list__list-row-text"]}
       >
         <DisplayName
           style={{
