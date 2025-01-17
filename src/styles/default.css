@@ -22,7 +22,18 @@
   h5,
   h6,
   p,
-  span {
+  span,
+  label,
+  ul,
+  ol,
+  li,
+  dl,
+  dd,
+  dt,
+  table,
+  tr,
+  td,
+  th {
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-normal);
 
