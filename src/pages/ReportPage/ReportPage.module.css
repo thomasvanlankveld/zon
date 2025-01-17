@@ -1,31 +1,29 @@
-@layer module {
-  .report-page {
-    height: 100dvh;
-    box-sizing: border-box;
-    padding: var(--spacing-xxl);
-    display: grid;
-    gap: var(--spacing-l);
-    grid-template-rows: min-content min-content 1fr;
-    grid-template-columns: 4fr 3fr;
-    overflow: hidden;
-    align-items: stretch;
-    justify-items: stretch;
-  }
+.report-page {
+  height: 100dvh;
+  box-sizing: border-box;
+  padding: var(--spacing-xxl);
+  display: grid;
+  gap: var(--spacing-l);
+  grid-template-rows: min-content min-content 1fr;
+  grid-template-columns: 4fr 3fr;
+  overflow: hidden;
+  align-items: stretch;
+  justify-items: stretch;
+}
 
-  .report-page__header {
-    grid-column: span 2;
-    display: flex;
-    justify-content: space-between;
-  }
+.report-page__header {
+  grid-column: span 2;
+  display: flex;
+  justify-content: space-between;
+}
 
-  .report-page__breadcrumbs {
-    grid-column: span 2;
-    min-height: calc(2 * var(--line-height-m));
-    max-height: calc(2 * var(--line-height-m));
-    overflow: hidden;
-    display: -webkit-box;
-    line-clamp: 2;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
+.report-page__breadcrumbs {
+  grid-column: span 2;
+  min-height: calc(2 * var(--line-height-m));
+  max-height: calc(2 * var(--line-height-m));
+  overflow: hidden;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
