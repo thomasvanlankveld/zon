@@ -1,5 +1,5 @@
 import { For } from "solid-js";
-import { NODE_TYPE, getPathString, getDisplayName } from "../../../utils/zon";
+import { getDisplayName, isFile, isGroup, isFolder } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import ListItem from "./ListItem";
 import styles from "./ReportList.module.css";
@@ -13,21 +13,19 @@ export default function ReportList() {
   const listNodes = () => {
     const root = listRoot();
 
-    if (root.type === NODE_TYPE.FILE) {
+    if (isFile(root)) {
       return [];
     }
 
-    if (root.type === NODE_TYPE.GROUP) {
+    if (isGroup(root)) {
       return root.groupedChildren;
     }
 
-    if (root.type !== NODE_TYPE.FOLDER) {
-      throw new Error(
-        `Node "${getPathString(root.path)}" has unknown type ${root.type.toString()}`,
-      );
+    if (isFolder(root)) {
+      return root.children;
     }
 
-    return root.children;
+    throw new Error(`Node has unknown type`);
   };
 
   return (

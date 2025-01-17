@@ -5,7 +5,7 @@ import {
   type Node,
   getDisplayName,
   arePathsEqual,
-  NODE_TYPE,
+  isFolder,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import styles from "./Breadcrumbs.module.css";
@@ -49,7 +49,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
             >
               <span>{getDisplayName(node.name, t("group-name"))}</span>
             </button>
-            <Show when={node.type === NODE_TYPE.FOLDER}>
+            <Show when={isFolder(node)}>
               <span class={styles.breadcrumbs__breadcrumb_separator}>
                 {" / "}
               </span>

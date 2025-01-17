@@ -8,13 +8,14 @@ import {
   Show,
 } from "solid-js";
 import {
-  NODE_TYPE,
   type Node,
   getDescendants,
   getParentPath,
   getPathString,
   arePathsEqual,
   Colors,
+  isFile,
+  isGroup,
 } from "../../../utils/zon/index.ts";
 import createElementSize from "../../../primitives/createElementSize.ts";
 import styles from "./Arc.module.css";
@@ -311,13 +312,13 @@ export default function Sunburst() {
   }
 
   function onArcClick(node: Node) {
-    const isFile = node.type === NODE_TYPE.FILE;
-    const isGroup = node.type === NODE_TYPE.GROUP;
+    const isFileArc = isFile(node);
+    const isGroupArc = isGroup(node);
 
     const arcClickTarget =
-      isFile || isGroup ? getParentPath(node.path) : node.path;
+      isFileArc || isGroupArc ? getParentPath(node.path) : node.path;
 
-    if (isGroup && arePathsEqual(arcClickTarget, targetDiagramRoot().path)) {
+    if (isGroupArc && arePathsEqual(arcClickTarget, targetDiagramRoot().path)) {
       expandGroup();
     } else {
       navigate(arcClickTarget);

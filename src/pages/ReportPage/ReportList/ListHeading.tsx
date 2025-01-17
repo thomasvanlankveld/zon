@@ -2,7 +2,7 @@ import {
   arePathsEqual,
   getNodeByPath,
   getParentPath,
-  NODE_TYPE,
+  isGroup,
 } from "../../../utils/zon";
 import styles from "./ReportList.module.css";
 import { useReportStore } from "../ReportPage.store";
@@ -21,10 +21,9 @@ export default function ListHeading() {
   } = useReportStore();
 
   function numberOfLinesInRoot() {
-    const root =
-      listRoot().type === NODE_TYPE.GROUP
-        ? getNodeByPath(reportRoot(), getParentPath(listRootPath()))
-        : listRoot();
+    const root = isGroup(listRoot())
+      ? getNodeByPath(reportRoot(), getParentPath(listRootPath()))
+      : listRoot();
 
     return root.numberOfLines;
   }

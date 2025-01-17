@@ -1,4 +1,11 @@
-import { NODE_TYPE, type Node, type Path, type SegmentName } from "./types.ts";
+import {
+  isFolder,
+  isGroup,
+  NODE_TYPE,
+  type Node,
+  type Path,
+  type SegmentName,
+} from "./types.ts";
 import { arePathsEqual, getPathString } from "./path.ts";
 
 /**
@@ -18,7 +25,7 @@ function getChild(
   childName: SegmentName,
   errorPrefix: string,
 ): Node {
-  if (parent.type !== NODE_TYPE.FOLDER) {
+  if (!isFolder(parent)) {
     throw new Error(
       `${errorPrefix}: "${getPathString(parent.path)}" is not a folder"`,
     );
@@ -40,7 +47,7 @@ function getChild(
     );
   }
 
-  if (lastChild.type !== NODE_TYPE.GROUP) {
+  if (!isGroup(lastChild)) {
     throw new Error(
       `${errorPrefix}: "${getPathString(parent.path)}" does not have a child named "${getPathString([childName])}" and it has no grouped children`,
     );
@@ -80,7 +87,7 @@ export function getNodeByPath(root: Node, path: Path): Node {
       continue;
     }
 
-    if (node.type !== NODE_TYPE.FOLDER) {
+    if (!isFolder(node)) {
       throw new Error(
         `${errorPrefix}: ${getPathString(node.path)} is not a folder`,
       );
@@ -116,7 +123,7 @@ export function getNodesAlongPath(root: Node, path: Path): Node[] {
         return null;
       }
 
-      if (parent.type !== NODE_TYPE.FOLDER) {
+      if (!isFolder(parent)) {
         throw new Error(
           `${errorPrefix}: "${getPathString(parent.path)}" is not a folder"`,
         );
@@ -153,7 +160,7 @@ export function getDescendants(
     return [node];
   }
 
-  if (node.type !== NODE_TYPE.FOLDER) {
+  if (!isFolder(node)) {
     return [node];
   }
 
@@ -178,7 +185,7 @@ export function withNode(root: Node, insertion: Node): Node {
     return insertion;
   }
 
-  if (root.type !== NODE_TYPE.FOLDER) {
+  if (!isFolder(root)) {
     throw new Error(
       `Can't insert node "${getPathString(path)}" into "${getPathString([root.name])}": ${getPathString(root.path)} is not a folder`,
     );
@@ -190,7 +197,7 @@ export function withNode(root: Node, insertion: Node): Node {
   for (let i = 1; i < path.length; i++) {
     const segment = path[i];
 
-    if (nextNode.type !== NODE_TYPE.FOLDER) {
+    if (!isFolder(nextNode)) {
       throw new Error(
         `Can't insert node "${getPathString(path)}" into "${getPathString([root.name])}": ${getPathString(nextNode.path)} is not a folder`,
       );

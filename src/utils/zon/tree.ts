@@ -1,6 +1,13 @@
 import { rainbow } from "./color.ts";
 import { Languages } from "../tokei.ts";
-import { type Colors, type LINE_TYPE, type Node, NODE_TYPE } from "./types.ts";
+import {
+  type Colors,
+  isFolder,
+  isGroup,
+  type LINE_TYPE,
+  type Node,
+  NODE_TYPE,
+} from "./types.ts";
 import { getProjectName, getPathString, getParentPath } from "./path.ts";
 import { getNumberOfLines, sumStats, subtractStats } from "./stats.ts";
 
@@ -81,7 +88,7 @@ export function createTree(
               );
             }
 
-            if (parent.type !== NODE_TYPE.FOLDER) {
+            if (!isFolder(parent)) {
               throw new Error(
                 `Parent "${getPathString(parentPath)}" of child "${getPathString(nodePath)}" is not a folder`,
               );
@@ -103,7 +110,7 @@ export function createTree(
 }
 
 function sortTree(node: Node): void {
-  if (node.type !== NODE_TYPE.FOLDER) {
+  if (!isFolder(node)) {
     return;
   }
 
@@ -121,7 +128,7 @@ function addDeduced(
   totalNumberOfLines: number,
   lineNumber: number,
 ): void {
-  if (node.type !== NODE_TYPE.FOLDER) {
+  if (!isFolder(node)) {
     return;
   }
 
@@ -163,7 +170,7 @@ function getHeight(children: Node[]): number {
  * @returns The root node
  */
 export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
-  if (node.type !== NODE_TYPE.FOLDER) {
+  if (!isFolder(node)) {
     return node;
   }
 

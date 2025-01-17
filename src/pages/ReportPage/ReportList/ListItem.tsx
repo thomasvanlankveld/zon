@@ -1,4 +1,4 @@
-import { NODE_TYPE, type Node } from "../../../utils/zon";
+import { isFolder, isGroup, type Node } from "../../../utils/zon";
 import { useReportStore } from "../ReportPage.store";
 import ListRow from "./ListRow";
 import { ARROW } from "./DisplayName";
@@ -12,21 +12,19 @@ export default function ListItem(props: ListItemProps) {
   const { navigate, expandGroup } = useReportStore();
 
   function nameHoverBeforeContent() {
-    return props.node.type === NODE_TYPE.FOLDER
-      ? ARROW.BEFORE.RIGHT
-      : ARROW.EMPTY;
+    return isFolder(props.node) ? ARROW.BEFORE.RIGHT : ARROW.EMPTY;
   }
 
   function nameHoverAfterContent() {
-    return props.node.type === NODE_TYPE.GROUP ? ARROW.AFTER.DOWN : ARROW.EMPTY;
+    return isGroup(props.node) ? ARROW.AFTER.DOWN : ARROW.EMPTY;
   }
 
   function maybeOnListItemClick() {
-    if (props.node.type === NODE_TYPE.GROUP) {
+    if (isGroup(props.node)) {
       return expandGroup;
     }
 
-    if (props.node.type === NODE_TYPE.FOLDER) {
+    if (isFolder(props.node)) {
       return navigate.bind(null, props.node.path);
     }
   }

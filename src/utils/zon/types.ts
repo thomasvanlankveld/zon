@@ -53,3 +53,15 @@ export type Group = NodeBase & {
 };
 
 export type Node = File | Folder | Group;
+
+export function isFile(node: Node): node is File {
+  return node.type === NODE_TYPE.FILE;
+}
+
+export function isFolder(node: Node): node is Folder {
+  return node.type === NODE_TYPE.FOLDER;
+}
+
+export function isGroup(node: Node): node is Group {
+  return node.type === NODE_TYPE.GROUP;
+}
