@@ -34,22 +34,22 @@
     --spacing-3xl: 3rem; /* 36px */
 
     /* Typography */
-    --font-size-m: 1rem; /* 16px */
-    --line-height-m: 1.5rem; /* 20px */
-    --font-weight-m: 400;
+    --fs-m: 1rem; /* 16px */
+    --lh-m: 1.5rem; /* 20px */
+    --fw-m: 400;
 
-    --font-size-l: 1.25rem; /* 18px */
-    --line-height-l: 2rem; /* 24px */
-    --font-weight-l: 400;
+    --fs-l: 1.25rem; /* 18px */
+    --lh-l: 2rem; /* 24px */
+    --fw-l: 400;
 
-    --font-size-xl: 1.5rem; /* 20px */
-    --line-height-xl: 2rem; /* 24px */
-    --font-weight-xl: 600;
+    --fs-xl: 1.5rem; /* 20px */
+    --lh-xl: 2rem; /* 24px */
+    --fw-xl: 600;
 
-    --font-size-base: var(--font-size-m);
-    --line-height-base: var(--spacing-xl);
-    --font-family: "Fira Code";
-    --font-weight-normal: 400;
+    --ff-base: "Fira Code";
+    --fs-base: var(--fs-m);
+    --lh-base: var(--ls-m);
+    --fw-base: var(--fw-m);
 
     /* Colors */
     --clr-white: #f6f6f6;

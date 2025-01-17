@@ -19,8 +19,8 @@
 
 .report-page__breadcrumbs {
   grid-column: span 2;
-  min-height: calc(2 * var(--line-height-m));
-  max-height: calc(2 * var(--line-height-m));
+  min-height: calc(2 * var(--lh-m));
+  max-height: calc(2 * var(--lh-m));
   overflow: hidden;
   display: -webkit-box;
   line-clamp: 2;

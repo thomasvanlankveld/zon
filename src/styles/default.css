@@ -1,9 +1,9 @@
 @layer default {
   :root {
-    font-family: var(--font-family);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
-    font-weight: var(--font-weight-normal);
+    font-family: var(--ff-base);
+    font-size: var(--fs-base);
+    line-height: var(--lh-base);
+    font-weight: var(--fw-base);
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -34,8 +34,8 @@
   tr,
   td,
   th {
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-normal);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-base);
 
     -webkit-user-select: none; /* Safari */
     user-select: none;
