@@ -36,6 +36,7 @@ export default function ListRow(props: ListRowProps) {
     <Dynamic
       component={isButton() ? "button" : "div"}
       classList={{
+        "overflow-x-hidden": true,
         [styles["report-list__row-wrapper"]]: true,
         [styles["report-list__button"]]: isButton(),
         ...props.rowContainerClassList,
@@ -51,7 +52,7 @@ export default function ListRow(props: ListRowProps) {
     >
       <Dynamic
         component={props.rowTextComponent ?? "span"}
-        class={styles["report-list__row-text"]}
+        class={`${styles["report-list__row-text"]} overflow-x-hidden`}
       >
         <DisplayName
           style={{

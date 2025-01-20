@@ -1,10 +1,5 @@
-.report-list {
-  overflow-x: hidden;
-}
-
 .report-list__list {
   display: grid;
-  overflow-x: hidden;
   gap: var(--spacing-xxs);
 }
 
@@ -12,15 +7,10 @@
   margin-bottom: var(--line-height-regular);
 }
 
-.report-list__row-wrapper {
-  overflow-x: hidden;
-}
-
 .report-list__row-text {
   display: flex;
   justify-content: space-between;
   gap: var(--spacing-l);
-  overflow-x: hidden;
   color: var(--base-color);
 }
 
@@ -34,12 +24,6 @@
 
 .report-list__button:active .report-list__row-text {
   color: var(--press-color);
-}
-
-.report-list__display-name {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .report-list__display-name::before {
@@ -56,10 +40,6 @@
 
 .report-list__folder-separator {
   color: var(--color-text-highlight);
-}
-
-.report-list__number-of-lines {
-  white-space: nowrap;
 }
 
 .report-list__item-underline {

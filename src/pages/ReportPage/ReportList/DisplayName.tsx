@@ -26,7 +26,7 @@ export default function DisplayName(props: DisplayNameProps) {
   return (
     <span
       style={{ ...props.style }}
-      class={styles["report-list__display-name"]}
+      class={`${styles["report-list__display-name"]} truncate`}
     >
       {getDisplayName(props.node.name, t("group-name"))}
       <Show when={isFolder(props.node)}>

@@ -29,6 +29,21 @@
     text-align: center;
   }
 
+  .truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .whitespace-nowrap {
+    white-space: nowrap;
+  }
+
+  /* Layout */
+  .overflow-x-hidden {
+    overflow-x: hidden;
+  }
+
   /* A11y */
   .screen-reader-only {
     clip: rect(0 0 0 0);

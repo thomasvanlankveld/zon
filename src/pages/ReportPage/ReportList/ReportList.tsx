@@ -29,10 +29,10 @@ export default function ReportList() {
   };
 
   return (
-    <div class={styles["report-list"]}>
+    <div class="overflow-x-hidden">
       {/* TODO: Maybe this shouldn't be a nav? Check https://a11y-style-guide.com/style-guide/section-navigation.html */}
       <nav
-        class={styles["report-list__list"]}
+        class={`${styles["report-list__list"]} overflow-x-hidden`}
         aria-label={t("report-list.nav.label", {
           name: getDisplayName(listRoot().name, t("group-name")),
         })}
