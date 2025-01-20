@@ -52,7 +52,7 @@ export default function ListRow(props: ListRowProps) {
     >
       <Dynamic
         component={props.rowTextComponent ?? "span"}
-        class={`${styles["report-list__row-text"]} overflow-x-hidden`}
+        class={styles["report-list__row-text"]}
       >
         <DisplayName
           style={{
