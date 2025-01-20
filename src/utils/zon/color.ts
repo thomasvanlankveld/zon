@@ -16,6 +16,7 @@ export function rainbow(value: number): Colors {
   return {
     default: `oklch(${lightness}% ${chroma} ${hue})`,
     highlight: `oklch(${lightness + 10}% ${(1 - chromaCorrection) * chroma} ${hue})`,
+    // TODO: Make text use a darker color instead of a lighter one
     press: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
   };
 }
