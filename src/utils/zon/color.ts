@@ -1,6 +1,31 @@
 import { arePathsEqual } from "./path";
 import { type Node, type Colors, type Path, isGroup } from "./types";
 
+// TODO: Use safer colors in prod mode (bright colors only in dev mode to emphasize mistakes)
+export const NODE_DEFAULT_COLORS: Colors = {
+  default: "var(--color-node-default)",
+  highlight: "var(--color-node-highlight)",
+  press: "var(--color-node-press)",
+};
+
+export const TEXT_ROOT_COLORS: Colors = {
+  default: "var(--color-text-root-default)",
+  highlight: "var(--color-text-root-highlight)",
+  press: "var(--color-text-root-press)",
+};
+
+export const GROUP_TEXT_COLORS: Colors = {
+  default: "var(--color-group-default)",
+  highlight: "var(--color-group-highlight)",
+  press: "var(--color-group-press)",
+};
+
+export const GROUP_ARC_COLORS: Colors = {
+  default: "var(--color-group-default)",
+  highlight: "var(--color-group-highlight)",
+  press: "var(--color-group-press)",
+};
+
 /**
  * Take a number between 0 and 1 (inclusive), and produce a set of corresponding colors
  * @param value
@@ -66,28 +91,3 @@ export function getNodeTextColors(
     press: staticColors.press,
   };
 }
-
-// TODO: Use safer colors in prod mode (bright colors only in dev mode to emphasize mistakes)
-export const NODE_DEFAULT_COLORS: Colors = {
-  default: "var(--color-node-default)",
-  highlight: "var(--color-node-highlight)",
-  press: "var(--color-node-press)",
-};
-
-export const TEXT_ROOT_COLORS: Colors = {
-  default: "var(--color-text-root-default)",
-  highlight: "var(--color-text-root-highlight)",
-  press: "var(--color-text-root-press)",
-};
-
-export const GROUP_TEXT_COLORS: Colors = {
-  default: "var(--color-group-default)",
-  highlight: "var(--color-group-highlight)",
-  press: "var(--color-group-press)",
-};
-
-export const GROUP_ARC_COLORS: Colors = {
-  default: "var(--color-group-default)",
-  highlight: "var(--color-group-highlight)",
-  press: "var(--color-group-press)",
-};
