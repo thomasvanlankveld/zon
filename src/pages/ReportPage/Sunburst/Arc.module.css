@@ -3,7 +3,7 @@
   stroke: rgba(0, 0, 0, 0.3);
   stroke-width: var(--spacing-4xs);
   fill-rule: evenodd;
-  fill: var(--arc-fill-color);
+  fill: var(--arc-base-color);
 }
 .sunburst__arc:hover {
   fill: var(--arc-highlight-color);

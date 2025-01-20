@@ -355,7 +355,7 @@ export default function Sunburst() {
           cy={0}
           r={(1 / targetMaxDistance()) * maxRadius()}
           style={{
-            "--arc-fill-color": getBaseColor(
+            "--arc-base-color": getBaseColor(
               rootColors,
               targetDiagramRoot().path,
               highlightedDiagramPath(),
