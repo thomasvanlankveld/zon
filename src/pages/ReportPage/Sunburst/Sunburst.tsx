@@ -13,7 +13,6 @@ import {
   getParentPath,
   getPathString,
   arePathsEqual,
-  Colors,
   isFile,
   isGroup,
 } from "../../../utils/zon/index.ts";
@@ -21,7 +20,7 @@ import createElementSize from "../../../primitives/createElementSize.ts";
 import styles from "./Arc.module.css";
 import { Dimensions, SunburstNode, DimensionKey } from "./types.ts";
 import Arc from "./Arc.tsx";
-import { getBaseColor } from "../../../utils/zon/color.ts";
+import { DIAGRAM_ROOT_COLORS, getBaseColor } from "../../../utils/zon/color.ts";
 import { useReportStore } from "../ReportPage.store.tsx";
 
 function clamp(value: number, min: number, max: number) {
@@ -325,12 +324,23 @@ export default function Sunburst() {
     }
   }
 
-  // TODO: Move to CSS
-  const rootColors: Colors = {
-    default: "rgba(255, 255, 255, 0.1)",
-    highlight: "rgba(255, 255, 255, 0.2)",
-    press: "rgba(255, 255, 255, 0.075)",
-  };
+  const rootColors = createMemo(() => {
+    if (isReportRoot()) {
+      return { base: "", highlight: "", press: "" };
+    }
+
+    const staticColors = DIAGRAM_ROOT_COLORS;
+
+    return {
+      base: getBaseColor(
+        staticColors,
+        targetDiagramRoot().path,
+        highlightedDiagramPath(),
+      ),
+      highlight: staticColors.highlight,
+      press: staticColors.press,
+    };
+  });
 
   return (
     <svg
@@ -355,13 +365,9 @@ export default function Sunburst() {
           cy={0}
           r={(1 / targetMaxDistance()) * maxRadius()}
           style={{
-            "--arc-base-color": getBaseColor(
-              rootColors,
-              targetDiagramRoot().path,
-              highlightedDiagramPath(),
-            ),
-            "--arc-highlight-color": rootColors.highlight,
-            "--arc-press-color": rootColors.press,
+            "--arc-base-color": rootColors().base,
+            "--arc-highlight-color": rootColors().highlight,
+            "--arc-press-color": rootColors().press,
           }}
           class={styles.sunburst__arc}
           onMouseEnter={() => setHoverArcPath(targetDiagramRoot().path)}

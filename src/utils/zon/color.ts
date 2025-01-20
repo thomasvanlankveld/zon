@@ -14,6 +14,12 @@ export const TEXT_ROOT_COLORS: Colors = {
   press: "var(--color-text-root-press)",
 };
 
+export const DIAGRAM_ROOT_COLORS: Colors = {
+  default: "var(--color-diagram-root-default)",
+  highlight: "var(--color-diagram-root-highlight)",
+  press: "var(--color-diagram-root-press)",
+};
+
 export const GROUP_TEXT_COLORS: Colors = {
   default: "var(--color-group-default)",
   highlight: "var(--color-group-highlight)",
