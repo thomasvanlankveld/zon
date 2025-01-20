@@ -36,7 +36,7 @@ export function getBaseColor(
 }
 
 /**
- * Get a node's text color
+ * Get a node's "static" text colors (not taking into account highlight from an outside component)
  */
 function getNodeStaticTextColors(node: Node, reportRootPath: Path): Colors {
   if (arePathsEqual(node.path, reportRootPath)) {
@@ -50,6 +50,9 @@ function getNodeStaticTextColors(node: Node, reportRootPath: Path): Colors {
   return node.colors;
 }
 
+/**
+ * Get a node's text color
+ */
 export function getNodeTextColors(
   node: Node,
   reportRootPath: Path,
