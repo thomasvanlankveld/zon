@@ -1,7 +1,6 @@
-import { rainbow } from "./color.ts";
+import { NODE_DEFAULT_COLORS, rainbow } from "./color.ts";
 import { Languages } from "../tokei.ts";
 import {
-  type Colors,
   GROUP_SEGMENT,
   isFolder,
   isGroup,
@@ -11,14 +10,6 @@ import {
 } from "./types.ts";
 import { getProjectName, getPathString, getParentPath } from "./path.ts";
 import { getNumberOfLines, sumStats, subtractStats } from "./stats.ts";
-
-// TODO: Make bright red in dev mode to emphasize mistakes
-// TODO: Use CSS variables in prod mode for more consistency
-export const rootColors: Colors = {
-  default: "rgb(204, 204, 204)",
-  highlighted: "rgb(255, 255, 255)",
-  pressed: "rgb(153, 153, 153)",
-};
 
 export function createTree(
   projectPath: string,
@@ -61,7 +52,7 @@ export function createTree(
             depth: i,
             // Actual values of `firstLine` and `color` can only be determined after sorting
             firstLine: 0,
-            colors: { ...rootColors },
+            colors: { ...NODE_DEFAULT_COLORS },
           };
 
           const isFile = i === filePathSegments.length - 1;

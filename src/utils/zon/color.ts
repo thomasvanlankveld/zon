@@ -1,5 +1,5 @@
 import { arePathsEqual } from "./path";
-import type { Colors, Path } from "./types";
+import { type Colors, type Path } from "./types";
 
 /**
  * Take a number between 0 and 1 (inclusive), and produce a set of corresponding colors
@@ -33,6 +33,19 @@ export function getBaseColor(
 
   return isHighlighted ? colors.highlighted : colors.default;
 }
+
+// TODO: Use safer colors in prod mode (bright colors only in dev mode to emphasize mistakes)
+export const NODE_DEFAULT_COLORS: Colors = {
+  default: "var(--color-node-default)",
+  highlighted: "var(--color-node-highlighted)",
+  pressed: "var(--color-node-pressed)",
+};
+
+export const TEXT_ROOT_COLORS: Colors = {
+  default: "var(--color-text-root-default)",
+  highlighted: "var(--color-text-root-highlighted)",
+  pressed: "var(--color-text-root-pressed)",
+};
 
 export const GROUP_TEXT_COLORS: Colors = {
   default: "var(--color-group-default)",

@@ -1,12 +1,16 @@
 import { ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { JSX } from "solid-js/h/jsx-runtime";
-import { isGroup, Node } from "../../../utils/zon";
+import { arePathsEqual, isGroup, Node } from "../../../utils/zon";
 import DisplayName from "./DisplayName";
 import NumberOfLines from "./NumberOfLines";
 import styles from "./ReportList.module.css";
 import Underline from "./Underline";
-import { getBaseColor, GROUP_TEXT_COLORS } from "../../../utils/zon/color";
+import {
+  getBaseColor,
+  GROUP_TEXT_COLORS,
+  TEXT_ROOT_COLORS,
+} from "../../../utils/zon/color";
 import { useReportStore } from "../ReportPage.store";
 
 type ListRowProps = {
@@ -21,14 +25,23 @@ type ListRowProps = {
 };
 
 export default function ListRow(props: ListRowProps) {
-  const { highlightedListPath, setHoverListPath } = useReportStore();
+  const { reportRoot, highlightedListPath, setHoverListPath } =
+    useReportStore();
 
   function isButton() {
     return props.onClick != null;
   }
 
   function colors() {
-    return isGroup(props.node) ? GROUP_TEXT_COLORS : props.node.colors;
+    if (arePathsEqual(props.node.path, reportRoot().path)) {
+      return TEXT_ROOT_COLORS;
+    }
+
+    if (isGroup(props.node)) {
+      return GROUP_TEXT_COLORS;
+    }
+
+    return props.node.colors;
   }
 
   return (

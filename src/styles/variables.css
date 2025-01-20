@@ -80,6 +80,14 @@
     --color-text-highlight: var(--clr-white);
     --color-background: var(--clr-black);
 
+    --color-node-default: red;
+    --color-node-highlighted: pink;
+    --color-node-pressed: purple;
+
+    --color-text-root-default: var(--clr-grey-800);
+    --color-text-root-highlighted: var(--clr-white);
+    --color-text-root-pressed: var(--clr-grey-600);
+
     /* TODO: Make darker colors for arcs, and lighter colors for text */
     --color-group-highlighted: var(--clr-grey-800);
     --color-group-default: var(--clr-grey-600);
