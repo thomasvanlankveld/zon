@@ -1,6 +1,5 @@
 .report-list__list {
   display: grid;
-  gap: var(--spacing-xxs);
 }
 
 .report-list__heading {
@@ -10,8 +9,16 @@
 .report-list__row-text {
   display: flex;
   justify-content: space-between;
-  gap: var(--spacing-l);
+  column-gap: var(--spacing-l);
   color: var(--base-color);
+}
+
+.report-list__row-wrapper:not(:first-of-type) {
+  padding-top: var(--spacing-3xs);
+}
+
+.report-list__row-wrapper:not(:last-of-type) {
+  padding-bottom: var(--spacing-3xs);
 }
 
 .report-list__button {
@@ -19,7 +26,14 @@
 }
 
 .report-list__row-wrapper:hover .report-list__row-text {
+  flex-wrap: wrap;
   color: var(--highlight-color);
+}
+
+.report-list__row-wrapper:hover .report-list__display-name {
+  text-align: start;
+  white-space: wrap;
+  text-overflow: inherit;
 }
 
 .report-list__button:active .report-list__row-text {
@@ -40,6 +54,10 @@
 
 .report-list__folder-separator {
   color: var(--color-text-highlight);
+}
+
+.report-list__number-of-lines {
+  margin-left: auto;
 }
 
 .report-list__item-underline {

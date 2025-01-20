@@ -38,14 +38,16 @@ export default function ReportList() {
         })}
       >
         <ListHeading />
-        <For each={listNodes()}>
-          {(child) => (
-            <ListItem
-              node={child}
-              numberOfLinesInRoot={listRoot().numberOfLines}
-            />
-          )}
-        </For>
+        <div class={styles["report-list__list"]}>
+          <For each={listNodes()}>
+            {(child) => (
+              <ListItem
+                node={child}
+                numberOfLinesInRoot={listRoot().numberOfLines}
+              />
+            )}
+          </For>
+        </div>
       </nav>
     </div>
   );
