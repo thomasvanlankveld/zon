@@ -40,9 +40,9 @@
     --clr-white: hsl(0, 0%, 96%);
     --clr-black: hsl(75, 100%, 1%);
 
-    --clr-grey-800: hsl(0, 0%, 80%);
-    --clr-grey-600: hsl(0, 0%, 60%);
-    --clr-grey-450: hsl(0, 0%, 45%);
+    --clr-grey-800: hsl(75, 4%, 80%);
+    --clr-grey-600: hsl(75, 4%, 60%);
+    --clr-grey-450: hsl(75, 4%, 45%);
   }
 
   /* Semantic properties */
