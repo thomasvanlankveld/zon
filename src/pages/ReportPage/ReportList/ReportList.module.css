@@ -12,7 +12,7 @@
   margin-bottom: var(--line-height-regular);
 }
 
-.report-list__row-container {
+.report-list__row-wrapper {
   overflow-x: hidden;
 }
 
@@ -28,7 +28,7 @@
   cursor: pointer;
 }
 
-.report-list__row-container:hover .report-list__row-text {
+.report-list__row-wrapper:hover .report-list__row-text {
   color: var(--highlighted-color);
 }
 
@@ -72,7 +72,7 @@
   opacity: 1;
 }
 
-.report-list__row-container:hover .report-list__item-underline {
+.report-list__row-wrapper:hover .report-list__item-underline {
   background-color: var(--highlighted-color);
 }
 

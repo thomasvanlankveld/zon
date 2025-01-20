@@ -35,7 +35,7 @@ export default function ListRow(props: ListRowProps) {
     <Dynamic
       component={isButton() ? "button" : "div"}
       classList={{
-        [styles["report-list__row-container"]]: true,
+        [styles["report-list__row-wrapper"]]: true,
         [styles["report-list__button"]]: isButton(),
         ...props.rowContainerClassList,
       }}
