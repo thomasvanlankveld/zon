@@ -59,6 +59,9 @@
     --spacing-xxl: 2rem; /* 24px */
     --spacing-3xl: 3rem; /* 36px */
 
+    --spacing-page-padding: var(--spacing-xxl);
+    --spacing-page-gap: var(--spacing-l);
+
     /* Typography */
     --font-family-regular: "Fira Code";
     --font-size-regular: var(--fs-m);

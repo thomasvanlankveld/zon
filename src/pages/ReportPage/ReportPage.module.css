@@ -1,9 +1,9 @@
 .report-page {
   height: 100dvh;
   box-sizing: border-box;
-  padding: var(--spacing-xxl);
+  padding: var(--spacing-page-padding);
   display: grid;
-  gap: var(--spacing-l);
+  gap: var(--spacing-page-gap);
   grid-template-rows: min-content min-content 1fr;
   grid-template-columns: 4fr 3fr;
   overflow: hidden;
