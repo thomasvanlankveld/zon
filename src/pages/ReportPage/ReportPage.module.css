@@ -5,7 +5,7 @@
   display: grid;
   gap: var(--spacing-page-gap);
   grid-template-rows: min-content min-content 1fr;
-  grid-template-columns: 4fr 3fr;
+  grid-template-columns: 7fr 5fr;
   overflow: hidden;
   align-items: stretch;
   justify-items: stretch;
