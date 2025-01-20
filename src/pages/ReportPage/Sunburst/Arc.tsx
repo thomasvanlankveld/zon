@@ -4,6 +4,7 @@ import { SunburstNode } from "./types.ts";
 import { Path } from "../../../utils/zon/types.ts";
 import styles from "./Arc.module.css";
 import { getNodeArcColors } from "../../../utils/zon/color.ts";
+import { createMemo } from "solid-js";
 
 type ArcProps = {
   node: SunburstNode;
@@ -29,9 +30,9 @@ function Arc(props: ArcProps) {
     return getArcD({ innerRadius, outerRadius, startAngle, endAngle });
   }
 
-  function colors() {
-    return getNodeArcColors(props.node, props.highlightedPath);
-  }
+  const colors = createMemo(() =>
+    getNodeArcColors(props.node, props.highlightedPath),
+  );
 
   return (
     <path

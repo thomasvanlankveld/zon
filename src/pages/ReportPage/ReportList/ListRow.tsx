@@ -1,4 +1,4 @@
-import { ValidComponent } from "solid-js";
+import { createMemo, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { JSX } from "solid-js/h/jsx-runtime";
 import { Node } from "../../../utils/zon";
@@ -28,13 +28,9 @@ export default function ListRow(props: ListRowProps) {
     return props.onClick != null;
   }
 
-  function colors() {
-    return getNodeTextColors(
-      props.node,
-      reportRoot().path,
-      highlightedListPath(),
-    );
-  }
+  const colors = createMemo(() =>
+    getNodeTextColors(props.node, reportRoot().path, highlightedListPath()),
+  );
 
   return (
     <Dynamic
