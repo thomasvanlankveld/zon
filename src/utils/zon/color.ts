@@ -91,3 +91,16 @@ export function getNodeTextColors(
     press: staticColors.press,
   };
 }
+
+/**
+ * Get a node's diagram arc color
+ */
+export function getNodeArcColors(node: Node, highlightedPath: Path | null) {
+  const staticColors = isGroup(node) ? GROUP_ARC_COLORS : node.colors;
+
+  return {
+    base: getBaseColor(staticColors, node.path, highlightedPath),
+    highlight: staticColors.highlight,
+    press: staticColors.press,
+  };
+}

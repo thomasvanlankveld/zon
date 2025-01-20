@@ -1,9 +1,9 @@
 import { JSX } from "solid-js/h/jsx-runtime";
 import { getArcD } from "../../../utils/svg.ts";
 import { SunburstNode } from "./types.ts";
-import { isGroup, Path } from "../../../utils/zon/types.ts";
+import { Path } from "../../../utils/zon/types.ts";
 import styles from "./Arc.module.css";
-import { getBaseColor, GROUP_ARC_COLORS } from "../../../utils/zon/color.ts";
+import { getNodeArcColors } from "../../../utils/zon/color.ts";
 
 type ArcProps = {
   node: SunburstNode;
@@ -30,18 +30,14 @@ function Arc(props: ArcProps) {
   }
 
   function colors() {
-    return isGroup(props.node) ? GROUP_ARC_COLORS : props.node.colors;
+    return getNodeArcColors(props.node, props.highlightedPath);
   }
 
   return (
     <path
       d={getNodeArcD()}
       style={{
-        "--arc-fill-color": getBaseColor(
-          colors(),
-          props.node.path,
-          props.highlightedPath,
-        ),
+        "--arc-fill-color": colors().base,
         "--arc-highlight-color": colors().highlight,
         "--arc-press-color": colors().press,
         opacity: props.node.opacity(),
