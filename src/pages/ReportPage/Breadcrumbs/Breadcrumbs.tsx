@@ -6,13 +6,11 @@ import {
   getDisplayName,
   arePathsEqual,
   isFolder,
-  Colors,
-  isGroup,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import styles from "./Breadcrumbs.module.css";
 import { useReportStore } from "../ReportPage.store";
-import { GROUP_TEXT_COLORS, TEXT_ROOT_COLORS } from "../../../utils/zon/color";
+import { getNodeTextColors } from "../../../utils/zon/color";
 
 type BreadcrumbsProps = {
   class?: string;
@@ -35,16 +33,8 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   );
   const lastNodeIndex = () => nodes().length - 1;
 
-  function getColors(node: Node): Colors {
-    if (arePathsEqual(node.path, reportRoot().path)) {
-      return TEXT_ROOT_COLORS;
-    }
-
-    if (isGroup(node)) {
-      return GROUP_TEXT_COLORS;
-    }
-
-    return node.colors;
+  function getColors(node: Node) {
+    return getNodeTextColors(node, reportRoot().path);
   }
 
   return (

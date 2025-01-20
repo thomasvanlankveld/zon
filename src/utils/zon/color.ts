@@ -1,5 +1,5 @@
 import { arePathsEqual } from "./path";
-import { type Colors, type Path } from "./types";
+import { type Node, type Colors, type Path, isGroup } from "./types";
 
 /**
  * Take a number between 0 and 1 (inclusive), and produce a set of corresponding colors
@@ -32,6 +32,21 @@ export function getBaseColor(
   const isHighlighted = arePathsEqual(highlightedPath, nodePath);
 
   return isHighlighted ? colors.highlighted : colors.default;
+}
+
+/**
+ * Get a node's text color
+ */
+export function getNodeTextColors(node: Node, reportRootPath: Path): Colors {
+  if (arePathsEqual(node.path, reportRootPath)) {
+    return TEXT_ROOT_COLORS;
+  }
+
+  if (isGroup(node)) {
+    return GROUP_TEXT_COLORS;
+  }
+
+  return node.colors;
 }
 
 // TODO: Use safer colors in prod mode (bright colors only in dev mode to emphasize mistakes)
