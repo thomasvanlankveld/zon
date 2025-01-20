@@ -38,7 +38,7 @@ export function getBaseColor(
 /**
  * Get a node's text color
  */
-export function getNodeTextColors(node: Node, reportRootPath: Path): Colors {
+function getNodeStaticTextColors(node: Node, reportRootPath: Path): Colors {
   if (arePathsEqual(node.path, reportRootPath)) {
     return TEXT_ROOT_COLORS;
   }
@@ -48,6 +48,20 @@ export function getNodeTextColors(node: Node, reportRootPath: Path): Colors {
   }
 
   return node.colors;
+}
+
+export function getNodeTextColors(
+  node: Node,
+  reportRootPath: Path,
+  highlightedPath: Path | null,
+) {
+  const staticColors = getNodeStaticTextColors(node, reportRootPath);
+
+  return {
+    base: getBaseColor(staticColors, node.path, highlightedPath),
+    highlight: staticColors.highlight,
+    press: staticColors.press,
+  };
 }
 
 // TODO: Use safer colors in prod mode (bright colors only in dev mode to emphasize mistakes)

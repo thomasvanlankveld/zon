@@ -1,6 +1,6 @@
 .breadcrumbs__breadcrumb-button {
   cursor: pointer;
-  color: var(--default-color);
+  color: var(--base-color);
 }
 
 .breadcrumbs__breadcrumb-button:hover {

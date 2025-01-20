@@ -68,6 +68,7 @@ function createReportStore(initialReportRoot: Node) {
 
   // Breadcrumb setup
   const breadcrumbPath = () => hoverArcPath() ?? diagramRootPath();
+  const highlightedBreadcrumbPath = hoverArcPath;
 
   // Diagram setup
   const highlightedDiagramPath = hoverListPath;
@@ -107,6 +108,7 @@ function createReportStore(initialReportRoot: Node) {
     setReportRoot,
     navigate,
     breadcrumbPath,
+    highlightedBreadcrumbPath,
     diagramRoot,
     diagramRootPath,
     highlightedDiagramPath,

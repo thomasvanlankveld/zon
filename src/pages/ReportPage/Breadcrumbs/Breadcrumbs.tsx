@@ -18,7 +18,8 @@ type BreadcrumbsProps = {
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
   const { t } = useI18n();
-  const { reportRoot, breadcrumbPath, navigate } = useReportStore();
+  const { reportRoot, breadcrumbPath, highlightedBreadcrumbPath, navigate } =
+    useReportStore();
 
   function getTargetPath(node: Node): Path | null {
     const isReportRoot = arePathsEqual(node.path, reportRoot().path);
@@ -34,7 +35,11 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   const lastNodeIndex = () => nodes().length - 1;
 
   function getColors(node: Node) {
-    return getNodeTextColors(node, reportRoot().path);
+    return getNodeTextColors(
+      node,
+      reportRoot().path,
+      highlightedBreadcrumbPath(),
+    );
   }
 
   return (
@@ -45,7 +50,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
             <button
               {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
               style={{
-                "--default-color": getColors(node).default,
+                "--base-color": getColors(node).base,
                 "--highlight-color": getColors(node).highlight,
                 "--press-color": getColors(node).press,
               }}

@@ -6,7 +6,7 @@ import DisplayName from "./DisplayName";
 import NumberOfLines from "./NumberOfLines";
 import styles from "./ReportList.module.css";
 import Underline from "./Underline";
-import { getBaseColor, getNodeTextColors } from "../../../utils/zon/color";
+import { getNodeTextColors } from "../../../utils/zon/color";
 import { useReportStore } from "../ReportPage.store";
 
 type ListRowProps = {
@@ -29,7 +29,11 @@ export default function ListRow(props: ListRowProps) {
   }
 
   function colors() {
-    return getNodeTextColors(props.node, reportRoot().path);
+    return getNodeTextColors(
+      props.node,
+      reportRoot().path,
+      highlightedListPath(),
+    );
   }
 
   return (
@@ -41,11 +45,7 @@ export default function ListRow(props: ListRowProps) {
         ...props.rowContainerClassList,
       }}
       style={{
-        "--base-color": getBaseColor(
-          colors(),
-          props.node.path,
-          highlightedListPath(),
-        ),
+        "--base-color": colors().base,
         "--highlight-color": colors().highlight,
         "--press-color": colors().press,
       }}
