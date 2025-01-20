@@ -14,6 +14,12 @@ export const TEXT_ROOT_COLORS: Colors = {
   press: "var(--color-text-root-press)",
 };
 
+export const ARC_ROOT_COLORS: Colors = {
+  default: "var(--color-text-root-default)",
+  highlight: "var(--color-text-root-highlight)",
+  press: "var(--color-text-root-press)",
+};
+
 export const GROUP_TEXT_COLORS: Colors = {
   default: "var(--color-group-default)",
   highlight: "var(--color-group-highlight)",
@@ -93,10 +99,29 @@ export function getNodeTextColors(
 }
 
 /**
+ * Get a node's "static" diagram arc colors (not taking into account highlight from an outside component)
+ */
+function getNodeStaticArcColors(node: Node, reportRootPath: Path): Colors {
+  if (arePathsEqual(node.path, reportRootPath)) {
+    return ARC_ROOT_COLORS;
+  }
+
+  if (isGroup(node)) {
+    return GROUP_ARC_COLORS;
+  }
+
+  return node.colors;
+}
+
+/**
  * Get a node's diagram arc color
  */
-export function getNodeArcColors(node: Node, highlightedPath: Path | null) {
-  const staticColors = isGroup(node) ? GROUP_ARC_COLORS : node.colors;
+export function getNodeArcColors(
+  node: Node,
+  reportRootPath: Path,
+  highlightedPath: Path | null,
+) {
+  const staticColors = getNodeStaticArcColors(node, reportRootPath);
 
   return {
     base: getBaseColor(staticColors, node.path, highlightedPath),

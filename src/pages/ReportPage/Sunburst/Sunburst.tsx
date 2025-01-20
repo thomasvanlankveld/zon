@@ -16,12 +16,13 @@ import {
   Colors,
   isFile,
   isGroup,
+  getNodeByPath,
 } from "../../../utils/zon/index.ts";
 import createElementSize from "../../../primitives/createElementSize.ts";
 import styles from "./Arc.module.css";
 import { Dimensions, SunburstNode, DimensionKey } from "./types.ts";
 import Arc from "./Arc.tsx";
-import { getBaseColor } from "../../../utils/zon/color.ts";
+import { getBaseColor, getNodeArcColors } from "../../../utils/zon/color.ts";
 import { useReportStore } from "../ReportPage.store.tsx";
 
 function clamp(value: number, min: number, max: number) {
@@ -325,18 +326,143 @@ export default function Sunburst() {
     }
   }
 
-  // TODO: Move to CSS
-  const rootColors: Colors = {
-    default: "rgba(255, 255, 255, 0.1)",
-    highlight: "rgba(255, 255, 255, 0.2)",
-    press: "rgba(255, 255, 255, 0.075)",
-  };
+  // // TODO: Move to CSS
+  // const rootColors: Colors = {
+  //   default: "var(--color-diagram-root-default)",
+  //   highlight: "var(--color-diagram-root-highlight)",
+  //   press: "var(--color-diagram-root-press)",
+  //   // default: "rgba(255, 255, 255, 0.1)",
+  //   // highlight: "rgba(255, 255, 255, 0.2)",
+  //   // press: "rgba(255, 255, 255, 0.075)",
+  // };
+  const rootColors = createMemo(() => {
+    if (isReportRoot()) {
+      return { base: "", highlight: "", press: "" };
+    }
+
+    const parent = getNodeByPath(
+      reportRoot(),
+      getParentPath(targetDiagramRoot().path),
+    );
+
+    return getNodeArcColors(
+      parent,
+      reportRoot().path,
+      highlightedDiagramPath(),
+    );
+  });
 
   return (
     <svg
       ref={setSvg}
       viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}
     >
+      <defs>
+        <filter id="inset-shadow">
+          <feComponentTransfer in="SourceGraphic" result="inset-selection">
+            <feFuncA type="discrete" tableValues="0 1 1 1 1 1" />
+          </feComponentTransfer>
+
+          <feComponentTransfer in="SourceGraphic" result="original-no-fill">
+            <feFuncA type="discrete" tableValues="0 0 1" />
+          </feComponentTransfer>
+
+          <feColorMatrix
+            type="matrix"
+            in="original-no-fill"
+            result="new-source-alpha"
+            values="0 0 0 0 0
+                      0 0 0 0 0
+                      0 0 0 0 0
+                      0 0 0 1 0"
+          />
+
+          <feGaussianBlur
+            in="new-source-alpha"
+            result="blur"
+            stdDeviation="5"
+          />
+          <feGaussianBlur
+            in="new-source-alpha"
+            result="blur2"
+            stdDeviation="10"
+          />
+          <feGaussianBlur
+            in="new-source-alpha"
+            result="blur3"
+            stdDeviation="15"
+          />
+          <feMerge result="blur">
+            <feMergeNode in="blur" mode="normal" />
+            <feMergeNode in="blur2" mode="normal" />
+            <feMergeNode in="blur3" mode="normal" />
+          </feMerge>
+
+          <feComposite
+            operator="in"
+            in="inset-selection"
+            in2="blur"
+            result="inset-blur"
+          />
+
+          <feComposite operator="over" in="original-no-fill" in2="inset-blur" />
+        </filter>
+
+        <filter id="drop-shadow">
+          <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="5" />
+          <feGaussianBlur in="SourceGraphic" result="blur2" stdDeviation="10" />
+          <feGaussianBlur in="SourceGraphic" result="blur3" stdDeviation="15" />
+          <feGaussianBlur in="SourceGraphic" result="blur4" stdDeviation="20" />
+          <feGaussianBlur in="SourceGraphic" result="blur5" stdDeviation="25" />
+          <feGaussianBlur in="SourceGraphic" result="blur6" stdDeviation="30" />
+          <feGaussianBlur in="SourceGraphic" result="blur7" stdDeviation="35" />
+          <feGaussianBlur in="SourceGraphic" result="blur8" stdDeviation="40" />
+          <feMerge>
+            {/* <feMergeNode in="blur" mode="normal" /> */}
+            {/* <feMergeNode in="blur2" mode="normal" /> */}
+            <feMergeNode in="blur3" mode="normal" />
+            {/* <feMergeNode in="blur4" mode="normal" /> */}
+            {/* <feMergeNode in="blur5" mode="normal" /> */}
+            <feMergeNode in="blur6" mode="normal" />
+            {/* <feMergeNode in="blur7" mode="normal" /> */}
+            {/* <feMergeNode in="blur8" mode="normal" /> */}
+            <feMergeNode in="SourceGraphic" mode="normal" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <Show when={!isReportRoot()}>
+        <circle
+          cx={0}
+          cy={0}
+          r={(1 / targetMaxDistance()) * maxRadius() + 2}
+          style={{
+            "--arc-base-color": rootColors().base,
+            "--arc-highlight-color": rootColors().highlight,
+            "--arc-press-color": rootColors().press,
+            // "--arc-base-color": getBaseColor(
+            //   rootColors,
+            //   targetDiagramRoot().path,
+            //   highlightedDiagramPath(),
+            // ),
+            // "--arc-highlight-color": rootColors.highlight,
+            // "--arc-press-color": rootColors.press,
+            opacity: "1",
+          }}
+          // class={styles.sunburst__arc}
+          fill={rootColors().base}
+          fill-opacity="0"
+          stroke={rootColors().base}
+          // stroke="white"
+          stroke-width="4"
+          filter="url(#drop-shadow)"
+          // filter="url(#inset-shadow)"
+          onMouseEnter={() => setHoverArcPath(targetDiagramRoot().path)}
+          onMouseLeave={() => setHoverArcPath(null)}
+          onClick={() => navigate(getParentPath(targetDiagramRoot().path))}
+        />
+      </Show>
+
       <For each={visibleNodes()}>
         {(node) => (
           <Arc
@@ -349,26 +475,6 @@ export default function Sunburst() {
           />
         )}
       </For>
-      <Show when={!isReportRoot()}>
-        <circle
-          cx={0}
-          cy={0}
-          r={(1 / targetMaxDistance()) * maxRadius()}
-          style={{
-            "--arc-base-color": getBaseColor(
-              rootColors,
-              targetDiagramRoot().path,
-              highlightedDiagramPath(),
-            ),
-            "--arc-highlight-color": rootColors.highlight,
-            "--arc-press-color": rootColors.press,
-          }}
-          class={styles.sunburst__arc}
-          onMouseEnter={() => setHoverArcPath(targetDiagramRoot().path)}
-          onMouseLeave={() => setHoverArcPath(null)}
-          onClick={() => navigate(getParentPath(targetDiagramRoot().path))}
-        />
-      </Show>
     </svg>
   );
 }
