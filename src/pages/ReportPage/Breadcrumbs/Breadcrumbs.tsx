@@ -45,27 +45,31 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   return (
     <nav class={props.class} aria-label={t("breadcrumbs.label")}>
       <For each={nodes()}>
-        {(node, i) => (
-          <>
-            <button
-              {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
-              style={{
-                "--base-color": getColors(node).base,
-                "--highlight-color": getColors(node).highlight,
-                "--press-color": getColors(node).press,
-              }}
-              class={styles["breadcrumbs__breadcrumb-button"]}
-              onClick={[navigate, node.targetPath]}
-            >
-              <span>{getDisplayName(node.name, t("group-name"))}</span>
-            </button>
-            <Show when={isFolder(node)}>
-              <span class={styles.breadcrumbs__breadcrumb_separator}>
-                {" / "}
-              </span>
-            </Show>
-          </>
-        )}
+        {(node, i) => {
+          const colors = getColors(node);
+
+          return (
+            <>
+              <button
+                {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
+                style={{
+                  "--base-color": colors.base,
+                  "--highlight-color": colors.highlight,
+                  "--press-color": colors.press,
+                }}
+                class={styles["breadcrumbs__breadcrumb-button"]}
+                onClick={[navigate, node.targetPath]}
+              >
+                <span>{getDisplayName(node.name, t("group-name"))}</span>
+              </button>
+              <Show when={isFolder(node)}>
+                <span class={styles.breadcrumbs__breadcrumb_separator}>
+                  {" / "}
+                </span>
+              </Show>
+            </>
+          );
+        }}
       </For>
     </nav>
   );
