@@ -1,4 +1,8 @@
 @layer utility {
+  .text-highlight {
+    color: var(--color-text-highlight);
+  }
+
   .text-regular,
   .text-regular * {
     font-size: var(--font-size-regular);
