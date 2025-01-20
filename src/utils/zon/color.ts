@@ -21,15 +21,15 @@ export const DIAGRAM_ROOT_COLORS: Colors = {
 };
 
 export const TEXT_GROUP_COLORS: Colors = {
-  default: "var(--color-group-default)",
-  highlight: "var(--color-group-highlight)",
-  press: "var(--color-group-press)",
+  default: "var(--color-text-group-default)",
+  highlight: "var(--color-text-group-highlight)",
+  press: "var(--color-text-group-press)",
 };
 
 export const DIAGRAM_ARC_GROUP_COLORS: Colors = {
-  default: "var(--color-group-default)",
-  highlight: "var(--color-group-highlight)",
-  press: "var(--color-group-press)",
+  default: "var(--color-diagram-arc-group-default)",
+  highlight: "var(--color-diagram-arc-group-highlight)",
+  press: "var(--color-diagram-arc-group-press)",
 };
 
 /**

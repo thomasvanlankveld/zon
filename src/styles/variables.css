@@ -41,7 +41,10 @@
     --clr-black: hsl(75, 100%, 1%);
 
     --clr-grey-800: hsl(75, 4%, 80%);
+    --clr-grey-700: hsl(75, 4%, 70%);
+    --clr-grey-630: hsl(75, 4%, 63%);
     --clr-grey-600: hsl(75, 4%, 60%);
+    --clr-grey-500: hsl(75, 4%, 50%);
     --clr-grey-450: hsl(75, 4%, 45%);
     --clr-grey-220: hsl(75, 4%, 22%);
     --clr-grey-150: hsl(75, 4%, 15%);
@@ -96,8 +99,12 @@
     --color-diagram-root-press: var(--clr-grey-100);
 
     /* TODO: Make darker colors for arcs, and lighter colors for text */
-    --color-group-highlight: var(--clr-grey-800);
-    --color-group-default: var(--clr-grey-600);
-    --color-group-press: var(--clr-grey-450);
+    --color-text-group-default: var(--clr-grey-700);
+    --color-text-group-highlight: var(--clr-grey-800);
+    --color-text-group-press: var(--clr-grey-600);
+
+    --color-diagram-arc-group-default: var(--clr-grey-500);
+    --color-diagram-arc-group-highlight: var(--clr-grey-630);
+    --color-diagram-arc-group-press: var(--clr-grey-450);
   }
 }
