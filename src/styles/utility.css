@@ -1,4 +1,5 @@
 @layer utility {
+  /* Typography */
   .text-highlight {
     color: var(--color-text-highlight);
   }
@@ -24,6 +25,11 @@
     font-weight: var(--font-weight-heading-l);
   }
 
+  .text-center {
+    text-align: center;
+  }
+
+  /* A11y */
   .screen-reader-only {
     clip: rect(0 0 0 0);
     clip-path: inset(50%);
