@@ -46,8 +46,8 @@ export default function ListRow(props: ListRowProps) {
           props.node.path,
           highlightedListPath(),
         ),
-        "--highlighted-color": colors().highlighted,
-        "--pressed-color": colors().pressed,
+        "--highlight-color": colors().highlight,
+        "--press-color": colors().press,
       }}
       onMouseEnter={[setHoverListPath, props.node.path]}
       onMouseLeave={[setHoverListPath, null]}

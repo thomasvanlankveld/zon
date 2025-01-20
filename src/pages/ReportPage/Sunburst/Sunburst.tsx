@@ -328,8 +328,8 @@ export default function Sunburst() {
   // TODO: Move to CSS
   const rootColors: Colors = {
     default: "rgba(255, 255, 255, 0.1)",
-    highlighted: "rgba(255, 255, 255, 0.2)",
-    pressed: "rgba(255, 255, 255, 0.075)",
+    highlight: "rgba(255, 255, 255, 0.2)",
+    press: "rgba(255, 255, 255, 0.075)",
   };
 
   return (
@@ -360,8 +360,8 @@ export default function Sunburst() {
               targetDiagramRoot().path,
               highlightedDiagramPath(),
             ),
-            "--arc-highlighted-color": rootColors.highlighted,
-            "--arc-pressed-color": rootColors.pressed,
+            "--arc-highlight-color": rootColors.highlight,
+            "--arc-press-color": rootColors.press,
           }}
           class={styles.sunburst__arc}
           onMouseEnter={() => setHoverArcPath(targetDiagramRoot().path)}

@@ -15,13 +15,13 @@ export function rainbow(value: number): Colors {
 
   return {
     default: `oklch(${lightness}% ${chroma} ${hue})`,
-    highlighted: `oklch(${lightness + 10}% ${(1 - chromaCorrection) * chroma} ${hue})`,
-    pressed: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
+    highlight: `oklch(${lightness + 10}% ${(1 - chromaCorrection) * chroma} ${hue})`,
+    press: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
   };
 }
 
 /**
- * Get a node's "dynamic" base color. When the node is highlighted (from an outside component), you want to use the
+ * Get a node's "dynamic" base color. When the node is highlight (from an outside component), you want to use the
  * "highlight" color instead of the "default" color as its basis.
  */
 export function getBaseColor(
@@ -31,7 +31,7 @@ export function getBaseColor(
 ): string {
   const isHighlighted = arePathsEqual(highlightedPath, nodePath);
 
-  return isHighlighted ? colors.highlighted : colors.default;
+  return isHighlighted ? colors.highlight : colors.default;
 }
 
 /**
@@ -52,24 +52,24 @@ export function getNodeTextColors(node: Node, reportRootPath: Path): Colors {
 // TODO: Use safer colors in prod mode (bright colors only in dev mode to emphasize mistakes)
 export const NODE_DEFAULT_COLORS: Colors = {
   default: "var(--color-node-default)",
-  highlighted: "var(--color-node-highlighted)",
-  pressed: "var(--color-node-pressed)",
+  highlight: "var(--color-node-highlight)",
+  press: "var(--color-node-press)",
 };
 
 export const TEXT_ROOT_COLORS: Colors = {
   default: "var(--color-text-root-default)",
-  highlighted: "var(--color-text-root-highlighted)",
-  pressed: "var(--color-text-root-pressed)",
+  highlight: "var(--color-text-root-highlight)",
+  press: "var(--color-text-root-press)",
 };
 
 export const GROUP_TEXT_COLORS: Colors = {
   default: "var(--color-group-default)",
-  highlighted: "var(--color-group-highlighted)",
-  pressed: "var(--color-group-pressed)",
+  highlight: "var(--color-group-highlight)",
+  press: "var(--color-group-press)",
 };
 
 export const GROUP_ARC_COLORS: Colors = {
   default: "var(--color-group-default)",
-  highlighted: "var(--color-group-highlighted)",
-  pressed: "var(--color-group-pressed)",
+  highlight: "var(--color-group-highlight)",
+  press: "var(--color-group-press)",
 };

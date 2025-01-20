@@ -6,8 +6,8 @@
   fill: var(--arc-fill-color);
 }
 .sunburst__arc:hover {
-  fill: var(--arc-highlighted-color);
+  fill: var(--arc-highlight-color);
 }
 .sunburst__arc:active {
-  fill: var(--arc-pressed-color);
+  fill: var(--arc-press-color);
 }

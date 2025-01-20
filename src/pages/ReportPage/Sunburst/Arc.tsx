@@ -42,8 +42,8 @@ function Arc(props: ArcProps) {
           props.node.path,
           props.highlightedPath,
         ),
-        "--arc-highlighted-color": colors().highlighted,
-        "--arc-pressed-color": colors().pressed,
+        "--arc-highlight-color": colors().highlight,
+        "--arc-press-color": colors().press,
         opacity: props.node.opacity(),
       }}
       class={styles.sunburst__arc}

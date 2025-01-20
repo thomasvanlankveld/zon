@@ -29,11 +29,11 @@
 }
 
 .report-list__row-wrapper:hover .report-list__row-text {
-  color: var(--highlighted-color);
+  color: var(--highlight-color);
 }
 
 .report-list__button:active .report-list__row-text {
-  color: var(--pressed-color);
+  color: var(--press-color);
 }
 
 .report-list__display-name {
@@ -73,9 +73,9 @@
 }
 
 .report-list__row-wrapper:hover .report-list__item-underline {
-  background-color: var(--highlighted-color);
+  background-color: var(--highlight-color);
 }
 
 .report-list__button:active .report-list__item-underline {
-  background-color: var(--pressed-color);
+  background-color: var(--press-color);
 }

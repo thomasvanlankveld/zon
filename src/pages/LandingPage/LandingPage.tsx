@@ -31,8 +31,8 @@ function ColorTest() {
   return (
     <div style={{ display: "grid", padding: "6rem" }}>
       <ColorSpread getColor={(val) => rainbow(val).default} />
-      <ColorSpread getColor={(val) => rainbow(val).highlighted} />
-      <ColorSpread getColor={(val) => rainbow(val).pressed} />
+      <ColorSpread getColor={(val) => rainbow(val).highlight} />
+      <ColorSpread getColor={(val) => rainbow(val).press} />
     </div>
   );
 }

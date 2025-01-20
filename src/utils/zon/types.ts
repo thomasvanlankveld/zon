@@ -24,8 +24,8 @@ export type Path = SegmentName[];
 
 export type Colors = {
   default: string;
-  highlighted: string;
-  pressed: string;
+  highlight: string;
+  press: string;
 };
 
 type NodeBase = {

@@ -46,8 +46,8 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
               {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
               style={{
                 "--default-color": getColors(node).default,
-                "--highlighted-color": getColors(node).highlighted,
-                "--pressed-color": getColors(node).pressed,
+                "--highlight-color": getColors(node).highlight,
+                "--press-color": getColors(node).press,
               }}
               class={styles["breadcrumbs__breadcrumb-button"]}
               onClick={[navigate, node.targetPath]}

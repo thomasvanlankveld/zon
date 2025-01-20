@@ -4,11 +4,11 @@
 }
 
 .breadcrumbs__breadcrumb-button:hover {
-  color: var(--highlighted-color);
+  color: var(--highlight-color);
 }
 
 .breadcrumbs__breadcrumb-button:active {
-  color: var(--pressed-color);
+  color: var(--press-color);
 }
 
 .breadcrumbs__breadcrumb-separator {
