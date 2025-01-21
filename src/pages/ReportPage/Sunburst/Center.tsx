@@ -2,7 +2,7 @@ import { createMemo, Show } from "solid-js";
 import { DIAGRAM_ROOT_COLORS, getBaseColor } from "../../../utils/zon/color";
 import { arePathsEqual, getParentPath } from "../../../utils/zon";
 import { useReportStore } from "../ReportPage.store";
-import styles from "./Arc.module.css";
+import styles from "./Sunburst.module.css";
 
 type CenterProps = {
   radius: number;
