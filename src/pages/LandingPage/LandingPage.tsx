@@ -1,46 +1,19 @@
-import { createSignal, For, type Setter, Show } from "solid-js";
+import { createSignal, type Setter, Show } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
+import ROUTES from "../../routes";
 import UploadButton from "../../components/UploadButton/UploadButton";
 import CountingLines from "../../components/CountingLines";
 import { useI18n } from "../../utils/i18n";
-import { rainbow } from "../../utils/zon/color";
 import logAsyncErrors from "../../utils/async/logErrors";
 import { createTree, LINE_TYPE, type Node } from "../../utils/zon";
 import type { Languages } from "../../utils/tokei";
-import ROUTES from "../../routes";
+import ColorTest from "./ColorTest";
 
 type LandingPageProps = {
   setRoot: Setter<Node | null>;
 };
-
-function ColorSpread(props: { getColor: (val: number) => string }) {
-  const colors = () =>
-    Array.from({ length: 1001 })
-      .fill(null)
-      .map((_, index) => props.getColor(Number((0.001 * index).toFixed(3))));
-
-  return (
-    <svg width="1000" height="100">
-      <For each={colors()}>
-        {(color, index) => (
-          <rect x={index()} y={0} width={1} height={100} fill={color} />
-        )}
-      </For>
-    </svg>
-  );
-}
-
-function ColorTest() {
-  return (
-    <div style={{ display: "grid", padding: "6rem" }}>
-      <ColorSpread getColor={(val) => rainbow(val).default} />
-      <ColorSpread getColor={(val) => rainbow(val).highlight} />
-      <ColorSpread getColor={(val) => rainbow(val).press} />
-    </div>
-  );
-}
 
 export default function LandingPage(props: LandingPageProps) {
   const navigate = useNavigate();
