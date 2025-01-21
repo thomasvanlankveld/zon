@@ -4,10 +4,12 @@
   stroke-width: var(--spacing-4xs);
   fill-rule: evenodd;
   fill: var(--arc-base-color);
-}
-.sunburst__arc:hover {
-  fill: var(--arc-highlight-color);
-}
-.sunburst__arc:active {
-  fill: var(--arc-press-color);
+
+  &:hover {
+    fill: var(--arc-highlight-color);
+  }
+
+  &:active {
+    fill: var(--arc-press-color);
+  }
 }
