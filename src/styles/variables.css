@@ -108,7 +108,6 @@
     --color-diagram-root-highlight: var(--clr-grey-220);
     --color-diagram-root-press: var(--clr-grey-100);
 
-    /* TODO: Make darker colors for arcs, and lighter colors for text */
     --color-text-group-default: var(--clr-grey-700);
     --color-text-group-highlight: var(--clr-grey-800);
     --color-text-group-press: var(--clr-grey-600);
