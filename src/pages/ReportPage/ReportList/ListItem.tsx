@@ -1,5 +1,5 @@
 import { isFolder, isGroup, type Node } from "../../../utils/zon";
-import { useReportStore } from "../ReportPage.store";
+import { useReportState } from "../ReportPage.state";
 import ListRow from "./ListRow";
 import { ARROW } from "./DisplayName";
 
@@ -9,7 +9,7 @@ type ListItemProps = {
 };
 
 export default function ListItem(props: ListItemProps) {
-  const { navigate, expandGroup } = useReportStore();
+  const { navigate, expandGroup } = useReportState();
 
   function nameHoverBeforeContent() {
     return isFolder(props.node) ? ARROW.BEFORE.RIGHT : ARROW.EMPTY;

@@ -19,9 +19,9 @@ import {
 const DEFAULT_MAX_CHILDREN = 16;
 
 /**
- * This technically not a Solid.js "store", but it does hold state
+ * Holds the report page's shared state
  */
-function createReportStore(initialReportRoot: Node) {
+function createReportState(initialReportRoot: Node) {
   const [reportRootWithoutGroups, setReportRoot] =
     createSignal(initialReportRoot);
 
@@ -122,32 +122,32 @@ function createReportStore(initialReportRoot: Node) {
   };
 }
 
-const ReportStoreContext = createContext();
+const ReportStateContext = createContext();
 
-type ReportStoreProviderProps = {
+type ReportStateProviderProps = {
   reportRoot: Node;
   children: JSX.Element;
 };
 
-export function ReportStoreProvider(props: ReportStoreProviderProps) {
+export function ReportStoreProvider(props: ReportStateProviderProps) {
   // Ignoring lint warning. By instantiating here we guarantee that report root is always defined, and the
-  // createEffect callback makes sure it's reactive
+  // `createEffect` callback makes sure it's reactive.
   // eslint-disable-next-line solid/reactivity
-  const reportStore = createReportStore(props.reportRoot);
+  const reportState = createReportState(props.reportRoot);
 
   createEffect(() => {
-    reportStore.setReportRoot(props.reportRoot);
+    reportState.setReportRoot(props.reportRoot);
   });
 
   return (
-    <ReportStoreContext.Provider value={reportStore}>
+    <ReportStateContext.Provider value={reportState}>
       {props.children}
-    </ReportStoreContext.Provider>
+    </ReportStateContext.Provider>
   );
 }
 
-type ReportStore = ReturnType<typeof createReportStore>;
+type ReportState = ReturnType<typeof createReportState>;
 
-export function useReportStore(): ReportStore {
-  return useContext(ReportStoreContext) as ReportStore;
+export function useReportState(): ReportState {
+  return useContext(ReportStateContext) as ReportState;
 }

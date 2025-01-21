@@ -5,7 +5,7 @@ import styles from "./Sunburst.module.css";
 import { getNodeArcColors } from "../../../utils/zon/color.ts";
 import { createMemo } from "solid-js";
 import { arePathsEqual, getParentPath } from "../../../utils/zon/path.ts";
-import { useReportStore } from "../ReportPage.store.tsx";
+import { useReportState } from "../ReportPage.state.tsx";
 
 type ArcProps = {
   node: SunburstNode;
@@ -15,7 +15,7 @@ type ArcProps = {
 
 function Arc(props: ArcProps) {
   const { navigate, diagramRoot, setHoverArcPath, expandGroup } =
-    useReportStore();
+    useReportState();
 
   /**
    * Determines the SVG path data for a node's arc

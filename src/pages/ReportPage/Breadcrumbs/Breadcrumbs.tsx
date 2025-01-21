@@ -9,7 +9,7 @@ import {
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import styles from "./Breadcrumbs.module.css";
-import { useReportStore } from "../ReportPage.store";
+import { useReportState } from "../ReportPage.state";
 import { getNodeTextColors } from "../../../utils/zon/color";
 
 type BreadcrumbsProps = {
@@ -19,7 +19,7 @@ type BreadcrumbsProps = {
 export default function Breadcrumbs(props: BreadcrumbsProps) {
   const { t } = useI18n();
   const { reportRoot, breadcrumbPath, highlightedBreadcrumbPath, navigate } =
-    useReportStore();
+    useReportState();
 
   function getTargetPath(node: Node): Path | null {
     const isReportRoot = arePathsEqual(node.path, reportRoot().path);

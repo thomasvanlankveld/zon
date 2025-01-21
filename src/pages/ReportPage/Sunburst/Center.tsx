@@ -1,7 +1,7 @@
 import { createMemo, Show } from "solid-js";
 import { DIAGRAM_ROOT_COLORS, getBaseColor } from "../../../utils/zon/color";
 import { arePathsEqual, getParentPath } from "../../../utils/zon";
-import { useReportStore } from "../ReportPage.store";
+import { useReportState } from "../ReportPage.state";
 import styles from "./Sunburst.module.css";
 
 type CenterProps = {
@@ -15,7 +15,7 @@ export default function Center(props: CenterProps) {
     diagramRoot,
     highlightedDiagramPath,
     setHoverArcPath,
-  } = useReportStore();
+  } = useReportState();
 
   const isReportRoot = createMemo(() =>
     arePathsEqual(diagramRoot().path, reportRoot().path),

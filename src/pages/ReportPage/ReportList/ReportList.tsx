@@ -4,11 +4,11 @@ import { useI18n } from "../../../utils/i18n";
 import ListItem from "./ListItem";
 import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
-import { useReportStore } from "../ReportPage.store";
+import { useReportState } from "../ReportPage.state";
 
 export default function ReportList() {
   const { t } = useI18n();
-  const { listRoot } = useReportStore();
+  const { listRoot } = useReportState();
 
   const listNodes = () => {
     const root = listRoot();

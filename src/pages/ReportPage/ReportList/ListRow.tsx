@@ -7,7 +7,7 @@ import NumberOfLines from "./NumberOfLines";
 import styles from "./ReportList.module.css";
 import Underline from "./Underline";
 import { getNodeTextColors } from "../../../utils/zon/color";
-import { useReportStore } from "../ReportPage.store";
+import { useReportState } from "../ReportPage.state";
 
 type ListRowProps = {
   node: Node;
@@ -22,7 +22,7 @@ type ListRowProps = {
 
 export default function ListRow(props: ListRowProps) {
   const { reportRoot, highlightedListPath, setHoverListPath } =
-    useReportStore();
+    useReportState();
 
   function isButton() {
     return props.onClick != null;

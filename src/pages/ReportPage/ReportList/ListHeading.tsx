@@ -5,7 +5,7 @@ import {
   isGroup,
 } from "../../../utils/zon";
 import styles from "./ReportList.module.css";
-import { useReportStore } from "../ReportPage.store";
+import { useReportState } from "../ReportPage.state";
 import ListRow from "./ListRow";
 import { ARROW } from "./DisplayName";
 
@@ -18,7 +18,7 @@ export default function ListHeading() {
     listRootPath,
     highlightedListPath,
     isListRootReportRoot,
-  } = useReportStore();
+  } = useReportState();
 
   function numberOfLinesInRoot() {
     const root = isGroup(listRoot())

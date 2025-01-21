@@ -15,7 +15,7 @@ import {
 import createElementSize from "../../../primitives/createElementSize.ts";
 import { Dimensions, SunburstNode, DimensionKey } from "./types.ts";
 import Arc from "./Arc.tsx";
-import { useReportStore } from "../ReportPage.store.tsx";
+import { useReportState } from "../ReportPage.state.tsx";
 import Center from "./Center.tsx";
 
 function clamp(value: number, min: number, max: number) {
@@ -35,7 +35,7 @@ function getAnimationTarget(value: number, target: number, dt: number) {
 
 export default function Sunburst() {
   const { diagramRoot: targetDiagramRoot, highlightedDiagramPath } =
-    useReportStore();
+    useReportState();
 
   const [svg, setSvg] = createSignal<SVGSVGElement>();
   const { width, height } = createElementSize(svg);
