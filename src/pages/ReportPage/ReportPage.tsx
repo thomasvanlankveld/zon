@@ -1,6 +1,5 @@
 import { type Node } from "../../utils/zon";
 import { useI18n } from "../../utils/i18n.tsx";
-import UploadButton from "../../components/UploadButton/UploadButton.tsx";
 import Sunburst from "./Sunburst/Sunburst.tsx";
 import ReportList from "./ReportList/ReportList.tsx";
 import Breadcrumbs from "./Breadcrumbs/Breadcrumbs.tsx";
@@ -9,7 +8,6 @@ import { ReportStoreProvider } from "./ReportPage.state.tsx";
 
 type ReportPageProps = {
   root: Node;
-  countLinesInFolder: () => void;
 };
 
 export default function ReportPage(props: ReportPageProps) {
@@ -20,7 +18,6 @@ export default function ReportPage(props: ReportPageProps) {
       <main class={styles["report-page"]}>
         <div class={styles["report-page__header"]}>
           <h1 class="heading-l">{t("app.title")}</h1>
-          <UploadButton countLinesInFolder={props.countLinesInFolder} />
         </div>
         <Breadcrumbs class={styles["report-page__breadcrumbs"]} />
         <Sunburst />

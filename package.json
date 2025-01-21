@@ -21,6 +21,7 @@
     "lint-staged": "deno run --allow-env --allow-read --allow-run=git,deno --allow-write=.git npm:lint-staged"
   },
   "dependencies": {
+    "@solidjs/router": "^0.15.3",
     "@tauri-apps/plugin-dialog": "~2.0.1",
     "solid-js": "^1.7.8",
     "@tauri-apps/api": "^2",
