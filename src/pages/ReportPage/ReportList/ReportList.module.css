@@ -1,7 +1,3 @@
-.report-list__list {
-  display: grid;
-}
-
 .report-list__heading {
   margin-bottom: var(--line-height-regular);
 }
@@ -11,45 +7,6 @@
   justify-content: space-between;
   column-gap: var(--spacing-l);
   color: var(--base-color);
-}
-
-.report-list__row-wrapper:not(:first-of-type) {
-  padding-top: var(--spacing-3xs);
-}
-
-.report-list__row-wrapper:not(:last-of-type) {
-  padding-bottom: var(--spacing-3xs);
-}
-
-.report-list__button {
-  cursor: pointer;
-}
-
-.report-list__row-wrapper:hover .report-list__row-text {
-  flex-wrap: wrap;
-  color: var(--highlight-color);
-}
-
-.report-list__row-wrapper:hover .report-list__display-name {
-  text-align: start;
-  white-space: wrap;
-  text-overflow: inherit;
-}
-
-.report-list__button:active .report-list__row-text {
-  color: var(--press-color);
-}
-
-.report-list__display-name::before {
-  content: var(--before-content);
-}
-
-.report-list__button:hover .report-list__display-name::before {
-  content: var(--hover-before-content);
-}
-
-.report-list__button:hover .report-list__display-name::after {
-  content: var(--hover-after-content);
 }
 
 .report-list__folder-separator {
@@ -66,14 +23,65 @@
   opacity: 0.4;
 }
 
-.report-list__list:hover .report-list__item-underline {
-  opacity: 1;
+.report-list__display-name::before {
+  content: var(--before-content);
 }
 
-.report-list__row-wrapper:hover .report-list__item-underline {
-  background-color: var(--highlight-color);
+.report-list__list {
+  display: grid;
+
+  &:hover .report-list__item-underline {
+    opacity: 1;
+  }
 }
 
-.report-list__button:active .report-list__item-underline {
-  background-color: var(--press-color);
+.report-list__row-wrapper {
+  &:not(:first-of-type) {
+    padding-top: var(--spacing-3xs);
+  }
+
+  &:not(:last-of-type) {
+    padding-bottom: var(--spacing-3xs);
+  }
+
+  &:hover {
+    .report-list__row-text {
+      flex-wrap: wrap;
+      color: var(--highlight-color);
+    }
+
+    .report-list__display-name {
+      text-align: start;
+      white-space: wrap;
+      text-overflow: inherit;
+    }
+
+    .report-list__item-underline {
+      background-color: var(--highlight-color);
+    }
+  }
+}
+
+.report-list__button {
+  cursor: pointer;
+
+  &:active {
+    .report-list__row-text {
+      color: var(--press-color);
+    }
+
+    .report-list__item-underline {
+      background-color: var(--press-color);
+    }
+  }
+
+  &:hover {
+    .report-list__display-name::before {
+      content: var(--hover-before-content);
+    }
+
+    .report-list__display-name::after {
+      content: var(--hover-after-content);
+    }
+  }
 }
