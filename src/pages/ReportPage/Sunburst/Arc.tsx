@@ -43,9 +43,15 @@ function Arc(props: ArcProps) {
       isFileArc || isGroupArc
         ? getParentPath(props.node.path)
         : props.node.path;
+    const targetIsDiagramRoot = arePathsEqual(
+      arcClickTarget,
+      diagramRoot().path,
+    );
 
-    if (isGroupArc && arePathsEqual(arcClickTarget, diagramRoot().path)) {
+    if (isGroupArc && targetIsDiagramRoot) {
       expandGroup();
+    } else if (targetIsDiagramRoot) {
+      return;
     } else {
       navigate(arcClickTarget);
     }
