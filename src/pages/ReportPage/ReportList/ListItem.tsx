@@ -1,7 +1,7 @@
 import { isFolder, isGroup, type Node } from "../../../utils/zon";
 import { useReportState } from "../ReportPage.state";
 import ListRow from "./ListRow";
-import { ARROW } from "./DisplayName";
+import { ARROW } from "../../../styles/arrow";
 
 type ListItemProps = {
   node: Node;

@@ -4,20 +4,6 @@ import styles from "./ReportList.module.css";
 import { getDisplayName, isFolder, type Node } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 
-// Non-breaking space
-const NBSP = "\\00a0";
-
-export const ARROW = {
-  BEFORE: {
-    LEFT: `"<-${NBSP}"`,
-    RIGHT: `"->${NBSP}"`,
-  },
-  AFTER: {
-    DOWN: `"${NBSP}↓"`,
-  },
-  EMPTY: "",
-};
-
 type DisplayNameProps = {
   style?: JSX.CSSProperties;
   node: Node;

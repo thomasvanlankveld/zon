@@ -115,5 +115,10 @@
     --color-diagram-arc-group-default: var(--clr-grey-500);
     --color-diagram-arc-group-highlight: var(--clr-grey-630);
     --color-diagram-arc-group-press: var(--clr-grey-450);
+
+    /* Content */
+    --content-arrow-before-left: "<-\00a0";
+    --content-arrow-before-right: "->\00a0";
+    --content-arrow-after-down: "\00a0↓";
   }
 }

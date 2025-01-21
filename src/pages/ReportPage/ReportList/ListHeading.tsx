@@ -7,7 +7,7 @@ import {
 import styles from "./ReportList.module.css";
 import { useReportState } from "../ReportPage.state";
 import ListRow from "./ListRow";
-import { ARROW } from "./DisplayName";
+import { ARROW } from "../../../styles/arrow";
 
 export default function ListHeading() {
   const {
@@ -33,7 +33,7 @@ export default function ListHeading() {
       isListRootReportRoot() ||
       !arePathsEqual(listRoot().path, highlightedListPath())
     ) {
-      return "";
+      return ARROW.EMPTY;
     }
 
     if (arePathsEqual(listRoot().path, diagramRootPath())) {

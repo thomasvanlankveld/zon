@@ -20,7 +20,7 @@
 .report-page__header-title {
   &:hover {
     &::before {
-      content: "<-\00a0";
+      content: var(--content-arrow-before-left);
     }
   }
 }
