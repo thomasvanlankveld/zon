@@ -5,21 +5,18 @@ import {
   createSignal,
   For,
   onMount,
-  Show,
 } from "solid-js";
 import {
   type Node,
   getDescendants,
-  getParentPath,
   getPathString,
   arePathsEqual,
 } from "../../../utils/zon/index.ts";
 import createElementSize from "../../../primitives/createElementSize.ts";
-import styles from "./Arc.module.css";
 import { Dimensions, SunburstNode, DimensionKey } from "./types.ts";
 import Arc from "./Arc.tsx";
-import { DIAGRAM_ROOT_COLORS, getBaseColor } from "../../../utils/zon/color.ts";
 import { useReportStore } from "../ReportPage.store.tsx";
+import Center from "./Center.tsx";
 
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(value, max));
@@ -37,13 +34,8 @@ function getAnimationTarget(value: number, target: number, dt: number) {
 }
 
 export default function Sunburst() {
-  const {
-    reportRoot,
-    navigate,
-    diagramRoot: targetDiagramRoot,
-    highlightedDiagramPath,
-    setHoverArcPath,
-  } = useReportStore();
+  const { diagramRoot: targetDiagramRoot, highlightedDiagramPath } =
+    useReportStore();
 
   const [svg, setSvg] = createSignal<SVGSVGElement>();
   const { width, height } = createElementSize(svg);
@@ -57,10 +49,6 @@ export default function Sunburst() {
   onMount(() => {
     setActualDiagramRoot(targetDiagramRoot());
   });
-
-  const isReportRoot = createMemo(() =>
-    arePathsEqual(targetDiagramRoot().path, reportRoot().path),
-  );
 
   const numberOfFullLayers = 3;
   const numberOfNarrowLayers = 5;
@@ -307,24 +295,6 @@ export default function Sunburst() {
     });
   }
 
-  const rootColors = createMemo(() => {
-    if (isReportRoot()) {
-      return { base: "", highlight: "", press: "" };
-    }
-
-    const staticColors = DIAGRAM_ROOT_COLORS;
-
-    return {
-      base: getBaseColor(
-        staticColors,
-        targetDiagramRoot().path,
-        highlightedDiagramPath(),
-      ),
-      highlight: staticColors.highlight,
-      press: staticColors.press,
-    };
-  });
-
   return (
     <svg
       ref={setSvg}
@@ -339,22 +309,7 @@ export default function Sunburst() {
           />
         )}
       </For>
-      <Show when={!isReportRoot()}>
-        <circle
-          cx={0}
-          cy={0}
-          r={(1 / targetMaxDistance()) * maxRadius()}
-          style={{
-            "--arc-base-color": rootColors().base,
-            "--arc-highlight-color": rootColors().highlight,
-            "--arc-press-color": rootColors().press,
-          }}
-          class={styles.sunburst__arc}
-          onMouseEnter={() => setHoverArcPath(targetDiagramRoot().path)}
-          onMouseLeave={() => setHoverArcPath(null)}
-          onClick={() => navigate(getParentPath(targetDiagramRoot().path))}
-        />
-      </Show>
+      <Center radius={(1 / targetMaxDistance()) * maxRadius()} />
     </svg>
   );
 }
