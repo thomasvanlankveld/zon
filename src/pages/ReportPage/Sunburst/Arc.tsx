@@ -51,6 +51,7 @@ function Arc(props: ArcProps) {
     if (isGroupArc && targetIsDiagramRoot) {
       expandGroup();
     } else if (targetIsDiagramRoot) {
+      // If we allow navigating to the diagram root, clicking file arcs will cause the group to collapse
       return;
     } else {
       navigate(arcClickTarget);
