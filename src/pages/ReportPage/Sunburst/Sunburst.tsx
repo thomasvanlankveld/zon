@@ -13,8 +13,6 @@ import {
   getParentPath,
   getPathString,
   arePathsEqual,
-  isFile,
-  isGroup,
 } from "../../../utils/zon/index.ts";
 import createElementSize from "../../../primitives/createElementSize.ts";
 import styles from "./Arc.module.css";
@@ -45,7 +43,6 @@ export default function Sunburst() {
     diagramRoot: targetDiagramRoot,
     highlightedDiagramPath,
     setHoverArcPath,
-    expandGroup,
   } = useReportStore();
 
   const [svg, setSvg] = createSignal<SVGSVGElement>();
@@ -310,20 +307,6 @@ export default function Sunburst() {
     });
   }
 
-  function onArcClick(node: Node) {
-    const isFileArc = isFile(node);
-    const isGroupArc = isGroup(node);
-
-    const arcClickTarget =
-      isFileArc || isGroupArc ? getParentPath(node.path) : node.path;
-
-    if (isGroupArc && arePathsEqual(arcClickTarget, targetDiagramRoot().path)) {
-      expandGroup();
-    } else {
-      navigate(arcClickTarget);
-    }
-  }
-
   const rootColors = createMemo(() => {
     if (isReportRoot()) {
       return { base: "", highlight: "", press: "" };
@@ -353,9 +336,6 @@ export default function Sunburst() {
             node={node}
             maxRadius={maxRadius()}
             highlightedPath={highlightedDiagramPath()}
-            onMouseEnter={() => setHoverArcPath(node.path)}
-            onMouseLeave={() => setHoverArcPath(null)}
-            onClick={() => onArcClick(node)}
           />
         )}
       </For>

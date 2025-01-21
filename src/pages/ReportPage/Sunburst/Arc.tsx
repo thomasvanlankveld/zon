@@ -1,21 +1,22 @@
-import { JSX } from "solid-js/h/jsx-runtime";
 import { getArcD } from "../../../utils/svg.ts";
 import { SunburstNode } from "./types.ts";
-import { Path } from "../../../utils/zon/types.ts";
+import { isFile, isGroup, Path } from "../../../utils/zon/types.ts";
 import styles from "./Arc.module.css";
 import { getNodeArcColors } from "../../../utils/zon/color.ts";
 import { createMemo } from "solid-js";
+import { arePathsEqual, getParentPath } from "../../../utils/zon/path.ts";
+import { useReportStore } from "../ReportPage.store.tsx";
 
 type ArcProps = {
   node: SunburstNode;
   maxRadius: number;
   highlightedPath: Path | null;
-  onMouseEnter?: JSX.EventHandler<SVGPathElement, MouseEvent>;
-  onMouseLeave?: JSX.EventHandler<SVGPathElement, MouseEvent>;
-  onClick?: JSX.EventHandler<SVGPathElement, MouseEvent>;
 };
 
 function Arc(props: ArcProps) {
+  const { navigate, diagramRoot, setHoverArcPath, expandGroup } =
+    useReportStore();
+
   /**
    * Determines the SVG path data for a node's arc
    */
@@ -34,6 +35,22 @@ function Arc(props: ArcProps) {
     getNodeArcColors(props.node, props.highlightedPath),
   );
 
+  function onArcClick() {
+    const isFileArc = isFile(props.node);
+    const isGroupArc = isGroup(props.node);
+
+    const arcClickTarget =
+      isFileArc || isGroupArc
+        ? getParentPath(props.node.path)
+        : props.node.path;
+
+    if (isGroupArc && arePathsEqual(arcClickTarget, diagramRoot().path)) {
+      expandGroup();
+    } else {
+      navigate(arcClickTarget);
+    }
+  }
+
   return (
     <path
       d={getNodeArcD()}
@@ -44,9 +61,9 @@ function Arc(props: ArcProps) {
         opacity: props.node.opacity(),
       }}
       class={styles.sunburst__arc}
-      onMouseEnter={(e) => props.onMouseEnter?.(e)}
-      onMouseLeave={(e) => props.onMouseLeave?.(e)}
-      onClick={(e) => props.onClick?.(e)}
+      onMouseEnter={() => setHoverArcPath(props.node.path)}
+      onMouseLeave={() => setHoverArcPath(null)}
+      onClick={onArcClick}
     />
   );
 }
