@@ -1,14 +1,14 @@
 .breadcrumbs__breadcrumb-button {
   cursor: pointer;
   color: var(--base-color);
-}
 
-.breadcrumbs__breadcrumb-button:hover {
-  color: var(--highlight-color);
-}
+  &:hover {
+    color: var(--highlight-color);
+  }
 
-.breadcrumbs__breadcrumb-button:active {
-  color: var(--press-color);
+  &:active {
+    color: var(--press-color);
+  }
 }
 
 .breadcrumbs__breadcrumb-separator {
