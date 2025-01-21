@@ -1,3 +1,5 @@
+import { A } from "@solidjs/router";
+import ROUTES from "../../routes.ts";
 import { type Node } from "../../utils/zon";
 import { useI18n } from "../../utils/i18n.tsx";
 import Sunburst from "./Sunburst/Sunburst.tsx";
@@ -17,7 +19,11 @@ export default function ReportPage(props: ReportPageProps) {
     <ReportStoreProvider reportRoot={props.root}>
       <main class={styles["report-page"]}>
         <div class={styles["report-page__header"]}>
-          <h1 class="heading-l">{t("app.title")}</h1>
+          <h1 class="heading-l">
+            <A class={styles["report-page__header-title"]} href={ROUTES.HOME}>
+              {t("app.title")}
+            </A>
+          </h1>
         </div>
         <Breadcrumbs class={styles["report-page__breadcrumbs"]} />
         <Sunburst />

@@ -17,6 +17,14 @@
   justify-content: space-between;
 }
 
+.report-page__header-title {
+  &:hover {
+    &::before {
+      content: "<-\00a0";
+    }
+  }
+}
+
 .report-page__breadcrumbs {
   grid-column: span 2;
   min-height: calc(2 * var(--line-height-regular));
