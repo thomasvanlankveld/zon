@@ -49,6 +49,10 @@
     --clr-grey-220: hsl(75, 4%, 22%);
     --clr-grey-150: hsl(75, 4%, 15%);
     --clr-grey-100: hsl(75, 4%, 10%);
+
+    --clr-blue-700: hsl(221, 67%, 70%);
+    --clr-blue-500: hsl(221, 67%, 54%);
+    --clr-blue-400: hsl(221, 67%, 40%);
   }
 
   /* Semantic properties */
@@ -84,6 +88,12 @@
 
     /* Colors */
     --color-text-highlight: var(--clr-white);
+    --color-text-regular: var(--clr-grey-800);
+
+    --color-text-link: var(----clr-grey-800);
+    --color-text-link-hover: var(--clr-white);
+    --color-text-link-active: var(--clr-grey-700);
+
     --color-background: var(--clr-black);
 
     --color-node-default: red;

@@ -10,7 +10,7 @@
 }
 
 .report-list__folder-separator {
-  color: var(--color-text-highlight);
+  color: var(--color-text-regular);
 }
 
 .report-list__number-of-lines {

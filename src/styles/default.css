@@ -11,7 +11,7 @@
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
 
-    color: var(--color-text-highlight);
+    color: var(--color-text-regular);
     background-color: var(--color-background);
   }
 
@@ -48,5 +48,19 @@
   a,
   a * {
     cursor: pointer;
+  }
+
+  a {
+    color: var(--color-text-link);
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--color-text-link-hover);
+    }
+
+    &:active {
+      color: var(--color-text-link-active);
+    }
   }
 }

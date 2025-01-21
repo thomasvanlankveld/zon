@@ -10,7 +10,3 @@
     color: var(--press-color);
   }
 }
-
-.breadcrumbs__breadcrumb-separator {
-  color: var(--color-text-highlight);
-}
