@@ -114,4 +114,8 @@
     -webkit-appearance: button;
     appearance: button;
   }
+
+  a {
+    text-decoration: inherit;
+  }
 }
