@@ -1,5 +1,5 @@
 import { For } from "solid-js";
-import { rainbow } from "../../utils/zon/color";
+import { rainbow } from "../../utils/zon";
 
 function ColorSpread(props: { getColor: (val: number) => string }) {
   const colors = () =>

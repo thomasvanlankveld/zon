@@ -1,11 +1,16 @@
-import { getArcD } from "../../../utils/svg.ts";
-import { SunburstNode } from "./types.ts";
-import { isFile, isGroup, Path } from "../../../utils/zon/types.ts";
-import styles from "./Sunburst.module.css";
-import { getNodeArcColors } from "../../../utils/zon/color.ts";
 import { createMemo } from "solid-js";
-import { arePathsEqual, getParentPath } from "../../../utils/zon/path.ts";
+import { getArcD } from "../../../utils/svg.ts";
+import {
+  arePathsEqual,
+  getNodeArcColors,
+  getParentPath,
+  isFile,
+  isGroup,
+  Path,
+} from "../../../utils/zon";
 import { useReportState } from "../ReportPage.state.tsx";
+import { SunburstNode } from "./types.ts";
+import styles from "./Sunburst.module.css";
 
 type ArcProps = {
   node: SunburstNode;

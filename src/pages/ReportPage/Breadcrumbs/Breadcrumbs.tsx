@@ -6,11 +6,11 @@ import {
   getDisplayName,
   arePathsEqual,
   isFolder,
+  getNodeTextColors,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import styles from "./Breadcrumbs.module.css";
 import { useReportState } from "../ReportPage.state";
-import { getNodeTextColors } from "../../../utils/zon/color";
 
 type BreadcrumbsProps = {
   class?: string;

@@ -1,8 +1,7 @@
 import { createMemo, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { JSX } from "solid-js/h/jsx-runtime";
-import { Node } from "../../../utils/zon";
-import { getNodeTextColors } from "../../../utils/zon/color";
+import { getNodeTextColors, Node } from "../../../utils/zon";
 import NumberOfLines from "../../../components/NumberOfLines";
 import DisplayName from "./DisplayName";
 import styles from "./ReportList.module.css";

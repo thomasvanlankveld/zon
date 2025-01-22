@@ -1,6 +1,10 @@
 import { createMemo, Show } from "solid-js";
-import { DIAGRAM_ROOT_COLORS, getBaseColor } from "../../../utils/zon/color";
-import { arePathsEqual, getParentPath } from "../../../utils/zon";
+import {
+  arePathsEqual,
+  DIAGRAM_ROOT_COLORS,
+  getBaseColor,
+  getParentPath,
+} from "../../../utils/zon";
 import { useReportState } from "../ReportPage.state";
 import styles from "./Sunburst.module.css";
 
