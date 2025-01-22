@@ -1,18 +1,17 @@
-import { createSignal, type Setter, Show } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
-import ROUTES from "../../routes";
+import Routes from "../../routes";
 import UploadButton from "../../components/UploadButton/UploadButton";
 import CountingLines from "../../components/CountingLines";
 import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
 import { createTree, LINE_TYPE, type Node } from "../../utils/zon";
 import type { Languages } from "../../utils/tokei";
-// import ColorTest from "./ColorTest";
 
 type LandingPageProps = {
-  setRoot: Setter<Node | null>;
+  addReport: (path: string, root: Node) => void;
 };
 
 export default function LandingPage(props: LandingPageProps) {
@@ -20,20 +19,19 @@ export default function LandingPage(props: LandingPageProps) {
   const { t } = useI18n();
 
   const [isLoading, setIsLoading] = createSignal(false);
-  const [path, setPath] = createSignal("");
+  const [selectedPath, setSelectedPath] = createSignal("");
 
   async function countLinesInFolder() {
-    const projectPath = await open({
+    const path = await open({
       multiple: false,
       directory: true,
     });
 
-    if (projectPath == null) {
+    if (path == null) {
       return;
     }
 
-    props.setRoot(null);
-    setPath(projectPath);
+    setSelectedPath(path);
     setIsLoading(true);
 
     // Maybe adopt createResource for this?
@@ -42,16 +40,16 @@ export default function LandingPage(props: LandingPageProps) {
     // https://www.solidjs.com/tutorial/async_suspense (Using `<Show>` is also fine for client-only projects)
     // https://www.solidjs.com/tutorial/async_transitions
     // https://docs.solidjs.com/reference/reactive-utilities/use-transition
-    const languages = await invoke("count_lines", { path: projectPath });
-    const projectRoot = createTree(projectPath, languages as Languages, [
+    const languages = await invoke("count_lines", { path: path });
+    const reportRoot = createTree(path, languages as Languages, [
       LINE_TYPE.BLANKS,
       LINE_TYPE.CODE,
       LINE_TYPE.COMMENTS,
     ]);
 
-    props.setRoot(projectRoot);
+    props.addReport(path, reportRoot);
     setIsLoading(false);
-    navigate(ROUTES.REPORT);
+    navigate(Routes.Report.getLocation(path));
   }
 
   return (
@@ -61,7 +59,7 @@ export default function LandingPage(props: LandingPageProps) {
       {/* <ColorTest /> */}
       <UploadButton countLinesInFolder={logAsyncErrors(countLinesInFolder)} />
       <Show when={isLoading()}>
-        <CountingLines path={path()} />
+        <CountingLines path={selectedPath()} />
       </Show>
     </main>
   );

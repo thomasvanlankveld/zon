@@ -1,33 +1,42 @@
-import { createSignal } from "solid-js";
-import { Route, MemoryRouter } from "@solidjs/router";
+import { Route, MemoryRouter, useSearchParams } from "@solidjs/router";
+import { createStore } from "solid-js/store";
 import "./styles/setup.css";
 import type { Node } from "./utils/zon";
 
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
 import { I18nProvider } from "./utils/i18n.tsx";
-import ROUTES from "./routes.ts";
+import Routes from "./routes.ts";
 
 function App() {
-  const [root, setRoot] = createSignal<Node | null>(null);
+  const [reports, setReports] = createStore<Record<string, Node>>({});
+
+  function addReport(path: string, root: Node) {
+    setReports(path, root);
+  }
 
   return (
     <I18nProvider>
       <MemoryRouter>
         <Route
-          path={ROUTES.HOME}
-          component={() => <HomePage setRoot={setRoot} />}
+          path={Routes.Home.Matcher}
+          component={() => <HomePage addReport={addReport} />}
         />
         <Route
-          path={ROUTES.REPORT}
+          path={Routes.Report.Matcher}
           component={() => {
-            const rootVal = root();
+            const [searchParams] = useSearchParams();
+            const rootPath = searchParams.rootPath;
 
-            if (rootVal == null) {
-              throw new Error("Can't render report page, root is not defined");
+            if (typeof rootPath !== "string") {
+              throw new Error(
+                `Can't display report for root path ${rootPath?.toString()}`,
+              );
             }
 
-            return <ReportPage root={rootVal} />;
+            const reportRoot = reports[rootPath];
+
+            return <ReportPage root={reportRoot} />;
           }}
         />
       </MemoryRouter>
