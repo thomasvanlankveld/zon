@@ -13,10 +13,6 @@
   color: var(--color-text-regular);
 }
 
-.report-list__number-of-lines {
-  margin-left: auto;
-}
-
 .report-list__item-underline {
   background-color: var(--base-color);
   height: var(--spacing-4xs);

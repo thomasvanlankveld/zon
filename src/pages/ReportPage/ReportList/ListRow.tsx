@@ -2,11 +2,11 @@ import { createMemo, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { JSX } from "solid-js/h/jsx-runtime";
 import { Node } from "../../../utils/zon";
+import { getNodeTextColors } from "../../../utils/zon/color";
+import NumberOfLines from "../../../components/NumberOfLines";
 import DisplayName from "./DisplayName";
-import NumberOfLines from "./NumberOfLines";
 import styles from "./ReportList.module.css";
 import Underline from "./Underline";
-import { getNodeTextColors } from "../../../utils/zon/color";
 import { useReportState } from "../ReportPage.state";
 
 type ListRowProps = {
@@ -62,7 +62,10 @@ export default function ListRow(props: ListRowProps) {
           }}
           node={props.node}
         />
-        <NumberOfLines numberOfLines={props.node.numberOfLines} />
+        <NumberOfLines
+          class="ml-auto"
+          numberOfLines={props.node.numberOfLines}
+        />
       </Dynamic>
       <Underline
         node={props.node}

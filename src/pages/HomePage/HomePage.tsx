@@ -9,6 +9,7 @@ import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
 import { createTree, LINE_TYPE, type Node } from "../../utils/zon";
 import type { Languages } from "../../utils/tokei";
+import NumberOfLines from "../../components/NumberOfLines";
 
 type LandingPageProps = {
   reports: Record<string, Node>;
@@ -60,7 +61,7 @@ export default function LandingPage(props: LandingPageProps) {
           {([path, root]) => (
             <div>
               <A href={Routes.Report.getLocation(path)}>{path}</A>
-              <span>{root.numberOfLines}</span>
+              <NumberOfLines numberOfLines={root.numberOfLines} />
             </div>
           )}
         </For>
