@@ -20,7 +20,7 @@ function App() {
       <MemoryRouter>
         <Route
           path={Routes.Home.Matcher}
-          component={() => <HomePage setReport={setReport} />}
+          component={() => <HomePage reports={reports} setReport={setReport} />}
         />
         <Route
           path={Routes.Report.Matcher}

@@ -1,5 +1,5 @@
-import { createSignal, Show } from "solid-js";
-import { useNavigate } from "@solidjs/router";
+import { createSignal, For, Show } from "solid-js";
+import { A, useNavigate } from "@solidjs/router";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import Routes from "../../routes";
@@ -11,6 +11,7 @@ import { createTree, LINE_TYPE, type Node } from "../../utils/zon";
 import type { Languages } from "../../utils/tokei";
 
 type LandingPageProps = {
+  reports: Record<string, Node>;
   setReport: (path: string, root: Node) => void;
 };
 
@@ -56,6 +57,16 @@ export default function LandingPage(props: LandingPageProps) {
     <main>
       <h1>{t("app.title")}</h1>
 
+      <div>
+        <For each={Object.entries(props.reports)}>
+          {([path, root]) => (
+            <div>
+              <A href={Routes.Report.getLocation(path)}>{path}</A>
+              <span>{root.numberOfLines}</span>
+            </div>
+          )}
+        </For>
+      </div>
       {/* <ColorTest /> */}
       <UploadButton countLinesInFolder={logAsyncErrors(countLinesInFolder)} />
       <Show when={isLoading()}>
