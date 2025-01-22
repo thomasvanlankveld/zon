@@ -11,7 +11,7 @@ import Routes from "./routes.ts";
 function App() {
   const [reports, setReports] = createStore<Record<string, Node>>({});
 
-  function addReport(path: string, root: Node) {
+  function setReport(path: string, root: Node) {
     setReports(path, root);
   }
 
@@ -20,7 +20,7 @@ function App() {
       <MemoryRouter>
         <Route
           path={Routes.Home.Matcher}
-          component={() => <HomePage addReport={addReport} />}
+          component={() => <HomePage setReport={setReport} />}
         />
         <Route
           path={Routes.Report.Matcher}

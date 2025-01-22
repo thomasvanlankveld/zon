@@ -11,7 +11,7 @@ import { createTree, LINE_TYPE, type Node } from "../../utils/zon";
 import type { Languages } from "../../utils/tokei";
 
 type LandingPageProps = {
-  addReport: (path: string, root: Node) => void;
+  setReport: (path: string, root: Node) => void;
 };
 
 export default function LandingPage(props: LandingPageProps) {
@@ -47,7 +47,7 @@ export default function LandingPage(props: LandingPageProps) {
       LINE_TYPE.COMMENTS,
     ]);
 
-    props.addReport(path, reportRoot);
+    props.setReport(path, reportRoot);
     setIsLoading(false);
     navigate(Routes.Report.getLocation(path));
   }
