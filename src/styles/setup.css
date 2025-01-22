@@ -1,6 +1,7 @@
-@layer variables, reset, default, components, utility;
+@layer variables, reset, default, component, utility;
 
 @import url("./variables.css");
 @import url("./reset.css");
 @import url("./default.css");
+@import url("./component.css");
 @import url("./utility.css");

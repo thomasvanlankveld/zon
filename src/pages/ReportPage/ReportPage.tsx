@@ -17,8 +17,8 @@ export default function ReportPage(props: ReportPageProps) {
 
   return (
     <ReportStoreProvider reportRoot={props.root}>
-      <main class={styles["report-page"]}>
-        <div class={styles["report-page__header"]}>
+      <main class={`${styles["report-page"]} page`}>
+        <div class="col-span-2">
           <h1 class="heading-l">
             <A
               class={styles["report-page__header-title"]}

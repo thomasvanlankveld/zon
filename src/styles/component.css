@@ -1,0 +1,11 @@
+@layer component {
+  .page {
+    height: 100dvh;
+    box-sizing: border-box;
+    padding: var(--spacing-page-padding);
+    display: grid;
+    gap: var(--spacing-page-gap);
+    align-items: stretch;
+    justify-items: stretch;
+  }
+}

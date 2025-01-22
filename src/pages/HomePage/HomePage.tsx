@@ -10,6 +10,7 @@ import logAsyncErrors from "../../utils/async/logErrors";
 import { createTree, LINE_TYPE, type Node } from "../../utils/zon";
 import type { Languages } from "../../utils/tokei";
 import NumberOfLines from "../../components/NumberOfLines";
+import styles from "./HomePage.module.css";
 
 type LandingPageProps = {
   reports: Record<string, Node>;
@@ -47,8 +48,8 @@ export default function LandingPage(props: LandingPageProps) {
   }
 
   return (
-    <main>
-      <h1>{t("app.title")}</h1>
+    <main class={`${styles["home-page"]} page`}>
+      <h1 class="heading-l">{t("app.title")}</h1>
 
       <div>
         <For each={Object.entries(props.reports)}>
@@ -61,10 +62,12 @@ export default function LandingPage(props: LandingPageProps) {
         </For>
       </div>
       {/* <ColorTest /> */}
-      <UploadButton countLinesInFolder={logAsyncErrors(countLinesInFolder)} />
-      <Show when={countingPath()}>
-        {(definedPath) => <CountingLines path={definedPath()} />}
-      </Show>
+      <div>
+        <UploadButton countLinesInFolder={logAsyncErrors(countLinesInFolder)} />
+        <Show when={countingPath()}>
+          {(definedPath) => <CountingLines path={definedPath()} />}
+        </Show>
+      </div>
     </main>
   );
 }

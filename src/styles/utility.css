@@ -39,6 +39,11 @@
     white-space: nowrap;
   }
 
+  /* Flexbox & grid */
+  .col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+
   /* Layout */
   .overflow-x-hidden {
     overflow-x: hidden;
