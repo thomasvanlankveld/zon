@@ -34,12 +34,6 @@ export default function LandingPage(props: LandingPageProps) {
 
     setCountingPath(path);
 
-    // Maybe adopt createResource for this?
-    // https://www.solidjs.com/tutorial/async_resources
-    // https://docs.solidjs.com/reference/basic-reactivity/create-resource
-    // https://www.solidjs.com/tutorial/async_suspense (Using `<Show>` is also fine for client-only projects)
-    // https://www.solidjs.com/tutorial/async_transitions
-    // https://docs.solidjs.com/reference/reactive-utilities/use-transition
     const languages = await invoke("count_lines", { path: path });
     const reportRoot = createTree(path, languages as Languages, [
       LINE_TYPE.BLANKS,
