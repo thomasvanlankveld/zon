@@ -9,7 +9,7 @@ import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
 import { createTree, LINE_TYPE, type Node } from "../../utils/zon";
 import type { Languages } from "../../utils/tokei";
-import ColorTest from "./ColorTest";
+// import ColorTest from "./ColorTest";
 
 type LandingPageProps = {
   setRoot: Setter<Node | null>;
@@ -58,7 +58,7 @@ export default function LandingPage(props: LandingPageProps) {
     <main>
       <h1>{t("app.title")}</h1>
 
-      <ColorTest />
+      {/* <ColorTest /> */}
       <UploadButton countLinesInFolder={logAsyncErrors(countLinesInFolder)} />
       <Show when={isLoading()}>
         <CountingLines path={path()} />
