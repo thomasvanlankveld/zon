@@ -54,7 +54,7 @@ export default function LandingPage(props: LandingPageProps) {
       <div>
         <For each={Object.entries(props.reports)}>
           {([path, root]) => (
-            <div>
+            <div class={styles["home-page__report-row"]}>
               <A href={Routes.Report.getLocation(path)}>{path}</A>
               <NumberOfLines numberOfLines={root.numberOfLines} />
             </div>
