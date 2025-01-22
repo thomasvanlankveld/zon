@@ -19,8 +19,7 @@ export default function LandingPage(props: LandingPageProps) {
   const navigate = useNavigate();
   const { t } = useI18n();
 
-  const [isLoading, setIsLoading] = createSignal(false);
-  const [selectedPath, setSelectedPath] = createSignal("");
+  const [countingPath, setCountingPath] = createSignal<string | null>();
 
   async function countLinesInFolder() {
     const path = await open({
@@ -32,8 +31,7 @@ export default function LandingPage(props: LandingPageProps) {
       return;
     }
 
-    setSelectedPath(path);
-    setIsLoading(true);
+    setCountingPath(path);
 
     // Maybe adopt createResource for this?
     // https://www.solidjs.com/tutorial/async_resources
@@ -49,7 +47,7 @@ export default function LandingPage(props: LandingPageProps) {
     ]);
 
     props.setReport(path, reportRoot);
-    setIsLoading(false);
+    setCountingPath(null);
     navigate(Routes.Report.getLocation(path));
   }
 
@@ -69,8 +67,8 @@ export default function LandingPage(props: LandingPageProps) {
       </div>
       {/* <ColorTest /> */}
       <UploadButton countLinesInFolder={logAsyncErrors(countLinesInFolder)} />
-      <Show when={isLoading()}>
-        <CountingLines path={selectedPath()} />
+      <Show when={countingPath()}>
+        {(definedPath) => <CountingLines path={definedPath()} />}
       </Show>
     </main>
   );
