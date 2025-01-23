@@ -2,9 +2,9 @@ import type { CodeStats } from "../tokei.ts";
 import { ValueOf } from "../type.ts";
 
 export const LINE_TYPE = {
-  BLANKS: "blanks",
   CODE: "code",
   COMMENTS: "comments",
+  BLANKS: "blanks",
 } as const;
 export type LINE_TYPE = ValueOf<typeof LINE_TYPE>;
 
