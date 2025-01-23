@@ -1,5 +1,11 @@
 import { createSignal, For } from "solid-js";
-import { getDisplayName, isFile, isGroup, isFolder } from "../../../utils/zon";
+import {
+  getDisplayName,
+  isFile,
+  isGroup,
+  isFolder,
+  LINE_TYPE,
+} from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import { useReportState } from "../ReportPage.state";
 import ListItem from "./ListItem";
@@ -66,7 +72,13 @@ export default function ReportList() {
           tabId={Tabs[TabKey.Types].tabId}
           selected={selectedTab() === TabKey.Types}
         >
-          Type information here
+          <For each={Object.values(LINE_TYPE)}>
+            {(lineType) => (
+              <span>
+                {lineType} {listRoot().stats[lineType]}
+              </span>
+            )}
+          </For>
         </TabPanel>
         <TabPanel
           id={Tabs[TabKey.Languages].panelId}
