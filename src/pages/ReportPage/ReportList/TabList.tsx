@@ -1,6 +1,7 @@
 import { For, Setter } from "solid-js";
 import { ValueOf } from "../../../utils/type";
 import { useI18n } from "../../../utils/i18n";
+import styles from "./ReportList.module.css";
 
 export const TabKey = {
   Content: "CONTENT",
@@ -33,39 +34,15 @@ export default function TabList(props: TabListProps) {
   const { t } = useI18n();
 
   return (
-    <div
-      role="tablist"
-      style={{
-        display: "flex",
-        "column-gap": "var(--spacing-l)",
-        "justify-content": "end",
-        "flex-direction": "row-reverse",
-      }}
-    >
+    <div role="tablist" class={styles["report-list__tab-list"]}>
       <For each={Object.values(Tabs)}>
         {(tab) => (
           <button
-            style={{
-              "padding-block": "var(--spacing-s)",
-              color:
-                tab.key === props.selectedTab
-                  ? "var(--color-text-regular)"
-                  : "var(--color-text-extra-muted)",
-            }}
-            class="text-small"
+            class={`${styles["report-list__tab"]} text-small`}
+            data-selected={props.selectedTab === tab.key}
             onClick={() => props.setSelectedTab(tab.key)}
           >
-            {/* <Show when={tab.key === activeTab()} fallback={"• "}>
-                          ◉{" "}
-                        </Show> */}
             {t(tab.label)}
-            {/* <Show when={tab.key === activeTab()} fallback={" •"}>
-                          {" "}
-                          ◉
-                        </Show> */}
-            {/* <Show when={tab.key === activeTab()} fallback={"."}>
-                          {":"}
-                        </Show> */}
           </button>
         )}
       </For>
