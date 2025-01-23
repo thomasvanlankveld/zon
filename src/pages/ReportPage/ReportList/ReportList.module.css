@@ -31,13 +31,6 @@
   }
 }
 
-.report-list__tab-list {
-  display: flex;
-  column-gap: var(--spacing-l);
-  justify-content: end;
-  flex-direction: row-reverse;
-}
-
 .report-list__row-wrapper {
   &:not(:first-of-type) {
     padding-top: var(--spacing-3xs);

@@ -1,8 +1,8 @@
 import { For, Setter } from "solid-js";
 import { ValueOf } from "../../../utils/type";
 import { useI18n } from "../../../utils/i18n";
-import styles from "./ReportList.module.css";
 import Tab from "../../../components/Tabs/Tab";
+import TabList from "../../../components/Tabs/TabList";
 
 export const TabKey = {
   Content: "content",
@@ -37,11 +37,11 @@ type TabListProps = {
   setSelectedTab: Setter<TabKey>;
 };
 
-export default function TabList(props: TabListProps) {
+export default function ReportTabList(props: TabListProps) {
   const { t } = useI18n();
 
   return (
-    <div role="tablist" class={styles["report-list__tab-list"]}>
+    <TabList>
       <For each={Object.values(Tabs)}>
         {(tab) => (
           <Tab
@@ -54,6 +54,6 @@ export default function TabList(props: TabListProps) {
           </Tab>
         )}
       </For>
-    </div>
+    </TabList>
   );
 }

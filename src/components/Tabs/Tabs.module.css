@@ -1,7 +1,8 @@
-.tabpanel {
-  &[data-selected="false"] {
-    display: none;
-  }
+.tab-list {
+  display: flex;
+  column-gap: var(--spacing-l);
+  justify-content: end;
+  flex-direction: row-reverse;
 }
 
 .tab {
@@ -26,5 +27,11 @@
     &:active {
       color: var(--color-text-muted);
     }
+  }
+}
+
+.tabpanel {
+  &[data-selected="false"] {
+    display: none;
   }
 }

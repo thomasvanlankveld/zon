@@ -5,7 +5,7 @@ import { useReportState } from "../ReportPage.state";
 import ListItem from "./ListItem";
 import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
-import TabList, { TabKey, Tabs } from "./TabList";
+import ReportTabList, { TabKey, Tabs } from "./ReportTabList";
 import TabPanel from "../../../components/Tabs/TabPanel";
 
 export default function ReportList() {
@@ -41,7 +41,10 @@ export default function ReportList() {
         })}
       >
         <ListHeading />
-        <TabList selectedTab={selectedTab()} setSelectedTab={setSelectedTab} />
+        <ReportTabList
+          selectedTab={selectedTab()}
+          setSelectedTab={setSelectedTab}
+        />
         <TabPanel
           id={Tabs[TabKey.Content].panelId}
           class={styles["report-list__list"]}
