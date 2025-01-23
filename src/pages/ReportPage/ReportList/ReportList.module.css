@@ -1,5 +1,5 @@
 .report-list__heading {
-  margin-bottom: var(--line-height-regular);
+  margin-bottom: var(--spacing-l);
 }
 
 .report-list__row-text {
