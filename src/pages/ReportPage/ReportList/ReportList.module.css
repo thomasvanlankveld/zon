@@ -38,31 +38,6 @@
   flex-direction: row-reverse;
 }
 
-.report-list__tab {
-  color: var(--color-text-extra-muted);
-  padding-block: var(--spacing-s);
-
-  &:hover {
-    color: var(--color-text-highlight);
-  }
-
-  &:active {
-    color: var(--color-text-muted);
-  }
-
-  &[data-selected="true"] {
-    color: var(--color-text-regular);
-
-    &:hover {
-      color: var(--color-text-highlight);
-    }
-
-    &:active {
-      color: var(--color-text-muted);
-    }
-  }
-}
-
 .report-list__row-wrapper {
   &:not(:first-of-type) {
     padding-top: var(--spacing-3xs);

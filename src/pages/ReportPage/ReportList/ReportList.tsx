@@ -5,7 +5,8 @@ import { useReportState } from "../ReportPage.state";
 import ListItem from "./ListItem";
 import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
-import TabList, { TabKey } from "./TabList";
+import TabList, { TabKey, Tabs } from "./TabList";
+import TabPanel from "../../../components/Tabs/TabPanel";
 
 export default function ReportList() {
   const { t } = useI18n();
@@ -41,7 +42,12 @@ export default function ReportList() {
       >
         <ListHeading />
         <TabList selectedTab={selectedTab()} setSelectedTab={setSelectedTab} />
-        <div role="tabpanel" class={styles["report-list__list"]}>
+        <TabPanel
+          id={Tabs[TabKey.Content].panelId}
+          class={styles["report-list__list"]}
+          tabId={Tabs[TabKey.Content].tabId}
+          selected={selectedTab() === TabKey.Content}
+        >
           <For each={listNodes()}>
             {(child) => (
               <ListItem
@@ -50,7 +56,7 @@ export default function ReportList() {
               />
             )}
           </For>
-        </div>
+        </TabPanel>
       </nav>
     </div>
   );
