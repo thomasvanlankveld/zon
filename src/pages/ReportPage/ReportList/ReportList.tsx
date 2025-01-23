@@ -10,7 +10,7 @@ import TabList, { TabKey } from "./TabList";
 export default function ReportList() {
   const { t } = useI18n();
   const { listRoot } = useReportState();
-  const [activeTab, setActiveTab] = createSignal<TabKey>(TabKey.Content);
+  const [selectedTab, setSelectedTab] = createSignal<TabKey>(TabKey.Content);
 
   const listNodes = () => {
     const root = listRoot();
@@ -40,7 +40,7 @@ export default function ReportList() {
         })}
       >
         <ListHeading />
-        <TabList activeTab={activeTab()} setActiveTab={setActiveTab} />
+        <TabList selectedTab={selectedTab()} setSelectedTab={setSelectedTab} />
         <div role="tabpanel" class={styles["report-list__list"]}>
           <For each={listNodes()}>
             {(child) => (

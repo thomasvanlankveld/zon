@@ -25,8 +25,8 @@ const Tabs = {
 };
 
 type TabListProps = {
-  activeTab: TabKey;
-  setActiveTab: Setter<TabKey>;
+  selectedTab: TabKey;
+  setSelectedTab: Setter<TabKey>;
 };
 
 export default function TabList(props: TabListProps) {
@@ -48,12 +48,12 @@ export default function TabList(props: TabListProps) {
             style={{
               "padding-block": "var(--spacing-s)",
               color:
-                tab.key === props.activeTab
+                tab.key === props.selectedTab
                   ? "var(--color-text-regular)"
                   : "var(--color-text-extra-muted)",
             }}
             class="text-small"
-            onClick={() => props.setActiveTab(tab.key)}
+            onClick={() => props.setSelectedTab(tab.key)}
           >
             {/* <Show when={tab.key === activeTab()} fallback={"• "}>
                           ◉{" "}
