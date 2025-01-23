@@ -97,6 +97,7 @@
     /* Colors */
     --color-text-highlight: var(--clr-white);
     --color-text-regular: var(--clr-grey-800);
+    --color-text-muted: var(--clr-grey-600);
     --color-text-extra-muted: var(--clr-grey-450);
 
     --color-text-link: var(----clr-grey-800);
