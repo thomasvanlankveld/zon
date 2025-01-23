@@ -4,6 +4,13 @@
     color: var(--color-text-highlight);
   }
 
+  .text-small,
+  .text-small * {
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    font-weight: var(--font-weight-small);
+  }
+
   .text-regular,
   .text-regular * {
     font-size: var(--font-size-regular);

@@ -1,6 +1,5 @@
 import type { CodeStats } from "../tokei.ts";
-
-type ValueOf<T> = T[keyof T];
+import { ValueOf } from "../type.ts";
 
 export const LINE_TYPE = {
   BLANKS: "blanks",

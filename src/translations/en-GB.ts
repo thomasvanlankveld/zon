@@ -9,6 +9,9 @@ const enGBTranslations: Translations = {
   "report-list.nav.label": ({ name }) => `${name} content list`,
   "report-list.number-of-lines": ({ numberOfLines }) =>
     `${numberOfLines} lines`,
+  "content.label": "Content",
+  "types.label": "Types",
+  "languages.label": "Languages",
 };
 
 export default enGBTranslations;

@@ -1,14 +1,16 @@
-import { For } from "solid-js";
+import { createSignal, For } from "solid-js";
 import { getDisplayName, isFile, isGroup, isFolder } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
+import { useReportState } from "../ReportPage.state";
 import ListItem from "./ListItem";
 import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
-import { useReportState } from "../ReportPage.state";
+import TabList, { TabKey } from "./TabList";
 
 export default function ReportList() {
   const { t } = useI18n();
   const { listRoot } = useReportState();
+  const [activeTab, setActiveTab] = createSignal<TabKey>(TabKey.Content);
 
   const listNodes = () => {
     const root = listRoot();
@@ -38,7 +40,8 @@ export default function ReportList() {
         })}
       >
         <ListHeading />
-        <div class={styles["report-list__list"]}>
+        <TabList activeTab={activeTab()} setActiveTab={setActiveTab} />
+        <div role="tabpanel" class={styles["report-list__list"]}>
           <For each={listNodes()}>
             {(child) => (
               <ListItem
