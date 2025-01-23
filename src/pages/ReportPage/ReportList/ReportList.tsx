@@ -60,6 +60,22 @@ export default function ReportList() {
             )}
           </For>
         </TabPanel>
+        <TabPanel
+          id={Tabs[TabKey.Types].panelId}
+          class={styles["report-list__list"]}
+          tabId={Tabs[TabKey.Types].tabId}
+          selected={selectedTab() === TabKey.Types}
+        >
+          Type information here
+        </TabPanel>
+        <TabPanel
+          id={Tabs[TabKey.Languages].panelId}
+          class={styles["report-list__list"]}
+          tabId={Tabs[TabKey.Languages].tabId}
+          selected={selectedTab() === TabKey.Languages}
+        >
+          Language information here
+        </TabPanel>
       </nav>
     </div>
   );
