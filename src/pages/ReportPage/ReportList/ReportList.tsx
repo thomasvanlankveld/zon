@@ -12,9 +12,10 @@ import { useReportState } from "../ReportPage.state";
 import ContentRow from "./Content/ContentRow";
 import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
-import ReportTabList, { TabKey, Tabs } from "./Tabs/ReportTabList";
+import ReportTabList from "./Tabs/ReportTabList";
 import TabPanel from "../../../components/Tabs/TabPanel";
 import ListRow from "./ListRow/ListRow";
+import { TabKey, Tabs } from "./Tabs/report-tabs";
 
 export default function ReportList() {
   const { t } = useI18n();
