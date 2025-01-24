@@ -6,9 +6,9 @@ import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
 import ReportTabList from "./Tabs/ReportTabList";
 import { TabKey } from "./Tabs/report-tabs";
-import ReportTabPanel from "./Tabs/ReportTabPanel";
 import ContentPanel from "./Content/ContentPanel";
 import LineTypePanel from "./LineType/LineTypePanel";
+import LanguagePanel from "./Language/LanguagePanel";
 
 export default function ReportList() {
   const { t } = useI18n();
@@ -31,13 +31,7 @@ export default function ReportList() {
         />
         <ContentPanel selectedTab={selectedTab()} />
         <LineTypePanel selectedTab={selectedTab()} />
-        <ReportTabPanel
-          class={styles["report-list__list"]}
-          tab={TabKey.Languages}
-          selectedTab={selectedTab()}
-        >
-          Language information here
-        </ReportTabPanel>
+        <LanguagePanel selectedTab={selectedTab()} />
       </nav>
     </div>
   );
