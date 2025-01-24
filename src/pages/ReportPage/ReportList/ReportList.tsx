@@ -16,6 +16,7 @@ import ReportTabList from "./Tabs/ReportTabList";
 import TabPanel from "../../../components/Tabs/TabPanel";
 import ListRow from "./ListRow/ListRow";
 import { TabKey, Tabs } from "./Tabs/report-tabs";
+import ReportTabPanel from "./Tabs/ReportTabPanel";
 
 export default function ReportList() {
   const { t } = useI18n();
@@ -69,11 +70,10 @@ export default function ReportList() {
           selectedTab={selectedTab()}
           setSelectedTab={setSelectedTab}
         />
-        <TabPanel
-          id={Tabs[TabKey.Content].panelId}
+        <ReportTabPanel
           class={styles["report-list__list"]}
-          tabId={Tabs[TabKey.Content].tabId}
-          selected={selectedTab() === TabKey.Content}
+          tab={TabKey.Content}
+          selectedTab={selectedTab()}
         >
           <For each={listNodes()}>
             {(child) => (
@@ -83,12 +83,11 @@ export default function ReportList() {
               />
             )}
           </For>
-        </TabPanel>
-        <TabPanel
-          id={Tabs[TabKey.Types].panelId}
+        </ReportTabPanel>
+        <ReportTabPanel
           class={styles["report-list__list"]}
-          tabId={Tabs[TabKey.Types].tabId}
-          selected={selectedTab() === TabKey.Types}
+          tab={TabKey.Types}
+          selectedTab={selectedTab()}
         >
           <For each={Object.values(LINE_TYPE)}>
             {(lineType) => (
@@ -100,15 +99,14 @@ export default function ReportList() {
               />
             )}
           </For>
-        </TabPanel>
-        <TabPanel
-          id={Tabs[TabKey.Languages].panelId}
+        </ReportTabPanel>
+        <ReportTabPanel
           class={styles["report-list__list"]}
-          tabId={Tabs[TabKey.Languages].tabId}
-          selected={selectedTab() === TabKey.Languages}
+          tab={TabKey.Languages}
+          selectedTab={selectedTab()}
         >
           Language information here
-        </TabPanel>
+        </ReportTabPanel>
       </nav>
     </div>
   );
