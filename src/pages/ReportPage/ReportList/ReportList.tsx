@@ -5,6 +5,7 @@ import {
   isGroup,
   isFolder,
   LINE_TYPE,
+  getNodeStaticTextColors,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import { useReportState } from "../ReportPage.state";
@@ -17,7 +18,7 @@ import ListRow from "./ListRow/ListRow";
 
 export default function ReportList() {
   const { t } = useI18n();
-  const { listRoot } = useReportState();
+  const { reportRoot, listRoot } = useReportState();
   const [selectedTab, setSelectedTab] = createSignal<TabKey>(TabKey.Content);
 
   const LineTypeNames = {
@@ -43,6 +44,15 @@ export default function ReportList() {
 
     throw new Error(`Node has unknown type`);
   };
+
+  function colors() {
+    const staticColors = getNodeStaticTextColors(listRoot(), reportRoot().path);
+
+    return {
+      ...staticColors,
+      base: staticColors.default,
+    };
+  }
 
   return (
     <div class="overflow-x-hidden">
@@ -82,6 +92,7 @@ export default function ReportList() {
           <For each={Object.values(LINE_TYPE)}>
             {(lineType) => (
               <ListRow
+                colors={colors()}
                 name={LineTypeNames[lineType]}
                 numberOfLinesInRow={listRoot().stats[lineType]}
                 numberOfLinesInRoot={listRoot().numberOfLines}
