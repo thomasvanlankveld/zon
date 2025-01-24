@@ -3,10 +3,10 @@ import { Dynamic } from "solid-js/web";
 import { JSX } from "solid-js/h/jsx-runtime";
 import { getNodeTextColors, Node } from "../../../utils/zon";
 import NumberOfLines from "../../../components/NumberOfLines";
-import DisplayName from "./DisplayName";
 import styles from "./ReportList.module.css";
 import Underline from "./Underline";
 import { useReportState } from "../ReportPage.state";
+import ContentName from "./ContentName";
 
 type ListRowProps = {
   node: Node;
@@ -53,14 +53,16 @@ export default function ListRow(props: ListRowProps) {
         component={props.rowTextComponent ?? "span"}
         class={styles["report-list__row-text"]}
       >
-        <DisplayName
+        <span
           style={{
             "--before-content": props.nameBeforeContent,
             "--hover-before-content": props.nameHoverBeforeContent,
             "--hover-after-content": props.nameHoverAfterContent,
           }}
-          node={props.node}
-        />
+          class={`${styles["report-list__row-name"]} truncate`}
+        >
+          <ContentName node={props.node} />
+        </span>
         <NumberOfLines
           class="ml-auto"
           numberOfLines={props.node.numberOfLines}

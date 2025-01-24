@@ -19,7 +19,7 @@
   opacity: 0.4;
 }
 
-.report-list__display-name::before {
+.report-list__row-name::before {
   content: var(--before-content);
 }
 
@@ -46,7 +46,7 @@
       color: var(--highlight-color);
     }
 
-    .report-list__display-name {
+    .report-list__row-name {
       text-align: start;
       white-space: wrap;
       text-overflow: inherit;
@@ -72,11 +72,11 @@
   }
 
   &:hover {
-    .report-list__display-name::before {
+    .report-list__row-name::before {
       content: var(--hover-before-content);
     }
 
-    .report-list__display-name::after {
+    .report-list__row-name::after {
       content: var(--hover-after-content);
     }
   }
