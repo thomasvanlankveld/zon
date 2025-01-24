@@ -13,6 +13,7 @@ import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
 import ReportTabList, { TabKey, Tabs } from "./ReportTabList";
 import TabPanel from "../../../components/Tabs/TabPanel";
+import ListRow from "./ListRow";
 
 export default function ReportList() {
   const { t } = useI18n();
@@ -74,9 +75,11 @@ export default function ReportList() {
         >
           <For each={Object.values(LINE_TYPE)}>
             {(lineType) => (
-              <span>
-                {lineType} {listRoot().stats[lineType]}
-              </span>
+              <ListRow
+                name={lineType}
+                numberOfLinesInRow={listRoot().stats[lineType]}
+                numberOfLinesInRoot={listRoot().numberOfLines}
+              />
             )}
           </For>
         </TabPanel>

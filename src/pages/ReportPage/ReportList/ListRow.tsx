@@ -11,7 +11,7 @@ export type ListRowColors = {
 };
 
 type ListRowProps = {
-  colors: ListRowColors;
+  colors?: ListRowColors;
   rowContainerClassList?: { [k: string]: boolean | undefined };
   rowTextComponent?: ValidComponent;
   name: JSX.Element;
@@ -40,9 +40,10 @@ export default function ListRow(props: ListRowProps) {
         ...props.rowContainerClassList,
       }}
       style={{
-        "--base-color": props.colors.base,
-        "--highlight-color": props.colors.highlight,
-        "--press-color": props.colors.press,
+        "--base-color": props.colors?.base ?? "var(--color-text-regular)",
+        "--highlight-color":
+          props.colors?.highlight ?? "var(--color-text-highlight)",
+        "--press-color": props.colors?.press ?? "var(--color-text-muted)",
       }}
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
