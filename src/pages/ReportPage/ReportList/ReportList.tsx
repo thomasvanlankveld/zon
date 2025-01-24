@@ -1,21 +1,18 @@
 import { createSignal, For } from "solid-js";
 import {
   getDisplayName,
-  isFile,
-  isGroup,
-  isFolder,
   LINE_TYPE,
   getNodeStaticTextColors,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import { useReportState } from "../ReportPage.state";
-import ContentRow from "./Content/ContentRow";
 import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
 import ReportTabList from "./Tabs/ReportTabList";
 import ListRow from "./ListRow/ListRow";
 import { TabKey } from "./Tabs/report-tabs";
 import ReportTabPanel from "./Tabs/ReportTabPanel";
+import ContentPanel from "./Content/ContentPanel";
 
 export default function ReportList() {
   const { t } = useI18n();
@@ -26,24 +23,6 @@ export default function ReportList() {
     [LINE_TYPE.CODE]: t("line-type.code"),
     [LINE_TYPE.COMMENTS]: t("line-type.comments"),
     [LINE_TYPE.BLANKS]: t("line-type.blanks"),
-  };
-
-  const listNodes = () => {
-    const root = listRoot();
-
-    if (isFile(root)) {
-      return [];
-    }
-
-    if (isGroup(root)) {
-      return root.groupedChildren;
-    }
-
-    if (isFolder(root)) {
-      return root.children;
-    }
-
-    throw new Error(`Node has unknown type`);
   };
 
   function colors() {
@@ -69,20 +48,7 @@ export default function ReportList() {
           selectedTab={selectedTab()}
           setSelectedTab={setSelectedTab}
         />
-        <ReportTabPanel
-          class={styles["report-list__list"]}
-          tab={TabKey.Content}
-          selectedTab={selectedTab()}
-        >
-          <For each={listNodes()}>
-            {(child) => (
-              <ContentRow
-                node={child}
-                numberOfLinesInRoot={listRoot().numberOfLines}
-              />
-            )}
-          </For>
-        </ReportTabPanel>
+        <ContentPanel selectedTab={selectedTab()} />
         <ReportTabPanel
           class={styles["report-list__list"]}
           tab={TabKey.Types}
