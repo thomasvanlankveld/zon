@@ -9,12 +9,12 @@ import ListRow from "./ListRow";
 import { ARROW } from "../../../styles/arrow";
 import ContentName from "./ContentName";
 
-type ListItemProps = {
+type ContentRowProps = {
   node: Node;
   numberOfLinesInRoot: number;
 };
 
-export default function ListItem(props: ListItemProps) {
+export default function ContentRow(props: ContentRowProps) {
   const {
     reportRoot,
     navigate,
