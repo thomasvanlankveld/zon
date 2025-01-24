@@ -33,11 +33,11 @@ export default function ListItem(props: ListItemProps) {
   return (
     <ListRow
       node={props.node}
-      numberOfLinesInRow={props.node.numberOfLines}
-      numberOfLinesInRoot={props.numberOfLinesInRoot}
       name={<ContentName node={props.node} />}
       nameHoverBeforeContent={nameHoverBeforeContent()}
       nameHoverAfterContent={nameHoverAfterContent()}
+      numberOfLinesInRow={props.node.numberOfLines}
+      numberOfLinesInRoot={props.numberOfLinesInRoot}
       onClick={maybeOnListItemClick()}
     />
   );

@@ -60,8 +60,6 @@ export default function ListHeading() {
   return (
     <ListRow
       node={listRoot()}
-      numberOfLinesInRow={listRoot().numberOfLines}
-      numberOfLinesInRoot={numberOfLinesInRoot()}
       rowContainerClassList={{
         "heading-regular": true,
         [styles["report-list__heading"]]: true,
@@ -70,6 +68,8 @@ export default function ListHeading() {
       name={<ContentName node={listRoot()} />}
       nameBeforeContent={nameBeforeContent()}
       nameHoverBeforeContent={nameHoverBeforeContent()}
+      numberOfLinesInRow={listRoot().numberOfLines}
+      numberOfLinesInRoot={numberOfLinesInRoot()}
       onClick={maybeOnHeaderClick()}
     />
   );

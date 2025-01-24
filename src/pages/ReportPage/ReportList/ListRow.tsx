@@ -8,14 +8,14 @@ import { useReportState } from "../ReportPage.state";
 
 type ListRowProps = {
   node: Node;
-  numberOfLinesInRow: number;
-  numberOfLinesInRoot: number;
   rowContainerClassList?: { [k: string]: boolean | undefined };
   rowTextComponent?: ValidComponent;
   name: JSX.Element;
   nameBeforeContent?: string;
   nameHoverBeforeContent?: string;
   nameHoverAfterContent?: string;
+  numberOfLinesInRow: number;
+  numberOfLinesInRoot: number;
   onClick?: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
 };
 
