@@ -32,11 +32,11 @@
 }
 
 .report-list__row-wrapper {
-  &:not(:first-of-type) {
+  &:not(:first-child) {
     padding-top: var(--spacing-3xs);
   }
 
-  &:not(:last-of-type) {
+  &:not(:last-child) {
     padding-bottom: var(--spacing-3xs);
   }
 
