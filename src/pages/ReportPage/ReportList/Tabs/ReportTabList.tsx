@@ -1,8 +1,8 @@
 import { For, Setter } from "solid-js";
-import { ValueOf } from "../../../utils/type";
-import { useI18n } from "../../../utils/i18n";
-import Tab from "../../../components/Tabs/Tab";
-import TabList from "../../../components/Tabs/TabList";
+import { ValueOf } from "../../../../utils/type";
+import { useI18n } from "../../../../utils/i18n";
+import Tab from "../../../../components/Tabs/Tab";
+import TabList from "../../../../components/Tabs/TabList";
 
 export const TabKey = {
   Content: "content",

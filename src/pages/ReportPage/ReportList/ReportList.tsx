@@ -12,7 +12,7 @@ import { useReportState } from "../ReportPage.state";
 import ContentRow from "./Content/ContentRow";
 import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
-import ReportTabList, { TabKey, Tabs } from "./ReportTabList";
+import ReportTabList, { TabKey, Tabs } from "./Tabs/ReportTabList";
 import TabPanel from "../../../components/Tabs/TabPanel";
 import ListRow from "./ListRow/ListRow";
 
