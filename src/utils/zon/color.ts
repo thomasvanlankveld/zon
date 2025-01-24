@@ -1,5 +1,5 @@
 import { arePathsEqual } from "./path";
-import { type Node, type Colors, type Path, isGroup } from "./types";
+import { type Node, type Colors, type Path, isGroup, LINE_TYPE } from "./types";
 
 // TODO: Use safer colors in prod mode (bright colors only in dev mode to emphasize mistakes)
 export const NODE_DEFAULT_COLORS: Colors = {
@@ -104,11 +104,20 @@ export function getNodeTextColors(
 /**
  * Get a node's diagram arc color
  */
-export function getNodeArcColors(node: Node, highlightedPath: Path | null) {
+export function getNodeArcColors(
+  node: Node,
+  highlightedPath: Path | null,
+  highlightedLineType: LINE_TYPE | null,
+) {
   const staticColors = isGroup(node) ? DIAGRAM_ARC_GROUP_COLORS : node.colors;
 
+  const isHighlighted =
+    arePathsEqual(highlightedPath, node.path) ||
+    (highlightedLineType != null && node.stats[highlightedLineType] > 0);
+  const base = isHighlighted ? staticColors.highlight : staticColors.default;
+
   return {
-    base: getBaseColor(staticColors, node.path, highlightedPath),
+    base,
     highlight: staticColors.highlight,
     press: staticColors.press,
   };

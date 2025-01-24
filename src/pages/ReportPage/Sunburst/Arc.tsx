@@ -21,6 +21,7 @@ function Arc(props: ArcProps) {
     navigate,
     diagramRoot,
     highlightedDiagramPath,
+    highlightedDiagramLineType,
     setHoverArcPath,
     expandGroup,
   } = useReportState();
@@ -40,7 +41,11 @@ function Arc(props: ArcProps) {
   }
 
   const colors = createMemo(() =>
-    getNodeArcColors(props.node, highlightedDiagramPath()),
+    getNodeArcColors(
+      props.node,
+      highlightedDiagramPath(),
+      highlightedDiagramLineType(),
+    ),
   );
 
   function onArcClick() {

@@ -13,7 +13,7 @@ type LineTypePanelProps = {
 
 export default function LineTypePanel(props: LineTypePanelProps) {
   const { t } = useI18n();
-  const { reportRoot, listRoot } = useReportState();
+  const { reportRoot, listRoot, setHoverListLineType } = useReportState();
 
   const LineTypeNames = {
     [LINE_TYPE.CODE]: t("line-type.code"),
@@ -43,6 +43,8 @@ export default function LineTypePanel(props: LineTypePanelProps) {
             name={LineTypeNames[lineType]}
             numberOfLinesInRow={listRoot().stats[lineType]}
             numberOfLinesInRoot={listRoot().numberOfLines}
+            onMouseEnter={[setHoverListLineType, lineType]}
+            onMouseLeave={[setHoverListLineType, null]}
           />
         )}
       </For>

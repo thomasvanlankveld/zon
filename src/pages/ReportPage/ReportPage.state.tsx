@@ -11,6 +11,7 @@ import {
   arePathsEqual,
   getNodeByPath,
   groupSmallestNodes,
+  LINE_TYPE,
   Node,
   Path,
   withNode,
@@ -65,6 +66,8 @@ function createReportState(initialReportRoot: Node) {
 
   // Path of the hovered list item
   const [hoverListPath, setHoverListPath] = createSignal<Path | null>(null);
+  const [hoverListLineType, setHoverListLineType] =
+    createSignal<LINE_TYPE | null>(null);
 
   // Breadcrumb setup
   const breadcrumbPath = () => hoverArcPath() ?? diagramRootPath();
@@ -72,6 +75,7 @@ function createReportState(initialReportRoot: Node) {
 
   // Diagram setup
   const highlightedDiagramPath = hoverListPath;
+  const highlightedDiagramLineType = hoverListLineType;
 
   // List setup
   const listRootPath = createMemo(() => hoverArcPath() ?? diagramRootPath());
@@ -112,12 +116,14 @@ function createReportState(initialReportRoot: Node) {
     diagramRoot,
     diagramRootPath,
     highlightedDiagramPath,
+    highlightedDiagramLineType,
     setHoverArcPath,
     listRoot,
     listRootPath,
     isListRootReportRoot,
     highlightedListPath,
     setHoverListPath,
+    setHoverListLineType,
     expandGroup,
   };
 }
