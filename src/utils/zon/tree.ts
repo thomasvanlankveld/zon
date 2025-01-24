@@ -13,7 +13,7 @@ import {
   getNumberOfLines,
   sumLineTypeCounts as sumLineTypeCounts,
   subtractLineTypeCounts,
-} from "./stats.ts";
+} from "./lineType.ts";
 
 export function createTree(
   projectPath: string,
