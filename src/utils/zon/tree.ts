@@ -1,5 +1,5 @@
 import { NODE_DEFAULT_COLORS, rainbow } from "./color.ts";
-import { Languages } from "../tokei.ts";
+import { Languages, LanguageType } from "../tokei.ts";
 import {
   GROUP_SEGMENT,
   isFolder,
@@ -14,6 +14,11 @@ import {
   sumLineTypeCounts as sumLineTypeCounts,
   subtractLineTypeCounts,
 } from "./lineType.ts";
+import {
+  addLanguageCount,
+  subtractLanguageCounts,
+  sumLanguageCounts,
+} from "./language.ts";
 
 export function createTree(
   projectPath: string,
@@ -24,12 +29,12 @@ export function createTree(
   const numberOfCharactersToRemove = projectPath.length - projectName.length;
 
   // Folders can have files in multiple languages, so ignoring those for now
-  const languageValues = Object.values(languages);
+  const languageEntries = Object.entries(languages);
 
   const nodes: { [name: string]: Node } = {};
 
   // For every programming language
-  for (const language of languageValues) {
+  for (const [languageName, language] of languageEntries) {
     // For every file
     for (const tokeiReport of language.reports) {
       const filePath = tokeiReport.name.slice(numberOfCharactersToRemove);
@@ -42,18 +47,29 @@ export function createTree(
 
         if (nodePathStr in nodes) {
           const node = nodes[nodePathStr];
+          const numberOfLines = getNumberOfLines(tokeiReport.stats, lineTypes);
+
           node.lineTypeCounts.blanks += tokeiReport.stats.blanks;
           node.lineTypeCounts.code += tokeiReport.stats.code;
           node.lineTypeCounts.comments += tokeiReport.stats.comments;
-          node.numberOfLines += getNumberOfLines(tokeiReport.stats, lineTypes);
+          node.numberOfLines += numberOfLines;
           node.height = Math.max(node.height, filePathSegments.length - i - 1);
+
+          addLanguageCount(
+            node.languageCounts,
+            languageName as LanguageType,
+            numberOfLines,
+          );
         } else {
+          const numberOfLines = getNumberOfLines(tokeiReport.stats, lineTypes);
+
           const nodeBase = {
             // TO DO: Add test to verify non-modification of `lineTypes`
             lineTypeCounts: { ...tokeiReport.stats },
+            languageCounts: { [languageName]: numberOfLines },
             path: nodePath,
             name: filePathSegments[i],
-            numberOfLines: getNumberOfLines(tokeiReport.stats, lineTypes),
+            numberOfLines,
             depth: i,
             // Actual values of `firstLine` and `color` can only be determined after sorting
             firstLine: 0,
@@ -189,13 +205,20 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
   const hiddenChildren = node.children.slice(visibleChildren.length);
 
   // The number of hidden nodes may be much larger than the number of visible ones, so we calculate the hidden line type
-  // counts by subtracting the visible totals from the parent's total
+  // and language counts by subtracting the visible totals from the parent's total
   const visibleLineTypeCounts = sumLineTypeCounts(
     visibleChildren.map((child) => child.lineTypeCounts),
   );
   const hiddenLineTypeCounts = subtractLineTypeCounts(
     node.lineTypeCounts,
     visibleLineTypeCounts,
+  );
+  const visibleLanguageCounts = sumLanguageCounts(
+    visibleChildren.map((child) => child.languageCounts),
+  );
+  const hiddenLanguageCounts = subtractLanguageCounts(
+    node.languageCounts,
+    visibleLanguageCounts,
   );
 
   const lastVisibleChild = visibleChildren.at(-1);
@@ -211,6 +234,7 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
   const group: Node = {
     type: NODE_TYPE.GROUP,
     lineTypeCounts: hiddenLineTypeCounts,
+    languageCounts: hiddenLanguageCounts,
     path: [...node.path, GROUP_SEGMENT],
     name: GROUP_SEGMENT,
     numberOfLines: hiddenNumberOfLines,

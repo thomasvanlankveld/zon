@@ -1,3 +1,4 @@
+import { LanguageType } from "../tokei.ts";
 import { ValueOf } from "../type.ts";
 
 export const LINE_TYPE = {
@@ -32,8 +33,11 @@ export type LineTypeCounts = {
   [LINE_TYPE.BLANKS]: number;
 };
 
+export type LanguageCounts = Partial<Record<LanguageType, number>>;
+
 type NodeBase = {
   lineTypeCounts: LineTypeCounts;
+  languageCounts: LanguageCounts;
   path: Path;
   name: SegmentName;
   numberOfLines: number;
