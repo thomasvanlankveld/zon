@@ -41,7 +41,7 @@ export default function LineTypePanel(props: LineTypePanelProps) {
           <ListRow
             colors={colors()}
             name={LineTypeNames[lineType]}
-            numberOfLinesInRow={listRoot().stats[lineType]}
+            numberOfLinesInRow={listRoot().lineTypeCounts[lineType]}
             numberOfLinesInRoot={listRoot().numberOfLines}
             onMouseEnter={[setHoverListLineType, lineType]}
             onMouseLeave={[setHoverListLineType, null]}

@@ -1,4 +1,3 @@
-import type { CodeStats } from "../tokei.ts";
 import { ValueOf } from "../type.ts";
 
 export const LINE_TYPE = {
@@ -27,8 +26,14 @@ export type Colors = {
   press: string;
 };
 
+export type LineTypeCounts = {
+  [LINE_TYPE.CODE]: number;
+  [LINE_TYPE.COMMENTS]: number;
+  [LINE_TYPE.BLANKS]: number;
+};
+
 type NodeBase = {
-  stats: CodeStats;
+  lineTypeCounts: LineTypeCounts;
   path: Path;
   name: SegmentName;
   numberOfLines: number;

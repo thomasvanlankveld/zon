@@ -9,7 +9,11 @@ import {
   NODE_TYPE,
 } from "./types.ts";
 import { getProjectName, getPathString, getParentPath } from "./path.ts";
-import { getNumberOfLines, sumStats, subtractStats } from "./stats.ts";
+import {
+  getNumberOfLines,
+  sumLineTypeCounts as sumLineTypeCounts,
+  subtractLineTypeCounts,
+} from "./stats.ts";
 
 export function createTree(
   projectPath: string,
@@ -38,15 +42,15 @@ export function createTree(
 
         if (nodePathStr in nodes) {
           const node = nodes[nodePathStr];
-          node.stats.blanks += tokeiReport.stats.blanks;
-          node.stats.code += tokeiReport.stats.code;
-          node.stats.comments += tokeiReport.stats.comments;
+          node.lineTypeCounts.blanks += tokeiReport.stats.blanks;
+          node.lineTypeCounts.code += tokeiReport.stats.code;
+          node.lineTypeCounts.comments += tokeiReport.stats.comments;
           node.numberOfLines += getNumberOfLines(tokeiReport.stats, lineTypes);
           node.height = Math.max(node.height, filePathSegments.length - i - 1);
         } else {
           const nodeBase = {
-            // TO DO: Add test to verify non-modification of stats
-            stats: { ...tokeiReport.stats },
+            // TO DO: Add test to verify non-modification of `lineTypes`
+            lineTypeCounts: { ...tokeiReport.stats },
             path: nodePath,
             name: filePathSegments[i],
             numberOfLines: getNumberOfLines(tokeiReport.stats, lineTypes),
@@ -184,10 +188,15 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
 
   const hiddenChildren = node.children.slice(visibleChildren.length);
 
-  // The number of hidden nodes may be much larger than the number of visible ones, so we calculate the hidden stats
-  // by subtracting the visible totals from the parent's total
-  const visibleStats = sumStats(visibleChildren.map((child) => child.stats));
-  const hiddenStats = subtractStats(node.stats, visibleStats);
+  // The number of hidden nodes may be much larger than the number of visible ones, so we calculate the hidden line type
+  // counts by subtracting the visible totals from the parent's total
+  const visibleLineTypeCounts = sumLineTypeCounts(
+    visibleChildren.map((child) => child.lineTypeCounts),
+  );
+  const hiddenLineTypeCounts = subtractLineTypeCounts(
+    node.lineTypeCounts,
+    visibleLineTypeCounts,
+  );
 
   const lastVisibleChild = visibleChildren.at(-1);
   const firstHiddenLine =
@@ -201,7 +210,7 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
 
   const group: Node = {
     type: NODE_TYPE.GROUP,
-    stats: hiddenStats,
+    lineTypeCounts: hiddenLineTypeCounts,
     path: [...node.path, GROUP_SEGMENT],
     name: GROUP_SEGMENT,
     numberOfLines: hiddenNumberOfLines,
