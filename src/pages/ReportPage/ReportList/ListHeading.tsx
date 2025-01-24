@@ -8,6 +8,7 @@ import styles from "./ReportList.module.css";
 import { useReportState } from "../ReportPage.state";
 import ListRow from "./ListRow";
 import { ARROW } from "../../../styles/arrow";
+import ContentName from "./ContentName";
 
 export default function ListHeading() {
   const {
@@ -65,6 +66,7 @@ export default function ListHeading() {
         [styles["report-list__heading"]]: true,
       }}
       rowTextComponent={"h2"}
+      name={<ContentName node={listRoot()} />}
       nameBeforeContent={nameBeforeContent()}
       nameHoverBeforeContent={nameHoverBeforeContent()}
       onClick={maybeOnHeaderClick()}

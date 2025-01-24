@@ -1,18 +1,17 @@
-import { createMemo, ValidComponent } from "solid-js";
+import { createMemo, JSX, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { JSX } from "solid-js/h/jsx-runtime";
 import { getNodeTextColors, Node } from "../../../utils/zon";
 import NumberOfLines from "../../../components/NumberOfLines";
 import styles from "./ReportList.module.css";
 import Underline from "./Underline";
 import { useReportState } from "../ReportPage.state";
-import ContentName from "./ContentName";
 
 type ListRowProps = {
   node: Node;
   numberOfLinesInRoot: number;
   rowContainerClassList?: { [k: string]: boolean | undefined };
   rowTextComponent?: ValidComponent;
+  name: JSX.Element;
   nameBeforeContent?: string;
   nameHoverBeforeContent?: string;
   nameHoverAfterContent?: string;
@@ -61,7 +60,7 @@ export default function ListRow(props: ListRowProps) {
           }}
           class={`${styles["report-list__row-name"]} truncate`}
         >
-          <ContentName node={props.node} />
+          {props.name}
         </span>
         <NumberOfLines
           class="ml-auto"

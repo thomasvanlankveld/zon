@@ -2,6 +2,7 @@ import { isFolder, isGroup, type Node } from "../../../utils/zon";
 import { useReportState } from "../ReportPage.state";
 import ListRow from "./ListRow";
 import { ARROW } from "../../../styles/arrow";
+import ContentName from "./ContentName";
 
 type ListItemProps = {
   node: Node;
@@ -33,6 +34,7 @@ export default function ListItem(props: ListItemProps) {
     <ListRow
       node={props.node}
       numberOfLinesInRoot={props.numberOfLinesInRoot}
+      name={<ContentName node={props.node} />}
       nameHoverBeforeContent={nameHoverBeforeContent()}
       nameHoverAfterContent={nameHoverAfterContent()}
       onClick={maybeOnListItemClick()}
