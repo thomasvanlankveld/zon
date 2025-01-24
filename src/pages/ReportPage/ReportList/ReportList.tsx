@@ -13,9 +13,8 @@ import ContentRow from "./Content/ContentRow";
 import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
 import ReportTabList from "./Tabs/ReportTabList";
-import TabPanel from "../../../components/Tabs/TabPanel";
 import ListRow from "./ListRow/ListRow";
-import { TabKey, Tabs } from "./Tabs/report-tabs";
+import { TabKey } from "./Tabs/report-tabs";
 import ReportTabPanel from "./Tabs/ReportTabPanel";
 
 export default function ReportList() {
