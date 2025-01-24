@@ -13,7 +13,7 @@ import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
 import ReportTabList, { TabKey, Tabs } from "./ReportTabList";
 import TabPanel from "../../../components/Tabs/TabPanel";
-import ListRow from "./ListRow";
+import ListRow from "./ListRow/ListRow";
 
 export default function ReportList() {
   const { t } = useI18n();

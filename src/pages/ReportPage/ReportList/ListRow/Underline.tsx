@@ -1,4 +1,4 @@
-import styles from "./ReportList.module.css";
+import styles from "../ReportList.module.css";
 
 type UnderlineProps = {
   numberOfLinesInRow: number;

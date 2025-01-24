@@ -1,7 +1,7 @@
 import { JSX, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import NumberOfLines from "../../../components/NumberOfLines";
-import styles from "./ReportList.module.css";
+import NumberOfLines from "../../../../components/NumberOfLines";
+import styles from "../ReportList.module.css";
 import Underline from "./Underline";
 
 export type ListRowColors = {

@@ -5,7 +5,7 @@ import {
   type Node,
 } from "../../../utils/zon";
 import { useReportState } from "../ReportPage.state";
-import ListRow from "./ListRow";
+import ListRow from "./ListRow/ListRow";
 import { ARROW } from "../../../styles/arrow";
 import ContentName from "./ContentName";
 

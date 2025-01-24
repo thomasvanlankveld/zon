@@ -7,7 +7,7 @@ import {
 } from "../../../utils/zon";
 import styles from "./ReportList.module.css";
 import { useReportState } from "../ReportPage.state";
-import ListRow from "./ListRow";
+import ListRow from "./ListRow/ListRow";
 import { ARROW } from "../../../styles/arrow";
 import ContentName from "./ContentName";
 
