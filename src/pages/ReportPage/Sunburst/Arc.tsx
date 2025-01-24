@@ -6,7 +6,6 @@ import {
   getParentPath,
   isFile,
   isGroup,
-  Path,
 } from "../../../utils/zon";
 import { useReportState } from "../ReportPage.state.tsx";
 import { SunburstNode } from "./types.ts";
@@ -15,12 +14,16 @@ import styles from "./Sunburst.module.css";
 type ArcProps = {
   node: SunburstNode;
   maxRadius: number;
-  highlightedPath: Path | null;
 };
 
 function Arc(props: ArcProps) {
-  const { navigate, diagramRoot, setHoverArcPath, expandGroup } =
-    useReportState();
+  const {
+    navigate,
+    diagramRoot,
+    highlightedDiagramPath,
+    setHoverArcPath,
+    expandGroup,
+  } = useReportState();
 
   /**
    * Determines the SVG path data for a node's arc
@@ -37,7 +40,7 @@ function Arc(props: ArcProps) {
   }
 
   const colors = createMemo(() =>
-    getNodeArcColors(props.node, props.highlightedPath),
+    getNodeArcColors(props.node, highlightedDiagramPath()),
   );
 
   function onArcClick() {
