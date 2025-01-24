@@ -1,13 +1,17 @@
-import { createMemo, JSX, ValidComponent } from "solid-js";
+import { JSX, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
-import { getNodeTextColors, Node } from "../../../utils/zon";
 import NumberOfLines from "../../../components/NumberOfLines";
 import styles from "./ReportList.module.css";
 import Underline from "./Underline";
-import { useReportState } from "../ReportPage.state";
+
+export type ListRowColors = {
+  base: string;
+  highlight: string;
+  press: string;
+};
 
 type ListRowProps = {
-  node: Node;
+  colors: ListRowColors;
   rowContainerClassList?: { [k: string]: boolean | undefined };
   rowTextComponent?: ValidComponent;
   name: JSX.Element;
@@ -22,15 +26,9 @@ type ListRowProps = {
 };
 
 export default function ListRow(props: ListRowProps) {
-  const { reportRoot, highlightedListPath } = useReportState();
-
   function isButton() {
     return props.onClick != null;
   }
-
-  const colors = createMemo(() =>
-    getNodeTextColors(props.node, reportRoot().path, highlightedListPath()),
-  );
 
   return (
     <Dynamic
@@ -42,9 +40,9 @@ export default function ListRow(props: ListRowProps) {
         ...props.rowContainerClassList,
       }}
       style={{
-        "--base-color": colors().base,
-        "--highlight-color": colors().highlight,
-        "--press-color": colors().press,
+        "--base-color": props.colors.base,
+        "--highlight-color": props.colors.highlight,
+        "--press-color": props.colors.press,
       }}
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}

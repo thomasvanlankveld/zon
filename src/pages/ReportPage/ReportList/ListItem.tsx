@@ -1,4 +1,9 @@
-import { isFolder, isGroup, type Node } from "../../../utils/zon";
+import {
+  getNodeTextColors,
+  isFolder,
+  isGroup,
+  type Node,
+} from "../../../utils/zon";
 import { useReportState } from "../ReportPage.state";
 import ListRow from "./ListRow";
 import { ARROW } from "../../../styles/arrow";
@@ -10,7 +15,13 @@ type ListItemProps = {
 };
 
 export default function ListItem(props: ListItemProps) {
-  const { navigate, expandGroup, setHoverListPath } = useReportState();
+  const {
+    reportRoot,
+    navigate,
+    expandGroup,
+    highlightedListPath,
+    setHoverListPath,
+  } = useReportState();
 
   function nameHoverBeforeContent() {
     return isFolder(props.node) ? ARROW.BEFORE.RIGHT : ARROW.EMPTY;
@@ -32,7 +43,11 @@ export default function ListItem(props: ListItemProps) {
 
   return (
     <ListRow
-      node={props.node}
+      colors={getNodeTextColors(
+        props.node,
+        reportRoot().path,
+        highlightedListPath(),
+      )}
       name={<ContentName node={props.node} />}
       nameHoverBeforeContent={nameHoverBeforeContent()}
       nameHoverAfterContent={nameHoverAfterContent()}
