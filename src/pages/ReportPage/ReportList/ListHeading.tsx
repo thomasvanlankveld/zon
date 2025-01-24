@@ -19,6 +19,7 @@ export default function ListHeading() {
     listRootPath,
     highlightedListPath,
     isListRootReportRoot,
+    setHoverListPath,
   } = useReportState();
 
   function numberOfLinesInRoot() {
@@ -70,6 +71,8 @@ export default function ListHeading() {
       nameHoverBeforeContent={nameHoverBeforeContent()}
       numberOfLinesInRow={listRoot().numberOfLines}
       numberOfLinesInRoot={numberOfLinesInRoot()}
+      onMouseEnter={[setHoverListPath, listRoot().path]}
+      onMouseLeave={[setHoverListPath, null]}
       onClick={maybeOnHeaderClick()}
     />
   );

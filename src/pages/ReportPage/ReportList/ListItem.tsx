@@ -10,7 +10,7 @@ type ListItemProps = {
 };
 
 export default function ListItem(props: ListItemProps) {
-  const { navigate, expandGroup } = useReportState();
+  const { navigate, expandGroup, setHoverListPath } = useReportState();
 
   function nameHoverBeforeContent() {
     return isFolder(props.node) ? ARROW.BEFORE.RIGHT : ARROW.EMPTY;
@@ -38,6 +38,8 @@ export default function ListItem(props: ListItemProps) {
       nameHoverAfterContent={nameHoverAfterContent()}
       numberOfLinesInRow={props.node.numberOfLines}
       numberOfLinesInRoot={props.numberOfLinesInRoot}
+      onMouseEnter={[setHoverListPath, props.node.path]}
+      onMouseLeave={[setHoverListPath, null]}
       onClick={maybeOnListItemClick()}
     />
   );

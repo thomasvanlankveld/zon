@@ -16,12 +16,13 @@ type ListRowProps = {
   nameHoverAfterContent?: string;
   numberOfLinesInRow: number;
   numberOfLinesInRoot: number;
+  onMouseEnter?: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
+  onMouseLeave?: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
   onClick?: JSX.EventHandlerUnion<HTMLButtonElement, MouseEvent>;
 };
 
 export default function ListRow(props: ListRowProps) {
-  const { reportRoot, highlightedListPath, setHoverListPath } =
-    useReportState();
+  const { reportRoot, highlightedListPath } = useReportState();
 
   function isButton() {
     return props.onClick != null;
@@ -45,8 +46,8 @@ export default function ListRow(props: ListRowProps) {
         "--highlight-color": colors().highlight,
         "--press-color": colors().press,
       }}
-      onMouseEnter={[setHoverListPath, props.node.path]}
-      onMouseLeave={[setHoverListPath, null]}
+      onMouseEnter={props.onMouseEnter}
+      onMouseLeave={props.onMouseLeave}
       onClick={props.onClick}
     >
       <Dynamic
