@@ -11,7 +11,7 @@ type LanguagePanelProps = {
 };
 
 export default function LanguagePanel(props: LanguagePanelProps) {
-  const { reportRoot, listRoot } = useReportState();
+  const { reportRoot, listRoot, setHoverListLanguage } = useReportState();
 
   function languageCounts() {
     return Object.entries(listRoot().languageCounts).toSorted(
@@ -41,6 +41,8 @@ export default function LanguagePanel(props: LanguagePanelProps) {
             name={languageName}
             numberOfLinesInRow={numberOfLines}
             numberOfLinesInRoot={listRoot().numberOfLines}
+            onMouseEnter={[setHoverListLanguage, languageName]}
+            onMouseLeave={[setHoverListLanguage, null]}
           />
         )}
       </For>

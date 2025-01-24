@@ -1,3 +1,4 @@
+import { LanguageType } from "../tokei";
 import { arePathsEqual } from "./path";
 import { type Node, type Colors, type Path, isGroup, LINE_TYPE } from "./types";
 
@@ -108,13 +109,16 @@ export function getNodeArcColors(
   node: Node,
   highlightedPath: Path | null,
   highlightedLineType: LINE_TYPE | null,
+  highlightedLanguage: LanguageType | null,
 ) {
   const staticColors = isGroup(node) ? DIAGRAM_ARC_GROUP_COLORS : node.colors;
 
   const isHighlighted =
     arePathsEqual(highlightedPath, node.path) ||
     (highlightedLineType != null &&
-      node.lineTypeCounts[highlightedLineType] > 0);
+      node.lineTypeCounts[highlightedLineType] > 0) ||
+    (highlightedLanguage != null &&
+      (node.languageCounts[highlightedLanguage] ?? 0) > 0);
   const base = isHighlighted ? staticColors.highlight : staticColors.default;
 
   return {

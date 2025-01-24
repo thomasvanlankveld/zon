@@ -16,6 +16,7 @@ import {
   Path,
   withNode,
 } from "../../utils/zon";
+import { LanguageType } from "../../utils/tokei";
 
 const DEFAULT_MAX_CHILDREN = 16;
 
@@ -68,6 +69,8 @@ function createReportState(initialReportRoot: Node) {
   const [hoverListPath, setHoverListPath] = createSignal<Path | null>(null);
   const [hoverListLineType, setHoverListLineType] =
     createSignal<LINE_TYPE | null>(null);
+  const [hoverListLanguage, setHoverListLanguage] =
+    createSignal<LanguageType | null>(null);
 
   // Breadcrumb setup
   const breadcrumbPath = () => hoverArcPath() ?? diagramRootPath();
@@ -76,6 +79,7 @@ function createReportState(initialReportRoot: Node) {
   // Diagram setup
   const highlightedDiagramPath = hoverListPath;
   const highlightedDiagramLineType = hoverListLineType;
+  const highlightedDiagramLanguage = hoverListLanguage;
 
   // List setup
   const listRootPath = createMemo(() => hoverArcPath() ?? diagramRootPath());
@@ -117,6 +121,7 @@ function createReportState(initialReportRoot: Node) {
     diagramRootPath,
     highlightedDiagramPath,
     highlightedDiagramLineType,
+    highlightedDiagramLanguage,
     setHoverArcPath,
     listRoot,
     listRootPath,
@@ -124,6 +129,7 @@ function createReportState(initialReportRoot: Node) {
     highlightedListPath,
     setHoverListPath,
     setHoverListLineType,
+    setHoverListLanguage,
     expandGroup,
   };
 }

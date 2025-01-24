@@ -22,6 +22,7 @@ function Arc(props: ArcProps) {
     diagramRoot,
     highlightedDiagramPath,
     highlightedDiagramLineType,
+    highlightedDiagramLanguage,
     setHoverArcPath,
     expandGroup,
   } = useReportState();
@@ -45,6 +46,7 @@ function Arc(props: ArcProps) {
       props.node,
       highlightedDiagramPath(),
       highlightedDiagramLineType(),
+      highlightedDiagramLanguage(),
     ),
   );
 
