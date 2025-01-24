@@ -8,7 +8,7 @@ import {
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import { useReportState } from "../ReportPage.state";
-import ContentRow from "./ContentRow";
+import ContentRow from "./Content/ContentRow";
 import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";
 import ReportTabList, { TabKey, Tabs } from "./ReportTabList";

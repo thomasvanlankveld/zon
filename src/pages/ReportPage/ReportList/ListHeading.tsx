@@ -9,7 +9,7 @@ import styles from "./ReportList.module.css";
 import { useReportState } from "../ReportPage.state";
 import ListRow from "./ListRow/ListRow";
 import { ARROW } from "../../../styles/arrow";
-import ContentName from "./ContentName";
+import ContentName from "./Content/ContentName";
 
 export default function ListHeading() {
   const {
