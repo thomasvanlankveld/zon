@@ -45,7 +45,8 @@ export function createTree(
           node.height = Math.max(node.height, filePathSegments.length - i - 1);
         } else {
           const nodeBase = {
-            stats: tokeiReport.stats,
+            // TO DO: Add test to verify non-modification of stats
+            stats: { ...tokeiReport.stats },
             path: nodePath,
             name: filePathSegments[i],
             numberOfLines: getNumberOfLines(tokeiReport.stats, lineTypes),
