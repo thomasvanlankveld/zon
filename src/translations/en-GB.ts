@@ -12,6 +12,9 @@ const enGBTranslations: Translations = {
   "content.label": "Content",
   "types.label": "Types",
   "languages.label": "Languages",
+  "line-type.code": "Code",
+  "line-type.comments": "Comments",
+  "line-type.blanks": "Blanks",
 };
 
 export default enGBTranslations;

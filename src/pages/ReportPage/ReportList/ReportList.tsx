@@ -20,6 +20,12 @@ export default function ReportList() {
   const { listRoot } = useReportState();
   const [selectedTab, setSelectedTab] = createSignal<TabKey>(TabKey.Content);
 
+  const LineTypeNames = {
+    [LINE_TYPE.CODE]: t("line-type.code"),
+    [LINE_TYPE.COMMENTS]: t("line-type.comments"),
+    [LINE_TYPE.BLANKS]: t("line-type.blanks"),
+  };
+
   const listNodes = () => {
     const root = listRoot();
 
@@ -76,7 +82,7 @@ export default function ReportList() {
           <For each={Object.values(LINE_TYPE)}>
             {(lineType) => (
               <ListRow
-                name={lineType}
+                name={LineTypeNames[lineType]}
                 numberOfLinesInRow={listRoot().stats[lineType]}
                 numberOfLinesInRoot={listRoot().numberOfLines}
               />
