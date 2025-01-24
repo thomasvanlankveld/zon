@@ -60,6 +60,7 @@ export default function ListHeading() {
   return (
     <ListRow
       node={listRoot()}
+      numberOfLinesInRow={listRoot().numberOfLines}
       numberOfLinesInRoot={numberOfLinesInRoot()}
       rowContainerClassList={{
         "heading-regular": true,

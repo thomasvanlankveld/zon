@@ -1,14 +1,13 @@
-import { Node } from "../../../utils/zon";
 import styles from "./ReportList.module.css";
 
 type UnderlineProps = {
-  node: Node;
+  numberOfLinesInRow: number;
   numberOfLinesInRoot: number;
 };
 
 export default function Underline(props: UnderlineProps) {
   function barWidth() {
-    return `${(props.node.numberOfLines / props.numberOfLinesInRoot) * 100}%`;
+    return `${(props.numberOfLinesInRow / props.numberOfLinesInRoot) * 100}%`;
   }
 
   return (

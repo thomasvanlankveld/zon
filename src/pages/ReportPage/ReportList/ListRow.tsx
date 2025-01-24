@@ -8,6 +8,7 @@ import { useReportState } from "../ReportPage.state";
 
 type ListRowProps = {
   node: Node;
+  numberOfLinesInRow: number;
   numberOfLinesInRoot: number;
   rowContainerClassList?: { [k: string]: boolean | undefined };
   rowTextComponent?: ValidComponent;
@@ -64,11 +65,11 @@ export default function ListRow(props: ListRowProps) {
         </span>
         <NumberOfLines
           class="ml-auto"
-          numberOfLines={props.node.numberOfLines}
+          numberOfLines={props.numberOfLinesInRow}
         />
       </Dynamic>
       <Underline
-        node={props.node}
+        numberOfLinesInRow={props.numberOfLinesInRow}
         numberOfLinesInRoot={props.numberOfLinesInRoot}
       />
     </Dynamic>
