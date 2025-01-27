@@ -20,6 +20,7 @@ export default function ContentRow(props: ContentRowProps) {
     navigate,
     expandGroup,
     highlightedListPath,
+    isListItemDimmed,
     setHoverListPath,
   } = useReportState();
 
@@ -49,6 +50,7 @@ export default function ContentRow(props: ContentRowProps) {
         highlightedListPath(),
       )}
       name={<ContentName node={props.node} />}
+      isDimmed={isListItemDimmed(props.node)}
       nameHoverBeforeContent={nameHoverBeforeContent()}
       nameHoverAfterContent={nameHoverAfterContent()}
       numberOfLinesInRow={props.node.numberOfLines}

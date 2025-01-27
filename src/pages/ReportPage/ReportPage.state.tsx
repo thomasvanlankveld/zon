@@ -144,6 +144,19 @@ function createReportState(initialReportRoot: Node) {
     arePathsEqual(listRootPath(), reportRoot().path),
   );
 
+  // TODO:
+  // - Default, hover, press pattern?
+  // - Split rainbow arc from text?
+  // - Fix language and line type tab highlight & dim
+  // - Add a bit of highlight? (in case everything matches, like on the Rust codebase)
+  // - Fix diagram hover making list rows dim
+  // - Maybe make this local to the list instead of keeping it here?
+  // - Highlight subtree?
+  // - Fix root
+  // - Fix groups
+  const isListItemHighlighted = isArcHighlighted;
+  const isListItemDimmed = isArcDimmed;
+
   // Clearing the hovered paths is not just for usability. Setting the selected root path and expanding the max children
   // are interactions that can cause groups to cease to exist. By clearing hovered paths, we prevent the breadcrumbs
   // from crashing because they target a non-existing group.
@@ -180,6 +193,8 @@ function createReportState(initialReportRoot: Node) {
     listRootPath,
     isListRootReportRoot,
     highlightedListPath,
+    isListItemHighlighted,
+    isListItemDimmed,
     setHoverListPath,
     setHoverListLineType,
     setHoverListLanguage,

@@ -43,7 +43,7 @@
   &:hover {
     .report-list__row-text {
       flex-wrap: wrap;
-      color: var(--highlight-color);
+      /* color: var(--highlight-color); */
     }
 
     .report-list__row-name {
@@ -52,8 +52,19 @@
       text-overflow: inherit;
     }
 
-    .report-list__item-underline {
+    /* .report-list__item-underline {
       background-color: var(--highlight-color);
+    } */
+  }
+
+  &[data-is-dimmed="true"] {
+    .report-list__row-text {
+      color: var(--dim-color);
+      /* opacity: 0.6; */
+    }
+
+    .report-list__item-underline {
+      background-color: var(--dim-color);
     }
   }
 }
@@ -63,11 +74,13 @@
 
   &:active {
     .report-list__row-text {
-      color: var(--press-color);
+      color: var(--highlight-color);
+      /* color: var(--press-color); */
     }
 
     .report-list__item-underline {
-      background-color: var(--press-color);
+      background-color: var(--highlight-color);
+      /* background-color: var(--press-color); */
     }
   }
 
