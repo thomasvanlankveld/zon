@@ -1,5 +1,6 @@
 import { For } from "solid-js";
 import { getNodeStaticTextColors } from "../../../../utils/zon";
+import { LanguageType } from "../../../../utils/tokei";
 import { useReportState } from "../../ReportPage.state";
 import { TabKey } from "../Tabs/report-tabs";
 import ReportTabPanel from "../Tabs/ReportTabPanel";
@@ -11,7 +12,8 @@ type LanguagePanelProps = {
 };
 
 export default function LanguagePanel(props: LanguagePanelProps) {
-  const { reportRoot, listRoot, setHoverListLanguage } = useReportState();
+  const { reportRoot, listRoot, hoverListLanguage, setHoverListLanguage } =
+    useReportState();
 
   function languageCounts() {
     return Object.entries(listRoot().languageCounts).toSorted(
@@ -28,6 +30,14 @@ export default function LanguagePanel(props: LanguagePanelProps) {
     };
   }
 
+  function isRowDimmed(languageName: LanguageType) {
+    if (hoverListLanguage() == null) {
+      return false;
+    }
+
+    return hoverListLanguage() !== languageName;
+  }
+
   return (
     <ReportTabPanel
       class={styles["report-list__list"]}
@@ -39,6 +49,7 @@ export default function LanguagePanel(props: LanguagePanelProps) {
           <ListRow
             colors={colors()}
             name={languageName}
+            isDimmed={isRowDimmed(languageName as LanguageType)}
             numberOfLinesInRow={numberOfLines}
             numberOfLinesInRoot={listRoot().numberOfLines}
             onMouseEnter={[setHoverListLanguage, languageName]}

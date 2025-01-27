@@ -1,4 +1,5 @@
 import {
+  arePathsEqual,
   getNodeTextColors,
   isFolder,
   isGroup,
@@ -20,7 +21,7 @@ export default function ContentRow(props: ContentRowProps) {
     navigate,
     expandGroup,
     highlightedListPath,
-    isListItemDimmed,
+    hoverListPath,
     setHoverListPath,
   } = useReportState();
 
@@ -42,6 +43,14 @@ export default function ContentRow(props: ContentRowProps) {
     }
   }
 
+  function isRowDimmed(node: Node) {
+    if (hoverListPath() == null) {
+      return false;
+    }
+
+    return !arePathsEqual(node.path, hoverListPath());
+  }
+
   return (
     <ListRow
       colors={getNodeTextColors(
@@ -50,7 +59,7 @@ export default function ContentRow(props: ContentRowProps) {
         highlightedListPath(),
       )}
       name={<ContentName node={props.node} />}
-      isDimmed={isListItemDimmed(props.node)}
+      isDimmed={isRowDimmed(props.node)}
       nameHoverBeforeContent={nameHoverBeforeContent()}
       nameHoverAfterContent={nameHoverAfterContent()}
       numberOfLinesInRow={props.node.numberOfLines}

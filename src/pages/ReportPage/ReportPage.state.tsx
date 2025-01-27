@@ -154,8 +154,7 @@ function createReportState(initialReportRoot: Node) {
   // - Highlight subtree?
   // - Fix root
   // - Fix groups
-  const isListItemHighlighted = isArcHighlighted;
-  const isListItemDimmed = isArcDimmed;
+  // - Give Languages and Types colors based on their "average" color value
 
   // Clearing the hovered paths is not just for usability. Setting the selected root path and expanding the max children
   // are interactions that can cause groups to cease to exist. By clearing hovered paths, we prevent the breadcrumbs
@@ -193,10 +192,11 @@ function createReportState(initialReportRoot: Node) {
     listRootPath,
     isListRootReportRoot,
     highlightedListPath,
-    isListItemHighlighted,
-    isListItemDimmed,
+    hoverListPath,
     setHoverListPath,
+    hoverListLineType,
     setHoverListLineType,
+    hoverListLanguage,
     setHoverListLanguage,
     expandGroup,
   };

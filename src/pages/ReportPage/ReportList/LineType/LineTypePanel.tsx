@@ -13,7 +13,8 @@ type LineTypePanelProps = {
 
 export default function LineTypePanel(props: LineTypePanelProps) {
   const { t } = useI18n();
-  const { reportRoot, listRoot, setHoverListLineType } = useReportState();
+  const { reportRoot, listRoot, hoverListLineType, setHoverListLineType } =
+    useReportState();
 
   const LineTypeNames = {
     [LINE_TYPE.CODE]: t("line-type.code"),
@@ -30,6 +31,14 @@ export default function LineTypePanel(props: LineTypePanelProps) {
     };
   }
 
+  function isRowDimmed(lineType: LINE_TYPE) {
+    if (hoverListLineType() == null) {
+      return false;
+    }
+
+    return hoverListLineType() !== lineType;
+  }
+
   return (
     <ReportTabPanel
       class={styles["report-list__list"]}
@@ -41,6 +50,7 @@ export default function LineTypePanel(props: LineTypePanelProps) {
           <ListRow
             colors={colors()}
             name={LineTypeNames[lineType]}
+            isDimmed={isRowDimmed(lineType)}
             numberOfLinesInRow={listRoot().lineTypeCounts[lineType]}
             numberOfLinesInRoot={listRoot().numberOfLines}
             onMouseEnter={[setHoverListLineType, lineType]}
