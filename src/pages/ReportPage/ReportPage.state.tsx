@@ -146,6 +146,10 @@ function createReportState(initialReportRoot: Node) {
 
   // TODO:
   // - Default, hover, press pattern?
+  //   - Deselected: `extra-muted`
+  //   - Default: `regular`
+  //   - hover / focus: `highlight` (or regular if the other items get `extra-muted`)
+  //   - pressed (active): `muted`
   // - Split rainbow arc from text?
   // - Fix language and line type tab highlight & dim
   // - Add a bit of highlight? (in case everything matches, like on the Rust codebase)
