@@ -29,8 +29,10 @@ export const TEXT_GROUP_COLORS: Colors = {
 
 export const DIAGRAM_ARC_GROUP_COLORS: Colors = {
   default: "var(--color-diagram-arc-group-default)",
+  slightHighlight: "var(--color-diagram-arc-group-slight-highlight)",
   highlight: "var(--color-diagram-arc-group-highlight)",
   press: "var(--color-diagram-arc-group-press)",
+  dim: "var(--color-diagram-arc-group-dim)",
 };
 
 function rainbowHue(
@@ -77,17 +79,18 @@ export function rainbow(
 
   return {
     default: `oklch(${lightness}% ${chroma} ${hue})`,
+    slightHighlight: `oklch(${lightness + 1}% ${(1 - 0.1 * chromaCorrection) * chroma} ${hue})`,
     // highlight: `oklch(${lightness + 10}% ${chroma} ${hue})`,
     // highlight: `oklch(${lightness}% ${(1 - chromaCorrection) * chroma} ${hue})`,
     // highlight: `oklch(${lightness + 8}% ${(1 - chromaCorrection) * chroma} ${hue})`,
     highlight: `oklch(${lightness + 10}% ${(1 - chromaCorrection) * chroma} ${hue})`,
     // // TODO: Make text use a darker color instead of a lighter one
-    press: `oklch(${lightness + 15}% ${chroma} ${hue})`,
-    // press: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
+    // press: `oklch(${lightness + 15}% ${chroma} ${hue})`,
+    press: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
     opposite: `oklch(${lightness + 10}% ${(1 - oppositeChromaCorrection) * chroma} ${oppositeHue} / 0.5)`,
     // opposite: `oklch(${lightness}% ${chroma} ${oppositeHue})`,
     // dim: `oklch(${lightness}% ${chroma} ${hue} / 0.6)`,
-    dim: `oklch(${lightness}% ${chroma} ${hue} / 0.5)`,
+    dim: `oklch(${lightness}% ${chroma} ${hue} / 0.55)`,
     // dim: `oklch(${lightness - 15}% ${chroma} ${hue})`,
   };
 }

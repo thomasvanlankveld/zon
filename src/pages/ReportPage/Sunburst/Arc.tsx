@@ -78,6 +78,8 @@ function Arc(props: ArcProps) {
       d={getNodeArcD()}
       style={{
         "--arc-base-color": colors().default,
+        "--arc-slight-highlight-color":
+          colors().slightHighlight ?? "rgba(255, 255, 255, 0.5);",
         "--arc-highlight-color": colors().highlight,
         "--arc-press-color": colors().press,
         "--arc-opposite-color":

@@ -23,6 +23,7 @@ export type Path = SegmentName[];
 
 export type Colors = {
   default: string;
+  slightHighlight?: string;
   highlight: string;
   press: string;
   opposite?: string;
