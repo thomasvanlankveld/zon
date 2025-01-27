@@ -23,6 +23,7 @@ function Arc(props: ArcProps) {
     highlightedDiagramPath,
     highlightedDiagramLineType,
     highlightedDiagramLanguage,
+    isArcHighlighted,
     setHoverArcPath,
     expandGroup,
   } = useReportState();
@@ -80,9 +81,12 @@ function Arc(props: ArcProps) {
         "--arc-base-color": colors().base,
         "--arc-highlight-color": colors().highlight,
         "--arc-press-color": colors().press,
+        "--arc-opposite-color":
+          colors().opposite ?? "rgba(255, 255, 255, 0.5);",
         opacity: props.node.opacity(),
       }}
       class={styles.sunburst__arc}
+      data-is-highlighted={isArcHighlighted(props.node)}
       onMouseEnter={() => setHoverArcPath(props.node.path)}
       onMouseLeave={() => setHoverArcPath(null)}
       onClick={onArcClick}

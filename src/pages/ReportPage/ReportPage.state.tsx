@@ -77,9 +77,24 @@ function createReportState(initialReportRoot: Node) {
   const highlightedBreadcrumbPath = hoverArcPath;
 
   // Diagram setup
-  const highlightedDiagramPath = hoverListPath;
+  const highlightedDiagramPath = () => hoverListPath() ?? hoverArcPath();
   const highlightedDiagramLineType = hoverListLineType;
   const highlightedDiagramLanguage = hoverListLanguage;
+
+  function isArcHighlighted(node: Node) {
+    const highlightedPath = highlightedDiagramPath();
+    const highlightedLineType = highlightedDiagramLineType();
+    const highlightedLanguage = highlightedDiagramLanguage();
+
+    const isHighlighted =
+      arePathsEqual(highlightedPath, node.path) ||
+      (highlightedLineType != null &&
+        node.lineTypeCounts[highlightedLineType] > 0) ||
+      (highlightedLanguage != null &&
+        (node.languageCounts[highlightedLanguage] ?? 0) > 0);
+
+    return isHighlighted;
+  }
 
   // List setup
   const listRootPath = createMemo(() => hoverArcPath() ?? diagramRootPath());
@@ -122,6 +137,7 @@ function createReportState(initialReportRoot: Node) {
     highlightedDiagramPath,
     highlightedDiagramLineType,
     highlightedDiagramLanguage,
+    isArcHighlighted,
     setHoverArcPath,
     listRoot,
     listRootPath,

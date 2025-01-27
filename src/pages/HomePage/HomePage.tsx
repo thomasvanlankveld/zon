@@ -11,6 +11,7 @@ import { createTree, LINE_TYPE, type Node } from "../../utils/zon";
 import type { Languages } from "../../utils/tokei";
 import NumberOfLines from "../../components/NumberOfLines";
 import styles from "./HomePage.module.css";
+// import ColorTest from "./ColorTest";
 
 type LandingPageProps = {
   reports: Record<string, Node>;
@@ -50,6 +51,7 @@ export default function LandingPage(props: LandingPageProps) {
   return (
     <main class={`${styles["home-page"]} page`}>
       <h1 class="heading-l">{t("app.title")}</h1>
+      {/* <ColorTest /> */}
 
       <div>
         <For each={Object.entries(props.reports)}>

@@ -5,11 +5,21 @@
   fill-rule: evenodd;
   fill: var(--arc-base-color);
 
-  &:hover {
+  /* TODO: Remove, not needed anymore when highlight is handled with data attribute */
+  /* &:hover {
     fill: var(--arc-highlight-color);
-  }
+    stroke: rgb(255, 255, 255);
+  } */
 
   &:active {
     fill: var(--arc-press-color);
+  }
+
+  &[data-is-highlighted="true"] {
+    fill: var(--arc-highlight-color);
+    /* stroke: var(--arc-opposite-color); */
+    stroke: rgb(255, 255, 255);
+    /* stroke: rgb(0, 0, 0); */
+    stroke-width: var(--spacing-3xs);
   }
 }

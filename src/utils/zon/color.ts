@@ -33,23 +33,59 @@ export const DIAGRAM_ARC_GROUP_COLORS: Colors = {
   press: "var(--color-diagram-arc-group-press)",
 };
 
+function rainbowHue(
+  value: number,
+  base?: number,
+  dynamic?: number,
+  offset?: number,
+) {
+  const position = (value + 0.8) % 1;
+  base ??= 0.3;
+  // base ??= 0.35;
+  dynamic ??= 0.5;
+  offset ??= 0.4;
+
+  const hue = position * 360;
+  const chromaCorrection = base + Math.abs(dynamic - ((value + offset) % 1));
+
+  return { hue, chromaCorrection };
+}
+
 /**
  * Take a number between 0 and 1 (inclusive), and produce a set of corresponding colors
  * @param value
  */
-export function rainbow(value: number): Colors {
-  const position = (value + 0.8) % 1;
+export function rainbow(
+  value: number,
+  base?: number,
+  dynamic?: number,
+  offset?: number,
+): Colors {
+  // const position = (value + 0.8) % 1;
+  // base ??= 0.3;
+  // // base ??= 0.35;
+  // dynamic ??= 0.5;
+  // offset ??= 0.4;
 
   const lightness = 82;
   const chroma = 0.31;
-  const hue = position * 360;
-  const chromaCorrection = 0.15 + Math.abs(0.5 - ((value + 0.25) % 1));
+  // const hue = position * 360;
+  // const chromaCorrection = base + Math.abs(dynamic - ((value + offset) % 1));
+  const { hue, chromaCorrection } = rainbowHue(value, base, dynamic, offset);
+  const { hue: oppositeHue, chromaCorrection: oppositeChromaCorrection } =
+    rainbowHue(value + 0.5, base, dynamic, offset);
 
   return {
     default: `oklch(${lightness}% ${chroma} ${hue})`,
+    // highlight: `oklch(${lightness + 10}% ${chroma} ${hue})`,
+    // highlight: `oklch(${lightness}% ${(1 - chromaCorrection) * chroma} ${hue})`,
+    // highlight: `oklch(${lightness + 8}% ${(1 - chromaCorrection) * chroma} ${hue})`,
     highlight: `oklch(${lightness + 10}% ${(1 - chromaCorrection) * chroma} ${hue})`,
-    // TODO: Make text use a darker color instead of a lighter one
-    press: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
+    // // TODO: Make text use a darker color instead of a lighter one
+    press: `oklch(${lightness + 15}% ${chroma} ${hue})`,
+    // press: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
+    opposite: `oklch(${lightness + 10}% ${(1 - oppositeChromaCorrection) * chroma} ${oppositeHue} / 0.5)`,
+    // opposite: `oklch(${lightness}% ${chroma} ${oppositeHue})`,
   };
 }
 
@@ -125,5 +161,6 @@ export function getNodeArcColors(
     base,
     highlight: staticColors.highlight,
     press: staticColors.press,
+    opposite: staticColors.opposite,
   };
 }

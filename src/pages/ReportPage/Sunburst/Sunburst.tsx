@@ -34,7 +34,7 @@ function getAnimationTarget(value: number, target: number, dt: number) {
 }
 
 export default function Sunburst() {
-  const { diagramRoot: targetDiagramRoot } = useReportState();
+  const { diagramRoot: targetDiagramRoot, isArcHighlighted } = useReportState();
 
   const [svg, setSvg] = createSignal<SVGSVGElement>();
   const { width, height } = createElementSize(svg);
@@ -299,7 +299,11 @@ export default function Sunburst() {
       ref={setSvg}
       viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}
     >
-      <For each={visibleNodes()}>
+      <For
+        each={visibleNodes()
+          .map((node) => ({ ...node, isHighlighted: isArcHighlighted(node) }))
+          .toSorted((node) => (node.isHighlighted ? 1 : -1))}
+      >
         {(node) => <Arc node={node} maxRadius={maxRadius()} />}
       </For>
       <Center radius={(1 / targetMaxDistance()) * maxRadius()} />
