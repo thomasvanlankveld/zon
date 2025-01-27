@@ -12,14 +12,19 @@
   } */
 
   &:active {
-    fill: var(--arc-press-color);
+    fill: var(--arc-highlight-color);
+    /* fill: var(--arc-press-color); */
   }
 
-  &[data-is-highlighted="true"] {
+  /* &[data-is-highlighted="true"] {
     fill: var(--arc-highlight-color);
-    /* stroke: var(--arc-opposite-color); */
+    /* stroke: var(--arc-opposite-color); */ /*
     stroke: rgb(255, 255, 255);
-    /* stroke: rgb(0, 0, 0); */
+    /* stroke: rgb(0, 0, 0); */ /*
     stroke-width: var(--spacing-3xs);
+  } */
+
+  &[data-is-dimmed="true"] {
+    fill: var(--arc-dim-color);
   }
 }

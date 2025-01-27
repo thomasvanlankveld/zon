@@ -86,6 +86,8 @@ export function rainbow(
     // press: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
     opposite: `oklch(${lightness + 10}% ${(1 - oppositeChromaCorrection) * chroma} ${oppositeHue} / 0.5)`,
     // opposite: `oklch(${lightness}% ${chroma} ${oppositeHue})`,
+    dim: `oklch(${lightness}% ${chroma} ${hue} / 0.5)`,
+    // dim: `oklch(${lightness - 15}% ${chroma} ${hue})`,
   };
 }
 
@@ -158,9 +160,7 @@ export function getNodeArcColors(
   const base = isHighlighted ? staticColors.highlight : staticColors.default;
 
   return {
+    ...staticColors,
     base,
-    highlight: staticColors.highlight,
-    press: staticColors.press,
-    opposite: staticColors.opposite,
   };
 }

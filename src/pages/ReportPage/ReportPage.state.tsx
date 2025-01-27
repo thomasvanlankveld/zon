@@ -81,19 +81,55 @@ function createReportState(initialReportRoot: Node) {
   const highlightedDiagramLineType = hoverListLineType;
   const highlightedDiagramLanguage = hoverListLanguage;
 
-  function isArcHighlighted(node: Node) {
-    const highlightedPath = highlightedDiagramPath();
-    const highlightedLineType = highlightedDiagramLineType();
-    const highlightedLanguage = highlightedDiagramLanguage();
-
-    const isHighlighted =
+  /**
+   * Whether the arc for the given node should be highlighted or not, as a pure function
+   */
+  function isArcHighlightedPure(
+    node: Node,
+    highlightedPath: Path | null,
+    highlightedLineType: LINE_TYPE | null,
+    highlightedLanguage: LanguageType | null,
+  ): boolean {
+    return (
       arePathsEqual(highlightedPath, node.path) ||
       (highlightedLineType != null &&
         node.lineTypeCounts[highlightedLineType] > 0) ||
       (highlightedLanguage != null &&
-        (node.languageCounts[highlightedLanguage] ?? 0) > 0);
+        (node.languageCounts[highlightedLanguage] ?? 0) > 0)
+    );
+  }
 
-    return isHighlighted;
+  /**
+   * Whether the arc for the given node should be highlighted or not
+   */
+  function isArcHighlighted(node: Node) {
+    return isArcHighlightedPure(
+      node,
+      highlightedDiagramPath(),
+      highlightedDiagramLineType(),
+      highlightedDiagramLanguage(),
+    );
+  }
+
+  /**
+   * An arc is dimmed when other arcs are highlighted
+   */
+  function isArcDimmed(node: Node) {
+    const isNothingHighlighted =
+      highlightedDiagramPath() == null &&
+      highlightedDiagramLineType() == null &&
+      highlightedDiagramLanguage() == null;
+
+    if (isNothingHighlighted) {
+      return false;
+    }
+
+    return !isArcHighlightedPure(
+      node,
+      highlightedDiagramPath(),
+      highlightedDiagramLineType(),
+      highlightedDiagramLanguage(),
+    );
   }
 
   // List setup
@@ -138,6 +174,7 @@ function createReportState(initialReportRoot: Node) {
     highlightedDiagramLineType,
     highlightedDiagramLanguage,
     isArcHighlighted,
+    isArcDimmed,
     setHoverArcPath,
     listRoot,
     listRootPath,

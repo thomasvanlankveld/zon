@@ -26,6 +26,7 @@ export type Colors = {
   highlight: string;
   press: string;
   opposite?: string;
+  dim?: string;
 };
 
 export type LineTypeCounts = {
