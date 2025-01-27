@@ -149,8 +149,6 @@ function createReportState(initialReportRoot: Node) {
   // - Split rainbow arc from text?
   // - Fix language and line type tab highlight & dim
   // - Add a bit of highlight? (in case everything matches, like on the Rust codebase)
-  // - Fix diagram hover making list rows dim
-  // - Maybe make this local to the list instead of keeping it here?
   // - Highlight subtree?
   // - Fix root
   // - Fix groups
