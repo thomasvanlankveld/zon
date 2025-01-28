@@ -51,14 +51,14 @@ type NodeBase = {
 export type File = NodeBase & {
   type: typeof NODE_TYPE.FILE;
   height: 0;
-  colors: Colors;
+  colorValue: number;
 };
 
 export type Folder = NodeBase & {
   type: typeof NODE_TYPE.FOLDER;
   children: Node[];
   height: number;
-  colors: Colors;
+  colorValue: number;
 };
 
 export type Group = NodeBase & {

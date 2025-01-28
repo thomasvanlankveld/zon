@@ -1,4 +1,3 @@
-import { NODE_DEFAULT_COLORS, rainbow } from "./color.ts";
 import { Languages, LanguageType } from "../tokei.ts";
 import {
   GROUP_SEGMENT,
@@ -73,7 +72,7 @@ export function createTree(
             depth: i,
             // Actual values of `firstLine` and `color` can only be determined after sorting
             firstLine: 0,
-            colors: { ...NODE_DEFAULT_COLORS },
+            colorValue: 0,
           };
 
           const isFile = i === filePathSegments.length - 1;
@@ -152,7 +151,7 @@ function addDeduced(
 
     if (!isGroup(child)) {
       const middleLine = lineNumber + child.numberOfLines / 2;
-      child.colors = rainbow(middleLine / totalNumberOfLines);
+      child.colorValue = middleLine / totalNumberOfLines;
     }
 
     addDeduced(child, totalNumberOfLines, lineNumber);

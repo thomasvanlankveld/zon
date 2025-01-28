@@ -124,7 +124,7 @@ export function getNodeStaticTextColors(
     return TEXT_GROUP_COLORS;
   }
 
-  return node.colors;
+  return rainbow(node.colorValue);
 }
 
 /**
@@ -152,7 +152,9 @@ export function getNodeArcColors(
   highlightedLineType: LINE_TYPE | null,
   highlightedLanguage: LanguageType | null,
 ) {
-  const staticColors = isGroup(node) ? DIAGRAM_ARC_GROUP_COLORS : node.colors;
+  const staticColors = isGroup(node)
+    ? DIAGRAM_ARC_GROUP_COLORS
+    : rainbow(node.colorValue);
 
   const isHighlighted =
     arePathsEqual(highlightedPath, node.path) ||
