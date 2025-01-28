@@ -16,7 +16,7 @@ type ListRowProps = {
   rowContainerClassList?: { [k: string]: boolean | undefined };
   rowTextComponent?: ValidComponent;
   name: JSX.Element;
-  isDimmed: boolean;
+  isDimmed?: boolean;
   nameBeforeContent?: string;
   nameHoverBeforeContent?: string;
   nameHoverAfterContent?: string;
@@ -48,7 +48,7 @@ export default function ListRow(props: ListRowProps) {
         "--press-color": props.colors?.press ?? "var(--color-text-muted)",
         "--dim-color": props.colors?.dim ?? "var(--color-text-extra-muted)",
       }}
-      data-is-dimmed={props.isDimmed}
+      data-is-dimmed={props.isDimmed ?? false}
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
       onClick={props.onClick}
