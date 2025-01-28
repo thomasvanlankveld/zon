@@ -144,20 +144,6 @@ function createReportState(initialReportRoot: Node) {
     arePathsEqual(listRootPath(), reportRoot().path),
   );
 
-  // TODO:
-  // - Default, hover, press pattern?
-  //   - Deselected: `extra-muted`
-  //   - Default: `regular`
-  //   - hover / focus: `highlight` (or regular if the other items get `extra-muted`)
-  //   - pressed (active): `muted`
-  // - Split rainbow arc from text?
-  // - Fix language and line type tab highlight & dim
-  // - Add a bit of highlight? (in case everything matches, like on the Rust codebase)
-  // - Highlight subtree?
-  // - Fix root
-  // - Fix groups
-  // - Give Languages and Types colors based on their "average" color value
-
   // Clearing the hovered paths is not just for usability. Setting the selected root path and expanding the max children
   // are interactions that can cause groups to cease to exist. By clearing hovered paths, we prevent the breadcrumbs
   // from crashing because they target a non-existing group.
