@@ -95,6 +95,14 @@
     --font-weight-heading-l: var(--fw-xl);
 
     /* Colors */
+
+    /*
+    Semantic pattern:
+    - Deemphasized: `extra-dim`
+    - Default: `regular`
+    - Hover & focus: `bright`
+    - Pressed: `dim`
+    */
     --color-text-highlight: var(--clr-white);
     --color-text-regular: var(--clr-grey-800);
     --color-text-muted: var(--clr-grey-600);
