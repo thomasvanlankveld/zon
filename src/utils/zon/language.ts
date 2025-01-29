@@ -34,6 +34,8 @@ export function subtractLanguageCounts(
 
     if (newSum.numberOfLines > 0) {
       sums[languageName as LanguageType] = newSum;
+    } else {
+      delete sums[languageName as LanguageType];
     }
   }
 
