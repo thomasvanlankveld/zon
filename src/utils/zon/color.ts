@@ -159,9 +159,9 @@ export function getNodeArcColors(
   const isHighlighted =
     arePathsEqual(highlightedPath, node.path) ||
     (highlightedLineType != null &&
-      node.lineTypeCounts[highlightedLineType] > 0) ||
+      node.lineTypes[highlightedLineType].numberOfLines > 0) ||
     (highlightedLanguage != null &&
-      (node.languageCounts[highlightedLanguage] ?? 0) > 0);
+      (node.languages[highlightedLanguage]?.numberOfLines ?? 0) > 0);
   const base = isHighlighted ? staticColors.highlight : staticColors.default;
 
   return {

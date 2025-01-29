@@ -1,8 +1,9 @@
 import { Languages, LanguageType } from "../tokei.ts";
 import {
+  Counted,
   GROUP_SEGMENT,
+  isFile,
   isFolder,
-  isGroup,
   type LINE_TYPE,
   type Node,
   NODE_TYPE,
@@ -13,11 +14,13 @@ import {
   sumLineTypeCounts as sumLineTypeCounts,
   subtractLineTypeCounts,
 } from "./lineType.ts";
+import { subtractLanguageCounts, sumLanguageCounts } from "./language.ts";
 import {
-  addLanguageCount,
-  subtractLanguageCounts,
-  sumLanguageCounts,
-} from "./language.ts";
+  addChildColorValue,
+  createCounted,
+  subtractChild,
+  sumCounted,
+} from "./counted.ts";
 
 export function createTree(
   projectPath: string,
@@ -48,24 +51,30 @@ export function createTree(
           const node = nodes[nodePathStr];
           const numberOfLines = getNumberOfLines(tokeiReport.stats, lineTypes);
 
-          node.lineTypeCounts.blanks += tokeiReport.stats.blanks;
-          node.lineTypeCounts.code += tokeiReport.stats.code;
-          node.lineTypeCounts.comments += tokeiReport.stats.comments;
+          node.lineTypes.blanks.numberOfLines += tokeiReport.stats.blanks;
+          node.lineTypes.code.numberOfLines += tokeiReport.stats.code;
+          node.lineTypes.comments.numberOfLines += tokeiReport.stats.comments;
           node.numberOfLines += numberOfLines;
           node.height = Math.max(node.height, filePathSegments.length - i - 1);
 
-          addLanguageCount(
-            node.languageCounts,
-            languageName as LanguageType,
-            numberOfLines,
-          );
+          // TODO: Maybe re-extract to `language.ts`
+          const countedLanguage =
+            node.languages[languageName as LanguageType] ?? createCounted(0);
+          countedLanguage.numberOfLines += numberOfLines;
+          if (!((languageName as LanguageType) in node.languages)) {
+            node.languages[languageName as LanguageType] = countedLanguage;
+          }
         } else {
           const numberOfLines = getNumberOfLines(tokeiReport.stats, lineTypes);
 
           const nodeBase = {
             // TO DO: Add test to verify non-modification of `lineTypes`
-            lineTypeCounts: { ...tokeiReport.stats },
-            languageCounts: { [languageName]: numberOfLines },
+            lineTypes: {
+              blanks: createCounted(tokeiReport.stats.blanks),
+              code: createCounted(tokeiReport.stats.code),
+              comments: createCounted(tokeiReport.stats.comments),
+            },
+            languages: { [languageName]: createCounted(numberOfLines) },
             path: nodePath,
             name: filePathSegments[i],
             numberOfLines,
@@ -147,15 +156,38 @@ function addDeduced(
   }
 
   for (const child of node.children) {
+    // Line position
     child.firstLine = lineNumber;
+    const middleLine = lineNumber + child.numberOfLines / 2;
 
-    if (!isGroup(child)) {
-      const middleLine = lineNumber + child.numberOfLines / 2;
-      child.colorValue = middleLine / totalNumberOfLines;
+    // Color value
+    child.colorValue = middleLine / totalNumberOfLines;
+    if (isFile(child)) {
+      child.lineTypes.blanks.colorValue = child.colorValue;
+      child.lineTypes.code.colorValue = child.colorValue;
+      child.lineTypes.comments.colorValue = child.colorValue;
+      Object.values(child.languages).forEach(
+        (counted) => (counted.colorValue = child.colorValue),
+      );
     }
 
+    // Recursive call
     addDeduced(child, totalNumberOfLines, lineNumber);
 
+    // Line type colors
+    addChildColorValue(node.lineTypes.blanks, child.lineTypes.blanks);
+    addChildColorValue(node.lineTypes.code, child.lineTypes.code);
+    addChildColorValue(node.lineTypes.comments, child.lineTypes.comments);
+
+    // Language colors
+    Object.entries(child.languages).forEach(([languageName, childLanguage]) => {
+      addChildColorValue(
+        node.languages[languageName as LanguageType] as Counted,
+        childLanguage,
+      );
+    });
+
+    // Update loop position
     lineNumber += child.numberOfLines;
   }
 }
@@ -206,17 +238,17 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
   // The number of hidden nodes may be much larger than the number of visible ones, so we calculate the hidden line type
   // and language counts by subtracting the visible totals from the parent's total
   const visibleLineTypeCounts = sumLineTypeCounts(
-    visibleChildren.map((child) => child.lineTypeCounts),
+    visibleChildren.map((child) => child.lineTypes),
   );
   const hiddenLineTypeCounts = subtractLineTypeCounts(
-    node.lineTypeCounts,
+    node.lineTypes,
     visibleLineTypeCounts,
   );
   const visibleLanguageCounts = sumLanguageCounts(
-    visibleChildren.map((child) => child.languageCounts),
+    visibleChildren.map((child) => child.languages),
   );
   const hiddenLanguageCounts = subtractLanguageCounts(
-    node.languageCounts,
+    node.languages,
     visibleLanguageCounts,
   );
 
@@ -226,17 +258,17 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
       ? lastVisibleChild.firstLine + lastVisibleChild.numberOfLines
       : node.firstLine;
 
-  const hiddenNumberOfLines =
-    node.numberOfLines -
-    visibleChildren.reduce((acc, child) => acc + child.numberOfLines, 0);
+  const visibleCounted = sumCounted(visibleChildren);
+  const hiddenCounted = subtractChild(node, visibleCounted);
 
   const group: Node = {
     type: NODE_TYPE.GROUP,
-    lineTypeCounts: hiddenLineTypeCounts,
-    languageCounts: hiddenLanguageCounts,
+    lineTypes: hiddenLineTypeCounts,
+    languages: hiddenLanguageCounts,
     path: [...node.path, GROUP_SEGMENT],
     name: GROUP_SEGMENT,
-    numberOfLines: hiddenNumberOfLines,
+    numberOfLines: hiddenCounted.numberOfLines,
+    colorValue: hiddenCounted.colorValue,
     firstLine: firstHiddenLine,
     depth: node.depth + 1,
     height: 0,

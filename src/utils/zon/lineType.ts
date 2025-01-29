@@ -1,26 +1,20 @@
+import { CodeStats } from "../tokei.ts";
+import { subtractChild, sumCounted } from "./counted.ts";
 import type { LINE_TYPE, LineTypeCounts } from "./types.ts";
 
 export function getNumberOfLines(
-  lineTypeCounts: LineTypeCounts,
+  lineTypeCounts: CodeStats,
   lineTypes: LINE_TYPE[],
 ): number {
   return lineTypes.reduce((total, type) => total + lineTypeCounts[type], 0);
 }
 
 export function sumLineTypeCounts(countsArr: LineTypeCounts[]): LineTypeCounts {
-  const sums: LineTypeCounts = {
-    blanks: 0,
-    code: 0,
-    comments: 0,
+  return {
+    blanks: sumCounted(countsArr.map((count) => count.blanks)),
+    code: sumCounted(countsArr.map((count) => count.code)),
+    comments: sumCounted(countsArr.map((count) => count.comments)),
   };
-
-  for (const lineTypeCounts of countsArr) {
-    sums.blanks += lineTypeCounts.blanks;
-    sums.comments += lineTypeCounts.comments;
-    sums.code += lineTypeCounts.code;
-  }
-
-  return sums;
 }
 
 export function subtractLineTypeCounts(
@@ -28,8 +22,8 @@ export function subtractLineTypeCounts(
   right: LineTypeCounts,
 ): LineTypeCounts {
   return {
-    blanks: left.blanks - right.blanks,
-    comments: left.comments - right.comments,
-    code: left.code - right.code,
+    blanks: subtractChild(left.blanks, right.blanks),
+    comments: subtractChild(left.comments, right.comments),
+    code: subtractChild(left.code, right.code),
   };
 }

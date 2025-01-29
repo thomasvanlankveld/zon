@@ -30,20 +30,24 @@ export type Colors = {
   dim?: string;
 };
 
-export type LineTypeCounts = {
-  [LINE_TYPE.CODE]: number;
-  [LINE_TYPE.COMMENTS]: number;
-  [LINE_TYPE.BLANKS]: number;
+export type Counted = {
+  numberOfLines: number;
+  colorValue: number;
 };
 
-export type LanguageCounts = Partial<Record<LanguageType, number>>;
+export type LineTypeCounts = {
+  [LINE_TYPE.CODE]: Counted;
+  [LINE_TYPE.COMMENTS]: Counted;
+  [LINE_TYPE.BLANKS]: Counted;
+};
 
-type NodeBase = {
-  lineTypeCounts: LineTypeCounts;
-  languageCounts: LanguageCounts;
+export type LanguageCounts = Partial<Record<LanguageType, Counted>>;
+
+type NodeBase = Counted & {
+  lineTypes: LineTypeCounts;
+  languages: LanguageCounts;
   path: Path;
   name: SegmentName;
-  numberOfLines: number;
   firstLine: number;
   depth: number;
 };
@@ -51,14 +55,12 @@ type NodeBase = {
 export type File = NodeBase & {
   type: typeof NODE_TYPE.FILE;
   height: 0;
-  colorValue: number;
 };
 
 export type Folder = NodeBase & {
   type: typeof NODE_TYPE.FOLDER;
   children: Node[];
   height: number;
-  colorValue: number;
 };
 
 export type Group = NodeBase & {

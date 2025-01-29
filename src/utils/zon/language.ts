@@ -1,31 +1,21 @@
 import { LanguageType } from "../tokei";
+import { addChildColorValue, createCounted, subtractChild } from "./counted";
 import { LanguageCounts } from "./types";
-
-/**
- * Add a given of number of lines to a set of language counts. Adds a new entry for the language if it didn't exist yet,
- * and removes entries when the new total is 0. This function modifies the given `languageCounts` object.
- */
-export function addLanguageCount(
-  languageCounts: LanguageCounts,
-  languageName: LanguageType,
-  numberOfLines: number,
-): void {
-  const oldNumberOfLines = languageCounts[languageName] ?? 0;
-  const newNumberOfLines = oldNumberOfLines + numberOfLines;
-
-  if (newNumberOfLines === 0) {
-    delete languageCounts[languageName];
-  } else {
-    languageCounts[languageName] = newNumberOfLines;
-  }
-}
 
 export function sumLanguageCounts(countsArr: LanguageCounts[]): LanguageCounts {
   const sums: LanguageCounts = {};
 
   for (const LanguageCounts of countsArr) {
     for (const [languageName, count] of Object.entries(LanguageCounts)) {
-      addLanguageCount(sums, languageName as LanguageType, count);
+      const languageSum =
+        sums[languageName as LanguageType] ?? createCounted(0);
+
+      languageSum.numberOfLines += count.numberOfLines;
+      addChildColorValue(languageSum, count);
+
+      if (!((languageName as LanguageType) in sums)) {
+        sums[languageName as LanguageType] = languageSum;
+      }
     }
   }
 
@@ -33,14 +23,19 @@ export function sumLanguageCounts(countsArr: LanguageCounts[]): LanguageCounts {
 }
 
 export function subtractLanguageCounts(
-  left: LanguageCounts,
-  right: LanguageCounts,
+  totals: LanguageCounts,
+  toSubtract: LanguageCounts,
 ): LanguageCounts {
-  const leftCopy = { ...left };
+  const sums: LanguageCounts = { ...totals };
 
-  for (const [languageName, count] of Object.entries(right)) {
-    addLanguageCount(leftCopy, languageName as LanguageType, -count);
+  for (const [languageName, count] of Object.entries(toSubtract)) {
+    const oldSum = totals[languageName as LanguageType] ?? createCounted(0);
+    const newSum = subtractChild(oldSum, count);
+
+    if (newSum.numberOfLines > 0) {
+      sums[languageName as LanguageType] = newSum;
+    }
   }
 
-  return leftCopy;
+  return sums;
 }

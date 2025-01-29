@@ -1,5 +1,5 @@
 import { For } from "solid-js";
-import { getNodeStaticTextColors } from "../../../../utils/zon";
+import { rainbow } from "../../../../utils/zon";
 import { LanguageType } from "../../../../utils/tokei";
 import { useReportState } from "../../ReportPage.state";
 import { TabKey } from "../Tabs/report-tabs";
@@ -12,17 +12,17 @@ type LanguagePanelProps = {
 };
 
 export default function LanguagePanel(props: LanguagePanelProps) {
-  const { reportRoot, listRoot, hoverListLanguage, setHoverListLanguage } =
+  const { listRoot, hoverListLanguage, setHoverListLanguage } =
     useReportState();
 
   function languageCounts() {
-    return Object.entries(listRoot().languageCounts).toSorted(
-      (left, right) => right[1] - left[1],
+    return Object.entries(listRoot().languages).toSorted(
+      (left, right) => right[1].numberOfLines - left[1].numberOfLines,
     );
   }
 
-  function colors() {
-    const staticColors = getNodeStaticTextColors(listRoot(), reportRoot().path);
+  function colors(colorValue: number) {
+    const staticColors = rainbow(colorValue);
 
     return {
       ...staticColors,
@@ -45,9 +45,9 @@ export default function LanguagePanel(props: LanguagePanelProps) {
       selectedTab={props.selectedTab}
     >
       <For each={languageCounts()}>
-        {([languageName, numberOfLines]) => (
+        {([languageName, { colorValue, numberOfLines }]) => (
           <ListRow
-            colors={colors()}
+            colors={colors(colorValue)}
             name={languageName}
             isDimmed={isRowDimmed(languageName as LanguageType)}
             numberOfLinesInRow={numberOfLines}
