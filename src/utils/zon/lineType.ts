@@ -17,13 +17,18 @@ export function sumLineTypeCounts(countsArr: LineTypeCounts[]): LineTypeCounts {
   };
 }
 
+/**
+ * Resulting number of lines and color value per line type, after removing a child from its parent
+ * @param fallbackColorValue Color value to use when the resulting number of lines for a line type is 0
+ */
 export function subtractLineTypeCounts(
   left: LineTypeCounts,
   right: LineTypeCounts,
+  fallbackColorValue: number,
 ): LineTypeCounts {
   return {
-    blanks: subtractChild(left.blanks, right.blanks),
-    comments: subtractChild(left.comments, right.comments),
-    code: subtractChild(left.code, right.code),
+    blanks: subtractChild(left.blanks, right.blanks, fallbackColorValue),
+    comments: subtractChild(left.comments, right.comments, fallbackColorValue),
+    code: subtractChild(left.code, right.code, fallbackColorValue),
   };
 }

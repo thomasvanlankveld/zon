@@ -44,7 +44,15 @@ export function addChildColorValue(parent: Counted, child: Counted): void {
   }
 }
 
-export function subtractChild(parent: Counted, child: Counted): Counted {
+/**
+ * Resulting number of lines and color value after removing a child from its parent
+ * @param fallbackColorValue Used when the resulting number of lines is 0. Default is the parent's color value.
+ */
+export function subtractChild(
+  parent: Counted,
+  child: Counted,
+  fallbackColorValue?: number,
+): Counted {
   if (child.numberOfLines === 0) {
     return parent;
   }
@@ -53,7 +61,7 @@ export function subtractChild(parent: Counted, child: Counted): Counted {
 
   const colorValue = (() => {
     if (numberOfLines === 0) {
-      return child.colorValue;
+      return fallbackColorValue ?? parent.colorValue;
     }
 
     return (

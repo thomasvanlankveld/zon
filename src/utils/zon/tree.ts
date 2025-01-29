@@ -237,12 +237,15 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
 
   // The number of hidden nodes may be much larger than the number of visible ones, so we calculate the hidden line type
   // and language counts by subtracting the visible totals from the parent's total
+  const visibleCounted = sumCounted(visibleChildren);
+  const hiddenCounted = subtractChild(node, visibleCounted);
   const visibleLineTypeCounts = sumLineTypeCounts(
     visibleChildren.map((child) => child.lineTypes),
   );
   const hiddenLineTypeCounts = subtractLineTypeCounts(
     node.lineTypes,
     visibleLineTypeCounts,
+    hiddenCounted.colorValue,
   );
   const visibleLanguageCounts = sumLanguageCounts(
     visibleChildren.map((child) => child.languages),
@@ -257,9 +260,6 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
     lastVisibleChild != null
       ? lastVisibleChild.firstLine + lastVisibleChild.numberOfLines
       : node.firstLine;
-
-  const visibleCounted = sumCounted(visibleChildren);
-  const hiddenCounted = subtractChild(node, visibleCounted);
 
   const group: Node = {
     type: NODE_TYPE.GROUP,
