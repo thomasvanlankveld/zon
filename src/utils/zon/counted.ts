@@ -31,7 +31,11 @@ export function sumCounted(countedVals: Counted[]): Counted {
   return { numberOfLines, colorValue };
 }
 
-export function addChildColorValue(parent: Counted, child: Counted) {
+/**
+ * This function modifies the parent's `colorValue`. Before calling this function, the parent's number of lines should
+ * already be total of all its children's lines.
+ */
+export function addChildColorValue(parent: Counted, child: Counted): void {
   if (parent.numberOfLines === 0) {
     parent.colorValue = child.colorValue;
   } else {

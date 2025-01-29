@@ -11,11 +11,25 @@ export function sumLanguageCounts(countsArr: LanguageCounts[]): LanguageCounts {
         sums[languageName as LanguageType] ?? createCounted(0);
 
       languageSum.numberOfLines += count.numberOfLines;
-      addChildColorValue(languageSum, count);
 
       if (!((languageName as LanguageType) in sums)) {
         sums[languageName as LanguageType] = languageSum;
       }
+    }
+  }
+
+  // Second pass, because we need the total number of lines per language before we can determine its color value.
+  for (const LanguageCounts of countsArr) {
+    for (const [languageName, count] of Object.entries(LanguageCounts)) {
+      const languageSum = sums[languageName as LanguageType];
+
+      if (languageSum == null) {
+        throw new Error(
+          "Can't determine color value of non-existing language sum",
+        );
+      }
+
+      addChildColorValue(languageSum, count);
     }
   }
 
