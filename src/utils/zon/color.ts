@@ -36,8 +36,8 @@ export const DIAGRAM_ARC_GROUP_COLORS: Colors = {
   slightHighlight: "var(--color-diagram-arc-group-slight-highlight)",
   highlight: "var(--color-diagram-arc-group-highlight)",
   press: "var(--color-diagram-arc-group-press)",
-  // dim: "rgba(255, 255, 255, 0.5)" // Maybe? (was default value in `Arc.tsx`)
-  deemphasize: "var(--color-diagram-arc-group-dim)",
+  // deemphasize: "rgba(255, 255, 255, 0.5)" // Maybe? (was default value in `Arc.tsx`)
+  deemphasize: "var(--color-diagram-arc-group-deemphasize)",
 };
 
 function rainbowHue(
@@ -94,9 +94,9 @@ export function rainbow(
     press: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
     opposite: `oklch(${lightness + 10}% ${(1 - oppositeChromaCorrection) * chroma} ${oppositeHue} / 0.5)`,
     // opposite: `oklch(${lightness}% ${chroma} ${oppositeHue})`,
-    // dim: `oklch(${lightness}% ${chroma} ${hue} / 0.6)`,
+    // deemphasize: `oklch(${lightness}% ${chroma} ${hue} / 0.6)`,
     deemphasize: `oklch(${lightness}% ${chroma} ${hue} / 0.55)`,
-    // dim: `oklch(${lightness - 15}% ${chroma} ${hue})`,
+    // deemphasize: `oklch(${lightness - 15}% ${chroma} ${hue})`,
   };
 }
 

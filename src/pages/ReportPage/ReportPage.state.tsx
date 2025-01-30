@@ -111,9 +111,9 @@ function createReportState(initialReportRoot: Node) {
   }
 
   /**
-   * An arc is dimmed when other arcs are highlighted
+   * An arc is deemphasized when other arcs are highlighted
    */
-  function isArcDimmed(node: Node) {
+  function isArcDeemphasized(node: Node) {
     const isNothingHighlighted =
       highlightedDiagramPath() == null &&
       highlightedDiagramLineType() == null &&
@@ -172,7 +172,7 @@ function createReportState(initialReportRoot: Node) {
     highlightedDiagramLineType,
     highlightedDiagramLanguage,
     isArcHighlighted,
-    isArcDimmed,
+    isArcDeemphasized,
     setHoverArcPath,
     listRoot,
     listRootPath,

@@ -30,7 +30,7 @@
   /* stroke-width: var(--spacing-xxs); */
   /* } */
 
-  &[data-is-dimmed="true"] {
-    fill: var(--arc-dim-color);
+  &[data-deemphasized="true"] {
+    fill: var(--arc-deemphasize-color);
   }
 }

@@ -57,14 +57,14 @@
     } */
   }
 
-  &[data-is-dimmed="true"] {
+  &[data-deemphasized="true"] {
     .report-list__row-text {
-      color: var(--dim-color);
+      color: var(--deemphasize-color);
       /* opacity: 0.6; */
     }
 
     .report-list__item-underline {
-      background-color: var(--dim-color);
+      background-color: var(--deemphasize-color);
     }
   }
 }

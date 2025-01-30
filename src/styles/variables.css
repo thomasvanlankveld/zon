@@ -126,7 +126,7 @@
     --color-diagram-arc-group-slight-highlight: var(--clr-grey-600);
     --color-diagram-arc-group-highlight: var(--clr-grey-630);
     --color-diagram-arc-group-press: var(--clr-grey-450);
-    --color-diagram-arc-group-dim: var(--clr-grey-220);
+    --color-diagram-arc-group-deemphasize: var(--clr-grey-220);
 
     /* Content */
     --content-arrow-before-left: "<-\00a0";

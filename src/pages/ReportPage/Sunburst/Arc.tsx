@@ -84,11 +84,11 @@ function Arc(props: ArcProps) {
         "--arc-press-color": colors().press,
         "--arc-opposite-color":
           colors().opposite ?? "rgba(255, 255, 255, 0.5);",
-        "--arc-dim-color": colors().deemphasize,
+        "--arc-deemphasize-color": colors().deemphasize,
         opacity: props.node.opacity(),
       }}
       class={styles.sunburst__arc}
-      data-is-dimmed={props.node.isDimmed()}
+      data-deemphasized={props.node.isDimmed()}
       data-is-highlighted={props.node.isHighlighted()}
       onMouseEnter={() => setHoverArcPath(props.node.path)}
       onMouseLeave={() => setHoverArcPath(null)}

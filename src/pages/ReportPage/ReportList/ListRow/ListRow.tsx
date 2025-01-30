@@ -46,10 +46,10 @@ export default function ListRow(props: ListRowProps) {
         "--highlight-color":
           props.colors?.highlight ?? "var(--color-text-hover-focus)",
         "--press-color": props.colors?.press ?? "var(--color-text-active)",
-        "--dim-color":
+        "--deemphasize-color":
           props.colors?.deemphasize ?? "var(--color-text-deemphasize)",
       }}
-      data-is-dimmed={props.isDimmed ?? false}
+      data-deemphasized={props.isDimmed ?? false}
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
       onClick={props.onClick}

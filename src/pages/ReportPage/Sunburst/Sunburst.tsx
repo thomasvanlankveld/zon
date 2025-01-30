@@ -37,7 +37,7 @@ export default function Sunburst() {
   const {
     diagramRoot: targetDiagramRoot,
     isArcHighlighted,
-    isArcDimmed,
+    isArcDeemphasized: isArcDimmed,
   } = useReportState();
 
   const [svg, setSvg] = createSignal<SVGSVGElement>();
