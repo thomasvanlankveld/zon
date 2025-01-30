@@ -305,11 +305,7 @@ export default function Sunburst() {
       ref={setSvg}
       viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}
     >
-      <For
-        each={visibleNodes().toSorted((node) =>
-          node.isHighlighted() ? 1 : -1,
-        )}
-      >
+      <For each={visibleNodes()}>
         {(node) => <Arc node={node} maxRadius={maxRadius()} />}
       </For>
       <Center radius={(1 / targetMaxDistance()) * maxRadius()} />
