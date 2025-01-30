@@ -57,6 +57,11 @@
     --clr-blue-700: hsl(221, 67%, 70%);
     --clr-blue-500: hsl(221, 67%, 54%);
     --clr-blue-400: hsl(221, 67%, 40%);
+
+    --clr-text-highlight: var(--clr-white);
+    --clr-text-regular: var(--clr-grey-800);
+    --clr-text-muted: var(--clr-grey-600);
+    --clr-text-extra-muted: var(--clr-grey-450);
   }
 
   /* Semantic properties */
@@ -95,22 +100,10 @@
     --font-weight-heading-l: var(--fw-xl);
 
     /* Colors */
-
-    /*
-    Semantic pattern:
-    - Deemphasized: `extra-muted`
-    - Default: `regular`
-    - Hover & focus: `highlight`
-    - Pressed: `muted`
-    */
-    --color-text-highlight: var(--clr-white);
-    --color-text-regular: var(--clr-grey-800);
-    --color-text-muted: var(--clr-grey-600);
-    --color-text-extra-muted: var(--clr-grey-450);
-
-    --color-text-link: var(----clr-grey-800);
-    --color-text-link-hover: var(--clr-white);
-    --color-text-link-active: var(--clr-grey-700);
+    --color-text-hover-focus: var(--clr-text-highlight);
+    --color-text-regular: var(--clr-text-regular);
+    --color-text-active: var(--clr-text-muted);
+    --color-text-deemphasize: var(--clr-text-extra-muted);
 
     --color-background: var(--clr-black);
 

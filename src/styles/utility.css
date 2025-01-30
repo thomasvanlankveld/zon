@@ -1,9 +1,5 @@
 @layer utility {
   /* Typography */
-  .text-highlight {
-    color: var(--color-text-highlight);
-  }
-
   .text-small,
   .text-small * {
     font-size: var(--font-size-small);

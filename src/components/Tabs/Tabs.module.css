@@ -6,26 +6,26 @@
 }
 
 .tab {
-  color: var(--color-text-extra-muted);
+  color: var(--color-text-deemphasize);
   padding-block: var(--spacing-s);
 
   &:hover {
-    color: var(--color-text-highlight);
+    color: var(--color-text-hover-focus);
   }
 
   &:active {
-    color: var(--color-text-muted);
+    color: var(--color-text-active);
   }
 
   &[data-selected="true"] {
     color: var(--color-text-regular);
 
     &:hover {
-      color: var(--color-text-highlight);
+      color: var(--color-text-hover-focus);
     }
 
     &:active {
-      color: var(--color-text-muted);
+      color: var(--color-text-active);
     }
   }
 }

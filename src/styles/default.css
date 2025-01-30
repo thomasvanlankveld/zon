@@ -51,15 +51,15 @@
   }
 
   a {
-    color: var(--color-text-link);
+    color: var(--color-text-regular);
 
     &:hover,
     &:focus-visible {
-      color: var(--color-text-link-hover);
+      color: var(--color-text-hover-focus);
     }
 
     &:active {
-      color: var(--color-text-link-active);
+      color: var(--color-text-active);
     }
   }
 }
