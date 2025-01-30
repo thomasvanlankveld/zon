@@ -69,14 +69,12 @@ function Arc(props: ArcProps) {
       d={getNodeArcD()}
       style={{
         "--arc-regular-color": colors().regular,
-        "--arc-highlight-color": colors().highlight,
         "--arc-active-color": colors().active,
         "--arc-deemphasize-color": colors().deemphasize,
         opacity: props.node.opacity(),
       }}
       class={styles.sunburst__arc}
       data-deemphasized={props.node.isDeemphasized()}
-      data-highlighted={props.node.isHighlighted()}
       onMouseEnter={() => setHoverArcPath(props.node.path)}
       onMouseLeave={() => setHoverArcPath(null)}
       onClick={onArcClick}

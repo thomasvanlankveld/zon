@@ -89,13 +89,15 @@ function createReportState(initialReportRoot: Node) {
     highlightedLineType: LINE_TYPE | null,
     highlightedLanguage: LanguageType | null,
   ): boolean {
-    return (
-      arePathsEqual(highlightedPath, node.path) ||
-      (highlightedLineType != null &&
-        node.lineTypes[highlightedLineType].numberOfLines > 0) ||
-      (highlightedLanguage != null &&
-        (node.languages[highlightedLanguage]?.numberOfLines ?? 0) > 0)
-    );
+    const isPathHighlighted = arePathsEqual(highlightedPath, node.path);
+    const isLineTypeHighlighted =
+      highlightedLineType != null &&
+      node.lineTypes[highlightedLineType].numberOfLines > 0;
+    const isLanguageHighlighted =
+      highlightedLanguage != null &&
+      (node.languages[highlightedLanguage]?.numberOfLines ?? 0) > 0;
+
+    return isPathHighlighted || isLineTypeHighlighted || isLanguageHighlighted;
   }
 
   /**

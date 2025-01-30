@@ -50,6 +50,7 @@
     --clr-grey-600: hsl(75, 4%, 60%);
     --clr-grey-500: hsl(75, 4%, 50%);
     --clr-grey-450: hsl(75, 4%, 45%);
+    --clr-grey-260: hsl(75, 4%, 26%);
     --clr-grey-220: hsl(75, 4%, 22%);
     --clr-grey-150: hsl(75, 4%, 15%);
     --clr-grey-100: hsl(75, 4%, 10%);
@@ -112,9 +113,9 @@
     --color-node-active: purple;
     --color-node-deemphasize: darkred;
 
-    --color-diagram-root-regular: var(--clr-grey-150);
-    --color-diagram-root-highlight: var(--clr-grey-220);
-    --color-diagram-root-active: var(--clr-grey-100);
+    --color-diagram-root-regular: var(--clr-grey-260);
+    --color-diagram-root-highlight: var(--clr-grey-450);
+    --color-diagram-root-active: var(--clr-grey-150);
     --color-diagram-root-deemphasize: var(--clr-grey-100);
 
     --color-text-group-regular: var(--clr-grey-700);

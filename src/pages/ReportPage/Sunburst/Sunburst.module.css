@@ -11,11 +11,6 @@
     stroke: rgb(255, 255, 255);
   } */
 
-  &:active {
-    /* fill: var(--arc-highlight-color); */
-    fill: var(--arc-active-color);
-  }
-
   /* &[data-highlighted="true"] { */
   /* fill: var(--arc-slight-highlight-color); */
   /* fill: var(--arc-highlight-color); */
@@ -30,7 +25,16 @@
   /* stroke-width: var(--spacing-xxs); */
   /* } */
 
+  &[data-highlighted="true"] {
+    fill: var(--arc-highlight-color, var(--arc-regular-color));
+  }
+
   &[data-deemphasized="true"] {
-    fill: var(--arc-deemphasize-color);
+    fill: var(--arc-deemphasize-color, var(--arc-regular-color));
+  }
+
+  &:active {
+    /* fill: var(--arc-highlight-color); */
+    fill: var(--arc-active-color);
   }
 }

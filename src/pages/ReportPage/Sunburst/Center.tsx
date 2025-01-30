@@ -1,10 +1,5 @@
 import { createMemo, Show } from "solid-js";
-import {
-  arePathsEqual,
-  DIAGRAM_ROOT_COLORS,
-  getBaseColor,
-  getParentPath,
-} from "../../../utils/zon";
+import { arePathsEqual, getParentPath } from "../../../utils/zon";
 import { useReportState } from "../ReportPage.state";
 import styles from "./Sunburst.module.css";
 
@@ -17,31 +12,14 @@ export default function Center(props: CenterProps) {
     reportRoot,
     navigate,
     diagramRoot,
-    highlightedDiagramPath,
+    isArcHighlighted,
+    isArcDeemphasized,
     setHoverArcPath,
   } = useReportState();
 
   const isReportRoot = createMemo(() =>
     arePathsEqual(diagramRoot().path, reportRoot().path),
   );
-
-  const rootColors = createMemo(() => {
-    if (isReportRoot()) {
-      return { base: "", highlight: "", active: "" };
-    }
-
-    const staticColors = DIAGRAM_ROOT_COLORS;
-
-    return {
-      base: getBaseColor(
-        staticColors,
-        diagramRoot().path,
-        highlightedDiagramPath(),
-      ),
-      highlight: staticColors.highlight,
-      active: staticColors.active,
-    };
-  });
 
   return (
     <Show when={!isReportRoot()}>
@@ -50,11 +28,14 @@ export default function Center(props: CenterProps) {
         cy={0}
         r={props.radius}
         style={{
-          "--arc-regular-color": rootColors().base,
-          "--arc-highlight-color": rootColors().highlight,
-          "--arc-active-color": rootColors().active,
+          "--arc-regular-color": "var(--color-diagram-root-regular)",
+          "--arc-highlight-color": "var(--color-diagram-root-highlight)",
+          "--arc-active-color": "var(--color-diagram-root-active)",
+          "--arc-deemphasize-color": "var(--color-diagram-root-deemphasize)",
         }}
         class={styles.sunburst__arc}
+        data-highlighted={isArcHighlighted(diagramRoot())}
+        data-deemphasized={isArcDeemphasized(diagramRoot())}
         onMouseEnter={() => setHoverArcPath(diagramRoot().path)}
         onMouseLeave={() => setHoverArcPath(null)}
         onClick={() => navigate(getParentPath(diagramRoot().path))}

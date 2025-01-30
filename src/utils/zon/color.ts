@@ -16,13 +16,6 @@ export const TEXT_ROOT_COLORS: Colors = {
   deemphasize: "var(--color-text-deemphasize)",
 };
 
-export const DIAGRAM_ROOT_COLORS: Colors = {
-  regular: "var(--color-diagram-root-regular)",
-  highlight: "var(--color-diagram-root-highlight)",
-  active: "var(--color-diagram-root-active)",
-  deemphasize: "var(--color-diagram-root-deemphasize)",
-};
-
 export const TEXT_GROUP_COLORS: Colors = {
   regular: "var(--color-text-group-regular)",
   highlight: "var(--color-text-group-highlight)",
@@ -98,20 +91,6 @@ export function rainbow(
     deemphasize: `oklch(${lightness}% ${chroma} ${hue} / 0.55)`,
     // deemphasize: `oklch(${lightness - 15}% ${chroma} ${hue})`,
   };
-}
-
-/**
- * Get a node's "dynamic" base color. When the node is highlight (from an outside component), you want to use the
- * "highlight" color instead of the "default" color as its basis.
- */
-export function getBaseColor(
-  colors: Colors,
-  nodePath: Path,
-  highlightedPath: Path | null,
-): string {
-  const isHighlighted = arePathsEqual(highlightedPath, nodePath);
-
-  return isHighlighted ? colors.highlight : colors.regular;
 }
 
 /**
