@@ -74,13 +74,13 @@
 
   &:active {
     .report-list__row-text {
-      color: var(--highlight-color);
-      /* color: var(--active-color); */
+      /* color: var(--highlight-color); */
+      color: var(--active-color);
     }
 
     .report-list__item-underline {
-      background-color: var(--highlight-color);
-      /* background-color: var(--active-color); */
+      /* background-color: var(--highlight-color); */
+      background-color: var(--active-color);
     }
   }
 

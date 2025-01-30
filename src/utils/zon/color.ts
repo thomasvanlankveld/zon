@@ -91,7 +91,8 @@ export function rainbow(
     highlight: `oklch(${lightness + 10}% ${(1 - chromaCorrection) * chroma} ${hue})`,
     // // TODO: Make text use a darker color instead of a lighter one
     // active: `oklch(${lightness + 15}% ${chroma} ${hue})`,
-    active: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
+    active: `oklch(${lightness}% ${chroma} ${hue} / 0.8)`,
+    // active: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
     opposite: `oklch(${lightness + 10}% ${(1 - oppositeChromaCorrection) * chroma} ${oppositeHue} / 0.5)`,
     // opposite: `oklch(${lightness}% ${chroma} ${oppositeHue})`,
     // deemphasize: `oklch(${lightness}% ${chroma} ${hue} / 0.6)`,
