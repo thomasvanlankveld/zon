@@ -7,7 +7,6 @@ import ReportList from "./ReportList/ReportList.tsx";
 import Breadcrumbs from "./Breadcrumbs/Breadcrumbs.tsx";
 import styles from "./ReportPage.module.css";
 import { ReportStoreProvider } from "./ReportPage.state.tsx";
-// import ColorTest from "../HomePage/ColorTest.tsx";
 
 type ReportPageProps = {
   root: Node;
@@ -18,7 +17,6 @@ export default function ReportPage(props: ReportPageProps) {
 
   return (
     <ReportStoreProvider reportRoot={props.root}>
-      {/* <ColorTest /> */}
       <main class={`${styles["report-page"]} page`}>
         <div class="col-span-2">
           <h1 class="heading-l">
