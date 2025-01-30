@@ -63,9 +63,9 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
             <button
               {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
               style={{
-                "--regular-color": colors.regular,
-                "--press-color": colors.press,
-                "--deemphasize-color":
+                "--color-node-regular": colors.regular,
+                "--color-node-active": colors.press,
+                "--color-node-deemphasize":
                   colors?.dim ?? "var(--color-text-deemphasize)",
               }}
               class={styles["breadcrumbs__breadcrumb-button"]}
