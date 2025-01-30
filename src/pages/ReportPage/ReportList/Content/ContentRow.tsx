@@ -43,7 +43,7 @@ export default function ContentRow(props: ContentRowProps) {
     }
   }
 
-  function isRowDimmed(node: Node) {
+  function isRowDeemphasized(node: Node) {
     if (hoverListPath() == null) {
       return false;
     }
@@ -59,7 +59,7 @@ export default function ContentRow(props: ContentRowProps) {
         highlightedListPath(),
       )}
       name={<ContentName node={props.node} />}
-      isDimmed={isRowDimmed(props.node)}
+      isDeemphasized={isRowDeemphasized(props.node)}
       nameHoverBeforeContent={nameHoverBeforeContent()}
       nameHoverAfterContent={nameHoverAfterContent()}
       numberOfLinesInRow={props.node.numberOfLines}

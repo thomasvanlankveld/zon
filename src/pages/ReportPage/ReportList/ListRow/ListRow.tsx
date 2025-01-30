@@ -16,7 +16,7 @@ type ListRowProps = {
   rowContainerClassList?: { [k: string]: boolean | undefined };
   rowTextComponent?: ValidComponent;
   name: JSX.Element;
-  isDimmed?: boolean;
+  isDeemphasized?: boolean;
   nameBeforeContent?: string;
   nameHoverBeforeContent?: string;
   nameHoverAfterContent?: string;
@@ -49,7 +49,7 @@ export default function ListRow(props: ListRowProps) {
         "--deemphasize-color":
           props.colors?.deemphasize ?? "var(--color-text-deemphasize)",
       }}
-      data-deemphasized={props.isDimmed ?? false}
+      data-deemphasized={props.isDeemphasized ?? false}
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
       onClick={props.onClick}

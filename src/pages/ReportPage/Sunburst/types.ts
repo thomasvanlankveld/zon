@@ -11,7 +11,7 @@ export type Dimensions = {
 
 export type SunburstNode = Node & {
   isHighlighted: () => boolean;
-  isDimmed: () => boolean;
+  isDeemphasized: () => boolean;
   opacity: Accessor<number>;
   setOpacity: Setter<number>;
   targetOpacity: Accessor<number>;

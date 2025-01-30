@@ -31,7 +31,7 @@ export default function LineTypePanel(props: LineTypePanelProps) {
     };
   }
 
-  function isRowDimmed(lineType: LINE_TYPE) {
+  function isRowDeemphasized(lineType: LINE_TYPE) {
     if (hoverListLineType() == null) {
       return false;
     }
@@ -50,7 +50,7 @@ export default function LineTypePanel(props: LineTypePanelProps) {
           <ListRow
             colors={colors(listRoot().lineTypes[lineType].colorValue)}
             name={LineTypeNames[lineType]}
-            isDimmed={isRowDimmed(lineType)}
+            isDeemphasized={isRowDeemphasized(lineType)}
             numberOfLinesInRow={listRoot().lineTypes[lineType].numberOfLines}
             numberOfLinesInRoot={listRoot().numberOfLines}
             onMouseEnter={[setHoverListLineType, lineType]}

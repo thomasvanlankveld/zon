@@ -30,7 +30,7 @@ export default function LanguagePanel(props: LanguagePanelProps) {
     };
   }
 
-  function isRowDimmed(languageName: LanguageType) {
+  function isRowDeemphasized(languageName: LanguageType) {
     if (hoverListLanguage() == null) {
       return false;
     }
@@ -49,7 +49,7 @@ export default function LanguagePanel(props: LanguagePanelProps) {
           <ListRow
             colors={colors(colorValue)}
             name={languageName}
-            isDimmed={isRowDimmed(languageName as LanguageType)}
+            isDeemphasized={isRowDeemphasized(languageName as LanguageType)}
             numberOfLinesInRow={numberOfLines}
             numberOfLinesInRoot={listRoot().numberOfLines}
             onMouseEnter={[setHoverListLanguage, languageName]}

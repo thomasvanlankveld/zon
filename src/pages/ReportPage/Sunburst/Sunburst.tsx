@@ -37,7 +37,7 @@ export default function Sunburst() {
   const {
     diagramRoot: targetDiagramRoot,
     isArcHighlighted,
-    isArcDeemphasized: isArcDimmed,
+    isArcDeemphasized,
   } = useReportState();
 
   const [svg, setSvg] = createSignal<SVGSVGElement>();
@@ -173,7 +173,7 @@ export default function Sunburst() {
         newNodes.push({
           ...targetNode,
           isHighlighted: () => isArcHighlighted(targetNode),
-          isDimmed: () => isArcDimmed(targetNode),
+          isDeemphasized: () => isArcDeemphasized(targetNode),
           opacity,
           setOpacity,
           targetOpacity,
