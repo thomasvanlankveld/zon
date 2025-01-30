@@ -75,12 +75,12 @@
   &:active {
     .report-list__row-text {
       color: var(--highlight-color);
-      /* color: var(--press-color); */
+      /* color: var(--active-color); */
     }
 
     .report-list__item-underline {
       background-color: var(--highlight-color);
-      /* background-color: var(--press-color); */
+      /* background-color: var(--active-color); */
     }
   }
 
