@@ -8,7 +8,7 @@ import {
   type Node,
   NODE_TYPE,
 } from "./types.ts";
-import { getProjectName, getPathString, getParentPath } from "./path.ts";
+import { getLastSegment, getPathString, getParentPath } from "./path.ts";
 import {
   getNumberOfLines,
   sumLineTypeCounts as sumLineTypeCounts,
@@ -23,12 +23,12 @@ import {
 } from "./counted.ts";
 
 export function createTree(
-  projectPath: string,
+  reportPath: string,
   languages: Languages,
   lineTypes: LINE_TYPE[],
 ) {
-  const projectName = getProjectName(projectPath);
-  const numberOfCharactersToRemove = projectPath.length - projectName.length;
+  const reportName = getLastSegment(reportPath);
+  const numberOfCharactersToRemove = reportPath.length - reportName.length;
 
   // Folders can have files in multiple languages, so ignoring those for now
   const languageEntries = Object.entries(languages);
@@ -124,7 +124,7 @@ export function createTree(
     }
   }
 
-  const root = nodes[projectName];
+  const root = nodes[reportName];
 
   sortTree(root);
   addDeduced(root, root.numberOfLines, 0);

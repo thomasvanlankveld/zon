@@ -1,15 +1,16 @@
 import { GROUP_SEGMENT, type Path, type SegmentName } from "./types.ts";
 
-export function getProjectName(projectPath: string): string {
-  const projectPathSegments = projectPath.split("/");
+/**
+ * Get the last segment
+ */
+export function getLastSegment(reportPath: string): string {
+  const reportPathSegments = reportPath.split("/");
 
-  return projectPathSegments[projectPathSegments.length - 1];
+  return reportPathSegments[reportPathSegments.length - 1];
 }
 
 /**
  * For user-facing purposes
- * @param name
- * @returns
  */
 export function getDisplayName(name: SegmentName, groupName: string): string {
   if (name === GROUP_SEGMENT) {
@@ -21,8 +22,6 @@ export function getDisplayName(name: SegmentName, groupName: string): string {
 
 /**
  * Use only for internal & debugging purposes
- * @param path
- * @returns
  */
 export function getPathString(path: Path | null): string {
   if (path == null) {
@@ -91,6 +90,9 @@ export function isChildPath(
   return true;
 }
 
+/**
+ * Get the parent path
+ */
 export function getParentPath(path: Path) {
   return path.slice(0, -1);
 }
