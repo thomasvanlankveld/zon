@@ -7,7 +7,7 @@ import Underline from "./Underline";
 export type ListRowColors = {
   base: string;
   highlight: string;
-  press: string;
+  active: string;
   deemphasize?: string;
 };
 
@@ -45,7 +45,7 @@ export default function ListRow(props: ListRowProps) {
         "--base-color": props.colors?.base ?? "var(--color-text-regular)",
         "--highlight-color":
           props.colors?.highlight ?? "var(--color-text-hover-focus)",
-        "--press-color": props.colors?.press ?? "var(--color-text-active)",
+        "--press-color": props.colors?.active ?? "var(--color-text-active)",
         "--deemphasize-color":
           props.colors?.deemphasize ?? "var(--color-text-deemphasize)",
       }}
