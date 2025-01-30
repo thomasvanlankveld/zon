@@ -119,8 +119,8 @@
 
     --color-text-group-regular: var(--clr-grey-700);
     --color-text-group-highlight: var(--clr-grey-800);
-    --color-text-group-active: var(--clr-grey-600);
-    --color-text-group-deemphasize: var(--clr-grey-600);
+    --color-text-group-active: var(--color-text-active);
+    --color-text-group-deemphasize: var(--color-text-deemphasize);
 
     --color-diagram-arc-group-regular: var(--clr-grey-500);
     --color-diagram-arc-group-slight-highlight: var(--clr-grey-600);
