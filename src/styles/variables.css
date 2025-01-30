@@ -98,10 +98,10 @@
 
     /*
     Semantic pattern:
-    - Deemphasized: `extra-dim`
+    - Deemphasized: `extra-muted`
     - Default: `regular`
-    - Hover & focus: `bright`
-    - Pressed: `dim`
+    - Hover & focus: `highlight`
+    - Pressed: `muted`
     */
     --color-text-highlight: var(--clr-white);
     --color-text-regular: var(--clr-grey-800);
