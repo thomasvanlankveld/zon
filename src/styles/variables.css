@@ -108,11 +108,6 @@
 
     --color-background: var(--clr-black);
 
-    --color-node-regular: red;
-    --color-node-highlight: pink;
-    --color-node-active: purple;
-    --color-node-deemphasize: darkred;
-
     --color-diagram-root-regular: var(--clr-grey-260);
     --color-diagram-root-highlight: var(--clr-grey-450);
     --color-diagram-root-active: var(--clr-grey-150);

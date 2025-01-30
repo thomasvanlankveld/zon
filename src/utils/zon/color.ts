@@ -1,13 +1,5 @@
 import { type Colors } from "./types";
 
-// TODO: Use safer colors in prod mode (bright colors only in dev mode to emphasize mistakes)
-export const NODE_DEFAULT_COLORS: Colors = {
-  regular: "var(--color-node-regular)",
-  highlight: "var(--color-node-highlight)",
-  active: "var(--color-node-active)",
-  deemphasize: "var(--color-node-deemphasize)",
-};
-
 export const TEXT_ROOT_COLORS: Colors = {
   regular: "var(--color-text-regular)",
   highlight: "var(--color-text-hover-focus)",
