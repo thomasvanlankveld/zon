@@ -14,7 +14,11 @@ import {
   sumLineTypeCounts as sumLineTypeCounts,
   subtractLineTypeCounts,
 } from "./lineType.ts";
-import { subtractLanguageCounts, sumLanguageCounts } from "./language.ts";
+import {
+  addLanguageCount,
+  subtractLanguageCounts,
+  sumLanguageCounts,
+} from "./language.ts";
 import {
   addChildColorValue,
   createCounted,
@@ -60,13 +64,11 @@ export function createTree(
           node.numberOfLines += numberOfLines;
           node.height = Math.max(node.height, filePathSegments.length - i - 1);
 
-          // TODO: Maybe re-extract to `language.ts`
-          const countedLanguage =
-            node.languages[languageName as LanguageType] ?? createCounted(0);
-          countedLanguage.numberOfLines += numberOfLines;
-          if (!((languageName as LanguageType) in node.languages)) {
-            node.languages[languageName as LanguageType] = countedLanguage;
-          }
+          addLanguageCount(
+            node.languages,
+            languageName as LanguageType,
+            numberOfLines,
+          );
         } else {
           const numberOfLines = getNumberOfLines(tokeiReport.stats, lineTypes);
 

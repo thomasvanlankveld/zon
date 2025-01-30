@@ -2,19 +2,29 @@ import { LanguageType } from "../tokei";
 import { addChildColorValue, createCounted, subtractChild } from "./counted";
 import { LanguageCounts } from "./types";
 
+/**
+ * Add the given number of lines to a language sum. Creates a new entry if needed.
+ */
+export function addLanguageCount(
+  sums: LanguageCounts,
+  languageName: LanguageType,
+  numberOfLines: number,
+): void {
+  const languageSum = sums[languageName] ?? createCounted(0);
+
+  languageSum.numberOfLines += numberOfLines;
+
+  if (!(languageName in sums)) {
+    sums[languageName] = languageSum;
+  }
+}
+
 export function sumLanguageCounts(countsArr: LanguageCounts[]): LanguageCounts {
   const sums: LanguageCounts = {};
 
   for (const LanguageCounts of countsArr) {
     for (const [languageName, count] of Object.entries(LanguageCounts)) {
-      const languageSum =
-        sums[languageName as LanguageType] ?? createCounted(0);
-
-      languageSum.numberOfLines += count.numberOfLines;
-
-      if (!((languageName as LanguageType) in sums)) {
-        sums[languageName as LanguageType] = languageSum;
-      }
+      addLanguageCount(sums, languageName as LanguageType, count.numberOfLines);
     }
   }
 
