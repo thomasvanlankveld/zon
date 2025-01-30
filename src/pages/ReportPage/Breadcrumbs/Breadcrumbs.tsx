@@ -6,8 +6,8 @@ import {
   getDisplayName,
   arePathsEqual,
   isFolder,
-  getNodeTextColors,
   isChildPath,
+  getNodeStaticTextColors,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import styles from "./Breadcrumbs.module.css";
@@ -19,13 +19,8 @@ type BreadcrumbsProps = {
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
   const { t } = useI18n();
-  const {
-    reportRoot,
-    diagramRootPath,
-    breadcrumbPath,
-    highlightedBreadcrumbPath,
-    navigate,
-  } = useReportState();
+  const { reportRoot, diagramRootPath, breadcrumbPath, navigate } =
+    useReportState();
 
   const [hoverPath, setHoverPath] = createSignal<Path | null>(null);
 
@@ -43,11 +38,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   const lastNodeIndex = () => nodes().length - 1;
 
   function getColors(node: Node) {
-    return getNodeTextColors(
-      node,
-      reportRoot().path,
-      highlightedBreadcrumbPath(),
-    );
+    return getNodeStaticTextColors(node, reportRoot().path);
   }
 
   function deemphasize(node: Node) {
@@ -72,7 +63,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
             <button
               {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
               style={{
-                "--base-color": colors.base,
+                "--regular-color": colors.regular,
                 "--press-color": colors.press,
                 "--deemphasize-color":
                   colors?.dim ?? "var(--color-text-deemphasize)",

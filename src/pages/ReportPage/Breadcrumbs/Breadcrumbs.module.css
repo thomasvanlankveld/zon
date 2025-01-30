@@ -1,6 +1,6 @@
 .breadcrumbs__breadcrumb-button {
   cursor: pointer;
-  color: var(--base-color);
+  color: var(--regular-color);
 
   &:not(:first-child) {
     padding-left: var(--spacing-s);

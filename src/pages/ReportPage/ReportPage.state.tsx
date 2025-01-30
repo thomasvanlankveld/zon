@@ -74,7 +74,6 @@ function createReportState(initialReportRoot: Node) {
 
   // Breadcrumb setup
   const breadcrumbPath = () => hoverArcPath() ?? diagramRootPath();
-  const highlightedBreadcrumbPath = hoverArcPath;
 
   // Diagram setup
   const highlightedDiagramPath = () => hoverListPath() ?? hoverArcPath();
@@ -167,7 +166,6 @@ function createReportState(initialReportRoot: Node) {
     setReportRoot,
     navigate,
     breadcrumbPath,
-    highlightedBreadcrumbPath,
     diagramRoot,
     diagramRootPath,
     highlightedDiagramPath,
