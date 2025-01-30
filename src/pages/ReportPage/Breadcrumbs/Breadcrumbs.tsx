@@ -37,10 +37,6 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   );
   const lastNodeIndex = () => nodes().length - 1;
 
-  function getColors(node: Node) {
-    return getNodeStaticTextColors(node, reportRoot().path);
-  }
-
   function deemphasize(node: Node) {
     if (!arePathsEqual(diagramRootPath(), breadcrumbPath())) {
       return !isChildPath(diagramRootPath(), node.path, { inclusive: true });
@@ -57,7 +53,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
     <nav class={props.class} aria-label={t("breadcrumbs.label")}>
       <For each={nodes()}>
         {(node, i) => {
-          const colors = getColors(node);
+          const colors = getNodeStaticTextColors(node, reportRoot().path);
 
           return (
             <button
