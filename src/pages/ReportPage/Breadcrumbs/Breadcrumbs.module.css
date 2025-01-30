@@ -19,8 +19,8 @@
     }
   }
 
-  &[data-is-dimmed="true"] {
-    color: var(--dim-color);
+  &[data-deemphasize="true"] {
+    color: var(--deemphasize-color);
 
     .breadcrumbs__breadcrumb-separator {
       color: var(--color-text-deemphasize);

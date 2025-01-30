@@ -50,7 +50,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
     );
   }
 
-  function isDimmed(node: Node) {
+  function deemphasize(node: Node) {
     if (!arePathsEqual(diagramRootPath(), breadcrumbPath())) {
       return !isChildPath(diagramRootPath(), node.path, { inclusive: true });
     }
@@ -74,10 +74,11 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
               style={{
                 "--base-color": colors.base,
                 "--press-color": colors.press,
-                "--dim-color": colors?.dim ?? "var(--color-text-deemphasize)",
+                "--deemphasize-color":
+                  colors?.dim ?? "var(--color-text-deemphasize)",
               }}
               class={styles["breadcrumbs__breadcrumb-button"]}
-              data-is-dimmed={isDimmed(node)}
+              data-deemphasize={deemphasize(node)}
               onMouseEnter={[setHoverPath, node.path]}
               onMouseLeave={[setHoverPath, null]}
               onClick={[navigate, node.targetPath]}
