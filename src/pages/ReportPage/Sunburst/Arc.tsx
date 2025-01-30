@@ -69,12 +69,8 @@ function Arc(props: ArcProps) {
       d={getNodeArcD()}
       style={{
         "--arc-regular-color": colors().regular,
-        "--arc-slight-highlight-color":
-          colors().slightHighlight ?? "rgba(255, 255, 255, 0.5);",
         "--arc-highlight-color": colors().highlight,
         "--arc-active-color": colors().active,
-        "--arc-opposite-color":
-          colors().opposite ?? "rgba(255, 255, 255, 0.5);",
         "--arc-deemphasize-color": colors().deemphasize,
         opacity: props.node.opacity(),
       }}
