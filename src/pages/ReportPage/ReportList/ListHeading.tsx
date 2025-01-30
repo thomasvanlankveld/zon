@@ -1,7 +1,6 @@
 import {
   arePathsEqual,
   getNodeByPath,
-  getNodeTextColors,
   getParentPath,
   isGroup,
 } from "../../../utils/zon";
@@ -21,6 +20,7 @@ export default function ListHeading() {
     highlightedListPath,
     isListRootReportRoot,
     setHoverListPath,
+    getNodeTextColors,
   } = useReportState();
 
   function numberOfLinesInRoot() {
@@ -61,11 +61,7 @@ export default function ListHeading() {
 
   return (
     <ListRow
-      colors={getNodeTextColors(
-        listRoot(),
-        reportRoot().path,
-        highlightedListPath(),
-      )}
+      colors={getNodeTextColors(listRoot())}
       rowContainerClassList={{
         "heading-regular": true,
         [styles["report-list__heading"]]: true,

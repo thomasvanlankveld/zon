@@ -6,7 +6,7 @@
   display: flex;
   justify-content: space-between;
   column-gap: var(--spacing-l);
-  color: var(--base-color);
+  color: var(--color-row-regular);
 }
 
 .report-list__folder-separator {
@@ -14,7 +14,7 @@
 }
 
 .report-list__item-underline {
-  background-color: var(--base-color);
+  background-color: var(--color-row-regular);
   height: var(--spacing-4xs);
   opacity: 0.4;
 }
@@ -43,7 +43,6 @@
   &:hover {
     .report-list__row-text {
       flex-wrap: wrap;
-      color: var(--highlight-color);
     }
 
     .report-list__row-name {
@@ -51,9 +50,15 @@
       white-space: wrap;
       text-overflow: inherit;
     }
+  }
+
+  &[data-deemphasized="true"] {
+    .report-list__row-text {
+      color: var(--color-row-deemphasize);
+    }
 
     .report-list__item-underline {
-      background-color: var(--highlight-color);
+      background-color: var(--color-row-deemphasize);
     }
   }
 }
@@ -63,15 +68,18 @@
 
   &:active {
     .report-list__row-text {
-      color: var(--press-color);
+      color: var(--color-row-active);
     }
 
     .report-list__item-underline {
-      background-color: var(--press-color);
+      background-color: var(--color-row-active);
     }
   }
 
   &:hover {
+    /* TODO: Highlight group text */
+    /* Use optional highlight color: var(--color-row-hover-focus, var(--color-row-regular)) */
+
     .report-list__row-name::before {
       content: var(--hover-before-content);
     }

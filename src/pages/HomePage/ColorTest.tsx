@@ -21,9 +21,9 @@ function ColorSpread(props: { getColor: (val: number) => string }) {
 export default function ColorTest() {
   return (
     <div style={{ display: "grid", padding: "6rem" }}>
-      <ColorSpread getColor={(val) => rainbow(val).default} />
-      <ColorSpread getColor={(val) => rainbow(val).highlight} />
-      <ColorSpread getColor={(val) => rainbow(val).press} />
+      <ColorSpread getColor={(val) => rainbow(val).regular} />
+      <ColorSpread getColor={(val) => rainbow(val).deemphasize} />
+      <ColorSpread getColor={(val) => rainbow(val).active} />
     </div>
   );
 }

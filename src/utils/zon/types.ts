@@ -22,25 +22,29 @@ export type SegmentName = string | typeof GROUP_SEGMENT;
 export type Path = SegmentName[];
 
 export type Colors = {
-  default: string;
-  highlight: string;
-  press: string;
+  regular: string;
+  active: string;
+  deemphasize: string;
+};
+
+export type Counted = {
+  numberOfLines: number;
+  colorValue: number;
 };
 
 export type LineTypeCounts = {
-  [LINE_TYPE.CODE]: number;
-  [LINE_TYPE.COMMENTS]: number;
-  [LINE_TYPE.BLANKS]: number;
+  [LINE_TYPE.CODE]: Counted;
+  [LINE_TYPE.COMMENTS]: Counted;
+  [LINE_TYPE.BLANKS]: Counted;
 };
 
-export type LanguageCounts = Partial<Record<LanguageType, number>>;
+export type LanguageCounts = Partial<Record<LanguageType, Counted>>;
 
-type NodeBase = {
-  lineTypeCounts: LineTypeCounts;
-  languageCounts: LanguageCounts;
+type NodeBase = Counted & {
+  lineTypes: LineTypeCounts;
+  languages: LanguageCounts;
   path: Path;
   name: SegmentName;
-  numberOfLines: number;
   firstLine: number;
   depth: number;
 };
@@ -48,14 +52,12 @@ type NodeBase = {
 export type File = NodeBase & {
   type: typeof NODE_TYPE.FILE;
   height: 0;
-  colors: Colors;
 };
 
 export type Folder = NodeBase & {
   type: typeof NODE_TYPE.FOLDER;
   children: Node[];
   height: number;
-  colors: Colors;
 };
 
 export type Group = NodeBase & {

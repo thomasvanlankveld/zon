@@ -34,7 +34,11 @@ function getAnimationTarget(value: number, target: number, dt: number) {
 }
 
 export default function Sunburst() {
-  const { diagramRoot: targetDiagramRoot } = useReportState();
+  const {
+    diagramRoot: targetDiagramRoot,
+    isArcHighlighted,
+    isArcDeemphasized,
+  } = useReportState();
 
   const [svg, setSvg] = createSignal<SVGSVGElement>();
   const { width, height } = createElementSize(svg);
@@ -168,6 +172,8 @@ export default function Sunburst() {
 
         newNodes.push({
           ...targetNode,
+          isHighlighted: () => isArcHighlighted(targetNode),
+          isDeemphasized: () => isArcDeemphasized(targetNode),
           opacity,
           setOpacity,
           targetOpacity,

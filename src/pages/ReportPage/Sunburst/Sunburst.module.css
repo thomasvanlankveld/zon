@@ -3,13 +3,17 @@
   stroke: rgba(0, 0, 0, 0.3);
   stroke-width: var(--spacing-4xs);
   fill-rule: evenodd;
-  fill: var(--arc-base-color);
+  fill: var(--color-arc-regular);
 
-  &:hover {
-    fill: var(--arc-highlight-color);
+  &[data-highlighted="true"] {
+    fill: var(--color-arc-highlight, var(--color-arc-regular));
+  }
+
+  &[data-deemphasized="true"] {
+    fill: var(--color-arc-deemphasize, var(--color-arc-regular));
   }
 
   &:active {
-    fill: var(--arc-press-color);
+    fill: var(--color-arc-active);
   }
 }

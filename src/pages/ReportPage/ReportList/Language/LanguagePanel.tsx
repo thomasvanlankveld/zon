@@ -1,5 +1,6 @@
 import { For } from "solid-js";
-import { getNodeStaticTextColors } from "../../../../utils/zon";
+import { rainbow } from "../../../../utils/zon";
+import { LanguageType } from "../../../../utils/tokei";
 import { useReportState } from "../../ReportPage.state";
 import { TabKey } from "../Tabs/report-tabs";
 import ReportTabPanel from "../Tabs/ReportTabPanel";
@@ -11,21 +12,21 @@ type LanguagePanelProps = {
 };
 
 export default function LanguagePanel(props: LanguagePanelProps) {
-  const { reportRoot, listRoot, setHoverListLanguage } = useReportState();
+  const { listRoot, hoverListLanguage, setHoverListLanguage } =
+    useReportState();
 
   function languageCounts() {
-    return Object.entries(listRoot().languageCounts).toSorted(
-      (left, right) => right[1] - left[1],
+    return Object.entries(listRoot().languages).toSorted(
+      (left, right) => right[1].numberOfLines - left[1].numberOfLines,
     );
   }
 
-  function colors() {
-    const staticColors = getNodeStaticTextColors(listRoot(), reportRoot().path);
+  function isRowDeemphasized(languageName: LanguageType) {
+    if (hoverListLanguage() == null) {
+      return false;
+    }
 
-    return {
-      ...staticColors,
-      base: staticColors.default,
-    };
+    return hoverListLanguage() !== languageName;
   }
 
   return (
@@ -35,10 +36,11 @@ export default function LanguagePanel(props: LanguagePanelProps) {
       selectedTab={props.selectedTab}
     >
       <For each={languageCounts()}>
-        {([languageName, numberOfLines]) => (
+        {([languageName, { colorValue, numberOfLines }]) => (
           <ListRow
-            colors={colors()}
+            colors={rainbow(colorValue)}
             name={languageName}
+            isDeemphasized={isRowDeemphasized(languageName as LanguageType)}
             numberOfLinesInRow={numberOfLines}
             numberOfLinesInRoot={listRoot().numberOfLines}
             onMouseEnter={[setHoverListLanguage, languageName]}

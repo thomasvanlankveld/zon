@@ -1,12 +1,29 @@
 .breadcrumbs__breadcrumb-button {
   cursor: pointer;
-  color: var(--base-color);
+  color: var(--color-breadcrumb-regular);
 
-  &:hover {
-    color: var(--highlight-color);
+  &:not(:first-child) {
+    padding-left: var(--spacing-s);
+  }
+
+  .breadcrumbs__breadcrumb-separator {
+    padding-left: var(--spacing-s);
+    color: var(--color-text-regular);
   }
 
   &:active {
-    color: var(--press-color);
+    color: var(--color-breadcrumb-active);
+
+    .breadcrumbs__breadcrumb-separator {
+      color: var(--color-text-active);
+    }
+  }
+
+  &[data-deemphasize="true"] {
+    color: var(--color-breadcrumb-deemphasize);
+
+    .breadcrumbs__breadcrumb-separator {
+      color: var(--color-text-deemphasize);
+    }
   }
 }

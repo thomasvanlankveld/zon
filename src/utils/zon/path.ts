@@ -50,6 +50,39 @@ export function arePathsEqual(left: Path | null, right: Path | null): boolean {
   return left.every((segment, i) => segment === right[i]);
 }
 
+export function isChildPath(
+  parent: Path | null,
+  child: Path | null,
+  options: { inclusive?: boolean; direct?: boolean } = {},
+) {
+  const inclusive = options.inclusive ?? false;
+  const direct = options.direct ?? false;
+
+  if (parent == null && child == null) {
+    return true;
+  }
+
+  if (parent == null || child == null) {
+    return false;
+  }
+
+  if (
+    parent.length > child.length ||
+    (!inclusive && parent.length === child.length) ||
+    (direct && child.length - parent.length > 1)
+  ) {
+    return false;
+  }
+
+  for (let i = 0; i < parent.length; i++) {
+    if (parent[i] !== child[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export function getParentPath(path: Path) {
   return path.slice(0, -1);
 }

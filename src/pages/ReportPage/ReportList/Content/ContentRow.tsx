@@ -1,5 +1,5 @@
 import {
-  getNodeTextColors,
+  arePathsEqual,
   isFolder,
   isGroup,
   type Node,
@@ -16,11 +16,11 @@ type ContentRowProps = {
 
 export default function ContentRow(props: ContentRowProps) {
   const {
-    reportRoot,
     navigate,
     expandGroup,
-    highlightedListPath,
+    hoverListPath,
     setHoverListPath,
+    getNodeTextColors,
   } = useReportState();
 
   function nameHoverBeforeContent() {
@@ -41,14 +41,19 @@ export default function ContentRow(props: ContentRowProps) {
     }
   }
 
+  function isRowDeemphasized(node: Node) {
+    if (hoverListPath() == null) {
+      return false;
+    }
+
+    return !arePathsEqual(node.path, hoverListPath());
+  }
+
   return (
     <ListRow
-      colors={getNodeTextColors(
-        props.node,
-        reportRoot().path,
-        highlightedListPath(),
-      )}
+      colors={getNodeTextColors(props.node)}
       name={<ContentName node={props.node} />}
+      isDeemphasized={isRowDeemphasized(props.node)}
       nameHoverBeforeContent={nameHoverBeforeContent()}
       nameHoverAfterContent={nameHoverAfterContent()}
       numberOfLinesInRow={props.node.numberOfLines}

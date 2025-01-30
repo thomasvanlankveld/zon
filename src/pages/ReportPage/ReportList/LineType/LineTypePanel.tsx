@@ -3,7 +3,7 @@ import styles from "../ReportList.module.css";
 import { For } from "solid-js";
 import ListRow from "../ListRow/ListRow";
 import { TabKey } from "../Tabs/report-tabs";
-import { getNodeStaticTextColors, LINE_TYPE } from "../../../../utils/zon";
+import { LINE_TYPE, rainbow } from "../../../../utils/zon";
 import { useReportState } from "../../ReportPage.state";
 import { useI18n } from "../../../../utils/i18n";
 
@@ -13,7 +13,8 @@ type LineTypePanelProps = {
 
 export default function LineTypePanel(props: LineTypePanelProps) {
   const { t } = useI18n();
-  const { reportRoot, listRoot, setHoverListLineType } = useReportState();
+  const { listRoot, hoverListLineType, setHoverListLineType } =
+    useReportState();
 
   const LineTypeNames = {
     [LINE_TYPE.CODE]: t("line-type.code"),
@@ -21,13 +22,12 @@ export default function LineTypePanel(props: LineTypePanelProps) {
     [LINE_TYPE.BLANKS]: t("line-type.blanks"),
   };
 
-  function colors() {
-    const staticColors = getNodeStaticTextColors(listRoot(), reportRoot().path);
+  function isRowDeemphasized(lineType: LINE_TYPE) {
+    if (hoverListLineType() == null) {
+      return false;
+    }
 
-    return {
-      ...staticColors,
-      base: staticColors.default,
-    };
+    return hoverListLineType() !== lineType;
   }
 
   return (
@@ -39,9 +39,10 @@ export default function LineTypePanel(props: LineTypePanelProps) {
       <For each={Object.values(LINE_TYPE)}>
         {(lineType) => (
           <ListRow
-            colors={colors()}
+            colors={rainbow(listRoot().lineTypes[lineType].colorValue)}
             name={LineTypeNames[lineType]}
-            numberOfLinesInRow={listRoot().lineTypeCounts[lineType]}
+            isDeemphasized={isRowDeemphasized(lineType)}
+            numberOfLinesInRow={listRoot().lineTypes[lineType].numberOfLines}
             numberOfLinesInRoot={listRoot().numberOfLines}
             onMouseEnter={[setHoverListLineType, lineType]}
             onMouseLeave={[setHoverListLineType, null]}

@@ -2,10 +2,11 @@ import { createMemo } from "solid-js";
 import { getArcD } from "../../../utils/svg.ts";
 import {
   arePathsEqual,
-  getNodeArcColors,
+  DIAGRAM_ARC_GROUP_COLORS,
   getParentPath,
   isFile,
   isGroup,
+  rainbow,
 } from "../../../utils/zon";
 import { useReportState } from "../ReportPage.state.tsx";
 import { SunburstNode } from "./types.ts";
@@ -17,15 +18,8 @@ type ArcProps = {
 };
 
 function Arc(props: ArcProps) {
-  const {
-    navigate,
-    diagramRoot,
-    highlightedDiagramPath,
-    highlightedDiagramLineType,
-    highlightedDiagramLanguage,
-    setHoverArcPath,
-    expandGroup,
-  } = useReportState();
+  const { navigate, diagramRoot, setHoverArcPath, expandGroup } =
+    useReportState();
 
   /**
    * Determines the SVG path data for a node's arc
@@ -42,12 +36,9 @@ function Arc(props: ArcProps) {
   }
 
   const colors = createMemo(() =>
-    getNodeArcColors(
-      props.node,
-      highlightedDiagramPath(),
-      highlightedDiagramLineType(),
-      highlightedDiagramLanguage(),
-    ),
+    isGroup(props.node)
+      ? DIAGRAM_ARC_GROUP_COLORS
+      : rainbow(props.node.colorValue),
   );
 
   function onArcClick() {
@@ -77,12 +68,13 @@ function Arc(props: ArcProps) {
     <path
       d={getNodeArcD()}
       style={{
-        "--arc-base-color": colors().base,
-        "--arc-highlight-color": colors().highlight,
-        "--arc-press-color": colors().press,
+        "--color-arc-regular": colors().regular,
+        "--color-arc-active": colors().active,
+        "--color-arc-deemphasize": colors().deemphasize,
         opacity: props.node.opacity(),
       }}
       class={styles.sunburst__arc}
+      data-deemphasized={props.node.isDeemphasized()}
       onMouseEnter={() => setHoverArcPath(props.node.path)}
       onMouseLeave={() => setHoverArcPath(null)}
       onClick={onArcClick}

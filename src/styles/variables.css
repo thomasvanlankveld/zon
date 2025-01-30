@@ -50,6 +50,7 @@
     --clr-grey-600: hsl(75, 4%, 60%);
     --clr-grey-500: hsl(75, 4%, 50%);
     --clr-grey-450: hsl(75, 4%, 45%);
+    --clr-grey-260: hsl(75, 4%, 26%);
     --clr-grey-220: hsl(75, 4%, 22%);
     --clr-grey-150: hsl(75, 4%, 15%);
     --clr-grey-100: hsl(75, 4%, 10%);
@@ -57,6 +58,11 @@
     --clr-blue-700: hsl(221, 67%, 70%);
     --clr-blue-500: hsl(221, 67%, 54%);
     --clr-blue-400: hsl(221, 67%, 40%);
+
+    --clr-text-highlight: var(--clr-white);
+    --clr-text-regular: var(--clr-grey-800);
+    --clr-text-muted: var(--clr-grey-600);
+    --clr-text-extra-muted: var(--clr-grey-450);
   }
 
   /* Semantic properties */
@@ -95,36 +101,25 @@
     --font-weight-heading-l: var(--fw-xl);
 
     /* Colors */
-    --color-text-highlight: var(--clr-white);
-    --color-text-regular: var(--clr-grey-800);
-    --color-text-muted: var(--clr-grey-600);
-    --color-text-extra-muted: var(--clr-grey-450);
-
-    --color-text-link: var(----clr-grey-800);
-    --color-text-link-hover: var(--clr-white);
-    --color-text-link-active: var(--clr-grey-700);
+    --color-text-hover-focus: var(--clr-text-highlight);
+    --color-text-regular: var(--clr-text-regular);
+    --color-text-active: var(--clr-text-muted);
+    --color-text-deemphasize: var(--clr-text-extra-muted);
 
     --color-background: var(--clr-black);
 
-    --color-node-default: red;
-    --color-node-highlight: pink;
-    --color-node-press: purple;
+    --color-diagram-root-regular: var(--clr-grey-260);
+    --color-diagram-root-highlight: var(--clr-grey-450);
+    --color-diagram-root-active: var(--clr-grey-150);
+    --color-diagram-root-deemphasize: var(--clr-grey-100);
 
-    --color-text-root-default: var(--clr-grey-800);
-    --color-text-root-highlight: var(--clr-white);
-    --color-text-root-press: var(--clr-grey-600);
+    --color-text-group-regular: var(--clr-grey-700);
+    --color-text-group-active: var(--color-text-active);
+    --color-text-group-deemphasize: var(--color-text-deemphasize);
 
-    --color-diagram-root-default: var(--clr-grey-150);
-    --color-diagram-root-highlight: var(--clr-grey-220);
-    --color-diagram-root-press: var(--clr-grey-100);
-
-    --color-text-group-default: var(--clr-grey-700);
-    --color-text-group-highlight: var(--clr-grey-800);
-    --color-text-group-press: var(--clr-grey-600);
-
-    --color-diagram-arc-group-default: var(--clr-grey-500);
-    --color-diagram-arc-group-highlight: var(--clr-grey-630);
-    --color-diagram-arc-group-press: var(--clr-grey-450);
+    --color-diagram-arc-group-regular: var(--clr-grey-500);
+    --color-diagram-arc-group-active: var(--clr-grey-450);
+    --color-diagram-arc-group-deemphasize: var(--clr-grey-220);
 
     /* Content */
     --content-arrow-before-left: "<-\00a0";
