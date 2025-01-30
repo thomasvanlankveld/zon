@@ -68,9 +68,9 @@ function Arc(props: ArcProps) {
     <path
       d={getNodeArcD()}
       style={{
-        "--arc-regular-color": colors().regular,
-        "--arc-active-color": colors().active,
-        "--arc-deemphasize-color": colors().deemphasize,
+        "--color-arc-regular": colors().regular,
+        "--color-arc-active": colors().active,
+        "--color-arc-deemphasize": colors().deemphasize,
         opacity: props.node.opacity(),
       }}
       class={styles.sunburst__arc}

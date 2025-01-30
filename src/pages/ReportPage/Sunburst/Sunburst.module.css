@@ -3,17 +3,17 @@
   stroke: rgba(0, 0, 0, 0.3);
   stroke-width: var(--spacing-4xs);
   fill-rule: evenodd;
-  fill: var(--arc-regular-color);
+  fill: var(--color-arc-regular);
 
   /* TODO: Remove, not needed anymore when highlight is handled with data attribute */
   /* &:hover {
-    fill: var(--arc-highlight-color);
+    fill: var(--color-arc-highlight);
     stroke: rgb(255, 255, 255);
   } */
 
   /* &[data-highlighted="true"] { */
   /* fill: var(--arc-slight-highlight-color); */
-  /* fill: var(--arc-highlight-color); */
+  /* fill: var(--color-arc-highlight); */
   /* stroke: var(--arc-opposite-color); */
   /* stroke: var(--color-text-hover-focus); */
   /* stroke: rgba(255, 255, 255, 0.8); */
@@ -26,15 +26,15 @@
   /* } */
 
   &[data-highlighted="true"] {
-    fill: var(--arc-highlight-color, var(--arc-regular-color));
+    fill: var(--color-arc-highlight, var(--color-arc-regular));
   }
 
   &[data-deemphasized="true"] {
-    fill: var(--arc-deemphasize-color, var(--arc-regular-color));
+    fill: var(--color-arc-deemphasize, var(--color-arc-regular));
   }
 
   &:active {
-    /* fill: var(--arc-highlight-color); */
-    fill: var(--arc-active-color);
+    /* fill: var(--color-arc-highlight); */
+    fill: var(--color-arc-active);
   }
 }

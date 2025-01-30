@@ -28,10 +28,10 @@ export default function Center(props: CenterProps) {
         cy={0}
         r={props.radius}
         style={{
-          "--arc-regular-color": "var(--color-diagram-root-regular)",
-          "--arc-highlight-color": "var(--color-diagram-root-highlight)",
-          "--arc-active-color": "var(--color-diagram-root-active)",
-          "--arc-deemphasize-color": "var(--color-diagram-root-deemphasize)",
+          "--color-arc-regular": "var(--color-diagram-root-regular)",
+          "--color-arc-highlight": "var(--color-diagram-root-highlight)",
+          "--color-arc-active": "var(--color-diagram-root-active)",
+          "--color-arc-deemphasize": "var(--color-diagram-root-deemphasize)",
         }}
         class={styles.sunburst__arc}
         data-highlighted={isArcHighlighted(diagramRoot())}
