@@ -1,6 +1,6 @@
 .breadcrumbs__breadcrumb-button {
   cursor: pointer;
-  color: var(--color-node-regular);
+  color: var(--color-breadcrumb-regular);
 
   &:not(:first-child) {
     padding-left: var(--spacing-s);
@@ -12,7 +12,7 @@
   }
 
   &:active {
-    color: var(--color-node-active);
+    color: var(--color-breadcrumb-active);
 
     .breadcrumbs__breadcrumb-separator {
       color: var(--color-text-active);
@@ -20,7 +20,7 @@
   }
 
   &[data-deemphasize="true"] {
-    color: var(--color-node-deemphasize);
+    color: var(--color-breadcrumb-deemphasize);
 
     .breadcrumbs__breadcrumb-separator {
       color: var(--color-text-deemphasize);
