@@ -177,6 +177,8 @@ function addDeduced(
     }
 
     // Recursive call
+    // This must happen before determining the line type and language color values, because those depend on the values
+    // of their children
     addDeduced(child, totalNumberOfLines, lineNumber);
 
     // Line type colors
@@ -242,6 +244,8 @@ export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
 
   // The number of hidden nodes may be much larger than the number of visible ones, so we calculate the hidden line type
   // and language counts by subtracting the visible totals from the parent's total
+  // TODO: Pick hidden-first or visible-first strategy based on whether the number of visible children is more or less
+  // than half the parent's total number of children
   const visibleCounted = sumCounted(visibleChildren);
   const hiddenCounted = subtractChild(node, visibleCounted);
   const visibleLineTypeCounts = sumLineTypeCounts(
