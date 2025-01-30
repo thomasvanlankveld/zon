@@ -132,30 +132,3 @@ export function getNodeStaticTextColors(
 
   return rainbow(node.colorValue);
 }
-
-/**
- * Get a node's diagram arc color
- */
-export function getNodeArcColors(
-  node: Node,
-  highlightedPath: Path | null,
-  highlightedLineType: LINE_TYPE | null,
-  highlightedLanguage: LanguageType | null,
-) {
-  const staticColors = isGroup(node)
-    ? DIAGRAM_ARC_GROUP_COLORS
-    : rainbow(node.colorValue);
-
-  const isHighlighted =
-    arePathsEqual(highlightedPath, node.path) ||
-    (highlightedLineType != null &&
-      node.lineTypes[highlightedLineType].numberOfLines > 0) ||
-    (highlightedLanguage != null &&
-      (node.languages[highlightedLanguage]?.numberOfLines ?? 0) > 0);
-  const base = isHighlighted ? staticColors.highlight : staticColors.regular;
-
-  return {
-    ...staticColors,
-    base,
-  };
-}

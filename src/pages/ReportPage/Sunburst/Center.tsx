@@ -50,7 +50,7 @@ export default function Center(props: CenterProps) {
         cy={0}
         r={props.radius}
         style={{
-          "--arc-base-color": rootColors().base,
+          "--arc-regular-color": rootColors().base,
           "--arc-highlight-color": rootColors().highlight,
           "--arc-active-color": rootColors().active,
         }}

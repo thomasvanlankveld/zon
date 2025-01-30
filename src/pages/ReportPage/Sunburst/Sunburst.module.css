@@ -3,7 +3,7 @@
   stroke: rgba(0, 0, 0, 0.3);
   stroke-width: var(--spacing-4xs);
   fill-rule: evenodd;
-  fill: var(--arc-base-color);
+  fill: var(--arc-regular-color);
 
   /* TODO: Remove, not needed anymore when highlight is handled with data attribute */
   /* &:hover {
@@ -16,7 +16,7 @@
     fill: var(--arc-active-color);
   }
 
-  /* &[data-is-highlighted="true"] { */
+  /* &[data-highlighted="true"] { */
   /* fill: var(--arc-slight-highlight-color); */
   /* fill: var(--arc-highlight-color); */
   /* stroke: var(--arc-opposite-color); */
