@@ -22,15 +22,6 @@ export default function LineTypePanel(props: LineTypePanelProps) {
     [LINE_TYPE.BLANKS]: t("line-type.blanks"),
   };
 
-  function colors(colorValue: number) {
-    const staticColors = rainbow(colorValue);
-
-    return {
-      ...staticColors,
-      base: staticColors.regular,
-    };
-  }
-
   function isRowDeemphasized(lineType: LINE_TYPE) {
     if (hoverListLineType() == null) {
       return false;
@@ -48,7 +39,7 @@ export default function LineTypePanel(props: LineTypePanelProps) {
       <For each={Object.values(LINE_TYPE)}>
         {(lineType) => (
           <ListRow
-            colors={colors(listRoot().lineTypes[lineType].colorValue)}
+            colors={rainbow(listRoot().lineTypes[lineType].colorValue)}
             name={LineTypeNames[lineType]}
             isDeemphasized={isRowDeemphasized(lineType)}
             numberOfLinesInRow={listRoot().lineTypes[lineType].numberOfLines}

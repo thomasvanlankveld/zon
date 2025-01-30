@@ -1,22 +1,16 @@
 import { JSX, ValidComponent } from "solid-js";
 import { Dynamic } from "solid-js/web";
+import { Colors } from "../../../../utils/zon";
 import NumberOfLines from "../../../../components/NumberOfLines";
 import styles from "../ReportList.module.css";
 import Underline from "./Underline";
 
-export type ListRowColors = {
-  base: string;
-  highlight: string;
-  active: string;
-  deemphasize?: string;
-};
-
 type ListRowProps = {
-  colors?: ListRowColors;
+  colors: Colors;
+  isDeemphasized?: boolean;
   rowContainerClassList?: { [k: string]: boolean | undefined };
   rowTextComponent?: ValidComponent;
   name: JSX.Element;
-  isDeemphasized?: boolean;
   nameBeforeContent?: string;
   nameHoverBeforeContent?: string;
   nameHoverAfterContent?: string;
@@ -42,12 +36,10 @@ export default function ListRow(props: ListRowProps) {
         ...props.rowContainerClassList,
       }}
       style={{
-        "--base-color": props.colors?.base ?? "var(--color-text-regular)",
-        "--highlight-color":
-          props.colors?.highlight ?? "var(--color-text-hover-focus)",
-        "--active-color": props.colors?.active ?? "var(--color-text-active)",
-        "--deemphasize-color":
-          props.colors?.deemphasize ?? "var(--color-text-deemphasize)",
+        "--regular-color": props.colors.regular,
+        "--highlight-color": props.colors.highlight,
+        "--active-color": props.colors.active,
+        "--deemphasize-color": props.colors.deemphasize,
       }}
       data-deemphasized={props.isDeemphasized ?? false}
       onMouseEnter={props.onMouseEnter}

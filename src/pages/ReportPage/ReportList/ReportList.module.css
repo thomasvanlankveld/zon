@@ -6,7 +6,7 @@
   display: flex;
   justify-content: space-between;
   column-gap: var(--spacing-l);
-  color: var(--base-color);
+  color: var(--regular-color);
 }
 
 .report-list__folder-separator {
@@ -14,7 +14,7 @@
 }
 
 .report-list__item-underline {
-  background-color: var(--base-color);
+  background-color: var(--regular-color);
   height: var(--spacing-4xs);
   opacity: 0.4;
 }

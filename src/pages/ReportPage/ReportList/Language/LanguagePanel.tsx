@@ -21,15 +21,6 @@ export default function LanguagePanel(props: LanguagePanelProps) {
     );
   }
 
-  function colors(colorValue: number) {
-    const staticColors = rainbow(colorValue);
-
-    return {
-      ...staticColors,
-      base: staticColors.regular,
-    };
-  }
-
   function isRowDeemphasized(languageName: LanguageType) {
     if (hoverListLanguage() == null) {
       return false;
@@ -47,7 +38,7 @@ export default function LanguagePanel(props: LanguagePanelProps) {
       <For each={languageCounts()}>
         {([languageName, { colorValue, numberOfLines }]) => (
           <ListRow
-            colors={colors(colorValue)}
+            colors={rainbow(colorValue)}
             name={languageName}
             isDeemphasized={isRowDeemphasized(languageName as LanguageType)}
             numberOfLinesInRow={numberOfLines}

@@ -133,22 +133,6 @@ export function getNodeStaticTextColors(
 }
 
 /**
- * Get a node's text color
- */
-export function getNodeTextColors(
-  node: Node,
-  reportRootPath: Path,
-  highlightedPath: Path | null,
-) {
-  const staticColors = getNodeStaticTextColors(node, reportRootPath);
-
-  return {
-    ...staticColors,
-    base: getBaseColor(staticColors, node.path, highlightedPath),
-  };
-}
-
-/**
  * Get a node's diagram arc color
  */
 export function getNodeArcColors(
