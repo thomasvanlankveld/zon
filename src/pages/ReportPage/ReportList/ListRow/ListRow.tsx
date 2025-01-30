@@ -37,7 +37,6 @@ export default function ListRow(props: ListRowProps) {
       }}
       style={{
         "--regular-color": props.colors.regular,
-        "--highlight-color": props.colors.highlight,
         "--active-color": props.colors.active,
         "--deemphasize-color": props.colors.deemphasize,
       }}

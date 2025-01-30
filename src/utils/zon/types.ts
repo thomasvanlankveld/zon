@@ -24,7 +24,6 @@ export type Path = SegmentName[];
 export type Colors = {
   regular: string;
   slightHighlight?: string;
-  highlight: string;
   active: string;
   opposite?: string;
   deemphasize: string;

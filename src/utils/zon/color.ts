@@ -2,14 +2,12 @@ import { type Colors } from "./types";
 
 export const TEXT_ROOT_COLORS: Colors = {
   regular: "var(--color-text-regular)",
-  highlight: "var(--color-text-hover-focus)",
   active: "var(--color-text-active)",
   deemphasize: "var(--color-text-deemphasize)",
 };
 
 export const TEXT_GROUP_COLORS: Colors = {
   regular: "var(--color-text-group-regular)",
-  highlight: "var(--color-text-group-highlight)",
   active: "var(--color-text-group-active)",
   deemphasize: "var(--color-text-group-deemphasize)",
 };
@@ -17,7 +15,6 @@ export const TEXT_GROUP_COLORS: Colors = {
 export const DIAGRAM_ARC_GROUP_COLORS: Colors = {
   regular: "var(--color-diagram-arc-group-regular)",
   slightHighlight: "var(--color-diagram-arc-group-slight-highlight)",
-  highlight: "var(--color-diagram-arc-group-highlight)",
   active: "var(--color-diagram-arc-group-active)",
   // deemphasize: "rgba(255, 255, 255, 0.5)" // Maybe? (was default value in `Arc.tsx`)
   deemphasize: "var(--color-diagram-arc-group-deemphasize)",
@@ -71,7 +68,7 @@ export function rainbow(
     // highlight: `oklch(${lightness + 10}% ${chroma} ${hue})`,
     // highlight: `oklch(${lightness}% ${(1 - chromaCorrection) * chroma} ${hue})`,
     // highlight: `oklch(${lightness + 8}% ${(1 - chromaCorrection) * chroma} ${hue})`,
-    highlight: `oklch(${lightness + 10}% ${(1 - chromaCorrection) * chroma} ${hue})`,
+    // highlight: `oklch(${lightness + 10}% ${(1 - chromaCorrection) * chroma} ${hue})`,
     // // TODO: Make text use a darker color instead of a lighter one
     // active: `oklch(${lightness + 15}% ${chroma} ${hue})`,
     active: `oklch(${lightness}% ${chroma} ${hue} / 0.8)`,

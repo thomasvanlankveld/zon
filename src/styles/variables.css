@@ -114,13 +114,11 @@
     --color-diagram-root-deemphasize: var(--clr-grey-100);
 
     --color-text-group-regular: var(--clr-grey-700);
-    --color-text-group-highlight: var(--clr-grey-800);
     --color-text-group-active: var(--color-text-active);
     --color-text-group-deemphasize: var(--color-text-deemphasize);
 
     --color-diagram-arc-group-regular: var(--clr-grey-500);
     --color-diagram-arc-group-slight-highlight: var(--clr-grey-600);
-    --color-diagram-arc-group-highlight: var(--clr-grey-630);
     --color-diagram-arc-group-active: var(--clr-grey-450);
     --color-diagram-arc-group-deemphasize: var(--clr-grey-220);
 
