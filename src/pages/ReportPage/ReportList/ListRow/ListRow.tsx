@@ -36,9 +36,9 @@ export default function ListRow(props: ListRowProps) {
         ...props.rowContainerClassList,
       }}
       style={{
-        "--regular-color": props.colors.regular,
-        "--active-color": props.colors.active,
-        "--deemphasize-color": props.colors.deemphasize,
+        "--color-row-regular": props.colors.regular,
+        "--color-row-active": props.colors.active,
+        "--color-row-deemphasize": props.colors.deemphasize,
       }}
       data-deemphasized={props.isDeemphasized ?? false}
       onMouseEnter={props.onMouseEnter}
