@@ -2,6 +2,9 @@ import { CodeStats } from "../tokei.ts";
 import { subtractChild, sumCounted } from "./counted.ts";
 import type { LINE_TYPE, LineTypeCounts } from "./types.ts";
 
+/**
+ * Get the total number of lines, of the given set of line types, from a Tokei stats object.
+ */
 export function getNumberOfLines(
   lineTypeCounts: CodeStats,
   lineTypes: LINE_TYPE[],
@@ -9,6 +12,9 @@ export function getNumberOfLines(
   return lineTypes.reduce((total, type) => total + lineTypeCounts[type], 0);
 }
 
+/**
+ * Per line type, sum all counts of that type
+ */
 export function sumLineTypeCounts(countsArr: LineTypeCounts[]): LineTypeCounts {
   return {
     blanks: sumCounted(countsArr.map((count) => count.blanks)),
