@@ -22,6 +22,9 @@ import {
   sumCounted,
 } from "./counted.ts";
 
+/**
+ * Create a "zon" tree from Tokei output
+ */
 export function createTree(
   reportPath: string,
   languages: Languages,
