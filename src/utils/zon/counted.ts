@@ -4,6 +4,9 @@ export function createCounted(numberOfLines: number): Counted {
   return { numberOfLines, colorValue: 0 };
 }
 
+/**
+ * For a given set of "counted" values, add the number of lines together, and calculate the sum's color value
+ */
 export function sumCounted(countedVals: Counted[]): Counted {
   const numberOfLines = countedVals.reduce(
     (sum, counted) => sum + counted.numberOfLines,
