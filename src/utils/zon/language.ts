@@ -19,6 +19,9 @@ export function addLanguageCount(
   }
 }
 
+/**
+ * Per language, sum up all counts of that language, and deduce the sum's color value
+ */
 export function sumLanguageCounts(countsArr: LanguageCounts[]): LanguageCounts {
   const sums: LanguageCounts = {};
 
@@ -46,14 +49,18 @@ export function sumLanguageCounts(countsArr: LanguageCounts[]): LanguageCounts {
   return sums;
 }
 
+/**
+ * Resulting number of lines and color value per language, after removing a child from its parent
+ * @param fallbackColorValue Color value to use when the resulting number of lines for a line type is 0
+ */
 export function subtractLanguageCounts(
-  totals: LanguageCounts,
-  toSubtract: LanguageCounts,
+  parent: LanguageCounts,
+  child: LanguageCounts,
 ): LanguageCounts {
-  const sums: LanguageCounts = { ...totals };
+  const sums: LanguageCounts = { ...parent };
 
-  for (const [languageName, count] of Object.entries(toSubtract)) {
-    const oldSum = totals[languageName as LanguageType] ?? createCounted(0);
+  for (const [languageName, count] of Object.entries(child)) {
+    const oldSum = parent[languageName as LanguageType] ?? createCounted(0);
     const newSum = subtractChild(oldSum, count);
 
     if (newSum.numberOfLines > 0) {
