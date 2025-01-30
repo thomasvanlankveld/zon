@@ -27,7 +27,7 @@ export default function Center(props: CenterProps) {
 
   const rootColors = createMemo(() => {
     if (isReportRoot()) {
-      return { base: "", highlight: "", press: "" };
+      return { base: "", highlight: "", active: "" };
     }
 
     const staticColors = DIAGRAM_ROOT_COLORS;
@@ -39,7 +39,7 @@ export default function Center(props: CenterProps) {
         highlightedDiagramPath(),
       ),
       highlight: staticColors.highlight,
-      press: staticColors.press,
+      active: staticColors.active,
     };
   });
 
@@ -52,7 +52,7 @@ export default function Center(props: CenterProps) {
         style={{
           "--arc-base-color": rootColors().base,
           "--arc-highlight-color": rootColors().highlight,
-          "--arc-press-color": rootColors().press,
+          "--arc-active-color": rootColors().active,
         }}
         class={styles.sunburst__arc}
         onMouseEnter={() => setHoverArcPath(diagramRoot().path)}

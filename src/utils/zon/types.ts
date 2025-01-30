@@ -25,7 +25,7 @@ export type Colors = {
   regular: string;
   slightHighlight?: string;
   highlight: string;
-  press: string;
+  active: string;
   opposite?: string;
   deemphasize: string;
 };

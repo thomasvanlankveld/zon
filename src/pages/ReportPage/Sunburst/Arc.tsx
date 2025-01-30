@@ -81,7 +81,7 @@ function Arc(props: ArcProps) {
         "--arc-slight-highlight-color":
           colors().slightHighlight ?? "rgba(255, 255, 255, 0.5);",
         "--arc-highlight-color": colors().highlight,
-        "--arc-press-color": colors().press,
+        "--arc-active-color": colors().active,
         "--arc-opposite-color":
           colors().opposite ?? "rgba(255, 255, 255, 0.5);",
         "--arc-deemphasize-color": colors().deemphasize,

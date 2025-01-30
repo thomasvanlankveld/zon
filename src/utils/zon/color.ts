@@ -6,28 +6,28 @@ import { type Node, type Colors, type Path, isGroup, LINE_TYPE } from "./types";
 export const NODE_DEFAULT_COLORS: Colors = {
   regular: "var(--color-node-regular)",
   highlight: "var(--color-node-highlight)",
-  press: "var(--color-node-press)",
+  active: "var(--color-node-press)",
   deemphasize: "var(--color-node-deemphasize)",
 };
 
 export const TEXT_ROOT_COLORS: Colors = {
   regular: "var(--color-text-regular)",
   highlight: "var(--color-text-hover-focus)",
-  press: "var(--color-text-active)",
+  active: "var(--color-text-active)",
   deemphasize: "var(--color-text-deemphasize)",
 };
 
 export const DIAGRAM_ROOT_COLORS: Colors = {
   regular: "var(--color-diagram-root-regular)",
   highlight: "var(--color-diagram-root-highlight)",
-  press: "var(--color-diagram-root-press)",
+  active: "var(--color-diagram-root-press)",
   deemphasize: "var(--color-diagram-root-deemphasize)",
 };
 
 export const TEXT_GROUP_COLORS: Colors = {
   regular: "var(--color-text-group-regular)",
   highlight: "var(--color-text-group-highlight)",
-  press: "var(--color-text-group-press)",
+  active: "var(--color-text-group-press)",
   deemphasize: "var(--color-text-group-deemphasize)",
 };
 
@@ -35,7 +35,7 @@ export const DIAGRAM_ARC_GROUP_COLORS: Colors = {
   regular: "var(--color-diagram-arc-group-regular)",
   slightHighlight: "var(--color-diagram-arc-group-slight-highlight)",
   highlight: "var(--color-diagram-arc-group-highlight)",
-  press: "var(--color-diagram-arc-group-press)",
+  active: "var(--color-diagram-arc-group-press)",
   // deemphasize: "rgba(255, 255, 255, 0.5)" // Maybe? (was default value in `Arc.tsx`)
   deemphasize: "var(--color-diagram-arc-group-deemphasize)",
 };
@@ -91,7 +91,7 @@ export function rainbow(
     highlight: `oklch(${lightness + 10}% ${(1 - chromaCorrection) * chroma} ${hue})`,
     // // TODO: Make text use a darker color instead of a lighter one
     // press: `oklch(${lightness + 15}% ${chroma} ${hue})`,
-    press: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
+    active: `oklch(${lightness + 15}% ${(1 - 1.3 * chromaCorrection) * chroma} ${hue})`,
     opposite: `oklch(${lightness + 10}% ${(1 - oppositeChromaCorrection) * chroma} ${oppositeHue} / 0.5)`,
     // opposite: `oklch(${lightness}% ${chroma} ${oppositeHue})`,
     // deemphasize: `oklch(${lightness}% ${chroma} ${hue} / 0.6)`,
