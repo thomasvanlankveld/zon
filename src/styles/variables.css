@@ -118,7 +118,6 @@
     --color-text-group-deemphasize: var(--color-text-deemphasize);
 
     --color-diagram-arc-group-regular: var(--clr-grey-500);
-    --color-diagram-arc-group-slight-highlight: var(--clr-grey-600);
     --color-diagram-arc-group-active: var(--clr-grey-450);
     --color-diagram-arc-group-deemphasize: var(--clr-grey-220);
 

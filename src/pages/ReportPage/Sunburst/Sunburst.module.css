@@ -5,26 +5,6 @@
   fill-rule: evenodd;
   fill: var(--color-arc-regular);
 
-  /* TODO: Remove, not needed anymore when highlight is handled with data attribute */
-  /* &:hover {
-    fill: var(--color-arc-highlight);
-    stroke: rgb(255, 255, 255);
-  } */
-
-  /* &[data-highlighted="true"] { */
-  /* fill: var(--arc-slight-highlight-color); */
-  /* fill: var(--color-arc-highlight); */
-  /* stroke: var(--arc-opposite-color); */
-  /* stroke: var(--color-text-hover-focus); */
-  /* stroke: rgba(255, 255, 255, 0.8); */
-  /* stroke: rgb(255, 255, 255); */
-  /* stroke: rgb(37, 75, 5); */
-  /* stroke: var(--clr-blue-700); */
-  /* stroke: rgba(0, 0, 0, 0.7); */
-  /* stroke-width: var(--spacing-3xs); */
-  /* stroke-width: var(--spacing-xxs); */
-  /* } */
-
   &[data-highlighted="true"] {
     fill: var(--color-arc-highlight, var(--color-arc-regular));
   }
@@ -34,7 +14,6 @@
   }
 
   &:active {
-    /* fill: var(--color-arc-highlight); */
     fill: var(--color-arc-active);
   }
 }

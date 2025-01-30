@@ -1,4 +1,4 @@
-import { createSignal, For } from "solid-js";
+import { For } from "solid-js";
 import { rainbow } from "../../utils/zon";
 
 function ColorSpread(props: { getColor: (val: number) => string }) {
@@ -19,61 +19,12 @@ function ColorSpread(props: { getColor: (val: number) => string }) {
 }
 
 export default function ColorTest() {
-  const [base, setBase] = createSignal(0.35);
-  const [dynamic, setDynamic] = createSignal(0.5);
-  const [offset, setOffset] = createSignal(0.4);
-
   return (
     <>
       <div style={{ display: "grid", padding: "6rem" }}>
-        <div style={{ display: "grid" }}>
-          <span>Base: {base()}</span>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={base()}
-            onInput={(e) => setBase(Number(e.target.value))}
-          />
-          <span>Dynamic: {dynamic()}</span>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={dynamic()}
-            onInput={(e) => setDynamic(Number(e.target.value))}
-          />
-          <span>Offset: {offset()}</span>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={offset()}
-            onInput={(e) => setOffset(Number(e.target.value))}
-          />
-        </div>
-        <ColorSpread
-          getColor={(val) => rainbow(val, base(), dynamic(), offset()).regular}
-        />
-        <ColorSpread
-          getColor={(val) =>
-            rainbow(val, base(), dynamic(), offset()).slightHighlight ?? ""
-          }
-        />
-        {/* <ColorSpread
-          getColor={(val) =>
-            rainbow(val, base(), dynamic(), offset()).highlight
-          }
-        /> */}
-        <ColorSpread
-          getColor={(val) =>
-            rainbow(val, base(), dynamic(), offset()).deemphasize
-          }
-        />
-        {/* <ColorSpread getColor={(val) => rainbow(val, offset()).active} /> */}
+        <ColorSpread getColor={(val) => rainbow(val).regular} />
+        <ColorSpread getColor={(val) => rainbow(val).deemphasize} />
+        <ColorSpread getColor={(val) => rainbow(val).active} />
       </div>
     </>
   );
