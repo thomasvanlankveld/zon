@@ -85,6 +85,9 @@
   }
 
   &:hover {
+    /* TODO: Highlight group text */
+    /* Use optional highlight color: var(--color-row-hover-focus, var(--color-row-regular)) */
+
     .report-list__row-name::before {
       content: var(--hover-before-content);
     }
