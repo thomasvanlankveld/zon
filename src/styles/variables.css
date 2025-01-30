@@ -111,10 +111,6 @@
     --color-node-highlight: pink;
     --color-node-press: purple;
 
-    --color-text-root-default: var(--clr-grey-800);
-    --color-text-root-highlight: var(--clr-white);
-    --color-text-root-press: var(--clr-grey-600);
-
     --color-diagram-root-default: var(--clr-grey-150);
     --color-diagram-root-highlight: var(--clr-grey-220);
     --color-diagram-root-press: var(--clr-grey-100);

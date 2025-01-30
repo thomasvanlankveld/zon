@@ -10,9 +10,9 @@ export const NODE_DEFAULT_COLORS: Colors = {
 };
 
 export const TEXT_ROOT_COLORS: Colors = {
-  default: "var(--color-text-root-default)",
-  highlight: "var(--color-text-root-highlight)",
-  press: "var(--color-text-root-press)",
+  default: "var(--color-text-regular)",
+  highlight: "var(--color-text-hover-focus)",
+  press: "var(--color-text-active)",
 };
 
 export const DIAGRAM_ROOT_COLORS: Colors = {
