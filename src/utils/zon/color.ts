@@ -1,5 +1,4 @@
-import { arePathsEqual } from "./path";
-import { type Node, type Colors, type Path, isGroup } from "./types";
+import { type Colors } from "./types";
 
 // TODO: Use safer colors in prod mode (bright colors only in dev mode to emphasize mistakes)
 export const NODE_DEFAULT_COLORS: Colors = {
@@ -91,22 +90,4 @@ export function rainbow(
     deemphasize: `oklch(${lightness}% ${chroma} ${hue} / 0.55)`,
     // deemphasize: `oklch(${lightness - 15}% ${chroma} ${hue})`,
   };
-}
-
-/**
- * Get a node's "static" text colors (not taking into account highlight from an outside component)
- */
-export function getNodeStaticTextColors(
-  node: Node,
-  reportRootPath: Path,
-): Colors {
-  if (arePathsEqual(node.path, reportRootPath)) {
-    return TEXT_ROOT_COLORS;
-  }
-
-  if (isGroup(node)) {
-    return TEXT_GROUP_COLORS;
-  }
-
-  return rainbow(node.colorValue);
 }

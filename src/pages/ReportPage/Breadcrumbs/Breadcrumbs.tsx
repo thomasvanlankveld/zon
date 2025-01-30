@@ -7,7 +7,6 @@ import {
   arePathsEqual,
   isFolder,
   isChildPath,
-  getNodeStaticTextColors,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import styles from "./Breadcrumbs.module.css";
@@ -19,8 +18,13 @@ type BreadcrumbsProps = {
 
 export default function Breadcrumbs(props: BreadcrumbsProps) {
   const { t } = useI18n();
-  const { reportRoot, diagramRootPath, breadcrumbPath, navigate } =
-    useReportState();
+  const {
+    reportRoot,
+    diagramRootPath,
+    breadcrumbPath,
+    navigate,
+    getNodeTextColors,
+  } = useReportState();
 
   const [hoverPath, setHoverPath] = createSignal<Path | null>(null);
 
@@ -53,7 +57,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
     <nav class={props.class} aria-label={t("breadcrumbs.label")}>
       <For each={nodes()}>
         {(node, i) => {
-          const colors = getNodeStaticTextColors(node, reportRoot().path);
+          const colors = getNodeTextColors(node);
 
           return (
             <button

@@ -9,11 +9,16 @@ import {
 } from "solid-js";
 import {
   arePathsEqual,
+  Colors,
   getNodeByPath,
   groupSmallestNodes,
+  isGroup,
   LINE_TYPE,
   Node,
   Path,
+  rainbow,
+  TEXT_GROUP_COLORS,
+  TEXT_ROOT_COLORS,
   withNode,
 } from "../../utils/zon";
 import { LanguageType } from "../../utils/tokei";
@@ -145,6 +150,22 @@ function createReportState(initialReportRoot: Node) {
     arePathsEqual(listRootPath(), reportRoot().path),
   );
 
+  // TODO: Maybe move this to a separate file?
+  /**
+   * Get a node's text colors
+   */
+  function getNodeTextColors(node: Node): Colors {
+    if (arePathsEqual(node.path, reportRoot().path)) {
+      return TEXT_ROOT_COLORS;
+    }
+
+    if (isGroup(node)) {
+      return TEXT_GROUP_COLORS;
+    }
+
+    return rainbow(node.colorValue);
+  }
+
   // Clearing the hovered paths is not just for usability. Setting the selected root path and expanding the max children
   // are interactions that can cause groups to cease to exist. By clearing hovered paths, we prevent the breadcrumbs
   // from crashing because they target a non-existing group.
@@ -186,6 +207,7 @@ function createReportState(initialReportRoot: Node) {
     setHoverListLineType,
     hoverListLanguage,
     setHoverListLanguage,
+    getNodeTextColors,
     expandGroup,
   };
 }
