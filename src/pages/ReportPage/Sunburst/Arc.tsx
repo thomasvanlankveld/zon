@@ -84,7 +84,7 @@ function Arc(props: ArcProps) {
         "--arc-press-color": colors().press,
         "--arc-opposite-color":
           colors().opposite ?? "rgba(255, 255, 255, 0.5);",
-        "--arc-dim-color": colors().dim ?? "rgba(255, 255, 255, 0.5);",
+        "--arc-dim-color": colors().deemphasize,
         opacity: props.node.opacity(),
       }}
       class={styles.sunburst__arc}

@@ -7,24 +7,28 @@ export const NODE_DEFAULT_COLORS: Colors = {
   regular: "var(--color-node-regular)",
   highlight: "var(--color-node-highlight)",
   press: "var(--color-node-press)",
+  deemphasize: "var(--color-node-deemphasize)",
 };
 
 export const TEXT_ROOT_COLORS: Colors = {
   regular: "var(--color-text-regular)",
   highlight: "var(--color-text-hover-focus)",
   press: "var(--color-text-active)",
+  deemphasize: "var(--color-text-deemphasize)",
 };
 
 export const DIAGRAM_ROOT_COLORS: Colors = {
   regular: "var(--color-diagram-root-regular)",
   highlight: "var(--color-diagram-root-highlight)",
   press: "var(--color-diagram-root-press)",
+  deemphasize: "var(--color-diagram-root-deemphasize)",
 };
 
 export const TEXT_GROUP_COLORS: Colors = {
   regular: "var(--color-text-group-regular)",
   highlight: "var(--color-text-group-highlight)",
   press: "var(--color-text-group-press)",
+  deemphasize: "var(--color-text-group-deemphasize)",
 };
 
 export const DIAGRAM_ARC_GROUP_COLORS: Colors = {
@@ -32,7 +36,8 @@ export const DIAGRAM_ARC_GROUP_COLORS: Colors = {
   slightHighlight: "var(--color-diagram-arc-group-slight-highlight)",
   highlight: "var(--color-diagram-arc-group-highlight)",
   press: "var(--color-diagram-arc-group-press)",
-  dim: "var(--color-diagram-arc-group-dim)",
+  // dim: "rgba(255, 255, 255, 0.5)" // Maybe? (was default value in `Arc.tsx`)
+  deemphasize: "var(--color-diagram-arc-group-dim)",
 };
 
 function rainbowHue(
@@ -90,7 +95,7 @@ export function rainbow(
     opposite: `oklch(${lightness + 10}% ${(1 - oppositeChromaCorrection) * chroma} ${oppositeHue} / 0.5)`,
     // opposite: `oklch(${lightness}% ${chroma} ${oppositeHue})`,
     // dim: `oklch(${lightness}% ${chroma} ${hue} / 0.6)`,
-    dim: `oklch(${lightness}% ${chroma} ${hue} / 0.55)`,
+    deemphasize: `oklch(${lightness}% ${chroma} ${hue} / 0.55)`,
     // dim: `oklch(${lightness - 15}% ${chroma} ${hue})`,
   };
 }

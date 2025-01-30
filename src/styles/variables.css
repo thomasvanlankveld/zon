@@ -110,14 +110,17 @@
     --color-node-regular: red;
     --color-node-highlight: pink;
     --color-node-press: purple;
+    --color-node-deemphasize: darkred;
 
     --color-diagram-root-regular: var(--clr-grey-150);
     --color-diagram-root-highlight: var(--clr-grey-220);
     --color-diagram-root-press: var(--clr-grey-100);
+    --color-diagram-root-deemphasize: var(--clr-grey-100);
 
     --color-text-group-regular: var(--clr-grey-700);
     --color-text-group-highlight: var(--clr-grey-800);
     --color-text-group-press: var(--clr-grey-600);
+    --color-text-group-deemphasize: var(--clr-grey-600);
 
     --color-diagram-arc-group-regular: var(--clr-grey-500);
     --color-diagram-arc-group-slight-highlight: var(--clr-grey-600);

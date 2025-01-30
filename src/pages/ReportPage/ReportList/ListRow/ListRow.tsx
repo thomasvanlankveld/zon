@@ -8,7 +8,7 @@ export type ListRowColors = {
   base: string;
   highlight: string;
   press: string;
-  dim?: string;
+  deemphasize?: string;
 };
 
 type ListRowProps = {
@@ -46,7 +46,8 @@ export default function ListRow(props: ListRowProps) {
         "--highlight-color":
           props.colors?.highlight ?? "var(--color-text-hover-focus)",
         "--press-color": props.colors?.press ?? "var(--color-text-active)",
-        "--dim-color": props.colors?.dim ?? "var(--color-text-deemphasize)",
+        "--dim-color":
+          props.colors?.deemphasize ?? "var(--color-text-deemphasize)",
       }}
       data-is-dimmed={props.isDimmed ?? false}
       onMouseEnter={props.onMouseEnter}

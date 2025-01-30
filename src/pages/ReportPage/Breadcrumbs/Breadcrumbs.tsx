@@ -61,8 +61,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
               style={{
                 "--color-node-regular": colors.regular,
                 "--color-node-active": colors.press,
-                "--color-node-deemphasize":
-                  colors?.dim ?? "var(--color-text-deemphasize)",
+                "--color-node-deemphasize": colors.deemphasize,
               }}
               class={styles["breadcrumbs__breadcrumb-button"]}
               data-deemphasize={deemphasize(node)}

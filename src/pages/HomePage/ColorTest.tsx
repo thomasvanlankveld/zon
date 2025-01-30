@@ -70,7 +70,7 @@ export default function ColorTest() {
         />
         <ColorSpread
           getColor={(val) =>
-            rainbow(val, base(), dynamic(), offset()).dim ?? ""
+            rainbow(val, base(), dynamic(), offset()).deemphasize
           }
         />
         {/* <ColorSpread getColor={(val) => rainbow(val, offset()).press} /> */}

@@ -27,7 +27,7 @@ export type Colors = {
   highlight: string;
   press: string;
   opposite?: string;
-  dim?: string;
+  deemphasize: string;
 };
 
 export type Counted = {
