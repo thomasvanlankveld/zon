@@ -34,6 +34,9 @@ export function getPathString(path: Path | null): string {
     .join("/");
 }
 
+/**
+ * Whether two paths are equal. If both paths are `null`, they are considered equal.
+ */
 export function arePathsEqual(left: Path | null, right: Path | null): boolean {
   if (left == null && right == null) {
     return true;
@@ -50,6 +53,11 @@ export function arePathsEqual(left: Path | null, right: Path | null): boolean {
   return left.every((segment, i) => segment === right[i]);
 }
 
+/**
+ * Whether the `child` path is actually a child of the `parent` path.
+ * @param options.inclusive Whether to consider "the child is the parent" as `true`
+ * @param options.direct When set to `true`, only checks the parent's direct children
+ */
 export function isChildPath(
   parent: Path | null,
   child: Path | null,
@@ -58,7 +66,7 @@ export function isChildPath(
   const inclusive = options.inclusive ?? false;
   const direct = options.direct ?? false;
 
-  if (parent == null && child == null) {
+  if (inclusive && parent == null && child == null) {
     return true;
   }
 
