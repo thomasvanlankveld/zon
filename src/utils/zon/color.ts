@@ -1,6 +1,5 @@
-import { LanguageType } from "../tokei";
 import { arePathsEqual } from "./path";
-import { type Node, type Colors, type Path, isGroup, LINE_TYPE } from "./types";
+import { type Node, type Colors, type Path, isGroup } from "./types";
 
 // TODO: Use safer colors in prod mode (bright colors only in dev mode to emphasize mistakes)
 export const NODE_DEFAULT_COLORS: Colors = {
