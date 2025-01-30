@@ -4,31 +4,31 @@ import { type Node, type Colors, type Path, isGroup, LINE_TYPE } from "./types";
 
 // TODO: Use safer colors in prod mode (bright colors only in dev mode to emphasize mistakes)
 export const NODE_DEFAULT_COLORS: Colors = {
-  default: "var(--color-node-default)",
+  regular: "var(--color-node-regular)",
   highlight: "var(--color-node-highlight)",
   press: "var(--color-node-press)",
 };
 
 export const TEXT_ROOT_COLORS: Colors = {
-  default: "var(--color-text-regular)",
+  regular: "var(--color-text-regular)",
   highlight: "var(--color-text-hover-focus)",
   press: "var(--color-text-active)",
 };
 
 export const DIAGRAM_ROOT_COLORS: Colors = {
-  default: "var(--color-diagram-root-default)",
+  regular: "var(--color-diagram-root-regular)",
   highlight: "var(--color-diagram-root-highlight)",
   press: "var(--color-diagram-root-press)",
 };
 
 export const TEXT_GROUP_COLORS: Colors = {
-  default: "var(--color-text-group-default)",
+  regular: "var(--color-text-group-regular)",
   highlight: "var(--color-text-group-highlight)",
   press: "var(--color-text-group-press)",
 };
 
 export const DIAGRAM_ARC_GROUP_COLORS: Colors = {
-  default: "var(--color-diagram-arc-group-default)",
+  regular: "var(--color-diagram-arc-group-regular)",
   slightHighlight: "var(--color-diagram-arc-group-slight-highlight)",
   highlight: "var(--color-diagram-arc-group-highlight)",
   press: "var(--color-diagram-arc-group-press)",
@@ -78,7 +78,7 @@ export function rainbow(
     rainbowHue(value + 0.5, base, dynamic, offset);
 
   return {
-    default: `oklch(${lightness}% ${chroma} ${hue})`,
+    regular: `oklch(${lightness}% ${chroma} ${hue})`,
     slightHighlight: `oklch(${lightness + 1}% ${(1 - 0.1 * chromaCorrection) * chroma} ${hue})`,
     // highlight: `oklch(${lightness + 10}% ${chroma} ${hue})`,
     // highlight: `oklch(${lightness}% ${(1 - chromaCorrection) * chroma} ${hue})`,
@@ -106,7 +106,7 @@ export function getBaseColor(
 ): string {
   const isHighlighted = arePathsEqual(highlightedPath, nodePath);
 
-  return isHighlighted ? colors.highlight : colors.default;
+  return isHighlighted ? colors.highlight : colors.regular;
 }
 
 /**
@@ -162,7 +162,7 @@ export function getNodeArcColors(
       node.lineTypes[highlightedLineType].numberOfLines > 0) ||
     (highlightedLanguage != null &&
       (node.languages[highlightedLanguage]?.numberOfLines ?? 0) > 0);
-  const base = isHighlighted ? staticColors.highlight : staticColors.default;
+  const base = isHighlighted ? staticColors.highlight : staticColors.regular;
 
   return {
     ...staticColors,

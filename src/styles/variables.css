@@ -107,19 +107,19 @@
 
     --color-background: var(--clr-black);
 
-    --color-node-default: red;
+    --color-node-regular: red;
     --color-node-highlight: pink;
     --color-node-press: purple;
 
-    --color-diagram-root-default: var(--clr-grey-150);
+    --color-diagram-root-regular: var(--clr-grey-150);
     --color-diagram-root-highlight: var(--clr-grey-220);
     --color-diagram-root-press: var(--clr-grey-100);
 
-    --color-text-group-default: var(--clr-grey-700);
+    --color-text-group-regular: var(--clr-grey-700);
     --color-text-group-highlight: var(--clr-grey-800);
     --color-text-group-press: var(--clr-grey-600);
 
-    --color-diagram-arc-group-default: var(--clr-grey-500);
+    --color-diagram-arc-group-regular: var(--clr-grey-500);
     --color-diagram-arc-group-slight-highlight: var(--clr-grey-600);
     --color-diagram-arc-group-highlight: var(--clr-grey-630);
     --color-diagram-arc-group-press: var(--clr-grey-450);

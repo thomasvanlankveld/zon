@@ -77,7 +77,7 @@ function Arc(props: ArcProps) {
     <path
       d={getNodeArcD()}
       style={{
-        "--arc-base-color": colors().default,
+        "--arc-base-color": colors().regular,
         "--arc-slight-highlight-color":
           colors().slightHighlight ?? "rgba(255, 255, 255, 0.5);",
         "--arc-highlight-color": colors().highlight,

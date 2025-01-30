@@ -22,7 +22,7 @@ export type SegmentName = string | typeof GROUP_SEGMENT;
 export type Path = SegmentName[];
 
 export type Colors = {
-  default: string;
+  regular: string;
   slightHighlight?: string;
   highlight: string;
   press: string;

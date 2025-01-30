@@ -27,7 +27,7 @@ export default function LineTypePanel(props: LineTypePanelProps) {
 
     return {
       ...staticColors,
-      base: staticColors.default,
+      base: staticColors.regular,
     };
   }
 

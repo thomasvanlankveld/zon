@@ -56,7 +56,7 @@ export default function ColorTest() {
           />
         </div>
         <ColorSpread
-          getColor={(val) => rainbow(val, base(), dynamic(), offset()).default}
+          getColor={(val) => rainbow(val, base(), dynamic(), offset()).regular}
         />
         <ColorSpread
           getColor={(val) =>

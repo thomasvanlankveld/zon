@@ -26,7 +26,7 @@ export default function LanguagePanel(props: LanguagePanelProps) {
 
     return {
       ...staticColors,
-      base: staticColors.default,
+      base: staticColors.regular,
     };
   }
 
