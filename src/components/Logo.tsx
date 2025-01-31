@@ -18,7 +18,7 @@ type LogoProps = {
 
 export default function Logo(props: LogoProps) {
   const size = () => props.size ?? 38;
-  const numberOfArcs = () => props.numberOfArcs ?? 300;
+  const numberOfArcs = () => props.numberOfArcs ?? size() * 2;
 
   const strokeWidth = 1;
   const maxRadius = () => size() / 2 - strokeWidth;
