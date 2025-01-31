@@ -9,6 +9,7 @@ import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
 import { createTree, LINE_TYPE, type Node } from "../../utils/zon";
 import type { Languages } from "../../utils/tokei";
+import Logo from "../../components/Logo";
 import NumberOfLines from "../../components/NumberOfLines";
 import styles from "./HomePage.module.css";
 
@@ -49,7 +50,13 @@ export default function LandingPage(props: LandingPageProps) {
 
   return (
     <main class={`${styles["home-page"]} page`}>
-      <h1 class="heading-l">{t("app.title")}</h1>
+      <h1
+        class="heading-l"
+        style={{ display: "flex", gap: "var(--spacing-m)" }}
+      >
+        <Logo />
+        {t("app.title")}
+      </h1>
 
       <div>
         <For each={Object.entries(props.reports)}>
