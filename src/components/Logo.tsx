@@ -13,8 +13,8 @@ function clamp(value: number, min: number, max: number) {
 
 export default function Logo() {
   // const size = 30;
-  const size = 620;
-  // const size = 310;
+  // const size = 620;
+  const size = 310;
   const numberOfArcs = 300;
 
   const strokeWidth = 1;
