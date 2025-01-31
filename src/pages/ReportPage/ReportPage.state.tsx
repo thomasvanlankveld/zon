@@ -23,7 +23,7 @@ import {
 } from "../../utils/zon";
 import { LanguageType } from "../../utils/tokei";
 
-const DEFAULT_MAX_CHILDREN = 16;
+const DEFAULT_MAX_CHILDREN = 14;
 
 /**
  * Holds the report page's shared state
