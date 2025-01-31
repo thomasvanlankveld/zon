@@ -12,14 +12,15 @@ function clamp(value: number, min: number, max: number) {
 }
 
 export default function Logo() {
-  // const size = 71;
+  // const size = 30;
   const size = 620;
   // const size = 310;
   const numberOfArcs = 300;
 
-  const maxRadius = size / 2 - 1;
+  const strokeWidth = 1;
+  const maxRadius = size / 2 - strokeWidth;
   const outerRadius = maxRadius;
-  const innerRadius = outerRadius / 2;
+  const innerRadius = outerRadius / 2 + strokeWidth;
 
   const step = 1 / numberOfArcs;
 
@@ -70,7 +71,7 @@ export default function Logo() {
             d={arc.d}
             fill={arc.color}
             stroke={arc.color}
-            stroke-width="1"
+            stroke-width={strokeWidth}
           />
         )}
       </For>
