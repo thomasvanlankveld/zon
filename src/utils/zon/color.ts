@@ -50,78 +50,23 @@ function interpolateBasis(values: number[]) {
  */
 export function rainbow(value: number): Colors {
   const position = (value + 0.85) % 1;
-  // const position = (value + 0.87) % 1;
-  // const position = (value + 0.8) % 1;
 
-  // const adjustedPosition = position;
-  // const adjustedPosition = interpolateBasis([0, 0.4, 1])(position);
-  // const adjustedPosition = interpolateBasis([0, 0.2, 0.4, 0.7, 1])(position);
-  // const adjustedPosition = interpolateBasis([
-  //   0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 0.85, 1,
-  // ])(position);
-
-  // // General correction
-  // const adjustedPosition = interpolateBasis([
-  //   0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.6, 0.725, 0.75,
-  //   0.85, 0.925, 1,
-  // ])(position);
-
-  // // Spread green a bit more
-  // const adjustedPosition = interpolateBasis([
-  //   0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.37, 0.4, 0.42, 0.5, 0.6, 0.725, 0.75,
-  //   0.85, 0.925, 1,
-  // ])(position);
-
-  // // Spread blues a bit more
-  // const adjustedPosition = interpolateBasis([
-  //   0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.37, 0.4, 0.42, 0.52, 0.65, 0.725,
-  //   0.75, 0.83, 0.875, 1,
-  // ])(position);
-
-  // // Smooth sudden pink jump
-  // const adjustedPosition = interpolateBasis([
-  //   0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.37, 0.4, 0.42, 0.52, 0.65, 0.725,
-  //   0.75, 0.83, 0.92, 1,
-  // ])(position);
-
-  // Compresses violet and teal, making more space for green, yellow, and deep orange
+  // Compress violet and teal, making more space for green, yellow, and deep orange
   const adjustedPosition = interpolateBasis([
     0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.37, 0.4, 0.42, 0.52, 0.65, 0.725,
     0.75, 0.83, 0.92, 1,
   ])(position);
 
-  // const lightness = 71.4;
-  // // const chroma = 0.29;
-  // // const chroma = 0.28;
-  // const chroma = 0.27;
-  // // const chroma = 0.25;
-  // // const chroma = 0.16;
-
-  // Orange / pink
-  // const orangePinkDip = (_: number) => 0 * _;
+  // Reduce chroma for colors that would otherwise be strangely bright
   const orangePinkDip = (p: number) =>
     interpolateBasis([0, 0, 0.08, 0, 0])((p + 0.3) % 1);
-  // const orangePinkDip = (p: number) =>
-  //   interpolateBasis([0, 0, 0.08, 0, 0, 0])((p + 0.2) % 1);
-
-  // Green / teal
-  // const greenTealDip = (_: number) => 0 * _;
   const greenTealDip = (p: number) =>
     interpolateBasis([0, 0, 0, 0.07, 0, 0, 0])((p - 0.08) % 1);
-
-  // Sum
-  // const chromaDip = (_: number) => 0 * _;
   const chromaDip = (p: number) => Math.max(orangePinkDip(p), greenTealDip(p));
 
   const lightness = 82;
-  // const chroma = 0.25;
-  // const chroma = 0.26;
-  // const chroma = 0.27;
-  // const chroma = 0.28;
-  // const chroma = 0.31 - chromaDip((position + 0.2) % 1);
   const chroma = 0.31 - chromaDip(position);
   const hue = adjustedPosition * 360;
-  // const hue = position * 360;
 
   return {
     regular: `oklch(${lightness}% ${chroma} ${hue})`,
