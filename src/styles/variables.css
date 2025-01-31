@@ -29,16 +29,24 @@
     --fw-s: 400;
 
     --fs-m: 1rem; /* 16px */
-    --lh-m: 1.5rem; /* 20px */
+    --lh-m: 1.5rem; /* 24px */
     --fw-m: 400;
 
-    --fs-l: 1.25rem; /* 18px */
-    --lh-l: 2rem; /* 24px */
+    --fs-l: 1.25rem; /* 20px */
+    --lh-l: 1.5rem;
     --fw-l: 400;
 
-    --fs-xl: 1.5rem; /* 20px */
-    --lh-xl: 2rem; /* 24px */
+    --fs-xl: 1.5rem; /* 24px */
+    --lh-xl: 1.75rem;
     --fw-xl: 600;
+
+    --fs-xxl: 2rem; /* 32px */
+    --lh-xxl: 2.25rem;
+    --fw-xxl: 600;
+
+    --fs-3xl: 3rem; /* 48px */
+    --lh-3xl: 3rem; /* 56px */
+    --fw-3xl: 600;
 
     /* Colors */
     --clr-white: hsl(0, 0%, 96%);
@@ -99,6 +107,14 @@
     --font-size-heading-l: var(--fs-xl);
     --line-height-heading-l: var(--lh-xl);
     --font-weight-heading-l: var(--fw-xl);
+
+    --font-size-heading-xl: var(--fs-xxl);
+    --line-height-heading-xl: var(--lh-xxl);
+    --font-weight-heading-xl: var(--fw-xxl);
+
+    --font-size-heading-xxl: var(--fs-3xl);
+    --line-height-heading-xxl: var(--lh-3xl);
+    --font-weight-heading-xxl: var(--fw-3xl);
 
     /* Colors */
     --color-text-hover-focus: var(--clr-text-highlight);

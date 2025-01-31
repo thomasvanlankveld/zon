@@ -51,8 +51,12 @@ export default function LandingPage(props: LandingPageProps) {
   return (
     <main class={`${styles["home-page"]} page`}>
       <h1
-        class="heading-l"
-        style={{ display: "flex", gap: "var(--spacing-m)" }}
+        class="heading-xxl"
+        style={{
+          display: "flex",
+          gap: "var(--spacing-xl)",
+          "align-items": "center",
+        }}
       >
         <Logo />
         {t("app.title")}

@@ -28,6 +28,20 @@
     font-weight: var(--font-weight-heading-l);
   }
 
+  .heading-xl,
+  .heading-xl * {
+    font-size: var(--font-size-heading-xl);
+    line-height: var(--line-height-heading-xl);
+    font-weight: var(--font-weight-heading-xl);
+  }
+
+  .heading-xxl,
+  .heading-xxl * {
+    font-size: var(--font-size-heading-xxl);
+    line-height: var(--line-height-heading-xxl);
+    font-weight: var(--font-weight-heading-xxl);
+  }
+
   .text-center {
     text-align: center;
   }
