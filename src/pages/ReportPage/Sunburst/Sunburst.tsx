@@ -62,7 +62,8 @@ export default function Sunburst() {
 
   const distanceFull = 1;
   // All narrow layers together take up the same distance as one full layer
-  const distanceNarrow = distanceFull / numberOfNarrowLayers;
+  // (unless there are no narrow layers, then it takes up no space)
+  const distanceNarrow = distanceFull / (numberOfNarrowLayers || Infinity);
 
   /**
    * Determines the outer "distance" of a node's arc based on its depth
