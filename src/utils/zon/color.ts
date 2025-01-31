@@ -18,20 +18,7 @@ export const DIAGRAM_ARC_GROUP_COLORS: Colors = {
   deemphasize: "var(--color-diagram-arc-group-deemphasize)",
 };
 
-// function interpolator(a: number, b: number) {
-//   return function interpolate(x: number) {
-//     return a * (1 - x) + b * x;
-//   };
-// }
-
-// function interpolate(specs: [number, number][], x: number) {
-//   for (const [a, b] of specs) {
-//     if (x < b) {
-//       return a * (1 - x) + b * x;
-//     }
-//   }
-// }
-
+// From d3 source code
 function basis(t1: number, v0: number, v1: number, v2: number, v3: number) {
   const t2 = t1 * t1,
     t3 = t2 * t1;
@@ -62,8 +49,9 @@ function interpolateBasis(values: number[]) {
  * @param value
  */
 export function rainbow(value: number): Colors {
+  const position = (value + 0.85) % 1;
   // const position = (value + 0.87) % 1;
-  const position = (value + 0.8) % 1;
+  // const position = (value + 0.8) % 1;
 
   // const adjustedPosition = position;
   // const adjustedPosition = interpolateBasis([0, 0.4, 1])(position);
