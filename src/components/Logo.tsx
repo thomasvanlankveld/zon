@@ -1,4 +1,4 @@
-import { For } from "solid-js";
+import { createMemo, For, Setter } from "solid-js";
 import { getArcD } from "../utils/svg";
 import { rainbow } from "../utils/zon";
 
@@ -13,15 +13,20 @@ function clamp(value: number, min: number, max: number) {
 
 type LogoProps = {
   size?: number;
+  factor?: number;
   numberOfArcs?: number;
+  setSvg?: Setter<SVGSVGElement | undefined>;
 };
 
 export default function Logo(props: LogoProps) {
   const size = () => props.size ?? 38;
   const numberOfArcs = () => props.numberOfArcs ?? size() * 2;
 
+  const canvasSize = () => size();
+  const circleSize = createMemo(() => size() * (props.factor ?? 1));
+
   const strokeWidth = 1;
-  const maxRadius = () => size() / 2 - strokeWidth;
+  const maxRadius = () => circleSize() / 2 - strokeWidth;
   const outerRadius = maxRadius;
   const innerRadius = () => outerRadius() / 2 + strokeWidth;
 
@@ -72,9 +77,10 @@ export default function Logo(props: LogoProps) {
 
   return (
     <svg
-      viewBox={`${-0.5 * size()} ${-0.5 * size()} ${size()} ${size()}`}
-      width={size()}
-      height={size()}
+      viewBox={`${-0.5 * canvasSize()} ${-0.5 * canvasSize()} ${canvasSize()} ${canvasSize()}`}
+      width={canvasSize()}
+      height={canvasSize()}
+      ref={props.setSvg}
     >
       <For each={arcs()}>
         {(arc) => (
