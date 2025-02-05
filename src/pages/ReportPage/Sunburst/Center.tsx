@@ -12,8 +12,8 @@ export default function Center(props: CenterProps) {
     reportRoot,
     navigate,
     diagramRoot,
-    isArcHighlighted,
-    isArcDeemphasized,
+    isCenterHighlighted,
+    isCenterDeemphasized,
     setHoverArcPath,
   } = useReportState();
 
@@ -34,8 +34,8 @@ export default function Center(props: CenterProps) {
           "--color-arc-deemphasize": "var(--color-diagram-root-deemphasize)",
         }}
         class={styles.sunburst__arc}
-        data-highlighted={isArcHighlighted(diagramRoot())}
-        data-deemphasized={isArcDeemphasized(diagramRoot())}
+        data-highlighted={isCenterHighlighted()}
+        data-deemphasized={isCenterDeemphasized()}
         onMouseEnter={() => setHoverArcPath(diagramRoot().path)}
         onMouseLeave={() => setHoverArcPath(null)}
         onClick={() => navigate(getParentPath(diagramRoot().path))}

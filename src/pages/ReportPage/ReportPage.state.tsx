@@ -138,6 +138,25 @@ function createReportState(initialReportRoot: Node) {
     );
   }
 
+  /**
+   * The center should be highlighted (only) when the diagram root path is highlighted
+   */
+  function isCenterHighlighted() {
+    return arePathsEqual(highlightedDiagramPath(), diagramRootPath());
+  }
+
+  /**
+   * The center should be deemphasized (only) when a line type is highlighted that is not present in the graph (along
+   * with all other visible arcs) (the same would count for languages, but the list only shows languages with lines)
+   */
+  function isCenterDeemphasized() {
+    const lineType: LINE_TYPE | null = highlightedDiagramLineType();
+
+    return (
+      lineType != null && diagramRoot().lineTypes[lineType].numberOfLines === 0
+    );
+  }
+
   // List setup
   const listRootPath = createMemo(() => hoverArcPath() ?? diagramRootPath());
   const highlightedListPath = hoverArcPath;
@@ -193,6 +212,8 @@ function createReportState(initialReportRoot: Node) {
     diagramRootPath,
     isArcHighlighted,
     isArcDeemphasized,
+    isCenterHighlighted,
+    isCenterDeemphasized,
     setHoverArcPath,
     listRoot,
     listRootPath,
