@@ -12,7 +12,7 @@ import type { Languages } from "../../utils/tokei";
 import Logo from "../../components/Logo";
 import NumberOfLines from "../../components/NumberOfLines";
 import styles from "./HomePage.module.css";
-import LogoPngMaker from "./LogoPngMaker";
+import LogoSvgMaker from "./LogoSVGMaker";
 
 type LandingPageProps = {
   reports: Record<string, Node>;
@@ -80,7 +80,7 @@ export default function LandingPage(props: LandingPageProps) {
           {(definedPath) => <CountingLines path={definedPath()} />}
         </Show>
       </div>
-      <LogoPngMaker />
+      <LogoSvgMaker />
     </main>
   );
 }
