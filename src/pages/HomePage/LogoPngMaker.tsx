@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import Logo from "../../components/Logo";
+import LogoEfficient from "../../components/LogoEfficient";
 
 //
 export default function LogoPngMaker() {
@@ -69,7 +69,7 @@ export default function LogoPngMaker() {
         onInput={(e) => setSize(Number(e.target.value))}
       />
       <canvas ref={setCanvas} hidden />
-      <Logo size={size()} setSvg={setSvg} factor={factor} />
+      <LogoEfficient size={size()} setSvg={setSvg} factor={factor} />
       <button onClick={onSaveClick}>Save PNG</button>
     </div>
   );

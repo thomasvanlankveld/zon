@@ -9,7 +9,7 @@ import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
 import { createTree, LINE_TYPE, type Node } from "../../utils/zon";
 import type { Languages } from "../../utils/tokei";
-import Logo from "../../components/Logo";
+import LogoEfficient from "../../components/LogoEfficient";
 import NumberOfLines from "../../components/NumberOfLines";
 import styles from "./HomePage.module.css";
 import LogoSvgMaker from "./LogoSVGMaker";
@@ -59,7 +59,7 @@ export default function LandingPage(props: LandingPageProps) {
           "align-items": "center",
         }}
       >
-        <Logo />
+        <LogoEfficient />
         {t("app.title")}
       </h1>
 
