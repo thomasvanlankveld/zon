@@ -1,13 +1,3 @@
-//
-// THIS DIV APPROACH DOES NOT WORK
-//
-// conic-gradient does not work with SVG
-// Maybe it'd be possible to do something with SVG filters, but:
-// - I'd have to make the filter
-// - I'd have to check if it works with oklch
-// - If it doesn't, I'd have to convert oklch to rgb
-//
-
 import { createMemo, Setter } from "solid-js";
 import { getArcD } from "../utils/svg";
 import { rainbow } from "../utils/zon";
@@ -33,14 +23,16 @@ export default function LogoEfficient(props: LogoEfficientProps) {
   // const nFactor = 2;
   //   const nFactor = 1;
   //   const numberOfArcs = () => props.numberOfArcs ?? size() * nFactor;
-  const numberOfArcs = () => 2;
+  const numberOfArcs = () => 1;
 
   const canvasSize = () => size();
   const circleSize = createMemo(() => size() * (props.factor ?? 1));
 
-  const maxRadius = () => circleSize() / 2;
+  const maxRadius = createMemo(() => circleSize() / 2);
   const outerRadius = maxRadius;
-  const innerRadius = () => outerRadius() / 2;
+  const innerRadius = createMemo(() => outerRadius() / 2);
+
+  const thickness = createMemo(() => outerRadius() - innerRadius());
 
   const step = () => 1 / numberOfArcs();
 
@@ -93,16 +85,52 @@ export default function LogoEfficient(props: LogoEfficientProps) {
     return { d, color };
   })();
 
+  const d = () => {
+    const firstMove = `M 0 ${-outerRadius()}`;
+    const outerHalfArc = `${outerRadius()} ${outerRadius()} 0 0 1 0`;
+    const outerArc = `a ${outerHalfArc} ${2 * outerRadius()} ${outerHalfArc} ${-2 * outerRadius()}`;
+    const moveToInner = `v ${thickness()}`;
+    const innerHalfArc = `${outerRadius() - thickness()} ${outerRadius() - thickness()} 0 0 0 0`;
+    const innerArc = `a ${innerHalfArc} ${2 * (outerRadius() - thickness())} ${innerHalfArc} ${-2 * (outerRadius() - thickness())}`;
+
+    return `${firstMove} ${outerArc} ${moveToInner} ${innerArc}`;
+  };
+
   return (
-    <div
-      style={{
-        width: `${canvasSize()}px`,
-        height: `${canvasSize()}px`,
-        // "border-radius": `${canvasSize() / 2}px`,
-        "clip-path": `path('${arc.d}')`,
-        "fill-rule": "evenodd",
-        background: "conic-gradient(red, orange, yellow, green, blue)",
-      }}
-    />
+    <svg
+      viewBox={`${-0.5 * canvasSize()} ${-0.5 * canvasSize()} ${canvasSize()} ${canvasSize()}`}
+      width={canvasSize()}
+      height={canvasSize()}
+      ref={props.setSvg}
+    >
+      {/* <path d={arc.d} fill={arc.color} fill-rule="evenodd" /> */}
+
+      <clipPath id="clip">
+        <path d={d()} />
+        {/* <path d="M 50 0 a 50 50 0 0 1 0 100 50 50 0 0 1 0 -100 v 8 a 42 42 0 0 0 0 84 42 42 0 0 0 0 -84" /> */}
+        {/* <path d={arc.d} /> */}
+        {/* <path d={arc2.d} /> */}
+      </clipPath>
+
+      <foreignObject
+        x={-0.5 * canvasSize()}
+        y={-0.5 * canvasSize()}
+        width={canvasSize()}
+        height={canvasSize()}
+        clip-path="url(#clip)"
+      >
+        <div
+          style={{
+            width: `${canvasSize()}px`,
+            height: `${canvasSize()}px`,
+            // "border-radius": `${canvasSize() / 2}px`,
+            // "clip-path": `path('${arc.d}')`,
+            // "fill-rule": "evenodd",
+            background: "conic-gradient(red, orange, yellow, green, blue)",
+          }}
+          xmlns="http://www.w3.org/1999/xhtml"
+        />
+      </foreignObject>
+    </svg>
   );
 }
