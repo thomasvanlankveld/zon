@@ -15,10 +15,7 @@ type LogoEfficientProps = {
 
 export default function LogoEfficient(props: LogoEfficientProps) {
   const size = () => props.size ?? 38;
-  // const nFactor = 2;
-  //   const nFactor = 1;
   const numberOfColors = () => props.numberOfColors ?? 15;
-  // const numberOfColors = () => 4;
 
   const canvasSize = () => size();
   const circleSize = createMemo(() => size() * (props.factor ?? 1));
