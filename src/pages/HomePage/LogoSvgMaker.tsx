@@ -4,7 +4,8 @@ import LogoEfficient from "../../components/LogoEfficient";
 //
 export default function LogoSvgMaker() {
   const [svg, setSvg] = createSignal<SVGSVGElement | undefined>();
-  const [size, setSize] = createSignal(500);
+  const [numberOfColors, setNumberOfColors] = createSignal(20);
+  const size = 1024;
 
   // In Apple's Design resources, the "icon grid bounding box" is 412px for an image size of 512px
   // https://developer.apple.com/design/resources/
@@ -35,10 +36,15 @@ export default function LogoSvgMaker() {
       <input
         type="number"
         step="1"
-        value={size()}
-        onInput={(e) => setSize(Number(e.target.value))}
+        value={numberOfColors()}
+        onInput={(e) => setNumberOfColors(Number(e.target.value))}
       />
-      <LogoEfficient size={size()} setSvg={setSvg} factor={factor} />
+      <LogoEfficient
+        size={size}
+        numberOfColors={numberOfColors()}
+        setSvg={setSvg}
+        factor={factor}
+      />
       <button onClick={onSaveClick}>Console log SVG</button>
     </div>
   );
