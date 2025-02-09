@@ -1,11 +1,11 @@
 import { createSignal } from "solid-js";
-import LogoEfficient from "../../components/LogoEfficient";
+import Logo from "../../components/Logo";
 
 //
 export default function LogoPngMaker() {
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
   const [svg, setSvg] = createSignal<SVGSVGElement | undefined>();
-  const [size, setSize] = createSignal(50);
+  const [size, setSize] = createSignal(500);
 
   // In Apple's Design resources, the "icon grid bounding box" is 412px for an image size of 512px
   // https://developer.apple.com/design/resources/
@@ -69,7 +69,7 @@ export default function LogoPngMaker() {
         onInput={(e) => setSize(Number(e.target.value))}
       />
       <canvas ref={setCanvas} hidden />
-      <LogoEfficient size={size()} setSvg={setSvg} factor={factor} />
+      <Logo size={size()} setSvg={setSvg} factor={factor} />
       <button onClick={onSaveClick}>Save PNG</button>
     </div>
   );

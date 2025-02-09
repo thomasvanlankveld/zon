@@ -6,14 +6,14 @@ export type Dimensions = {
   x1: number;
 };
 
-type LogoEfficientProps = {
+type LogoProps = {
   size?: number;
   factor?: number;
   numberOfColors?: number;
   setSvg?: Setter<SVGSVGElement | undefined>;
 };
 
-export default function LogoEfficient(props: LogoEfficientProps) {
+export default function Logo(props: LogoProps) {
   const size = () => props.size ?? 38;
   const numberOfColors = () => props.numberOfColors ?? 15;
 

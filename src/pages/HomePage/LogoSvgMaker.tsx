@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import LogoEfficient from "../../components/LogoEfficient";
+import Logo from "../../components/Logo";
 
 //
 export default function LogoSvgMaker() {
@@ -39,7 +39,7 @@ export default function LogoSvgMaker() {
         value={numberOfColors()}
         onInput={(e) => setNumberOfColors(Number(e.target.value))}
       />
-      <LogoEfficient
+      <Logo
         size={size}
         numberOfColors={numberOfColors()}
         setSvg={setSvg}
