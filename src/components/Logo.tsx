@@ -8,17 +8,16 @@ export type Dimensions = {
 
 type LogoProps = {
   size?: number;
-  factor?: number;
-  numberOfColors?: number;
+  circleSizeRatio?: number;
   setSvg?: Setter<SVGSVGElement | undefined>;
 };
 
 export default function Logo(props: LogoProps) {
   const size = () => props.size ?? 38;
-  const numberOfColors = () => props.numberOfColors ?? 15;
+  const numberOfColors = 20;
 
   const canvasSize = () => size();
-  const circleSize = createMemo(() => size() * (props.factor ?? 1));
+  const circleSize = createMemo(() => size() * (props.circleSizeRatio ?? 1));
 
   const maxRadius = createMemo(() => circleSize() / 2);
   const outerRadius = maxRadius;
@@ -26,15 +25,15 @@ export default function Logo(props: LogoProps) {
 
   const thickness = createMemo(() => outerRadius() - innerRadius());
 
-  const step = () => 1 / numberOfColors();
+  const step = 1 / numberOfColors;
 
   function getPosition(i: number) {
-    return i * step();
+    return i * step;
   }
 
   const colors = () =>
     // Add one so that the first color is the same as the last
-    Array.from({ length: numberOfColors() + 1 })
+    Array.from({ length: numberOfColors + 1 })
       .fill(null)
       .map((_, i) => rainbow(getPosition(i)).regular);
   const conicGradient = () => `conic-gradient(${colors().join(", ")})`;
