@@ -1,20 +1,14 @@
+// Not a neat script, just a quick way to get the logo as a png
+
 import { createSignal } from "solid-js";
 import Logo from "../Logo";
 
-//
 export default function LogoPngMaker() {
   const [canvas, setCanvas] = createSignal<HTMLCanvasElement>();
   const [svg, setSvg] = createSignal<SVGSVGElement | undefined>();
   const [size, setSize] = createSignal(500);
 
-  // In Apple's Design resources, the "icon grid bounding box" is 412px for an image size of 512px
-  // https://developer.apple.com/design/resources/
-  // https://developer.apple.com/design/human-interface-guidelines/app-icons/#macOS
-  // https://developer.apple.com/design/human-interface-guidelines/app-icons/#macOS-app-icon-sizes
-  // OUTDATED: Instead we made these in Sketch, using a 1028 size export at factor 1 as source rainbow
-  // const circleSizeRatio = 412 / 512;
-
-  // Elsewhere, we keep some space to the edge, same as the Tauri logo has on top and bottom
+  // This ratio keeps some space to the edge, same as the Tauri logo has on top and bottom
   const circleSizeRatio = 423 / 512;
 
   // To use the rainbow disk as an element in a design, full size is best
