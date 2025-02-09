@@ -1,5 +1,4 @@
-import { For } from "solid-js";
-import { getArcD } from "../utils/svg";
+import { createMemo, Setter } from "solid-js";
 import { rainbow } from "../utils/zon";
 
 export type Dimensions = {
@@ -7,85 +6,77 @@ export type Dimensions = {
   x1: number;
 };
 
-function clamp(value: number, min: number, max: number) {
-  return Math.max(min, Math.min(value, max));
-}
-
 type LogoProps = {
   size?: number;
-  numberOfArcs?: number;
+  circleSizeRatio?: number;
+  setSvg?: Setter<SVGSVGElement | undefined>;
 };
 
 export default function Logo(props: LogoProps) {
   const size = () => props.size ?? 38;
-  const numberOfArcs = () => props.numberOfArcs ?? size() * 2;
+  const numberOfColors = 20;
 
-  const strokeWidth = 1;
-  const maxRadius = () => size() / 2 - strokeWidth;
+  const canvasSize = () => size();
+  const circleSize = createMemo(() => size() * (props.circleSizeRatio ?? 1));
+
+  const maxRadius = createMemo(() => circleSize() / 2);
   const outerRadius = maxRadius;
-  const innerRadius = () => outerRadius() / 2 + strokeWidth;
+  const innerRadius = createMemo(() => outerRadius() / 2);
 
-  const step = () => 1 / numberOfArcs();
+  const thickness = createMemo(() => outerRadius() - innerRadius());
+
+  const step = 1 / numberOfColors;
 
   function getPosition(i: number) {
-    return i * step();
+    return i * step;
   }
 
-  /**
-   * Determines the dimensions of an arc
-   * The dimensions are returned in a range of 0-1
-   */
-  function getArcDimensions(position: number): Dimensions {
-    const x0 = position;
-    const x1 = position + step();
-
-    return { x0: clamp(x0, 0, 1), x1: clamp(x1, 0, 1) };
-  }
-
-  /**
-   * Determines the SVG path data for a node's arc
-   */
-  function getLogoArcD(dimensions: Dimensions): string {
-    const startAngle = dimensions.x0 * 2 * Math.PI;
-    const endAngle = dimensions.x1 * 2 * Math.PI;
-
-    return getArcD({
-      innerRadius: innerRadius(),
-      outerRadius: outerRadius(),
-      startAngle,
-      endAngle,
-    });
-  }
-
-  const arcs = () =>
-    Array.from({ length: numberOfArcs() })
+  const colors = () =>
+    // Add one so that the first color is the same as the last
+    Array.from({ length: numberOfColors + 1 })
       .fill(null)
-      .map((_, i) => {
-        const position = getPosition(i);
-        const dimensions = getArcDimensions(position);
-        const d = getLogoArcD(dimensions);
+      .map((_, i) => rainbow(getPosition(i)).regular);
+  const conicGradient = () => `conic-gradient(${colors().join(", ")})`;
 
-        const color = rainbow(position).regular;
+  const d = () => {
+    const firstMove = `M 0 ${-outerRadius()}`;
+    const outerHalfArc = `${outerRadius()} ${outerRadius()} 0 0 1 0`;
+    const outerArc = `a ${outerHalfArc} ${2 * outerRadius()} ${outerHalfArc} ${-2 * outerRadius()}`;
+    const moveToInner = `v ${thickness()}`;
+    const innerHalfArc = `${outerRadius() - thickness()} ${outerRadius() - thickness()} 0 0 0 0`;
+    const innerArc = `a ${innerHalfArc} ${2 * (outerRadius() - thickness())} ${innerHalfArc} ${-2 * (outerRadius() - thickness())}`;
 
-        return { d, color };
-      });
+    return `${firstMove} ${outerArc} ${moveToInner} ${innerArc}`;
+  };
 
   return (
     <svg
-      viewBox={`${-0.5 * size()} ${-0.5 * size()} ${size()} ${size()}`}
-      width={size()}
-      height={size()}
+      viewBox={`${-0.5 * canvasSize()} ${-0.5 * canvasSize()} ${canvasSize()} ${canvasSize()}`}
+      width={canvasSize()}
+      height={canvasSize()}
+      ref={props.setSvg}
     >
-      <For each={arcs()}>
-        {(arc) => (
-          <path
-            d={arc.d}
-            fill={arc.color}
-            stroke={arc.color}
-            stroke-width={strokeWidth}
-          />
-        )}
-      </For>
+      <clipPath id="clip">
+        <path d={d()} />
+      </clipPath>
+
+      <foreignObject
+        x={-0.5 * canvasSize()}
+        y={-0.5 * canvasSize()}
+        width={canvasSize()}
+        height={canvasSize()}
+        clip-path="url(#clip)"
+      >
+        <div
+          style={{
+            width: `${canvasSize()}px`,
+            height: `${canvasSize()}px`,
+            // background: "conic-gradient(red, orange, yellow, green, blue)",
+            background: conicGradient(),
+          }}
+          xmlns="http://www.w3.org/1999/xhtml"
+        />
+      </foreignObject>
     </svg>
   );
 }
