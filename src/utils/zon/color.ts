@@ -40,8 +40,12 @@ export function rainbow(value: number): Colors {
   const chromaDip = (p: number) => Math.max(orangePinkDip(p), greenTealDip(p));
 
   const lightness = 82;
-  const chroma = 0.31 - chromaDip(position);
-  const hue = adjustedPosition * 360;
+  const fullChroma = 0.31 - chromaDip(position);
+  const fullHue = adjustedPosition * 360;
+
+  // 3 decimals is enough
+  const chroma = Number(fullChroma.toFixed(3));
+  const hue = Number(fullHue.toFixed(3));
 
   return {
     regular: `oklch(${lightness}% ${chroma} ${hue})`,
