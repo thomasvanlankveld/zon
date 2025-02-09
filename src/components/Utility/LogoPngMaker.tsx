@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import Logo from "../../components/Logo";
+import Logo from "../Logo";
 
 //
 export default function LogoPngMaker() {
