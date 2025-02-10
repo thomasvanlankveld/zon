@@ -8,6 +8,14 @@ import {
 } from "./types.ts";
 import { arePathsEqual, getPathString } from "./path.ts";
 
+export class GetNodeError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "GetNodeError";
+    Object.setPrototypeOf(this, GetNodeError.prototype);
+  }
+}
+
 /**
  * Get a child by its name.
  *
@@ -26,7 +34,7 @@ function getChild(
   errorPrefix: string,
 ): Node {
   if (!isFolder(parent)) {
-    throw new Error(
+    throw new GetNodeError(
       `${errorPrefix}: "${getPathString(parent.path)}" is not a folder"`,
     );
   }
@@ -42,13 +50,13 @@ function getChild(
   const lastChild = parent.children.at(-1);
 
   if (lastChild == null) {
-    throw new Error(
+    throw new GetNodeError(
       `${errorPrefix}: "${getPathString(parent.path)}" has no children`,
     );
   }
 
   if (!isGroup(lastChild)) {
-    throw new Error(
+    throw new GetNodeError(
       `${errorPrefix}: "${getPathString(parent.path)}" does not have a child named "${getPathString([childName])}" and it has no grouped children`,
     );
   }
@@ -58,7 +66,7 @@ function getChild(
   );
 
   if (groupedChildrenMatch == null) {
-    throw new Error(
+    throw new GetNodeError(
       `${errorPrefix}: "${getPathString(parent.path)}" has neither a direct child nor a grouped child named "${getPathString([childName])}"`,
     );
   }
@@ -88,7 +96,7 @@ export function getNodeByPath(root: Node, path: Path): Node {
     }
 
     if (!isFolder(node)) {
-      throw new Error(
+      throw new GetNodeError(
         `${errorPrefix}: ${getPathString(node.path)} is not a folder`,
       );
     }
@@ -124,7 +132,7 @@ export function getNodesAlongPath(root: Node, path: Path): Node[] {
       }
 
       if (!isFolder(parent)) {
-        throw new Error(
+        throw new GetNodeError(
           `${errorPrefix}: "${getPathString(parent.path)}" is not a folder"`,
         );
       }

@@ -7,6 +7,7 @@ import {
   arePathsEqual,
   isFolder,
   isChildPath,
+  GetNodeError,
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import styles from "./Breadcrumbs.module.css";
@@ -33,8 +34,21 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
     return isReportRoot ? null : node.path;
   }
 
+  const nodesAlongPath = createMemo<Node[]>((prev) => {
+    try {
+      return getNodesAlongPath(reportRoot(), breadcrumbPath());
+    } catch (error) {
+      // During the diagram's animation, it's possible to hover over a node that does not exist in the new tree. In
+      // that case, we just keep showing the most recent breadcrumb trail.
+      if (error instanceof GetNodeError && prev !== undefined) {
+        return prev;
+      } else {
+        throw error;
+      }
+    }
+  });
   const nodes = createMemo(() =>
-    getNodesAlongPath(reportRoot(), breadcrumbPath()).map((node) => ({
+    nodesAlongPath().map((node) => ({
       ...node,
       targetPath: getTargetPath(node),
     })),

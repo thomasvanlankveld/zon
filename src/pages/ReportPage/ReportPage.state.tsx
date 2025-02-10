@@ -11,6 +11,7 @@ import {
   arePathsEqual,
   Colors,
   getNodeByPath,
+  GetNodeError,
   groupSmallestNodes,
   isGroup,
   LINE_TYPE,
@@ -160,11 +161,21 @@ function createReportState(initialReportRoot: Node) {
   // List setup
   const listRootPath = createMemo(() => hoverArcPath() ?? diagramRootPath());
   const highlightedListPath = hoverArcPath;
-  const listRoot = createMemo(() =>
-    listRootPath() != null
-      ? getNodeByPath(reportRoot(), listRootPath())
-      : reportRoot(),
-  );
+  const listRoot = createMemo<Node>((prev) => {
+    try {
+      return listRootPath() != null
+        ? getNodeByPath(reportRoot(), listRootPath())
+        : reportRoot();
+    } catch (error) {
+      // During the diagram's animation, it's possible to hover over a node that does not exist in the new tree. In
+      // that case, we just keep showing the most recent list.
+      if (error instanceof GetNodeError && prev !== undefined) {
+        return prev;
+      } else {
+        throw error;
+      }
+    }
+  });
   const isListRootReportRoot = createMemo(() =>
     arePathsEqual(listRootPath(), reportRoot().path),
   );
