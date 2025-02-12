@@ -86,6 +86,7 @@ export default function LandingPage(props: LandingPageProps) {
     return i * step;
   }
 
+  // // Box shadow doesn't let us isolate sides
   // const boxShadow = () =>
   //   Array.from({ length: numberOfColors })
   //     .fill(null)
@@ -98,6 +99,7 @@ export default function LandingPage(props: LandingPageProps) {
   //     })
   //     .join(",");
 
+  // // Radial gradients are not distributed very well
   // const radialGradients = () =>
   //   Array.from({ length: numberOfColors })
   //     .fill(null)
@@ -111,6 +113,7 @@ export default function LandingPage(props: LandingPageProps) {
   //     })
   //     .join(",");
 
+  // Conic gradient places colors accurately
   const colors = () =>
     // Add one so that the first color is the same as the last
     Array.from({ length: numberOfColors + 1 })
