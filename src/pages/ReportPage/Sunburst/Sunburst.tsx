@@ -48,7 +48,8 @@ export default function Sunburst() {
   const { width, height } = createElementSize(svg);
   const smallest = () => Math.min(width(), height());
 
-  const maxRadius = createMemo(() => Math.min(width(), height()) / 2);
+  const padding = 12;
+  const maxRadius = createMemo(() => smallest() / 2 - padding);
   const centerRadius = 1;
 
   const [actualDiagramRoot, setActualDiagramRoot] = createSignal<Node | null>(
@@ -325,6 +326,7 @@ export default function Sunburst() {
       .map((_, i) => rainbow(getPosition(i)).regular);
   const conicGradient = () => `conic-gradient(${colors().join(", ")})`;
 
+  // TODO: Fix diagram only growing, not shrinking on window resize
   return (
     <div
       style={{
@@ -343,8 +345,9 @@ export default function Sunburst() {
           bottom: "0",
           left: "0",
           right: "0",
-          filter: "blur(3rem)",
+          filter: "blur(4rem)",
           "pointer-events": "none",
+          "z-index": "-1",
         }}
       >
         <div
@@ -361,6 +364,9 @@ export default function Sunburst() {
         viewBox={`${-0.5 * smallest()} ${-0.5 * smallest()} ${smallest()} ${smallest()}`}
         width={smallest()}
         height={smallest()}
+        // style={{
+        //   "z-index": "50",
+        // }}
       >
         <defs>
           <clipPath
@@ -375,6 +381,12 @@ export default function Sunburst() {
                     innerRadius: node.dimensions().y1 * maxRadius(),
                     startAngle: node.dimensions().x0 * 2 * Math.PI,
                     endAngle: node.dimensions().x1 * 2 * Math.PI,
+                    // outerRadius: (node.dimensions().y0 + 0.03) * maxRadius(),
+                    // innerRadius:
+                    //   ((node.dimensions().y1 + 0.99) % 1) * maxRadius(),
+                    // startAngle:
+                    //   ((node.dimensions().x0 + 0.99) % 1) * 2 * Math.PI,
+                    // endAngle: ((node.dimensions().x1 + 0.01) % 1) * 2 * Math.PI,
                   })}
                 />
               )}
@@ -382,9 +394,23 @@ export default function Sunburst() {
           </clipPath>
         </defs>
         <For each={visibleNodes()}>
+          {(node) => (
+            <path
+              d={getArcD({
+                outerRadius: node.dimensions().y0 * maxRadius(),
+                innerRadius: node.dimensions().y1 * maxRadius(),
+                startAngle: node.dimensions().x0 * 2 * Math.PI,
+                endAngle: node.dimensions().x1 * 2 * Math.PI,
+              })}
+              stroke-width={padding * 2}
+              stroke="#000000"
+            />
+          )}
+        </For>
+        <For each={visibleNodes()}>
           {(node) => <Arc node={node} maxRadius={maxRadius()} />}
         </For>
-        <Center radius={(1 / targetMaxDistance()) * maxRadius()} />
+        <Center radius={(1 / targetMaxDistance()) * maxRadius() - padding} />
       </svg>
     </div>
     // <div

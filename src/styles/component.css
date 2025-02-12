@@ -23,7 +23,7 @@
     /* filter: blur(5rem); */
     transform: translate3d(0, 0, -1px);
     pointer-events: none;
-    opacity: 0.25;
+    opacity: 0.7;
     clip-path: url(#myClip);
     /* backdrop-filter: blur(1rem); */
   }
