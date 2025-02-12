@@ -9,12 +9,31 @@
     justify-items: stretch;
   }
 
-  .glowing {
+  .glow {
     position: relative;
     transform-style: preserve-3d;
   }
 
-  .glowing::before {
+  .glow::before {
+    content: "";
+    position: absolute;
+    /* border-radius: 50%; */
+    inset: 0rem;
+    background: var(--conic-gradient);
+    /* filter: blur(5rem); */
+    transform: translate3d(0, 0, -1px);
+    pointer-events: none;
+    opacity: 0.25;
+    clip-path: url(#myClip);
+    /* backdrop-filter: blur(1rem); */
+  }
+
+  .glow-inset {
+    position: relative;
+    transform-style: preserve-3d;
+  }
+
+  .glow-inset::before {
     content: "";
     position: absolute;
     inset: -10rem;
@@ -24,7 +43,7 @@
     pointer-events: none;
   }
 
-  .glowing::after {
+  .glow-inset::after {
     content: "";
     position: absolute;
     inset: -8rem;

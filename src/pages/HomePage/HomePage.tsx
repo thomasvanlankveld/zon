@@ -130,7 +130,7 @@ export default function LandingPage(props: LandingPageProps) {
         // "box-shadow": `inset 0 0 6rem white`,
         // "box-shadow": `inset 0 0 6rem ${conicGradient()}`,
       }}
-      class={`${styles["home-page"]} page glowing`}
+      class={`${styles["home-page"]} page glow-inset`}
     >
       {/* <div
         style={{

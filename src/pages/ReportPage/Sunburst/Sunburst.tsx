@@ -11,12 +11,15 @@ import {
   getDescendants,
   getPathString,
   arePathsEqual,
+  rainbow,
+  isGroup,
 } from "../../../utils/zon/index.ts";
 import createElementSize from "../../../primitives/createElementSize.ts";
 import { Dimensions, SunburstNode, DimensionKey } from "./types.ts";
 import Arc from "./Arc.tsx";
 import { useReportState } from "../ReportPage.state.tsx";
 import Center from "./Center.tsx";
+import { getArcD } from "../../../utils/svg.ts";
 
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(value, max));
@@ -42,6 +45,7 @@ export default function Sunburst() {
 
   const [svg, setSvg] = createSignal<SVGSVGElement>();
   const { width, height } = createElementSize(svg);
+  const smallest = () => Math.min(width(), height());
 
   const maxRadius = createMemo(() => Math.min(width(), height()) / 2);
   const centerRadius = 1;
@@ -301,15 +305,128 @@ export default function Sunburst() {
     });
   }
 
+  const numberOfColors = 32;
+  const step = 1 / numberOfColors;
+
+  function getPosition(i: number) {
+    return i * step;
+  }
+
+  const colors = () =>
+    // Add one so that the first color is the same as the last
+    Array.from({ length: numberOfColors + 1 })
+      .fill(null)
+      .map((_, i) => rainbow(getPosition(i)).regular);
+  const conicGradient = () => `conic-gradient(${colors().join(", ")})`;
+
   return (
-    <svg
+    <div
+      style={{
+        display: "grid",
+        "justify-content": "center",
+        position: "relative",
+      }}
       ref={setSvg}
-      viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}
     >
-      <For each={visibleNodes()}>
-        {(node) => <Arc node={node} maxRadius={maxRadius()} />}
-      </For>
-      <Center radius={(1 / targetMaxDistance()) * maxRadius()} />
-    </svg>
+      <div
+        style={{
+          display: "grid",
+          "justify-items": "center",
+          position: "absolute",
+          top: "0",
+          bottom: "0",
+          left: "0",
+          right: "0",
+          filter: "blur(3rem)",
+          "pointer-events": "none",
+        }}
+      >
+        <div
+          style={{
+            "--conic-gradient": conicGradient(),
+            width: `${smallest()}px`,
+            height: `${smallest()}px`,
+          }}
+          class="glow"
+        />
+      </div>
+      <svg
+        // style={{ width: "100%", height: "100%" }}
+        viewBox={`${-0.5 * smallest()} ${-0.5 * smallest()} ${smallest()} ${smallest()}`}
+        width={smallest()}
+        height={smallest()}
+      >
+        <defs>
+          <clipPath
+            id="myClip"
+            transform={`translate(${0.5 * smallest()} ${0.5 * smallest()})`}
+          >
+            <For each={visibleNodes().filter((node) => !isGroup(node))}>
+              {(node) => (
+                <path
+                  d={getArcD({
+                    outerRadius: node.dimensions().y0 * maxRadius(),
+                    innerRadius: node.dimensions().y1 * maxRadius(),
+                    startAngle: node.dimensions().x0 * 2 * Math.PI,
+                    endAngle: node.dimensions().x1 * 2 * Math.PI,
+                  })}
+                />
+              )}
+            </For>
+          </clipPath>
+        </defs>
+        <For each={visibleNodes()}>
+          {(node) => <Arc node={node} maxRadius={maxRadius()} />}
+        </For>
+        <Center radius={(1 / targetMaxDistance()) * maxRadius()} />
+      </svg>
+    </div>
+    // <div
+    //   style={{
+    //     display: "flex",
+    //     "justify-content": "center",
+    //   }}
+    //   ref={setSvg}
+    // >
+    //   <div
+    //     style={{
+    //       "--conic-gradient": conicGradient(),
+    //       display: "grid",
+    //       "justify-content": "center",
+    //     }}
+    //     class="glow"
+    //   >
+    //     <svg
+    //       // style={{ width: "100%", height: "100%" }}
+    //       viewBox={`${-0.5 * smallest()} ${-0.5 * smallest()} ${smallest()} ${smallest()}`}
+    //       width={smallest()}
+    //       height={smallest()}
+    //     >
+    //       <defs>
+    //         <clipPath
+    //           id="myClip"
+    //           transform={`translate(${0.5 * smallest()} ${0.5 * smallest()})`}
+    //         >
+    //           <For each={visibleNodes()}>
+    //             {(node) => (
+    //               <path
+    //                 d={getArcD({
+    //                   outerRadius: node.dimensions().y0 * maxRadius(),
+    //                   innerRadius: node.dimensions().y1 * maxRadius(),
+    //                   startAngle: node.dimensions().x0 * 2 * Math.PI,
+    //                   endAngle: node.dimensions().x1 * 2 * Math.PI,
+    //                 })}
+    //               />
+    //             )}
+    //           </For>
+    //         </clipPath>
+    //       </defs>
+    //       {/* <For each={visibleNodes()}>
+    //         {(node) => <Arc node={node} maxRadius={maxRadius()} />}
+    //       </For>
+    //       <Center radius={(1 / targetMaxDistance()) * maxRadius()} /> */}
+    //     </svg>
+    //   </div>
+    // </div>
   );
 }
