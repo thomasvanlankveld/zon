@@ -38,6 +38,7 @@ function getAnimationTarget(value: number, target: number, dt: number) {
 
 export default function Sunburst() {
   const {
+    reportRoot,
     diagramRoot: targetDiagramRoot,
     isArcHighlighted,
     isArcDeemphasized,
@@ -306,10 +307,15 @@ export default function Sunburst() {
   }
 
   const numberOfColors = 32;
-  const step = 1 / numberOfColors;
+  const step = () =>
+    targetDiagramRoot().numberOfLines /
+    reportRoot().numberOfLines /
+    numberOfColors;
 
   function getPosition(i: number) {
-    return i * step;
+    return (
+      targetDiagramRoot().firstLine / reportRoot().numberOfLines + i * step()
+    );
   }
 
   const colors = () =>
