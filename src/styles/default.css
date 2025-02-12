@@ -12,7 +12,12 @@
     -webkit-text-size-adjust: 100%;
 
     color: var(--color-text-regular);
-    background-color: var(--color-background);
+    /* background-color: var(--color-background); */
+    background: radial-gradient(
+      circle at 35% -30%,
+      var(--clr-grey-060),
+      var(--clr-black)
+    );
   }
 
   h1,
