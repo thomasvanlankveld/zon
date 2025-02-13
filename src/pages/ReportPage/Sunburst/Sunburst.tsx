@@ -346,6 +346,7 @@ export default function Sunburst() {
           left: "0",
           right: "0",
           filter: "blur(4rem)",
+          opacity: "0.5",
           "pointer-events": "none",
           "z-index": "-1",
         }}

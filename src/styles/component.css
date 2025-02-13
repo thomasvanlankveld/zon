@@ -18,13 +18,26 @@
     content: "";
     position: absolute;
     /* border-radius: 50%; */
+    inset: calc(-1 * var(--spacing-3xs));
+    background: var(--glow-background);
+    transform: translate3d(0, 0, -1px);
+    pointer-events: none;
+    clip-path: var(--glow-clip-path);
+    opacity: 0.3;
+  }
+
+  .glow::after {
+    content: "";
+    position: absolute;
+    /* border-radius: 50%; */
     inset: 0rem;
     background: var(--glow-background);
     /* filter: blur(5rem); */
     transform: translate3d(0, 0, -1px);
     pointer-events: none;
-    opacity: 0.7;
+    opacity: var(--glow-opacity, 0.2);
     clip-path: var(--glow-clip-path);
+    filter: blur(4rem);
     /* backdrop-filter: blur(1rem); */
   }
 
