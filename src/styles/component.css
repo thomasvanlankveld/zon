@@ -14,17 +14,16 @@
     transform-style: preserve-3d;
   }
 
-  .glow::before {
+  /* .glow::before {
     content: "";
     position: absolute;
-    /* border-radius: 50%; */
     inset: calc(-1 * var(--spacing-4xs));
     background: var(--glow-background);
     transform: translate3d(0, 0, -1px);
     pointer-events: none;
     clip-path: var(--glow-clip-path);
     opacity: 0.2;
-  }
+  } */
 
   .glow::after {
     content: "";

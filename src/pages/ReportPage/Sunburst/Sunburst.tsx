@@ -48,7 +48,7 @@ export default function Sunburst() {
   const { width, height } = createElementSize(svg);
   const smallest = () => Math.min(width(), height());
 
-  const padding = 8;
+  const padding = 16;
   const maxRadius = createMemo(() => smallest() / 2 - padding);
   const centerRadius = 1;
 
@@ -331,12 +331,13 @@ export default function Sunburst() {
     <div
       style={{
         display: "grid",
+        // "justify-self": "center",
         "justify-content": "center",
         position: "relative",
       }}
       ref={setSvg}
     >
-      <div
+      {/* <div
         style={{
           display: "grid",
           "justify-items": "center",
@@ -360,60 +361,70 @@ export default function Sunburst() {
           }}
           class="glow"
         />
-      </div>
-      <svg
-        // style={{ width: "100%", height: "100%" }}
-        viewBox={`${-0.5 * smallest()} ${-0.5 * smallest()} ${smallest()} ${smallest()}`}
-        width={smallest()}
-        height={smallest()}
-        // style={{
-        //   "z-index": "50",
-        // }}
+      </div> */}
+      <div
+        style={{
+          "--glow-background": conicGradient(),
+          display: "grid",
+          background: "var(--color-background)",
+        }}
+        class="glow"
       >
-        <defs>
-          <clipPath
-            id="diagram-clip-path"
-            transform={`translate(${0.5 * smallest()} ${0.5 * smallest()})`}
-          >
-            <For each={visibleNodes().filter((node) => !isGroup(node))}>
-              {(node) => (
-                <path
-                  d={getArcD({
-                    outerRadius: node.dimensions().y0 * maxRadius(),
-                    innerRadius: node.dimensions().y1 * maxRadius(),
-                    startAngle: node.dimensions().x0 * 2 * Math.PI,
-                    endAngle: node.dimensions().x1 * 2 * Math.PI,
-                    // outerRadius: (node.dimensions().y0 + 0.03) * maxRadius(),
-                    // innerRadius:
-                    //   ((node.dimensions().y1 + 0.99) % 1) * maxRadius(),
-                    // startAngle:
-                    //   ((node.dimensions().x0 + 0.99) % 1) * 2 * Math.PI,
-                    // endAngle: ((node.dimensions().x1 + 0.01) % 1) * 2 * Math.PI,
-                  })}
-                />
-              )}
-            </For>
-          </clipPath>
-        </defs>
-        <For each={visibleNodes()}>
-          {(node) => (
-            <path
-              d={getArcD({
-                outerRadius: node.dimensions().y0 * maxRadius(),
-                innerRadius: node.dimensions().y1 * maxRadius(),
-                startAngle: node.dimensions().x0 * 2 * Math.PI,
-                endAngle: node.dimensions().x1 * 2 * Math.PI,
-              })}
-              stroke-width={padding * 2}
-              stroke="#000000"
-            />
-          )}
-        </For>
-        <For each={visibleNodes()}>
-          {(node) => <Arc node={node} maxRadius={maxRadius()} />}
-        </For>
-        <Center radius={(1 / targetMaxDistance()) * maxRadius() - padding} />
-      </svg>
+        <svg
+          // style={{ width: "100%", height: "100%" }}
+          viewBox={`${-0.5 * smallest()} ${-0.5 * smallest()} ${smallest()} ${smallest()}`}
+          width={smallest()}
+          height={smallest()}
+          // ref={setSvg}
+          // style={{
+          //   "z-index": "50",
+          // }}
+        >
+          <defs>
+            <clipPath
+              id="diagram-clip-path"
+              transform={`translate(${0.5 * smallest()} ${0.5 * smallest()})`}
+            >
+              <For each={visibleNodes().filter((node) => !isGroup(node))}>
+                {(node) => (
+                  <path
+                    d={getArcD({
+                      outerRadius: node.dimensions().y0 * maxRadius(),
+                      innerRadius: node.dimensions().y1 * maxRadius(),
+                      startAngle: node.dimensions().x0 * 2 * Math.PI,
+                      endAngle: node.dimensions().x1 * 2 * Math.PI,
+                      // outerRadius: (node.dimensions().y0 + 0.03) * maxRadius(),
+                      // innerRadius:
+                      //   ((node.dimensions().y1 + 0.99) % 1) * maxRadius(),
+                      // startAngle:
+                      //   ((node.dimensions().x0 + 0.99) % 1) * 2 * Math.PI,
+                      // endAngle: ((node.dimensions().x1 + 0.01) % 1) * 2 * Math.PI,
+                    })}
+                  />
+                )}
+              </For>
+            </clipPath>
+          </defs>
+          <For each={visibleNodes()}>
+            {(node) => (
+              <path
+                d={getArcD({
+                  outerRadius: node.dimensions().y0 * maxRadius(),
+                  innerRadius: node.dimensions().y1 * maxRadius(),
+                  startAngle: node.dimensions().x0 * 2 * Math.PI,
+                  endAngle: node.dimensions().x1 * 2 * Math.PI,
+                })}
+                stroke-width={padding * 2}
+                stroke="#000000"
+              />
+            )}
+          </For>
+          <For each={visibleNodes()}>
+            {(node) => <Arc node={node} maxRadius={maxRadius()} />}
+          </For>
+          <Center radius={(1 / targetMaxDistance()) * maxRadius() - padding} />
+        </svg>
+      </div>
     </div>
     // <div
     //   style={{
