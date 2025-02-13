@@ -42,7 +42,7 @@ function ReportPageContent() {
 
   return (
     <main
-      style={{ "--glow-background": conicGradient(), "--glow-opacity": "0.05" }}
+      style={{ "--glow-background": conicGradient(), "--glow-opacity": "0.03" }}
       class={`${styles["report-page"]} page glow`}
     >
       <div class="col-span-2">
