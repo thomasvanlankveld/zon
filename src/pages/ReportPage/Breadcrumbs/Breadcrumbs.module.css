@@ -2,8 +2,8 @@
   cursor: pointer;
   color: var(--color-breadcrumb-regular);
 
-  &:not(:first-child) {
-    padding-left: var(--spacing-s);
+  &:not(:last-child) {
+    padding-right: var(--spacing-s);
   }
 
   .breadcrumbs__breadcrumb-separator {

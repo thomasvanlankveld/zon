@@ -46,8 +46,9 @@ export default function Sunburst() {
   const smallest = () => Math.min(width(), height());
 
   // const padding = 8;
+  const padding = 12;
   // const padding = 16;
-  const padding = 20;
+  // const padding = 20;
   // const padding = 24;
   const maxRadius = createMemo(() => smallest() / 2 - padding);
   const centerRadius = 1;

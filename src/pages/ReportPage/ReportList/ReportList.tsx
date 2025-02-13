@@ -50,7 +50,8 @@ export default function ReportList() {
       <nav
         // TODO: Fix report-list__list being used in two places
         style={{
-          padding: "var(--spacing-xl)",
+          "padding-block": "var(--spacing-m)",
+          "padding-inline": "var(--spacing-l)",
           "background-color": "var(--color-background)",
         }}
         class={`${styles["report-list__list"]} overflow-x-hidden`}

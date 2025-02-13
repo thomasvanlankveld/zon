@@ -1,5 +1,7 @@
 .report-page {
+  /* grid-template-rows: min-content 1fr; */
   grid-template-rows: min-content min-content 1fr;
+  /* grid-template-columns: 1fr 1fr; */
   grid-template-columns: 7fr 5fr;
   overflow: hidden;
 }
@@ -14,9 +16,6 @@
 
 .report-page__breadcrumbs {
   grid-column: span 2;
-  /* TODO: Move min-height and max-height into breadcrumbs */
-  min-height: calc(2 * var(--line-height-regular) + 2 * var(--spacing-m));
-  max-height: calc(2 * var(--line-height-regular) + 2 * var(--spacing-m));
   overflow: hidden;
   display: -webkit-box;
   line-clamp: 2;

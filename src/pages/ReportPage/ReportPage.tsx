@@ -42,22 +42,25 @@ function ReportPageContent() {
 
   return (
     <main
-      style={{ "--glow-background": conicGradient(), "--glow-opacity": "0.03" }}
+      style={{
+        "--glow-background": conicGradient(),
+        "--glow-opacity": "0.015",
+      }}
       class={`${styles["report-page"]} page glow`}
     >
-      <div class="col-span-2">
-        <h1 style={{ display: "inline-flex" }} class="heading-l">
-          <A
-            style={{
-              background: "var(--color-background)",
-              padding: "var(--spacing-l)",
-            }}
-            class={styles["report-page__header-title"]}
-            href={Routes.Home.Matcher}
-          >
-            {t("app.title")}
-          </A>
-        </h1>
+      <div style={{ display: "flex" }} class="col-span-2">
+        <A
+          style={{
+            background: "var(--color-background)",
+            "padding-block": "var(--spacing-m)",
+            "padding-inline": "var(--spacing-l)",
+          }}
+          class={styles["report-page__header-title"]}
+          href={Routes.Home.Matcher}
+        >
+          {/* Back */}
+          {t("app.title")}
+        </A>
       </div>
       <Breadcrumbs class={styles["report-page__breadcrumbs"]} />
       <Sunburst />

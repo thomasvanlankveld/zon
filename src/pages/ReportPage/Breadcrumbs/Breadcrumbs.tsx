@@ -1,3 +1,5 @@
+// import { A } from "@solidjs/router";
+// import Routes from "../../../routes.ts";
 import { createMemo, createSignal, For, Show } from "solid-js";
 import {
   getNodesAlongPath,
@@ -73,16 +75,35 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
         display: "inline-grid",
         "align-content": "start",
         "justify-content": "start",
+        "min-height":
+          "calc(2 * var(--line-height-regular) + 2 * var(--spacing-m))",
+        "max-height":
+          "calc(2 * var(--line-height-regular) + 2 * var(--spacing-m))",
+        // "min-height":
+        //   "calc(3 * var(--line-height-regular) + 3 * var(--spacing-m))",
+        // "max-height":
+        //   "calc(3 * var(--line-height-regular) + 3 * var(--spacing-m))",
       }}
       class={props.class}
       aria-label={t("breadcrumbs.label")}
     >
       <div
         style={{
-          padding: "var(--spacing-m)",
+          // display: "grid",
+          // gap: "var(--spacing-m)",
+          "padding-block": "var(--spacing-m)",
+          "padding-inline": "var(--spacing-l)",
           background: "var(--color-background)",
         }}
       >
+        {/* <A
+          style={{ color: "var(--color-text-group-regular)" }}
+          href={Routes.Home.Matcher}
+        >
+          back
+        </A> */}
+
+        {/* <div> */}
         <For each={nodes()}>
           {(node, i) => {
             const colors = getNodeTextColors(node);
@@ -111,6 +132,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
             );
           }}
         </For>
+        {/* </div> */}
       </div>
     </nav>
   );
