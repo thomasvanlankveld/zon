@@ -48,70 +48,12 @@ export default function LandingPage(props: LandingPageProps) {
     navigate(Routes.Report.getLocation(path));
   }
 
-  // oklch(0.82 0.307 287.621)
-  // oklch(0.82 0.303 311.851)
-  // oklch(0.82 0.297 336.653)
-  // oklch(0.82 0.287 0)
-  // oklch(0.82 0.277 14.4)
-
-  // oklch(0.82 0.267 28.8)
-  // oklch(0.82 0.26 43.2)
-  // oklch(0.82 0.257 57.6)
-  // oklch(0.82 0.26 72)
-  // oklch(0.82 0.267 86.4)
-
-  // oklch(0.82 0.277 101.059)
-  // oklch(0.82 0.287 118.186)
-  // oklch(0.82 0.289 134.126)
-  // oklch(0.82 0.276 143.4)
-  // oklch(0.82 0.265 152.213)
-
-  // oklch(0.82 0.264 173.496)
-  // oklch(0.82 0.273 206.098)
-  // oklch(0.82 0.287 237.686)
-  // oklch(0.82 0.299 258)
-  // oklch(0.82 0.306 269.866)
-
-  // box-shadow:
-  //   inset 0 0 50px #fff,
-  //   inset 20px 0 80px #f0f,
-  //   inset -20px 0 80px #0ff,
-  //   inset 20px 0 300px #f0f,
-  //   inset -20px 0 300px #0ff;
-
   const numberOfColors = 32;
   const step = 1 / numberOfColors;
 
   function getPosition(i: number) {
     return i * step;
   }
-
-  // // Box shadow doesn't let us isolate sides
-  // const boxShadow = () =>
-  //   Array.from({ length: numberOfColors })
-  //     .fill(null)
-  //     .map((_, i) => {
-  //       const position = getPosition(i);
-  //       const color = rainbow(position).regular;
-  //       const offsetX = 6 * Math.sin(position * 2 * Math.PI);
-  //       const offsetY = 6 * Math.cos(position * 2 * Math.PI);
-  //       return `inset ${offsetX}rem ${offsetY}rem 3rem ${color}`;
-  //     })
-  //     .join(",");
-
-  // // Radial gradients are not distributed very well
-  // const radialGradients = () =>
-  //   Array.from({ length: numberOfColors })
-  //     .fill(null)
-  //     .map((_, i) => {
-  //       const position = getPosition(i);
-  //       const color = rainbow(position).regular;
-  //       const horizontal = 50 + 50 * Math.sin(position * 2 * Math.PI);
-  //       const vertical = 50 - 50 * Math.cos(position * 2 * Math.PI);
-  //       // return `radial-gradient(circle at ${horizontal}% ${vertical}%, ${color}, transparent 40%)`;
-  //       return `radial-gradient(circle at ${horizontal}% ${vertical}%, ${color}, transparent 50%)`;
-  //     })
-  //     .join(",");
 
   // Conic gradient places colors accurately
   const colors = () =>
