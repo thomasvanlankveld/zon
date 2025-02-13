@@ -7,7 +7,12 @@ import UploadButton from "../../components/UploadButton/UploadButton";
 import CountingLines from "../../components/CountingLines";
 import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
-import { createTree, LINE_TYPE, rainbow, type Node } from "../../utils/zon";
+import {
+  conicGradient,
+  createTree,
+  LINE_TYPE,
+  type Node,
+} from "../../utils/zon";
 import type { Languages } from "../../utils/tokei";
 import Logo from "../../components/Logo";
 import NumberOfLines from "../../components/NumberOfLines";
@@ -47,21 +52,6 @@ export default function LandingPage(props: LandingPageProps) {
     setCountingPath(null);
     navigate(Routes.Report.getLocation(path));
   }
-
-  const numberOfColors = 16;
-  const step = 1 / numberOfColors;
-
-  function getPosition(i: number) {
-    return i * step;
-  }
-
-  // Conic gradient places colors accurately
-  const colors = () =>
-    // Add one so that the first color is the same as the last
-    Array.from({ length: numberOfColors + 1 })
-      .fill(null)
-      .map((_, i) => rainbow(getPosition(i)).regular);
-  const conicGradient = () => `conic-gradient(${colors().join(", ")})`;
 
   return (
     <main

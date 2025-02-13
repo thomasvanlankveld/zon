@@ -1,6 +1,6 @@
 import { A } from "@solidjs/router";
 import Routes from "../../routes.ts";
-import { rainbow, type Node } from "../../utils/zon";
+import { conicGradient, type Node } from "../../utils/zon";
 import { useI18n } from "../../utils/i18n.tsx";
 import Sunburst from "./Sunburst/Sunburst.tsx";
 import ReportList from "./ReportList/ReportList.tsx";
@@ -25,25 +25,16 @@ function ReportPageContent() {
 
   const { reportRoot, diagramRoot } = useReportState();
 
-  const numberOfColors = 16;
-  const step = () =>
-    diagramRoot().numberOfLines / reportRoot().numberOfLines / numberOfColors;
-
-  function getPosition(i: number) {
-    return diagramRoot().firstLine / reportRoot().numberOfLines + i * step();
-  }
-
-  const colors = () =>
-    // Add one so that the first color is the same as the last
-    Array.from({ length: numberOfColors + 1 })
-      .fill(null)
-      .map((_, i) => rainbow(getPosition(i)).regular);
-  const conicGradient = () => `conic-gradient(${colors().join(", ")})`;
+  const glowBackground = () =>
+    conicGradient({
+      startPosition: diagramRoot().firstLine / reportRoot().numberOfLines,
+      span: diagramRoot().numberOfLines / reportRoot().numberOfLines,
+    });
 
   return (
     <main
       style={{
-        "--glow-background": conicGradient(),
+        "--glow-background": glowBackground(),
         "--glow-opacity": "0.01",
       }}
       class={`${styles["report-page"]} page glow`}
