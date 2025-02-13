@@ -48,7 +48,7 @@ export default function LandingPage(props: LandingPageProps) {
     navigate(Routes.Report.getLocation(path));
   }
 
-  const numberOfColors = 32;
+  const numberOfColors = 16;
   const step = 1 / numberOfColors;
 
   function getPosition(i: number) {
