@@ -126,7 +126,7 @@ export default function LandingPage(props: LandingPageProps) {
       style={{
         // position: "relative",
         // background: conicGradient(),
-        "--conic-gradient": conicGradient(),
+        "--glow-background": conicGradient(),
         // "box-shadow": `inset 0 0 6rem white`,
         // "box-shadow": `inset 0 0 6rem ${conicGradient()}`,
       }}

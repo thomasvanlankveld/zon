@@ -352,7 +352,7 @@ export default function Sunburst() {
       >
         <div
           style={{
-            "--conic-gradient": conicGradient(),
+            "--glow-background": conicGradient(),
             width: `${smallest()}px`,
             height: `${smallest()}px`,
           }}
@@ -422,7 +422,7 @@ export default function Sunburst() {
     // >
     //   <div
     //     style={{
-    //       "--conic-gradient": conicGradient(),
+    //       "--glow-background": conicGradient(),
     //       display: "grid",
     //       "justify-content": "center",
     //     }}
