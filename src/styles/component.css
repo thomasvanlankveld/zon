@@ -24,7 +24,7 @@
     transform: translate3d(0, 0, -1px);
     pointer-events: none;
     opacity: 0.7;
-    clip-path: url(#myClip);
+    clip-path: var(--glow-clip-path);
     /* backdrop-filter: blur(1rem); */
   }
 

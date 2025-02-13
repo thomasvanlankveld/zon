@@ -353,6 +353,7 @@ export default function Sunburst() {
         <div
           style={{
             "--glow-background": conicGradient(),
+            "--glow-clip-path": "url(#diagram-clip-path)",
             width: `${smallest()}px`,
             height: `${smallest()}px`,
           }}
@@ -370,7 +371,7 @@ export default function Sunburst() {
       >
         <defs>
           <clipPath
-            id="myClip"
+            id="diagram-clip-path"
             transform={`translate(${0.5 * smallest()} ${0.5 * smallest()})`}
           >
             <For each={visibleNodes().filter((node) => !isGroup(node))}>
