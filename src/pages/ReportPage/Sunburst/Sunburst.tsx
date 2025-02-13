@@ -48,7 +48,7 @@ export default function Sunburst() {
   const { width, height } = createElementSize(svg);
   const smallest = () => Math.min(width(), height());
 
-  const padding = 12;
+  const padding = 8;
   const maxRadius = createMemo(() => smallest() / 2 - padding);
   const centerRadius = 1;
 
