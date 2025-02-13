@@ -11,8 +11,6 @@ import {
   getDescendants,
   getPathString,
   arePathsEqual,
-  rainbow,
-  isGroup,
 } from "../../../utils/zon/index.ts";
 import createElementSize from "../../../primitives/createElementSize.ts";
 import { Dimensions, SunburstNode, DimensionKey } from "./types.ts";
@@ -38,7 +36,6 @@ function getAnimationTarget(value: number, target: number, dt: number) {
 
 export default function Sunburst() {
   const {
-    reportRoot,
     diagramRoot: targetDiagramRoot,
     isArcHighlighted,
     isArcDeemphasized,
@@ -48,7 +45,10 @@ export default function Sunburst() {
   const { width, height } = createElementSize(svg);
   const smallest = () => Math.min(width(), height());
 
-  const padding = 16;
+  // const padding = 8;
+  // const padding = 16;
+  const padding = 20;
+  // const padding = 24;
   const maxRadius = createMemo(() => smallest() / 2 - padding);
   const centerRadius = 1;
 
@@ -307,129 +307,100 @@ export default function Sunburst() {
     });
   }
 
-  const numberOfColors = 32;
-  const step = () =>
-    targetDiagramRoot().numberOfLines /
-    reportRoot().numberOfLines /
-    numberOfColors;
-
-  function getPosition(i: number) {
-    return (
-      targetDiagramRoot().firstLine / reportRoot().numberOfLines + i * step()
-    );
-  }
-
-  const colors = () =>
-    // Add one so that the first color is the same as the last
-    Array.from({ length: numberOfColors + 1 })
-      .fill(null)
-      .map((_, i) => rainbow(getPosition(i)).regular);
-  const conicGradient = () => `conic-gradient(${colors().join(", ")})`;
-
   // TODO: Fix diagram only growing, not shrinking on window resize
   return (
-    <div
-      style={{
-        display: "grid",
-        // "justify-self": "center",
-        "justify-content": "center",
-        position: "relative",
-      }}
-      ref={setSvg}
-    >
-      {/* <div
-        style={{
-          display: "grid",
-          "justify-items": "center",
-          position: "absolute",
-          top: "0",
-          bottom: "0",
-          left: "0",
-          right: "0",
-          filter: "blur(4rem)",
-          opacity: "0.5",
-          "pointer-events": "none",
-          "z-index": "-1",
-        }}
-      >
-        <div
-          style={{
-            "--glow-background": conicGradient(),
-            "--glow-clip-path": "url(#diagram-clip-path)",
-            width: `${smallest()}px`,
-            height: `${smallest()}px`,
-          }}
-          class="glow"
-        />
-      </div> */}
-      <div
-        style={{
-          "--glow-background": conicGradient(),
-          display: "grid",
-          background: "var(--color-background)",
-        }}
-        class="glow"
-      >
-        <svg
-          // style={{ width: "100%", height: "100%" }}
-          viewBox={`${-0.5 * smallest()} ${-0.5 * smallest()} ${smallest()} ${smallest()}`}
-          width={smallest()}
-          height={smallest()}
-          // ref={setSvg}
-          // style={{
-          //   "z-index": "50",
-          // }}
-        >
-          <defs>
-            <clipPath
-              id="diagram-clip-path"
-              transform={`translate(${0.5 * smallest()} ${0.5 * smallest()})`}
-            >
-              <For each={visibleNodes().filter((node) => !isGroup(node))}>
-                {(node) => (
-                  <path
-                    d={getArcD({
-                      outerRadius: node.dimensions().y0 * maxRadius(),
-                      innerRadius: node.dimensions().y1 * maxRadius(),
-                      startAngle: node.dimensions().x0 * 2 * Math.PI,
-                      endAngle: node.dimensions().x1 * 2 * Math.PI,
-                      // outerRadius: (node.dimensions().y0 + 0.03) * maxRadius(),
-                      // innerRadius:
-                      //   ((node.dimensions().y1 + 0.99) % 1) * maxRadius(),
-                      // startAngle:
-                      //   ((node.dimensions().x0 + 0.99) % 1) * 2 * Math.PI,
-                      // endAngle: ((node.dimensions().x1 + 0.01) % 1) * 2 * Math.PI,
-                    })}
-                  />
-                )}
-              </For>
-            </clipPath>
-          </defs>
-          <For each={visibleNodes()}>
-            {(node) => (
-              <path
-                d={getArcD({
-                  outerRadius: node.dimensions().y0 * maxRadius(),
-                  innerRadius: node.dimensions().y1 * maxRadius(),
-                  startAngle: node.dimensions().x0 * 2 * Math.PI,
-                  endAngle: node.dimensions().x1 * 2 * Math.PI,
-                })}
-                stroke-width={padding * 2}
-                stroke="#000000"
-              />
-            )}
-          </For>
-          <For each={visibleNodes()}>
-            {(node) => <Arc node={node} maxRadius={maxRadius()} />}
-          </For>
-          <Center radius={(1 / targetMaxDistance()) * maxRadius() - padding} />
-        </svg>
-      </div>
-    </div>
+    // // Diagram has a black stroke and glow
     // <div
     //   style={{
-    //     display: "flex",
+    //     display: "grid",
+    //     // "justify-self": "center",
     //     "justify-content": "center",
+    //     position: "relative",
+    //   }}
+    //   ref={setSvg}
+    // >
+    //   <div
+    //     style={{
+    //       display: "grid",
+    //       "justify-items": "center",
+    //       position: "absolute",
+    //       top: "0",
+    //       bottom: "0",
+    //       left: "0",
+    //       right: "0",
+    //       filter: "blur(4rem)",
+    //       opacity: "0.5",
+    //       "pointer-events": "none",
+    //       "z-index": "-1",
+    //     }}
+    //   >
+    //     <div
+    //       style={{
+    //         "--glow-background": conicGradient(),
+    //         "--glow-clip-path": "url(#diagram-clip-path)",
+    //         width: `${smallest()}px`,
+    //         height: `${smallest()}px`,
+    //       }}
+    //       class="glow"
+    //     />
+    //   </div>
+    //   <svg
+    //     // style={{ width: "100%", height: "100%" }}
+    //     viewBox={`${-0.5 * smallest()} ${-0.5 * smallest()} ${smallest()} ${smallest()}`}
+    //     width={smallest()}
+    //     height={smallest()}
+    //     // ref={setSvg}
+    //     // style={{
+    //     //   "z-index": "50",
+    //     // }}
+    //   >
+    //     <defs>
+    //       <clipPath
+    //         id="diagram-clip-path"
+    //         transform={`translate(${0.5 * smallest()} ${0.5 * smallest()})`}
+    //       >
+    //         <For each={visibleNodes().filter((node) => !isGroup(node))}>
+    //           {(node) => (
+    //             <path
+    //               d={getArcD({
+    //                 outerRadius: node.dimensions().y0 * maxRadius(),
+    //                 innerRadius: node.dimensions().y1 * maxRadius(),
+    //                 startAngle: node.dimensions().x0 * 2 * Math.PI,
+    //                 endAngle: node.dimensions().x1 * 2 * Math.PI,
+    //               })}
+    //             />
+    //           )}
+    //         </For>
+    //       </clipPath>
+    //     </defs>
+    //     <For each={visibleNodes()}>
+    //       {(node) => (
+    //         <path
+    //           d={getArcD({
+    //             outerRadius: node.dimensions().y0 * maxRadius(),
+    //             innerRadius: node.dimensions().y1 * maxRadius(),
+    //             startAngle: node.dimensions().x0 * 2 * Math.PI,
+    //             endAngle: node.dimensions().x1 * 2 * Math.PI,
+    //           })}
+    //           stroke-width={padding * 2}
+    //           stroke="#000000"
+    //         />
+    //       )}
+    //     </For>
+    //     <For each={visibleNodes()}>
+    //       {(node) => <Arc node={node} maxRadius={maxRadius()} />}
+    //     </For>
+    //     <Center radius={(1 / targetMaxDistance()) * maxRadius() - padding} />
+    //   </svg>
+    // </div>
+
+    // // Diagram has glowing square backdrop
+    // <div
+    //   style={{
+    //     display: "grid",
+    //     // "justify-self": "center",
+    //     "justify-content": "center",
+    //     position: "relative",
     //   }}
     //   ref={setSvg}
     // >
@@ -437,7 +408,7 @@ export default function Sunburst() {
     //     style={{
     //       "--glow-background": conicGradient(),
     //       display: "grid",
-    //       "justify-content": "center",
+    //       background: "var(--color-background)",
     //     }}
     //     class="glow"
     //   >
@@ -446,13 +417,17 @@ export default function Sunburst() {
     //       viewBox={`${-0.5 * smallest()} ${-0.5 * smallest()} ${smallest()} ${smallest()}`}
     //       width={smallest()}
     //       height={smallest()}
+    //       // ref={setSvg}
+    //       // style={{
+    //       //   "z-index": "50",
+    //       // }}
     //     >
     //       <defs>
     //         <clipPath
-    //           id="myClip"
+    //           id="diagram-clip-path"
     //           transform={`translate(${0.5 * smallest()} ${0.5 * smallest()})`}
     //         >
-    //           <For each={visibleNodes()}>
+    //           <For each={visibleNodes().filter((node) => !isGroup(node))}>
     //             {(node) => (
     //               <path
     //                 d={getArcD({
@@ -466,12 +441,58 @@ export default function Sunburst() {
     //           </For>
     //         </clipPath>
     //       </defs>
-    //       {/* <For each={visibleNodes()}>
+    //       <For each={visibleNodes()}>
+    //         {(node) => (
+    //           <path
+    //             d={getArcD({
+    //               outerRadius: node.dimensions().y0 * maxRadius(),
+    //               innerRadius: node.dimensions().y1 * maxRadius(),
+    //               startAngle: node.dimensions().x0 * 2 * Math.PI,
+    //               endAngle: node.dimensions().x1 * 2 * Math.PI,
+    //             })}
+    //             stroke-width={padding * 2}
+    //             stroke="#000000"
+    //           />
+    //         )}
+    //       </For>
+    //       <For each={visibleNodes()}>
     //         {(node) => <Arc node={node} maxRadius={maxRadius()} />}
     //       </For>
-    //       <Center radius={(1 / targetMaxDistance()) * maxRadius()} /> */}
+    //       <Center radius={(1 / targetMaxDistance()) * maxRadius() - padding} />
     //     </svg>
     //   </div>
     // </div>
+    <svg
+      viewBox={`${-0.5 * width()} ${-0.5 * height()} ${width()} ${height()}`}
+      // width={width()}
+      // height={height()}
+      ref={setSvg}
+    >
+      {/* <rect
+        x={-0.5 * width()}
+        y={-0.5 * height()}
+        width={width()}
+        height={height()}
+      /> */}
+      {/* <circle r={smallest() / 2} cx="0" cy="0" /> */}
+      <For each={visibleNodes().filter((node) => node.targetOpacity() === 1)}>
+        {(node) => (
+          <path
+            d={getArcD({
+              outerRadius: node.dimensions().y0 * maxRadius(),
+              innerRadius: node.dimensions().y1 * maxRadius(),
+              startAngle: node.dimensions().x0 * 2 * Math.PI,
+              endAngle: node.dimensions().x1 * 2 * Math.PI,
+            })}
+            stroke-width={padding * 2}
+            stroke="var(--color-background)"
+          />
+        )}
+      </For>
+      <For each={visibleNodes()}>
+        {(node) => <Arc node={node} maxRadius={maxRadius()} />}
+      </For>
+      <Center radius={(1 / targetMaxDistance()) * maxRadius()} />
+    </svg>
   );
 }

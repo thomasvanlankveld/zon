@@ -1,7 +1,6 @@
 @layer component {
   .page {
     height: 100dvh;
-    box-sizing: border-box;
     padding: var(--spacing-page-padding);
     display: grid;
     gap: var(--spacing-page-gap);
@@ -12,6 +11,10 @@
   .glow {
     position: relative;
     transform-style: preserve-3d;
+
+    * {
+      transform: translate3d(0, 0, 1px);
+    }
   }
 
   /* .glow::before {
@@ -25,7 +28,7 @@
     opacity: 0.2;
   } */
 
-  .glow::after {
+  .glow::before {
     content: "";
     position: absolute;
     /* border-radius: 50%; */

@@ -14,8 +14,9 @@
 
 .report-page__breadcrumbs {
   grid-column: span 2;
-  min-height: calc(2 * var(--line-height-regular));
-  max-height: calc(2 * var(--line-height-regular));
+  /* TODO: Move min-height and max-height into breadcrumbs */
+  min-height: calc(2 * var(--line-height-regular) + 2 * var(--spacing-m));
+  max-height: calc(2 * var(--line-height-regular) + 2 * var(--spacing-m));
   overflow: hidden;
   display: -webkit-box;
   line-clamp: 2;
