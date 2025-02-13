@@ -37,7 +37,7 @@ export default function ReportList() {
       <div
         style={{
           "--glow-background": linearGradient(),
-          "--glow-opacity": "0.15",
+          "--glow-opacity": "0.05",
         }}
         class="glow"
       >
