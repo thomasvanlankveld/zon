@@ -124,74 +124,59 @@ export default function LandingPage(props: LandingPageProps) {
   return (
     <main
       style={{
-        // position: "relative",
-        // background: conicGradient(),
         "--glow-background": conicGradient(),
-        // "box-shadow": `inset 0 0 6rem white`,
-        // "box-shadow": `inset 0 0 6rem ${conicGradient()}`,
+        "--glow-opacity": "0.01",
+        "min-height": "100dvh",
+        display: "grid",
+        "place-items": "center",
+        padding: "var(--spacing-xxl)",
       }}
-      class={`${styles["home-page"]} page glow-inset`}
+      class={`${styles["home-page"]} glow`}
     >
-      {/* <div
+      <div
         style={{
-          position: "absolute",
-          top: "0",
-          left: "0",
-          right: "0",
-          bottom: "0",
-          // background: "black",
-          "z-index": -1,
-          // background: radialGradients(),
-          // background: `
-          // radial-gradient(
-          //   circle at 50% -50%,
-          //   oklch(0.82 0.307 287.621),
-          //   transparent 50%
-          // ),
-          // radial-gradient(
-          //   circle at -50% 50%,
-          //   oklch(0.82 0.267 28.8),
-          //   transparent 50%
-          // )
-          // `,
-          // margin: "-200rem",
-          // "box-shadow": boxShadow(),
-          // "box-shadow": `
-          //   inset 0 3rem 6rem oklch(0.82 0.307 287.621),
-          //   inset -3rem 0 6rem oklch(0.82 0.267 28.8),
-          //   inset 0 -3rem 6rem oklch(0.82 0.277 101.059),
-          //   inset 3rem 0 6rem oklch(0.82 0.264 173.496)
-          // `,
-        }}
-      /> */}
-      <h1
-        class="heading-xxl"
-        style={{
+          flex: "1 1 auto",
+          height: "min(var(--container-s), 100%)",
+          overflow: "auto",
+          width: "min(var(--container-l), 100%)",
+          background: "var(--color-background)",
           display: "flex",
-          gap: "var(--spacing-xl)",
+          "flex-direction": "column",
           "align-items": "center",
+          "justify-content": "space-evenly",
+          padding: "var(--spacing-xxl)",
         }}
       >
-        <Logo />
-        {t("app.title")}
-      </h1>
+        <h1
+          class="heading-xxl"
+          style={{
+            display: "flex",
+            gap: "var(--spacing-xl)",
+            "align-items": "center",
+          }}
+        >
+          <Logo />
+          {t("app.title")}
+        </h1>
 
-      <div>
-        <For each={Object.entries(props.reports)}>
-          {([path, root]) => (
-            <div class={styles["home-page__report-row"]}>
-              <A href={Routes.Report.getLocation(path)}>{path}</A>
-              <NumberOfLines numberOfLines={root.numberOfLines} />
-            </div>
-          )}
-        </For>
-      </div>
-      {/* <ColorTest /> */}
-      <div>
-        <UploadButton countLinesInFolder={logAsyncErrors(countLinesInFolder)} />
-        <Show when={countingPath()}>
-          {(definedPath) => <CountingLines path={definedPath()} />}
-        </Show>
+        <div>
+          <For each={Object.entries(props.reports)}>
+            {([path, root]) => (
+              <div class={styles["home-page__report-row"]}>
+                <A href={Routes.Report.getLocation(path)}>{path}</A>
+                <NumberOfLines numberOfLines={root.numberOfLines} />
+              </div>
+            )}
+          </For>
+        </div>
+        <div>
+          <UploadButton
+            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+          />
+          <Show when={countingPath()}>
+            {(definedPath) => <CountingLines path={definedPath()} />}
+          </Show>
+        </div>
       </div>
     </main>
   );

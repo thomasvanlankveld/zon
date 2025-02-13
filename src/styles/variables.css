@@ -91,6 +91,21 @@
     --spacing-page-padding: var(--spacing-xxl);
     --spacing-page-gap: var(--spacing-l);
 
+    /* Sizing */
+    --container-3xs: 16rem; /* (256px) */
+    --container-2xs: 18rem; /* (288px) */
+    --container-xs: 20rem; /* (320px) */
+    --container-s: 24rem; /* (384px) */
+    --container-m: 28rem; /* (448px) */
+    --container-l: 32rem; /* (512px) */
+    --container-xl: 36rem; /* (576px) */
+    --container-2xl: 42rem; /* (672px) */
+    --container-3xl: 48rem; /* (768px) */
+    --container-3xl: 48rem; /* (768px) */
+    --container-4xl: 56rem; /* (896px) */
+    --container-5xl: 64rem; /* (1024px) */
+    --container-6xl: 72rem; /* (1152px) */
+
     /* Typography */
     --font-family-regular: "Fira Code";
     --font-size-small: var(--fs-s);

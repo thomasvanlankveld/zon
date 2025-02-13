@@ -56,7 +56,7 @@ export default function Logo(props: LogoProps) {
       height={canvasSize()}
       ref={props.setSvg}
     >
-      <clipPath id="clip">
+      <clipPath id="logo-clip-path">
         <path d={d()} />
       </clipPath>
 
@@ -65,7 +65,7 @@ export default function Logo(props: LogoProps) {
         y={-0.5 * canvasSize()}
         width={canvasSize()}
         height={canvasSize()}
-        clip-path="url(#clip)"
+        clip-path="url(#logo-clip-path)"
       >
         <div
           style={{
