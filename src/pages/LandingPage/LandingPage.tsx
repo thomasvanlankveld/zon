@@ -28,14 +28,14 @@ export default function LandingPage(props: LandingPageProps) {
   return (
     <main
       style={{
-        "--glow-background": conicGradient(),
-        "--glow-opacity": "0.01",
+        "--cloudy-background": conicGradient(),
+        "--cloudy-opacity": "0.01",
         "min-height": "100dvh",
         display: "grid",
         "place-items": "center",
         padding: "var(--spacing-xxl)",
       }}
-      class="glow"
+      class="cloudy"
     >
       <div
         style={{

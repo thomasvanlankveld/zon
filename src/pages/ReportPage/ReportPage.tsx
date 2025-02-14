@@ -25,7 +25,7 @@ function ReportPageContent() {
 
   const { reportRoot, diagramRoot } = useReportState();
 
-  const glowBackground = () =>
+  const cloudyBackground = () =>
     conicGradient({
       startPosition: diagramRoot().firstLine / reportRoot().numberOfLines,
       span: diagramRoot().numberOfLines / reportRoot().numberOfLines,
@@ -34,10 +34,10 @@ function ReportPageContent() {
   return (
     <main
       style={{
-        "--glow-background": glowBackground(),
-        "--glow-opacity": "0.01",
+        "--cloudy-background": cloudyBackground(),
+        "--cloudy-opacity": "0.01",
       }}
-      class={`${styles["report-page"]} page glow`}
+      class={`${styles["report-page"]} page cloudy`}
     >
       <div style={{ display: "flex" }} class="col-span-2">
         <h1 style={{ display: "flex" }} class="heading-regular">

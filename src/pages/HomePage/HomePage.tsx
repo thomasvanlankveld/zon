@@ -31,14 +31,14 @@ export default function HomePage(props: HomePageProps) {
   return (
     <main
       style={{
-        "--glow-background": conicGradient(),
-        "--glow-opacity": "0.01",
+        "--cloudy-background": conicGradient(),
+        "--cloudy-opacity": "0.01",
         "min-height": "100dvh",
         display: "grid",
         "place-items": "center",
         padding: "var(--spacing-xxl)",
       }}
-      class={`${styles["home-page"]} glow`}
+      class={`${styles["home-page"]} cloudy`}
     >
       <div
         style={{

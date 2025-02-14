@@ -81,4 +81,25 @@
     white-space: nowrap;
     width: 1px;
   }
+
+  /* Decoration */
+  .cloudy {
+    position: relative;
+    transform-style: preserve-3d;
+
+    & > * {
+      transform: translate3d(0, 0, 1px);
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      transform: translate3d(0, 0, -1px);
+      inset: 0;
+      background: var(--cloudy-background);
+      opacity: var(--cloudy-opacity, 0.01);
+      filter: blur(--cloudy-blur, 4rem);
+    }
+  }
 }
