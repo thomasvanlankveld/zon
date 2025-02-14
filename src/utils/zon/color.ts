@@ -55,7 +55,8 @@ export function rainbow(value: number): Colors {
 }
 
 /**
- * Create a conic gradient for a specified section of the rainbow. `startPosition + span` should not exceed `1`.
+ * Create a conic gradient for a specified section of the rainbow. `startPosition + span` should not exceed `1`. If you
+ * set either of these values, you might want to add a `filter: blur(...)`.
  * @param [options.numberOfColors] Whole positive number, default 20, the number of colors in the gradient
  * @param [options.startPosition] Fraction between 0 and 1, default 0, position along the rainbow's colors
  * @param [options.span] Fraction between 0 and 1, default 1, the distance to span along the rainbow's colors
