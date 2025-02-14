@@ -92,10 +92,10 @@
   @keyframes cloudy-opacity-pulse {
     0%,
     100% {
-      --cloudy-opacity: 0.1;
+      --cloudy-opacity: 0.02;
     }
     50% {
-      --cloudy-opacity: 0.3;
+      --cloudy-opacity: 0.12;
     }
   }
 
