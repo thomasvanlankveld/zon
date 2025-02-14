@@ -137,11 +137,22 @@
   }
 
   .cloudy {
-    /* TODO: Move these CSS variables back into local scope, because the values set here won't be applied in nested
-    scope unless they're first defined with @property in the global scope (which is a hassle for complex types such as
-    what the background prop expects) */
     --cloudy-background: var(--color-cloudy-default);
     --cloudy-blur: 4rem;
+    --cloudy-opacity: 0.5;
+    --cloudy-mask: radial-gradient(
+      circle at var(--cloudy-mask-position-horizontal)
+        var(--cloudy-mask-position-vertical),
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0.1),
+      rgba(0, 0, 0, 0.05) 100%
+    );
+
+    animation:
+      cloudy-mask-rotation linear 60s infinite,
+      cloudy-opacity-pulse ease-in-out 21s infinite;
 
     position: relative;
     transform-style: preserve-3d;
@@ -151,21 +162,6 @@
     }
 
     &::before {
-      --cloudy-opacity: 0.5;
-      --cloudy-mask: radial-gradient(
-        circle at var(--cloudy-mask-position-horizontal)
-          var(--cloudy-mask-position-vertical),
-        rgba(0, 0, 0, 0.6),
-        rgba(0, 0, 0, 0.4),
-        rgba(0, 0, 0, 0.2),
-        rgba(0, 0, 0, 0.1),
-        rgba(0, 0, 0, 0.05) 100%
-      );
-
-      animation:
-        cloudy-mask-rotation linear 60s infinite,
-        cloudy-opacity-pulse ease-in-out 21s infinite;
-
       content: "";
       position: absolute;
       pointer-events: none;
@@ -209,6 +205,13 @@
     --glow-edge-width: var(--spacing-3xs);
     --glow-opacity: 0.6;
     --glow-blur: 4rem;
+    --glow-mask: linear-gradient(
+      -70deg in oklab,
+      black 30%,
+      hsl(0 0 var(--glow-mask-lightness)),
+      black 70%
+    );
+    animation: glow-mask-flyby 0.5s normal forwards ease-in-out 1s;
 
     position: relative;
     transform-style: preserve-3d;
@@ -218,14 +221,6 @@
     }
 
     &::before {
-      --glow-mask: linear-gradient(
-        -70deg in oklab,
-        black 30%,
-        hsl(0 0 var(--glow-mask-lightness)),
-        black 70%
-      );
-      animation: glow-mask-flyby 0.5s normal forwards ease-in-out 1s;
-
       content: "";
       position: absolute;
       inset: calc(-1 * var(--glow-edge-width));
