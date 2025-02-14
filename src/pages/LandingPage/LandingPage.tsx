@@ -82,12 +82,16 @@ export default function LandingPage(props: LandingPageProps) {
               "text-wrap": "balance",
             }}
           >
-            <Show
-              when={props.countingPath}
-              fallback={t("landing-page.welcome-message")}
+            <span
+              style={{ "min-height": "calc(2 * var(--line-height-regular))" }}
             >
-              {(definedPath) => <CountingLines path={definedPath()} />}
-            </Show>
+              <Show
+                when={props.countingPath}
+                fallback={t("landing-page.welcome-message")}
+              >
+                {(definedPath) => <CountingLines path={definedPath()} />}
+              </Show>
+            </span>
             <div>
               <UploadButton
                 countLinesInFolder={logAsyncErrors(countLinesInFolder)}

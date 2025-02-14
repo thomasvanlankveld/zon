@@ -206,6 +206,8 @@
     --glow-edge-width: var(--spacing-3xs);
     --glow-opacity: 0.6;
     --glow-blur: 4rem;
+    --glow-border-radius: 0;
+
     --glow-mask: linear-gradient(
       -70deg in oklab,
       black 30%,
@@ -230,6 +232,7 @@
     &::before {
       content: "";
       position: absolute;
+      border-radius: var(--glow-border-radius);
       inset: calc(-1 * var(--glow-edge-width));
       background: var(--glow-background);
       transform: translate3d(0, 0, -1px);
@@ -239,6 +242,10 @@
       mask-mode: luminance;
       mask-position: var(--glow-mask-position) var(--glow-mask-position);
       mask-size: 225% 225%;
+    }
+
+    &.glow-hover:hover::before {
+      mask-image: none;
     }
 
     &::after {
