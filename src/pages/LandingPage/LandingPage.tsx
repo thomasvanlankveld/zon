@@ -1,22 +1,19 @@
-import { For, Show } from "solid-js";
-import { A, useNavigate } from "@solidjs/router";
+import { Show } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 import Routes from "../../routes";
 import UploadButton from "../../components/UploadButton/UploadButton";
 import CountingLines from "../../components/CountingLines";
 import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
-import { conicGradient, type Node } from "../../utils/zon";
+import { conicGradient } from "../../utils/zon";
 import Logo from "../../components/Logo";
-import NumberOfLines from "../../components/NumberOfLines";
-import styles from "./HomePage.module.css";
 
-type HomePageProps = {
-  reports: Record<string, Node>;
+type LandingPageProps = {
   countLinesInFolder: () => Promise<string | null>;
   countingPath: string | null;
 };
 
-export default function HomePage(props: HomePageProps) {
+export default function LandingPage(props: LandingPageProps) {
   const navigate = useNavigate();
   const { t } = useI18n();
 
@@ -38,7 +35,7 @@ export default function HomePage(props: HomePageProps) {
         "place-items": "center",
         padding: "var(--spacing-xxl)",
       }}
-      class={`${styles["home-page"]} glow`}
+      class="glow"
     >
       <div
         style={{
@@ -65,17 +62,7 @@ export default function HomePage(props: HomePageProps) {
           <Logo />
           {t("app.title")}
         </h1>
-        Home page
-        <div>
-          <For each={Object.entries(props.reports)}>
-            {([path, root]) => (
-              <div class={styles["home-page__report-row"]}>
-                <A href={Routes.Report.getLocation(path)}>{path}</A>
-                <NumberOfLines numberOfLines={root.numberOfLines} />
-              </div>
-            )}
-          </For>
-        </div>
+        Landing page
         <div>
           <UploadButton
             countLinesInFolder={logAsyncErrors(countLinesInFolder)}

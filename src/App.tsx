@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
-import { createSignal } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import { Route, MemoryRouter, useSearchParams } from "@solidjs/router";
 import { createStore } from "solid-js/store";
 
@@ -11,6 +11,7 @@ import ReportPage from "./pages/ReportPage/ReportPage.tsx";
 import { Languages } from "./utils/tokei.ts";
 import { I18nProvider } from "./utils/i18n.tsx";
 import Routes from "./routes.ts";
+import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 
 function App() {
   // TODO: Move some of this stuff into a context
@@ -53,11 +54,21 @@ function App() {
         <Route
           path={Routes.Home.Matcher}
           component={() => (
-            <HomePage
-              reports={reports}
-              countLinesInFolder={countLinesInFolder}
-              countingPath={countingPath()}
-            />
+            <Show
+              when={Object.values(reports).length > 0}
+              fallback={
+                <LandingPage
+                  countLinesInFolder={countLinesInFolder}
+                  countingPath={countingPath()}
+                />
+              }
+            >
+              <HomePage
+                reports={reports}
+                countLinesInFolder={countLinesInFolder}
+                countingPath={countingPath()}
+              />
+            </Show>
           )}
         />
         <Route
