@@ -83,9 +83,65 @@
   }
 
   /* Decoration */
+  @property --cloudy-opacity {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0.01;
+  }
+
+  @keyframes cloudy-opacity-pulse {
+    0%,
+    100% {
+      --cloudy-opacity: 0.01;
+    }
+    50% {
+      --cloudy-opacity: 0.5;
+    }
+  }
+
+  @property --cloudy-mask-position-horizontal {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 50%;
+  }
+  @property --cloudy-mask-position-vertical {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 50%;
+  }
+
+  @keyframes cloudy-mask-rotation {
+    0%,
+    100% {
+      --cloudy-mask-position-horizontal: 50%;
+      --cloudy-mask-position-vertical: 25%;
+    }
+    25% {
+      --cloudy-mask-position-horizontal: 75%;
+      --cloudy-mask-position-vertical: 50%;
+    }
+    50% {
+      --cloudy-mask-position-horizontal: 50%;
+      --cloudy-mask-position-vertical: 75%;
+    }
+    75% {
+      --cloudy-mask-position-horizontal: 25%;
+      --cloudy-mask-position-vertical: 50%;
+    }
+  }
+
+  @property --cloudy-blur {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 0;
+  }
+
   .cloudy {
+    /* TODO: Move these CSS variables back into local scope, because the values set here won't be applied in nested
+    scope unless they're first defined with @property in the global scope (which is a hassle for complex types such as
+    what the background prop expects) */
     --cloudy-background: var(--color-cloudy-default);
-    --cloudy-opacity: 0.01;
+    /* --cloudy-opacity: 0.01; */
     --cloudy-blur: 4rem;
 
     position: relative;
@@ -96,6 +152,17 @@
     }
 
     &::before {
+      --cloudy-mask: radial-gradient(
+        circle at var(--cloudy-mask-position-horizontal)
+          var(--cloudy-mask-position-vertical),
+        black,
+        rgba(0, 0, 0, 0.2) 50%
+      );
+
+      animation:
+        cloudy-mask-rotation linear 60s infinite,
+        cloudy-opacity-pulse ease-in-out 21s infinite;
+
       content: "";
       position: absolute;
       pointer-events: none;
@@ -104,6 +171,11 @@
       background: var(--cloudy-background);
       opacity: var(--cloudy-opacity);
       filter: blur(var(--cloudy-blur));
+      mask: var(--cloudy-mask);
+
+      /* mask-image: var(--cloudy-mask); */
+      /* mask-position: 25% 75%; */
+      /* mask-position: var(--cloudy-mask-position); */
     }
   }
 
@@ -112,6 +184,7 @@
     --glow-edge-width: var(--spacing-3xs);
     --glow-opacity: 0.6;
     --glow-blur: 4rem;
+    /* --glow-mask: radial-gradient(circle at center, black, transparent 200%); */
 
     position: relative;
     transform-style: preserve-3d;
@@ -128,6 +201,7 @@
       transform: translate3d(0, 0, -1px);
       pointer-events: none;
       opacity: 0.8;
+      /* mask: var(--glow-mask); */
     }
 
     &::after {
@@ -139,6 +213,7 @@
       pointer-events: none;
       opacity: var(--glow-opacity);
       filter: blur(var(--glow-blur));
+      /* mask: var(--glow-mask); */
     }
   }
 }
