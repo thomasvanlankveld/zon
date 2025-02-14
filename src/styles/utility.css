@@ -85,7 +85,7 @@
   /* Decoration */
   .cloudy {
     --cloudy-background: var(--color-cloudy-default);
-    --cloudy-opacity: 0.6;
+    --cloudy-opacity: 0.01;
     --cloudy-blur: 4rem;
 
     position: relative;
