@@ -213,6 +213,11 @@
     );
     animation: glow-mask-flyby 0.5s normal forwards ease-in-out 1s;
 
+    /* animation: none;
+    &:hover {
+      animation: glow-mask-flyby 0.5s normal forwards ease-in-out;
+    } */
+
     position: relative;
     transform-style: preserve-3d;
 
