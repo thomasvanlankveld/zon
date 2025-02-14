@@ -71,7 +71,7 @@ export default function LandingPage(props: LandingPageProps) {
             <Logo />
             {t("app.title")}
           </h1>
-          Landing page
+
           <div>
             <UploadButton
               countLinesInFolder={logAsyncErrors(countLinesInFolder)}

@@ -65,7 +65,7 @@ export default function HomePage(props: HomePageProps) {
           <Logo />
           {t("app.title")}
         </h1>
-        Home page
+
         <div>
           <For each={Object.entries(props.reports)}>
             {([path, root]) => (
