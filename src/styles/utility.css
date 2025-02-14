@@ -150,6 +150,7 @@
       rgba(0, 0, 0, 0.05) 100%
     );
 
+    /* TODO: Animation part should probably be enabled with another class, so only the landing page uses it */
     animation:
       cloudy-mask-rotation linear 60s infinite,
       cloudy-opacity-pulse ease-in-out 21s infinite;
@@ -225,6 +226,7 @@
       transform: translate3d(0, 0, 1px);
     }
 
+    /* TODO: Split glimmer into separate class */
     &::before {
       content: "";
       position: absolute;
