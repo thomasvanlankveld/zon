@@ -175,10 +175,32 @@
       opacity: var(--cloudy-opacity);
       filter: blur(var(--cloudy-blur));
       mask: var(--cloudy-mask);
+    }
+  }
 
-      /* mask-image: var(--cloudy-mask); */
-      /* mask-position: 25% 75%; */
-      /* mask-position: var(--cloudy-mask-position); */
+  @property --glow-mask-position {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 100%;
+  }
+
+  @property --glow-mask-lightness {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 0%;
+  }
+
+  @keyframes glow-mask-flyby {
+    0% {
+      --glow-mask-position: 100%;
+      --glow-mask-lightness: 0%;
+    }
+    50% {
+      --glow-mask-lightness: 100%;
+    }
+    100% {
+      --glow-mask-position: 0%;
+      --glow-mask-lightness: 0%;
     }
   }
 
@@ -187,7 +209,6 @@
     --glow-edge-width: var(--spacing-3xs);
     --glow-opacity: 0.6;
     --glow-blur: 4rem;
-    /* --glow-mask: radial-gradient(circle at center, black, transparent 200%); */
 
     position: relative;
     transform-style: preserve-3d;
@@ -197,6 +218,14 @@
     }
 
     &::before {
+      --glow-mask: linear-gradient(
+        -70deg in oklab,
+        black 30%,
+        hsl(0 0 var(--glow-mask-lightness)),
+        black 70%
+      );
+      animation: glow-mask-flyby 0.5s normal forwards ease-in-out 1s;
+
       content: "";
       position: absolute;
       inset: calc(-1 * var(--glow-edge-width));
@@ -204,7 +233,10 @@
       transform: translate3d(0, 0, -1px);
       pointer-events: none;
       opacity: 0.8;
-      /* mask: var(--glow-mask); */
+      mask-image: var(--glow-mask);
+      mask-mode: luminance;
+      mask-position: var(--glow-mask-position) var(--glow-mask-position);
+      mask-size: 225% 225%;
     }
 
     &::after {
