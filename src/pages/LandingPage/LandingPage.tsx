@@ -57,7 +57,8 @@ export default function LandingPage(props: LandingPageProps) {
             "flex-direction": "column",
             "align-items": "center",
             "justify-content": "space-evenly",
-            padding: "var(--spacing-xxl)",
+            "padding-block": "var(--spacing-xxl)",
+            "padding-inline": "var(--spacing-4xl)",
           }}
         >
           <h1
@@ -68,17 +69,30 @@ export default function LandingPage(props: LandingPageProps) {
               "align-items": "center",
             }}
           >
-            <Logo />
+            <Logo size={70} />
             {t("app.title")}
           </h1>
 
-          <div>
-            <UploadButton
-              countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-            />
-            <Show when={props.countingPath}>
+          <div
+            style={{
+              display: "grid",
+              "place-items": "center",
+              gap: "var(--spacing-xl)",
+              "text-align": "center",
+              "text-wrap": "balance",
+            }}
+          >
+            <Show
+              when={props.countingPath}
+              fallback={t("landing-page.welcome-message")}
+            >
               {(definedPath) => <CountingLines path={definedPath()} />}
             </Show>
+            <div>
+              <UploadButton
+                countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+              />
+            </div>
           </div>
         </div>
       </div>
