@@ -92,10 +92,10 @@
   @keyframes cloudy-opacity-pulse {
     0%,
     100% {
-      --cloudy-opacity: 0.01;
+      --cloudy-opacity: 0.1;
     }
     50% {
-      --cloudy-opacity: 0.5;
+      --cloudy-opacity: 0.3;
     }
   }
 
@@ -141,7 +141,6 @@
     scope unless they're first defined with @property in the global scope (which is a hassle for complex types such as
     what the background prop expects) */
     --cloudy-background: var(--color-cloudy-default);
-    /* --cloudy-opacity: 0.01; */
     --cloudy-blur: 4rem;
 
     position: relative;
@@ -152,11 +151,15 @@
     }
 
     &::before {
+      --cloudy-opacity: 0.5;
       --cloudy-mask: radial-gradient(
         circle at var(--cloudy-mask-position-horizontal)
           var(--cloudy-mask-position-vertical),
-        black,
-        rgba(0, 0, 0, 0.2) 50%
+        rgba(0, 0, 0, 0.6),
+        rgba(0, 0, 0, 0.4),
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.05) 100%
       );
 
       animation:
