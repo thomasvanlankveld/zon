@@ -8,41 +8,6 @@
     justify-items: stretch;
   }
 
-  .glow {
-    position: relative;
-    transform-style: preserve-3d;
-
-    & > * {
-      transform: translate3d(0, 0, 1px);
-    }
-  }
-
-  /* .glow::before {
-    content: "";
-    position: absolute;
-    inset: calc(-1 * var(--spacing-4xs));
-    background: var(--glow-background);
-    transform: translate3d(0, 0, -1px);
-    pointer-events: none;
-    clip-path: var(--glow-clip-path);
-    opacity: 0.2;
-  } */
-
-  .glow::before {
-    content: "";
-    position: absolute;
-    /* border-radius: 50%; */
-    inset: 0rem;
-    background: var(--glow-background);
-    /* filter: blur(5rem); */
-    transform: translate3d(0, 0, -1px);
-    pointer-events: none;
-    opacity: var(--glow-opacity, 0.2);
-    clip-path: var(--glow-clip-path);
-    filter: blur(4rem);
-    /* backdrop-filter: blur(1rem); */
-  }
-
   .glow-inset {
     position: relative;
     transform-style: preserve-3d;

@@ -25,15 +25,17 @@ export default function LandingPage(props: LandingPageProps) {
     }
   }
 
+  const gradient = conicGradient();
+
   return (
     <main
       style={{
-        "--cloudy-background": conicGradient(),
-        "--cloudy-opacity": "0.01",
         "min-height": "100dvh",
         display: "grid",
         "place-items": "center",
         padding: "var(--spacing-xxl)",
+        "--cloudy-background": gradient,
+        "--cloudy-opacity": "0.03",
       }}
       class="cloudy"
     >
@@ -41,35 +43,43 @@ export default function LandingPage(props: LandingPageProps) {
         style={{
           flex: "1 1 auto",
           height: "min(var(--container-s), 100%)",
-          overflow: "auto",
           width: "min(var(--container-l), 100%)",
-          background: "var(--color-background)",
-          display: "flex",
-          "flex-direction": "column",
-          "align-items": "center",
-          "justify-content": "space-evenly",
-          padding: "var(--spacing-xxl)",
+          "--glow-background": gradient,
         }}
+        class="glow"
       >
-        <h1
-          class="heading-xxl"
+        <div
           style={{
+            height: "min(var(--container-s), 100%)",
+            overflow: "auto",
+            background: "var(--color-background)",
             display: "flex",
-            gap: "var(--spacing-xl)",
+            "flex-direction": "column",
             "align-items": "center",
+            "justify-content": "space-evenly",
+            padding: "var(--spacing-xxl)",
           }}
         >
-          <Logo />
-          {t("app.title")}
-        </h1>
-        Landing page
-        <div>
-          <UploadButton
-            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-          />
-          <Show when={props.countingPath}>
-            {(definedPath) => <CountingLines path={definedPath()} />}
-          </Show>
+          <h1
+            class="heading-xxl"
+            style={{
+              display: "flex",
+              gap: "var(--spacing-xl)",
+              "align-items": "center",
+            }}
+          >
+            <Logo />
+            {t("app.title")}
+          </h1>
+          Landing page
+          <div>
+            <UploadButton
+              countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+            />
+            <Show when={props.countingPath}>
+              {(definedPath) => <CountingLines path={definedPath()} />}
+            </Show>
+          </div>
         </div>
       </div>
     </main>
