@@ -138,6 +138,8 @@
     --color-text-active: var(--clr-text-muted);
     --color-text-deemphasize: var(--clr-text-extra-muted);
 
+    --color-cloudy-default: var(--color-white);
+    --color-glow-default: var(--color-white);
     --color-background: var(--clr-black);
 
     --color-diagram-root-regular: var(--clr-grey-260);

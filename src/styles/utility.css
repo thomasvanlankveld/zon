@@ -84,6 +84,10 @@
 
   /* Decoration */
   .cloudy {
+    --cloudy-background: var(--color-cloudy-default);
+    --cloudy-opacity: 0.6;
+    --cloudy-blur: 4rem;
+
     position: relative;
     transform-style: preserve-3d;
 
@@ -98,12 +102,17 @@
       transform: translate3d(0, 0, -1px);
       inset: 0;
       background: var(--cloudy-background);
-      opacity: var(--cloudy-opacity, 0.01);
-      filter: blur(var(--cloudy-blur, 4rem));
+      opacity: var(--cloudy-opacity);
+      filter: blur(var(--cloudy-blur));
     }
   }
 
   .glow {
+    --glow-background: var(--color-glow-default);
+    --glow-edge-width: var(--spacing-3xs);
+    --glow-opacity: 0.6;
+    --glow-blur: 4rem;
+
     position: relative;
     transform-style: preserve-3d;
 
@@ -114,7 +123,7 @@
     &::before {
       content: "";
       position: absolute;
-      inset: calc(-1 * var(--spacing-3xs));
+      inset: calc(-1 * var(--glow-edge-width));
       background: var(--glow-background);
       transform: translate3d(0, 0, -1px);
       pointer-events: none;
@@ -128,8 +137,8 @@
       background: var(--glow-background);
       transform: translate3d(0, 0, -1px);
       pointer-events: none;
-      opacity: var(--glow-opacity, 0.6);
-      filter: blur(var(--glow-blur, 4rem));
+      opacity: var(--glow-opacity);
+      filter: blur(var(--glow-blur));
     }
   }
 }
