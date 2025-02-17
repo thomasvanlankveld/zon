@@ -1,3 +1,9 @@
+.report-list__card {
+  &:hover .report-list__item-underline {
+    opacity: 1;
+  }
+}
+
 .report-list__heading {
   margin-bottom: var(--spacing-xl);
   /* margin-bottom: var(--spacing-l); */
@@ -24,12 +30,10 @@
   content: var(--before-content);
 }
 
-.report-list__list {
+.report-list__tab-panel {
   display: grid;
-
-  &:hover .report-list__item-underline {
-    opacity: 1;
-  }
+  grid-auto-rows: min-content;
+  overflow-y: auto;
 }
 
 .report-list__row-wrapper {

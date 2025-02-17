@@ -31,7 +31,7 @@ export default function LanguagePanel(props: LanguagePanelProps) {
 
   return (
     <ReportTabPanel
-      class={styles["report-list__list"]}
+      class={styles["report-list__tab-panel"]}
       tab={TabKey.Languages}
       selectedTab={props.selectedTab}
     >
