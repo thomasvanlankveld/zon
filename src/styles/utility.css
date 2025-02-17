@@ -83,7 +83,7 @@
   }
 
   /* Decoration */
-  @property --cloudy-opacity {
+  /* @property --cloudy-opacity {
     syntax: "<number>";
     inherits: true;
     initial-value: 0.01;
@@ -128,19 +128,20 @@
       --cloudy-mask-position-horizontal: 25%;
       --cloudy-mask-position-vertical: 50%;
     }
-  }
+  } */
 
-  @property --cloudy-blur {
+  /* @property --cloudy-blur {
     syntax: "<length>";
     inherits: true;
     initial-value: 0;
-  }
+  } */
 
   .cloudy {
     --cloudy-background: var(--color-cloudy-default);
     --cloudy-blur: 4rem;
-    --cloudy-opacity: 0.5;
-    --cloudy-mask: radial-gradient(
+    --cloudy-opacity: 0.1;
+
+    /* --cloudy-mask: radial-gradient(
       circle at var(--cloudy-mask-position-horizontal)
         var(--cloudy-mask-position-vertical),
       rgba(0, 0, 0, 0.6),
@@ -148,12 +149,12 @@
       rgba(0, 0, 0, 0.2),
       rgba(0, 0, 0, 0.1),
       rgba(0, 0, 0, 0.05) 100%
-    );
+    ); */
 
     /* TODO: Animation part should probably be enabled with another class, so only the landing page uses it */
-    animation:
+    /* animation:
       cloudy-mask-rotation linear 60s infinite,
-      cloudy-opacity-pulse ease-in-out 21s infinite;
+      cloudy-opacity-pulse ease-in-out 21s infinite; */
 
     position: relative;
     transform-style: preserve-3d;
@@ -171,7 +172,7 @@
       background: var(--cloudy-background);
       opacity: var(--cloudy-opacity);
       filter: blur(var(--cloudy-blur));
-      mask: var(--cloudy-mask);
+      /* mask: var(--cloudy-mask); */
     }
   }
 

@@ -35,7 +35,7 @@ export default function LandingPage(props: LandingPageProps) {
         "place-items": "center",
         padding: "var(--spacing-xxl)",
         "--cloudy-background": gradient,
-        // "--cloudy-opacity": "0.3",
+        "--cloudy-opacity": "0.01",
       }}
       class="cloudy"
     >
