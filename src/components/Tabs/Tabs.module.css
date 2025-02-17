@@ -2,6 +2,9 @@
   display: flex;
   margin-bottom: var(--spacing-s);
   column-gap: var(--spacing-l);
+
+  /* column-gap: var(--spacing-xs); */
+
   justify-content: end;
   flex-direction: row-reverse;
   flex-wrap: wrap;
@@ -10,10 +13,11 @@
 .tab {
   color: var(--color-text-deemphasize);
   padding-block: var(--spacing-xxs);
-  /* margin-inline: var(--spacing-xs); */
   border-bottom: 0.5px solid transparent;
 
-  /* padding-inline: var(--spacing-m); */
+  /* margin-inline: var(--spacing-xs);
+  padding-inline: var(--spacing-m);
+  padding-block: var(--spacing-s); */
 
   &:hover {
     color: var(--color-text-hover-focus);
