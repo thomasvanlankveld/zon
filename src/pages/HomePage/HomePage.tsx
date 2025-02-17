@@ -6,7 +6,7 @@ import UploadButton from "../../components/UploadButton/UploadButton";
 import CountingLines from "../../components/CountingLines";
 import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
-import { type Node } from "../../utils/zon";
+import { conicGradient, type Node } from "../../utils/zon";
 import Logo from "../../components/Logo";
 import NumberOfLines from "../../components/NumberOfLines";
 import styles from "./HomePage.module.css";
@@ -29,6 +29,9 @@ export default function HomePage(props: HomePageProps) {
     }
   }
 
+  // TODO: Add a default value to "glow" class, so we can remove this setting
+  const gradient = conicGradient();
+
   return (
     <main
       style={{
@@ -37,52 +40,63 @@ export default function HomePage(props: HomePageProps) {
         "place-items": "center",
         padding: "var(--spacing-xxl)",
       }}
-      class={`${styles["home-page"]}`}
     >
       <BackgroundConfig opacity={0.01} />
       <div
         style={{
           flex: "1 1 auto",
-          height: "min(var(--container-s), 100%)",
-          overflow: "auto",
-          width: "min(var(--container-l), 100%)",
-          background: "var(--color-background)",
-          display: "flex",
-          "flex-direction": "column",
-          "align-items": "center",
-          "justify-content": "space-evenly",
-          padding: "var(--spacing-xxl)",
+          // TODO: Fix glow wrapper and content height into a single variable
+          height: "min(var(--container-l), 100%)",
+          width: "min(var(--container-3xl), 100%)",
+          "--glow-background": gradient,
+          "--glow-border-radius": "var(--spacing-l)",
         }}
+        class="glow"
       >
-        <h1
-          class="heading-xxl"
+        <div
           style={{
+            height: "min(var(--container-l), 100%)",
+            overflow: "auto",
+            "border-radius": "var(--spacing-l)",
+            background: "var(--color-background)",
             display: "flex",
-            gap: "var(--spacing-xl)",
+            "flex-direction": "column",
             "align-items": "center",
+            "justify-content": "space-evenly",
+            "padding-block": "var(--spacing-xxl)",
+            "padding-inline": "var(--spacing-4xl)",
           }}
         >
-          <Logo />
-          {t("app.title")}
-        </h1>
+          <h1
+            class="heading-xxl"
+            style={{
+              display: "flex",
+              gap: "var(--spacing-xl)",
+              "align-items": "center",
+            }}
+          >
+            <Logo />
+            {t("app.title")}
+          </h1>
 
-        <div>
-          <For each={Object.entries(props.reports)}>
-            {([path, root]) => (
-              <div class={styles["home-page__report-row"]}>
-                <A href={Routes.Report.getLocation(path)}>{path}</A>
-                <NumberOfLines numberOfLines={root.numberOfLines} />
-              </div>
-            )}
-          </For>
-        </div>
-        <div>
-          <UploadButton
-            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-          />
-          <Show when={props.countingPath}>
-            {(definedPath) => <CountingLines path={definedPath()} />}
-          </Show>
+          <div>
+            <For each={Object.entries(props.reports)}>
+              {([path, root]) => (
+                <div class={styles["home-page__report-row"]}>
+                  <A href={Routes.Report.getLocation(path)}>{path}</A>
+                  <NumberOfLines numberOfLines={root.numberOfLines} />
+                </div>
+              )}
+            </For>
+          </div>
+          <div>
+            <UploadButton
+              countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+            />
+            <Show when={props.countingPath}>
+              {(definedPath) => <CountingLines path={definedPath()} />}
+            </Show>
+          </div>
         </div>
       </div>
     </main>
