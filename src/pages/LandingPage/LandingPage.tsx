@@ -26,6 +26,7 @@ export default function LandingPage(props: LandingPageProps) {
     }
   }
 
+  // TODO: Add a default value to "glow" class, so we can remove this setting
   const gradient = conicGradient();
 
   return (
@@ -41,6 +42,7 @@ export default function LandingPage(props: LandingPageProps) {
       <div
         style={{
           flex: "1 1 auto",
+          // TODO: Fix glow wrapper and content height into a single variable
           height: "min(var(--container-s), 100%)",
           width: "min(var(--container-l), 100%)",
           "--glow-background": gradient,
