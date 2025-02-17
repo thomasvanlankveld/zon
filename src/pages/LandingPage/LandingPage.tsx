@@ -1,6 +1,7 @@
 import { Show } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import Routes from "../../routes";
+import { BackgroundConfig } from "../../components/Background/Background";
 import UploadButton from "../../components/UploadButton/UploadButton";
 import CountingLines from "../../components/CountingLines";
 import { useI18n } from "../../utils/i18n";
@@ -34,11 +35,9 @@ export default function LandingPage(props: LandingPageProps) {
         display: "grid",
         "place-items": "center",
         padding: "var(--spacing-xxl)",
-        "--cloudy-background": gradient,
-        "--cloudy-opacity": "0.01",
       }}
-      class="cloudy"
     >
+      <BackgroundConfig opacity={0.01} />
       <div
         style={{
           flex: "1 1 auto",

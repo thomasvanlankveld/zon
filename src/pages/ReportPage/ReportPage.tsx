@@ -1,6 +1,7 @@
 import { A } from "@solidjs/router";
 import Routes from "../../routes.ts";
-import { conicGradient, type Node } from "../../utils/zon";
+import { BackgroundConfig } from "../../components/Background/Background.tsx";
+import { type Node } from "../../utils/zon";
 import { useI18n } from "../../utils/i18n.tsx";
 import Sunburst from "./Sunburst/Sunburst.tsx";
 import ReportList from "./ReportList/ReportList.tsx";
@@ -25,20 +26,13 @@ function ReportPageContent() {
 
   const { reportRoot, diagramRoot } = useReportState();
 
-  const cloudyBackground = () =>
-    conicGradient({
-      startPosition: diagramRoot().firstLine / reportRoot().numberOfLines,
-      span: diagramRoot().numberOfLines / reportRoot().numberOfLines,
-    });
-
   return (
-    <main
-      style={{
-        "--cloudy-background": cloudyBackground(),
-        "--cloudy-opacity": "0.2",
-      }}
-      class={`${styles["report-page"]} page cloudy`}
-    >
+    <main class={`${styles["report-page"]} page`}>
+      <BackgroundConfig
+        opacity={0.2}
+        startPosition={diagramRoot().firstLine / reportRoot().numberOfLines}
+        span={diagramRoot().numberOfLines / reportRoot().numberOfLines}
+      />
       <div style={{ display: "flex" }} class="col-span-2">
         <h1 style={{ display: "flex" }} class="heading-regular">
           <A

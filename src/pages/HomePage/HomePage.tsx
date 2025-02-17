@@ -1,11 +1,12 @@
 import { For, Show } from "solid-js";
 import { A, useNavigate } from "@solidjs/router";
 import Routes from "../../routes";
+import { BackgroundConfig } from "../../components/Background/Background";
 import UploadButton from "../../components/UploadButton/UploadButton";
 import CountingLines from "../../components/CountingLines";
 import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
-import { conicGradient, type Node } from "../../utils/zon";
+import { type Node } from "../../utils/zon";
 import Logo from "../../components/Logo";
 import NumberOfLines from "../../components/NumberOfLines";
 import styles from "./HomePage.module.css";
@@ -31,15 +32,14 @@ export default function HomePage(props: HomePageProps) {
   return (
     <main
       style={{
-        "--cloudy-background": conicGradient(),
-        "--cloudy-opacity": "0.01",
         "min-height": "100dvh",
         display: "grid",
         "place-items": "center",
         padding: "var(--spacing-xxl)",
       }}
-      class={`${styles["home-page"]} cloudy`}
+      class={`${styles["home-page"]}`}
     >
+      <BackgroundConfig opacity={0.01} />
       <div
         style={{
           flex: "1 1 auto",

@@ -5,6 +5,7 @@ import { Route, MemoryRouter, useSearchParams } from "@solidjs/router";
 import { createStore } from "solid-js/store";
 
 import "./styles/setup.css";
+import { Background } from "./components/Background/Background.tsx";
 import { createTree, LINE_TYPE, type Node } from "./utils/zon";
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
@@ -49,47 +50,49 @@ function App() {
   }
 
   return (
-    <I18nProvider>
-      <MemoryRouter>
-        <Route
-          path={Routes.Home.Matcher}
-          component={() => (
-            <Show
-              when={Object.values(reports).length > 0}
-              fallback={
-                <LandingPage
+    <Background>
+      <I18nProvider>
+        <MemoryRouter>
+          <Route
+            path={Routes.Home.Matcher}
+            component={() => (
+              <Show
+                when={Object.values(reports).length > 0}
+                fallback={
+                  <LandingPage
+                    countLinesInFolder={countLinesInFolder}
+                    countingPath={countingPath()}
+                  />
+                }
+              >
+                <HomePage
+                  reports={reports}
                   countLinesInFolder={countLinesInFolder}
                   countingPath={countingPath()}
                 />
+              </Show>
+            )}
+          />
+          <Route
+            path={Routes.Report.Matcher}
+            component={() => {
+              const [searchParams] = useSearchParams();
+              const rootPath = searchParams.rootPath;
+
+              if (typeof rootPath !== "string") {
+                throw new Error(
+                  `Can't display report for root path ${rootPath?.toString()}`,
+                );
               }
-            >
-              <HomePage
-                reports={reports}
-                countLinesInFolder={countLinesInFolder}
-                countingPath={countingPath()}
-              />
-            </Show>
-          )}
-        />
-        <Route
-          path={Routes.Report.Matcher}
-          component={() => {
-            const [searchParams] = useSearchParams();
-            const rootPath = searchParams.rootPath;
 
-            if (typeof rootPath !== "string") {
-              throw new Error(
-                `Can't display report for root path ${rootPath?.toString()}`,
-              );
-            }
+              const reportRoot = reports[rootPath];
 
-            const reportRoot = reports[rootPath];
-
-            return <ReportPage root={reportRoot} />;
-          }}
-        />
-      </MemoryRouter>
-    </I18nProvider>
+              return <ReportPage root={reportRoot} />;
+            }}
+          />
+        </MemoryRouter>
+      </I18nProvider>
+    </Background>
   );
 }
 
