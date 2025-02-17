@@ -136,6 +136,7 @@
     initial-value: 0;
   } */
 
+  /* TODO: Perhaps we can get rid of "cloudy" altogether?  */
   .cloudy {
     --cloudy-background: var(--color-cloudy-default);
     --cloudy-blur: 4rem;
