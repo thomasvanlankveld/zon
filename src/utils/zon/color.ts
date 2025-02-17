@@ -55,14 +55,14 @@ export function rainbow(value: number): Colors {
 }
 
 /**
- * Create a conic gradient for a specified section of the rainbow. `startPosition + span` should not exceed `1`. If you
- * set either of these values, you might want to add a `filter: blur(...)`.
+ * Get an array of colors spanning a specified section of the rainbow (usually to make a gradient).
+ * `startPosition + span` should not exceed `1`. If you set either of these values, you might want
+ * to add a `filter: blur(...)`.
  * @param [options.numberOfColors] Whole positive number, default 20, the number of colors in the gradient
  * @param [options.startPosition] Fraction between 0 and 1, default 0, position along the rainbow's colors
  * @param [options.span] Fraction between 0 and 1, default 1, the distance to span along the rainbow's colors
- * @returns Containing a CSS `conicGradient`, for example to be used as a value for `background`
  */
-export function conicGradient(
+export function colorRange(
   options: {
     numberOfColors?: number;
     startPosition?: number;
@@ -79,11 +79,27 @@ export function conicGradient(
     return startPosition + i * step;
   }
 
-  const colors =
-    // Add one so that the first color is the same as the last
-    Array.from({ length: numberOfColors + 1 })
-      .fill(null)
-      .map((_, i) => rainbow(getPosition(i)).regular);
+  return Array.from({ length: numberOfColors })
+    .fill(null)
+    .map((_, i) => rainbow(getPosition(i)).regular);
+}
 
-  return `conic-gradient(${colors.join(", ")})`;
+/**
+ * Create a conic gradient for a specified section of the rainbow. `startPosition + span` should not exceed `1`. If you
+ * set either of these values, you might want to add a `filter: blur(...)`.
+ * @param [options.numberOfColors] Whole positive number, default 20, the number of colors in the gradient
+ * @param [options.startPosition] Fraction between 0 and 1, default 0, position along the rainbow's colors
+ * @param [options.span] Fraction between 0 and 1, default 1, the distance to span along the rainbow's colors
+ * @returns Containing a CSS `conicGradient`, for example to be used as a value for `background`
+ */
+export function conicGradient(
+  options: {
+    numberOfColors?: number;
+    startPosition?: number;
+    span?: number;
+  } = {},
+) {
+  const colors = colorRange({ ...options });
+
+  return `conic-gradient(${[...colors, colors[0]].join(", ")})`;
 }

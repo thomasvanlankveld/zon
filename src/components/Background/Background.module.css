@@ -1,0 +1,177 @@
+@property --background-opacity {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0.01;
+}
+
+/* Every color must be defined as a property, so that we can animate the gradient */
+@property --background-color-0 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.307 287.621);
+}
+@property --background-color-1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.303 311.851);
+}
+@property --background-color-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.297 336.653);
+}
+@property --background-color-3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.287 0);
+}
+@property --background-color-4 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.277 14.4);
+}
+@property --background-color-5 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.267 28.8);
+}
+@property --background-color-6 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.26 43.2);
+}
+@property --background-color-7 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.257 57.6);
+}
+@property --background-color-8 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.26 72);
+}
+@property --background-color-9 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.267 86.4);
+}
+@property --background-color-10 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.277 101.059);
+}
+@property --background-color-11 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.287 118.186);
+}
+@property --background-color-12 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.289 134.126);
+}
+@property --background-color-13 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.276 143.4);
+}
+@property --background-color-14 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.265 152.213);
+}
+@property --background-color-15 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.264 173.496);
+}
+@property --background-color-16 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.273 206.098);
+}
+@property --background-color-17 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.287 237.686);
+}
+@property --background-color-18 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.299 258);
+}
+@property --background-color-19 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(82% 0.306 269.866);
+}
+
+.background {
+  --background-gradient: conic-gradient(
+    var(--background-color-0),
+    var(--background-color-1),
+    var(--background-color-2),
+    var(--background-color-3),
+    var(--background-color-4),
+    var(--background-color-5),
+    var(--background-color-6),
+    var(--background-color-7),
+    var(--background-color-8),
+    var(--background-color-9),
+    var(--background-color-10),
+    var(--background-color-11),
+    var(--background-color-12),
+    var(--background-color-13),
+    var(--background-color-14),
+    var(--background-color-15),
+    var(--background-color-16),
+    var(--background-color-17),
+    var(--background-color-18),
+    var(--background-color-19),
+    /* Repeat the last color so that the start and end close on each other */
+      var(--background-color-0)
+  );
+  --background-blur: 4rem;
+  --background-opacity: 0.1;
+
+  transition:
+    --background-opacity 0.5s ease-out,
+    --background-color-0 0.25s ease-out,
+    --background-color-1 0.25s ease-out,
+    --background-color-2 0.25s ease-out,
+    --background-color-3 0.25s ease-out,
+    --background-color-4 0.25s ease-out,
+    --background-color-5 0.25s ease-out,
+    --background-color-6 0.25s ease-out,
+    --background-color-7 0.25s ease-out,
+    --background-color-8 0.25s ease-out,
+    --background-color-9 0.25s ease-out,
+    --background-color-10 0.25s ease-out,
+    --background-color-11 0.25s ease-out,
+    --background-color-12 0.25s ease-out,
+    --background-color-13 0.25s ease-out,
+    --background-color-14 0.25s ease-out,
+    --background-color-15 0.25s ease-out,
+    --background-color-16 0.25s ease-out,
+    --background-color-17 0.25s ease-out,
+    --background-color-18 0.25s ease-out,
+    --background-color-19 0.25s ease-out;
+
+  position: relative;
+  transform-style: preserve-3d;
+
+  & > * {
+    transform: translate3d(0, 0, 1px);
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    transform: translate3d(0, 0, -1px);
+    inset: 0;
+    background-image: var(--background-gradient);
+    opacity: var(--background-opacity);
+    filter: blur(var(--background-blur));
+  }
+}
