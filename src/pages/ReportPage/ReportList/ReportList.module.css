@@ -1,5 +1,5 @@
 .report-list__heading {
-  margin-bottom: var(--spacing-l);
+  margin-bottom: var(--spacing-xl);
 }
 
 .report-list__row-text {
@@ -33,11 +33,11 @@
 
 .report-list__row-wrapper {
   &:not(:first-child) {
-    padding-top: var(--spacing-3xs);
+    padding-top: var(--spacing-xxs);
   }
 
   &:not(:last-child) {
-    padding-bottom: var(--spacing-3xs);
+    padding-bottom: var(--spacing-xxs);
   }
 
   &:hover {

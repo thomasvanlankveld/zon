@@ -50,23 +50,40 @@ export default function ReportList() {
       <nav
         // TODO: Fix report-list__list being used in two places
         style={{
-          "padding-block": "var(--spacing-m)",
-          "padding-inline": "var(--spacing-l)",
+          "border-radius": "var(--spacing-xxl)",
+          "padding-block": "var(--spacing-xxl)",
+          "padding-inline": "var(--spacing-xxl)",
+          // "border-radius": "var(--spacing-xl)",
+          // "padding-block": "var(--spacing-xl)",
+          // "padding-inline": "var(--spacing-xl)",
           "background-color": "var(--color-background)",
+          gap: "var(--spacing-xs)",
         }}
         class={`${styles["report-list__list"]} overflow-x-hidden`}
         aria-label={t("report-list.nav.label", {
           name: getDisplayName(listRoot().name, t("group-name")),
         })}
       >
+        {/* <div style={{ display: "grid", padding: "var(--spacing-xs)" }}> */}
         <ListHeading />
+        {/* </div> */}
         <ReportTabList
           selectedTab={selectedTab()}
           setSelectedTab={setSelectedTab}
         />
+        {/* <div
+          style={{
+            border: "1px solid var(--clr-grey-150)",
+            "padding-block": "var(--spacing-m)",
+            "padding-inline": "var(--spacing-l)",
+            "border-radius": "var(--spacing-m)",
+            "background-color": "var(--clr-grey-060)",
+          }}
+        > */}
         <ContentPanel selectedTab={selectedTab()} />
         <LineTypePanel selectedTab={selectedTab()} />
         <LanguagePanel selectedTab={selectedTab()} />
+        {/* </div> */}
       </nav>
       {/* </div> */}
     </div>

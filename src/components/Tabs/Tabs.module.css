@@ -1,6 +1,7 @@
 .tab-list {
   display: flex;
   column-gap: var(--spacing-l);
+  /* column-gap: var(--spacing-l); */
   justify-content: end;
   flex-direction: row-reverse;
 }
@@ -8,6 +9,7 @@
 .tab {
   color: var(--color-text-deemphasize);
   padding-block: var(--spacing-s);
+  /* padding-inline: var(--spacing-m); */
 
   &:hover {
     color: var(--color-text-hover-focus);
@@ -19,6 +21,9 @@
 
   &[data-selected="true"] {
     color: var(--color-text-regular);
+    /* outline: 1px solid var(--clr-grey-150);
+    border-radius: var(--spacing-s);
+    background-color: var(--clr-grey-060); */
 
     &:hover {
       color: var(--color-text-hover-focus);

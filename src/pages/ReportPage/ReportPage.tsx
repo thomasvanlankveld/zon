@@ -35,7 +35,7 @@ function ReportPageContent() {
     <main
       style={{
         "--cloudy-background": cloudyBackground(),
-        "--cloudy-opacity": "0.01",
+        "--cloudy-opacity": "0.2",
       }}
       class={`${styles["report-page"]} page cloudy`}
     >
@@ -44,6 +44,7 @@ function ReportPageContent() {
           <A
             style={{
               background: "var(--color-background)",
+              "border-radius": "var(--spacing-m)",
               "padding-block": "var(--spacing-m)",
               "padding-inline": "var(--spacing-l)",
             }}

@@ -91,6 +91,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
         style={{
           // display: "grid",
           // gap: "var(--spacing-m)",
+          "border-radius": "var(--spacing-m)",
           "padding-block": "var(--spacing-m)",
           "padding-inline": "var(--spacing-l)",
           background: "var(--color-background)",
