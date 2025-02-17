@@ -1,5 +1,6 @@
 .report-list__heading {
   margin-bottom: var(--spacing-xl);
+  /* margin-bottom: var(--spacing-l); */
 }
 
 .report-list__row-text {
@@ -15,7 +16,7 @@
 
 .report-list__item-underline {
   background-color: var(--color-row-regular);
-  height: var(--spacing-4xs);
+  height: 1px;
   opacity: 0.4;
 }
 

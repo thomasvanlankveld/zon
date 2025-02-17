@@ -71,19 +71,9 @@ export default function ReportList() {
           selectedTab={selectedTab()}
           setSelectedTab={setSelectedTab}
         />
-        {/* <div
-          style={{
-            border: "1px solid var(--clr-grey-150)",
-            "padding-block": "var(--spacing-m)",
-            "padding-inline": "var(--spacing-l)",
-            "border-radius": "var(--spacing-m)",
-            "background-color": "var(--clr-grey-060)",
-          }}
-        > */}
         <ContentPanel selectedTab={selectedTab()} />
         <LineTypePanel selectedTab={selectedTab()} />
         <LanguagePanel selectedTab={selectedTab()} />
-        {/* </div> */}
       </nav>
       {/* </div> */}
     </div>
