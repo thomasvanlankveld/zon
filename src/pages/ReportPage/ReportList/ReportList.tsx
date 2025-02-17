@@ -46,12 +46,15 @@ export default function ReportList() {
         "max-height": "100%",
         // TODO: Inject two lines above from report
 
+        // TODO: Move below lines into `card` component class
         "border-radius": "var(--spacing-xxl)",
         "padding-block": "var(--spacing-xxl)",
         "padding-inline": "var(--spacing-xxl)",
         // "padding-block": "var(--spacing-xl)",
         // "padding-inline": "var(--spacing-xl)",
         "background-color": "var(--color-background)",
+        // TODO: Move above lines into `card` component class
+
         display: "grid",
         "grid-template-rows": "min-content min-content 1fr",
         gap: "var(--spacing-xs)",
