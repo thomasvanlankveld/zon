@@ -15,6 +15,7 @@ type HomePageProps = {
   reports: Record<string, Node>;
   countLinesInFolder: () => Promise<string | null>;
   countingPath: string | null;
+  removeReport: (path: string) => void;
 };
 
 export default function HomePage(props: HomePageProps) {
@@ -75,7 +76,7 @@ export default function HomePage(props: HomePageProps) {
               "align-items": "center",
             }}
           >
-            <Logo />
+            <Logo size={70} />
             {t("app.title")}
           </h1>
 
@@ -85,6 +86,9 @@ export default function HomePage(props: HomePageProps) {
                 <div class={styles["home-page__report-row"]}>
                   <A href={Routes.Report.getLocation(path)}>{path}</A>
                   <NumberOfLines numberOfLines={root.numberOfLines} />
+                  <button onClick={() => props.removeReport(path)}>
+                    Remove
+                  </button>
                 </div>
               )}
             </For>

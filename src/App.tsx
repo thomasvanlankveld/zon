@@ -22,6 +22,10 @@ function App() {
     setReports(path, root);
   }
 
+  function removeReport(path: string) {
+    setReports(path, undefined!);
+  }
+
   const [countingPath, setCountingPath] = createSignal<string | null>(null);
 
   async function countLinesInFolder() {
@@ -69,6 +73,7 @@ function App() {
                   reports={reports}
                   countLinesInFolder={countLinesInFolder}
                   countingPath={countingPath()}
+                  removeReport={removeReport}
                 />
               </Show>
             )}
