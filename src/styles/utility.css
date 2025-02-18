@@ -180,7 +180,7 @@
   @property --glow-mask-position {
     syntax: "<percentage>";
     inherits: true;
-    initial-value: 100%;
+    initial-value: 0%;
   }
 
   @property --glow-mask-lightness {
@@ -191,14 +191,14 @@
 
   @keyframes glow-mask-flyby {
     0% {
-      --glow-mask-position: 100%;
+      --glow-mask-position: 0%;
       --glow-mask-lightness: 0%;
     }
     50% {
       --glow-mask-lightness: 100%;
     }
     100% {
-      --glow-mask-position: 0%;
+      --glow-mask-position: 100%;
       --glow-mask-lightness: 0%;
     }
   }
@@ -211,10 +211,10 @@
     --glow-border-radius: 0;
 
     --glow-mask: linear-gradient(
-      -70deg in oklab,
-      black 30%,
-      hsl(0 0 var(--glow-mask-lightness)),
-      black 70%
+      110deg in oklab,
+      black calc(var(--glow-mask-position) - 20%),
+      hsl(0 0 var(--glow-mask-lightness)) var(--glow-mask-position),
+      black calc(var(--glow-mask-position) + 20%)
     );
     animation: glow-mask-flyby 0.5s normal forwards ease-in-out 1s;
 
@@ -243,7 +243,6 @@
       mask-image: var(--glow-mask);
       mask-mode: luminance;
       mask-position: var(--glow-mask-position) var(--glow-mask-position);
-      mask-size: 225% 225%;
     }
 
     &.glow-hover:hover::before {
