@@ -53,3 +53,53 @@ export function rainbow(value: number): Colors {
     deemphasize: `oklch(${lightness}% ${chroma} ${hue} / 0.55)`,
   };
 }
+
+/**
+ * Get an array of colors spanning a specified section of the rainbow (usually to make a gradient).
+ * `startPosition + span` should not exceed `1`. If you set either of these values, you might want
+ * to add a `filter: blur(...)`.
+ * @param [options.numberOfColors] Whole positive number, default 20, the number of colors in the gradient
+ * @param [options.startPosition] Fraction between 0 and 1, default 0, position along the rainbow's colors
+ * @param [options.span] Fraction between 0 and 1, default 1, the distance to span along the rainbow's colors
+ */
+export function colorRange(
+  options: {
+    numberOfColors?: number;
+    startPosition?: number;
+    span?: number;
+  } = {},
+) {
+  const numberOfColors = options.numberOfColors ?? 20;
+  const startPosition = options.startPosition ?? 0;
+  const span = options.span ?? 1;
+
+  const step = span / numberOfColors;
+
+  function getPosition(i: number) {
+    return startPosition + i * step;
+  }
+
+  return Array.from({ length: numberOfColors })
+    .fill(null)
+    .map((_, i) => rainbow(getPosition(i)).regular);
+}
+
+/**
+ * Create a conic gradient for a specified section of the rainbow. `startPosition + span` should not exceed `1`. If you
+ * set either of these values, you might want to add a `filter: blur(...)`.
+ * @param [options.numberOfColors] Whole positive number, default 20, the number of colors in the gradient
+ * @param [options.startPosition] Fraction between 0 and 1, default 0, position along the rainbow's colors
+ * @param [options.span] Fraction between 0 and 1, default 1, the distance to span along the rainbow's colors
+ * @returns Containing a CSS `conicGradient`, for example to be used as a value for `background`
+ */
+export function conicGradient(
+  options: {
+    numberOfColors?: number;
+    startPosition?: number;
+    span?: number;
+  } = {},
+) {
+  const colors = colorRange({ ...options });
+
+  return `conic-gradient(${[...colors, colors[0]].join(", ")})`;
+}

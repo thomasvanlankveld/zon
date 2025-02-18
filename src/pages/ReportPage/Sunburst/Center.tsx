@@ -22,7 +22,12 @@ export default function Center(props: CenterProps) {
   );
 
   return (
-    <Show when={!isReportRoot()}>
+    <Show
+      when={!isReportRoot()}
+      fallback={
+        <circle cx={0} cy={0} r={props.radius} fill="var(--color-background)" />
+      }
+    >
       <circle
         cx={0}
         cy={0}

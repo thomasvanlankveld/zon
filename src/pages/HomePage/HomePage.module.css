@@ -1,6 +1,6 @@
-.home-page {
+/* .home-page {
   grid-template-rows: min-content min-content 1fr;
-}
+} */
 
 .home-page__report-row {
   display: flex;

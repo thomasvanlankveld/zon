@@ -2,6 +2,7 @@ import { Translations } from "./types";
 
 const enGBTranslations: Translations = {
   "app.title": "Zon",
+  "landing-page.welcome-message": "Select a folder to count its lines",
   "upload-button.label": "Select folder",
   "counting-lines.text": ({ path }) => `Counting lines in ${path}`,
   "group-name": "Smaller items",

@@ -1,24 +1,20 @@
-import { For, Show } from "solid-js";
-import { A, useNavigate } from "@solidjs/router";
+import { Show } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 import Routes from "../../routes";
 import { BackgroundConfig } from "../../components/Background/Background";
 import UploadButton from "../../components/UploadButton/UploadButton";
 import CountingLines from "../../components/CountingLines";
 import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
-import { conicGradient, type Node } from "../../utils/zon";
+import { conicGradient } from "../../utils/zon";
 import Logo from "../../components/Logo";
-import NumberOfLines from "../../components/NumberOfLines";
-import styles from "./HomePage.module.css";
 
-type HomePageProps = {
-  reports: Record<string, Node>;
+type LandingPageProps = {
   countLinesInFolder: () => Promise<string | null>;
   countingPath: string | null;
-  removeReport: (path: string) => void;
 };
 
-export default function HomePage(props: HomePageProps) {
+export default function LandingPage(props: LandingPageProps) {
   const navigate = useNavigate();
   const { t } = useI18n();
 
@@ -47,8 +43,8 @@ export default function HomePage(props: HomePageProps) {
         style={{
           flex: "1 1 auto",
           // TODO: Fix glow wrapper and content height into a single variable
-          height: "min(var(--container-l), 100%)",
-          width: "min(var(--container-3xl), 100%)",
+          height: "min(var(--container-s), 100%)",
+          width: "min(var(--container-l), 100%)",
           "--glow-background": gradient,
           "--glow-border-radius": "var(--spacing-xl)",
         }}
@@ -56,7 +52,7 @@ export default function HomePage(props: HomePageProps) {
       >
         <div
           style={{
-            height: "min(var(--container-l), 100%)",
+            height: "min(var(--container-s), 100%)",
             overflow: "auto",
             "border-radius": "var(--spacing-xl)",
             background: "var(--color-background)",
@@ -80,26 +76,30 @@ export default function HomePage(props: HomePageProps) {
             {t("app.title")}
           </h1>
 
-          <div>
-            <For each={Object.entries(props.reports)}>
-              {([path, root]) => (
-                <div class={styles["home-page__report-row"]}>
-                  <A href={Routes.Report.getLocation(path)}>{path}</A>
-                  <NumberOfLines numberOfLines={root.numberOfLines} />
-                  <button onClick={() => props.removeReport(path)}>
-                    Remove
-                  </button>
-                </div>
-              )}
-            </For>
-          </div>
-          <div>
-            <UploadButton
-              countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-            />
-            <Show when={props.countingPath}>
-              {(definedPath) => <CountingLines path={definedPath()} />}
-            </Show>
+          <div
+            style={{
+              display: "grid",
+              "place-items": "center",
+              gap: "var(--spacing-xl)",
+              "text-align": "center",
+              "text-wrap": "balance",
+            }}
+          >
+            <span
+              style={{ "min-height": "calc(2 * var(--line-height-regular))" }}
+            >
+              <Show
+                when={props.countingPath}
+                fallback={t("landing-page.welcome-message")}
+              >
+                {(definedPath) => <CountingLines path={definedPath()} />}
+              </Show>
+            </span>
+            <div>
+              <UploadButton
+                countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+              />
+            </div>
           </div>
         </div>
       </div>

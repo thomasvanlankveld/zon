@@ -1,3 +1,5 @@
+// import { A } from "@solidjs/router";
+// import Routes from "../../../routes.ts";
 import { createMemo, createSignal, For, Show } from "solid-js";
 import {
   getNodesAlongPath,
@@ -68,35 +70,71 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   }
 
   return (
-    <nav class={props.class} aria-label={t("breadcrumbs.label")}>
-      <For each={nodes()}>
-        {(node, i) => {
-          const colors = getNodeTextColors(node);
-
-          return (
-            <button
-              {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
-              style={{
-                "--color-breadcrumb-regular": colors.regular,
-                "--color-breadcrumb-active": colors.active,
-                "--color-breadcrumb-deemphasize": colors.deemphasize,
-              }}
-              class={styles["breadcrumbs__breadcrumb-button"]}
-              data-deemphasize={deemphasize(node)}
-              onMouseEnter={[setHoverPath, node.path]}
-              onMouseLeave={[setHoverPath, null]}
-              onClick={[navigate, node.targetPath]}
-            >
-              <span>{getDisplayName(node.name, t("group-name"))}</span>
-              <Show when={isFolder(node)}>
-                <span class={styles["breadcrumbs__breadcrumb-separator"]}>
-                  /
-                </span>
-              </Show>
-            </button>
-          );
+    <nav
+      style={{
+        display: "inline-grid",
+        "align-content": "start",
+        "justify-content": "start",
+        "min-height":
+          "calc(2 * var(--line-height-regular) + 2 * var(--spacing-m))",
+        "max-height":
+          "calc(2 * var(--line-height-regular) + 2 * var(--spacing-m))",
+        // "min-height":
+        //   "calc(3 * var(--line-height-regular) + 3 * var(--spacing-m))",
+        // "max-height":
+        //   "calc(3 * var(--line-height-regular) + 3 * var(--spacing-m))",
+      }}
+      class={props.class}
+      aria-label={t("breadcrumbs.label")}
+    >
+      <div
+        style={{
+          // display: "grid",
+          // gap: "var(--spacing-m)",
+          "border-radius": "var(--spacing-m)",
+          "padding-block": "var(--spacing-m)",
+          "padding-inline": "var(--spacing-l)",
+          background: "var(--color-background)",
         }}
-      </For>
+      >
+        {/* <A
+          style={{ color: "var(--color-text-group-regular)" }}
+          href={Routes.Home.Matcher}
+        >
+          back
+        </A> */}
+
+        {/* <div> */}
+        <For each={nodes()}>
+          {(node, i) => {
+            const colors = getNodeTextColors(node);
+
+            return (
+              <button
+                {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
+                style={{
+                  "--color-breadcrumb-regular": colors.regular,
+                  "--color-breadcrumb-active": colors.active,
+                  "--color-breadcrumb-deemphasize": colors.deemphasize,
+                }}
+                class={styles["breadcrumbs__breadcrumb-button"]}
+                data-deemphasize={deemphasize(node)}
+                onMouseEnter={[setHoverPath, node.path]}
+                onMouseLeave={[setHoverPath, null]}
+                onClick={[navigate, node.targetPath]}
+              >
+                <span>{getDisplayName(node.name, t("group-name"))}</span>
+                <Show when={isFolder(node)}>
+                  <span class={styles["breadcrumbs__breadcrumb-separator"]}>
+                    /
+                  </span>
+                </Show>
+              </button>
+            );
+          }}
+        </For>
+        {/* </div> */}
+      </div>
     </nav>
   );
 }

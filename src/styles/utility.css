@@ -81,4 +81,184 @@
     white-space: nowrap;
     width: 1px;
   }
+
+  /* Decoration */
+  /* @property --cloudy-opacity {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0.01;
+  }
+
+  @keyframes cloudy-opacity-pulse {
+    0%,
+    100% {
+      --cloudy-opacity: 0.02;
+    }
+    50% {
+      --cloudy-opacity: 0.12;
+    }
+  }
+
+  @property --cloudy-mask-position-horizontal {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 50%;
+  }
+  @property --cloudy-mask-position-vertical {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 50%;
+  }
+
+  @keyframes cloudy-mask-rotation {
+    0%,
+    100% {
+      --cloudy-mask-position-horizontal: 50%;
+      --cloudy-mask-position-vertical: 25%;
+    }
+    25% {
+      --cloudy-mask-position-horizontal: 75%;
+      --cloudy-mask-position-vertical: 50%;
+    }
+    50% {
+      --cloudy-mask-position-horizontal: 50%;
+      --cloudy-mask-position-vertical: 75%;
+    }
+    75% {
+      --cloudy-mask-position-horizontal: 25%;
+      --cloudy-mask-position-vertical: 50%;
+    }
+  } */
+
+  /* @property --cloudy-blur {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 0;
+  } */
+
+  /* TODO: Perhaps we can get rid of "cloudy" altogether?  */
+  .cloudy {
+    --cloudy-background: var(--color-cloudy-default);
+    --cloudy-blur: 4rem;
+    --cloudy-opacity: 0.1;
+
+    /* --cloudy-mask: radial-gradient(
+      circle at var(--cloudy-mask-position-horizontal)
+        var(--cloudy-mask-position-vertical),
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0.1),
+      rgba(0, 0, 0, 0.05) 100%
+    ); */
+
+    /* TODO: Animation part should probably be enabled with another class, so only the landing page uses it */
+    /* animation:
+      cloudy-mask-rotation linear 60s infinite,
+      cloudy-opacity-pulse ease-in-out 21s infinite; */
+
+    position: relative;
+    transform-style: preserve-3d;
+
+    & > * {
+      transform: translate3d(0, 0, 1px);
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+      transform: translate3d(0, 0, -1px);
+      inset: 0;
+      background: var(--cloudy-background);
+      opacity: var(--cloudy-opacity);
+      filter: blur(var(--cloudy-blur));
+      /* mask: var(--cloudy-mask); */
+    }
+  }
+
+  @property --glow-mask-position {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 0%;
+  }
+
+  @property --glow-mask-lightness {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 0%;
+  }
+
+  @keyframes glow-mask-flyby {
+    0% {
+      --glow-mask-position: 0%;
+      --glow-mask-lightness: 0%;
+    }
+    50% {
+      --glow-mask-lightness: 100%;
+    }
+    100% {
+      --glow-mask-position: 100%;
+      --glow-mask-lightness: 0%;
+    }
+  }
+
+  .glow {
+    --glow-background: var(--color-glow-default);
+    --glow-edge-width: var(--spacing-3xs);
+    --glow-opacity: 0.6;
+    --glow-blur: 4rem;
+    --glow-border-radius: 0;
+
+    --glow-mask: linear-gradient(
+      110deg in oklab,
+      black calc(var(--glow-mask-position) - 20%),
+      hsl(0 0 var(--glow-mask-lightness)) var(--glow-mask-position),
+      black calc(var(--glow-mask-position) + 20%)
+    );
+    animation: glow-mask-flyby 0.5s normal forwards ease-in-out 1s;
+
+    /* animation: none;
+    &:hover {
+      animation: glow-mask-flyby 0.5s normal forwards ease-in-out;
+    } */
+
+    position: relative;
+    transform-style: preserve-3d;
+
+    & > * {
+      transform: translate3d(0, 0, 1px);
+    }
+
+    /* TODO: Split glimmer into separate class */
+    &::before {
+      content: "";
+      position: absolute;
+      border-radius: var(--glow-border-radius);
+      inset: calc(-1 * var(--glow-edge-width));
+      background: var(--glow-background);
+      transform: translate3d(0, 0, -1px);
+      pointer-events: none;
+      opacity: 0.8;
+      mask-image: var(--glow-mask);
+      mask-mode: luminance;
+      mask-position: var(--glow-mask-position) var(--glow-mask-position);
+    }
+
+    &.glow-hover:hover::before {
+      mask-image: none;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0rem;
+      background: var(--glow-background);
+      transform: translate3d(0, 0, -1px);
+      pointer-events: none;
+      opacity: var(--glow-opacity);
+      filter: blur(var(--glow-blur));
+      /* mask: var(--glow-mask); */
+    }
+  }
 }

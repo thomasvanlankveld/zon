@@ -32,7 +32,7 @@ export default function LineTypePanel(props: LineTypePanelProps) {
 
   return (
     <ReportTabPanel
-      class={styles["report-list__list"]}
+      class={styles["report-list__tab-panel"]}
       tab={TabKey.Types}
       selectedTab={props.selectedTab}
     >
