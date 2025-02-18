@@ -1,7 +1,5 @@
 .report-page {
-  /* grid-template-rows: min-content 1fr; */
   grid-template-rows: min-content min-content 1fr;
-  /* grid-template-columns: 1fr 1fr; */
   grid-template-columns: 7fr 5fr;
   overflow: hidden;
 }
@@ -21,4 +19,9 @@
   line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+}
+
+.report-page__report-list {
+  align-self: start;
+  max-height: 100%;
 }

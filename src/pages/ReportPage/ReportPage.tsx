@@ -52,7 +52,7 @@ function ReportPageContent() {
       </div>
       <Breadcrumbs class={styles["report-page__breadcrumbs"]} />
       <Sunburst />
-      <ReportList />
+      <ReportList class={styles["report-page__report-list"]} />
       {/* For debugging: */}
       {/* <pre>{JSON.stringify(props.root, null, 2)}</pre> */}
     </main>

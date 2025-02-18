@@ -13,7 +13,11 @@ import ContentPanel from "./Content/ContentPanel";
 import LineTypePanel from "./LineType/LineTypePanel";
 import LanguagePanel from "./Language/LanguagePanel";
 
-export default function ReportList() {
+type ReportListProps = {
+  class?: string;
+};
+
+export default function ReportList(props: ReportListProps) {
   const { t } = useI18n();
   const {
     // reportRoot,
@@ -41,16 +45,11 @@ export default function ReportList() {
     <nav
       // TODO: Fix report-list__tab-panel being used in two places
       style={{
-        // TODO: Inject two lines below from report
-        "align-self": "start",
-        "max-height": "100%",
-        // TODO: Inject two lines above from report
-
         display: "grid",
         "grid-template-rows": "min-content min-content 1fr",
         gap: "var(--spacing-xs)",
       }}
-      class={`${styles["report-list__card"]} card overflow-x-hidden`}
+      class={`${styles["report-list__card"]} card overflow-x-hidden ${props.class}`}
       aria-label={t("report-list.nav.label", {
         name: getDisplayName(listRoot().name, t("group-name")),
       })}
