@@ -57,7 +57,6 @@ export default function Logo(props: LogoProps) {
           style={{
             width: `${canvasSize()}px`,
             height: `${canvasSize()}px`,
-            // background: "conic-gradient(red, orange, yellow, green, blue)",
             background: conicGradient({ numberOfColors: 20 }),
           }}
           xmlns="http://www.w3.org/1999/xhtml"
