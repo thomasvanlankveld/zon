@@ -58,15 +58,12 @@ export default function HomePage(props: HomePageProps) {
           style={{
             height: "min(var(--container-l), 100%)",
             overflow: "auto",
-            "border-radius": "var(--spacing-xl)",
-            background: "var(--color-background)",
             display: "flex",
             "flex-direction": "column",
             "align-items": "center",
             "justify-content": "space-evenly",
-            "padding-block": "var(--spacing-xxl)",
-            "padding-inline": "var(--spacing-4xl)",
           }}
+          class="card"
         >
           <h1
             class="heading-xxl"

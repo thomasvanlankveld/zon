@@ -1,4 +1,11 @@
 @layer component {
+  .card {
+    background: var(--color-background);
+    border-radius: var(--spacing-xl);
+    padding: var(--spacing-xxl);
+  }
+
+  /* TODO: Get rid of this? Clean it up? */
   .page {
     height: 100dvh;
     padding: var(--spacing-page-padding);
