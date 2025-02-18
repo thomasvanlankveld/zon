@@ -47,7 +47,7 @@ export default function ReportList() {
         // TODO: Inject two lines above from report
 
         // TODO: Move below lines into `card` component class
-        "border-radius": "var(--spacing-xxl)",
+        "border-radius": "var(--spacing-xl)",
         "padding-block": "var(--spacing-xxl)",
         "padding-inline": "var(--spacing-xxl)",
         // "padding-block": "var(--spacing-xl)",

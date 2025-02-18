@@ -46,7 +46,7 @@ export default function LandingPage(props: LandingPageProps) {
           height: "min(var(--container-s), 100%)",
           width: "min(var(--container-l), 100%)",
           "--glow-background": gradient,
-          "--glow-border-radius": "var(--spacing-l)",
+          "--glow-border-radius": "var(--spacing-xl)",
         }}
         class="glow"
       >
@@ -54,7 +54,7 @@ export default function LandingPage(props: LandingPageProps) {
           style={{
             height: "min(var(--container-s), 100%)",
             overflow: "auto",
-            "border-radius": "var(--spacing-l)",
+            "border-radius": "var(--spacing-xl)",
             background: "var(--color-background)",
             display: "flex",
             "flex-direction": "column",
