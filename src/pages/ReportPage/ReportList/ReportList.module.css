@@ -1,12 +1,25 @@
 .report-list__card {
+  display: grid;
+  grid-template-rows: min-content min-content 1fr;
+  gap: var(--spacing-xs);
+
+  &[data-heading-only="true"] {
+    grid-template-rows: min-content;
+  }
+
   &:hover .report-list__item-underline {
     opacity: 1;
   }
 }
 
 .report-list__heading {
-  margin-bottom: var(--spacing-xl);
-  /* margin-bottom: var(--spacing-l); */
+  &[data-has-bottom-spacing="true"] {
+    margin-bottom: var(--spacing-xl);
+  }
+  /* Extra class to win specificity */
+  &.report-list__row-wrapper[data-has-bottom-spacing="false"] {
+    padding: 0;
+  }
 }
 
 .report-list__row-text {

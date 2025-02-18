@@ -10,7 +10,11 @@ import ListRow from "./ListRow/ListRow";
 import { ARROW } from "../../../styles/arrow";
 import ContentName from "./Content/ContentName";
 
-export default function ListHeading() {
+type ListHeadingProps = {
+  hasBottomSpacing: boolean;
+};
+
+export default function ListHeading(props: ListHeadingProps) {
   const {
     reportRoot,
     navigate,
@@ -66,6 +70,7 @@ export default function ListHeading() {
         "heading-regular": true,
         [styles["report-list__heading"]]: true,
       }}
+      hasBottomSpacing={props.hasBottomSpacing}
       rowTextComponent={"h2"}
       name={<ContentName node={listRoot()} />}
       nameBeforeContent={nameBeforeContent()}

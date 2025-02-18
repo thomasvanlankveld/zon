@@ -1,6 +1,7 @@
-import { createSignal } from "solid-js";
+import { createMemo, createSignal, Show } from "solid-js";
 import {
   getDisplayName,
+  isFile,
   // rainbow
 } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
@@ -25,6 +26,8 @@ export default function ReportList(props: ReportListProps) {
   } = useReportState();
   const [selectedTab, setSelectedTab] = createSignal<TabKey>(TabKey.Content);
 
+  const listRootHasContent = createMemo(() => !isFile(listRoot()));
+
   // const numberOfColors = 16;
   // const step = () =>
   //   listRoot().numberOfLines / reportRoot().numberOfLines / numberOfColors;
@@ -43,24 +46,21 @@ export default function ReportList(props: ReportListProps) {
   // TODO: Maybe this shouldn't be a nav? Check https://a11y-style-guide.com/style-guide/section-navigation.html
   return (
     <nav
-      // TODO: Fix report-list__tab-panel being used in two places
-      style={{
-        display: "grid",
-        "grid-template-rows": "min-content min-content 1fr",
-        gap: "var(--spacing-xs)",
-      }}
       class={`${styles["report-list__card"]} card overflow-x-hidden ${props.class}`}
+      data-heading-only={!listRootHasContent()}
       aria-label={t("report-list.nav.label", {
         name: getDisplayName(listRoot().name, t("group-name")),
       })}
     >
       {/* <div style={{ display: "grid", padding: "var(--spacing-xs)" }}> */}
-      <ListHeading />
+      <ListHeading hasBottomSpacing={listRootHasContent()} />
       {/* </div> */}
-      <ReportTabList
-        selectedTab={selectedTab()}
-        setSelectedTab={setSelectedTab}
-      />
+      <Show when={listRootHasContent()}>
+        <ReportTabList
+          selectedTab={selectedTab()}
+          setSelectedTab={setSelectedTab}
+        />
+      </Show>
       <ContentPanel selectedTab={selectedTab()} />
       <LineTypePanel selectedTab={selectedTab()} />
       <LanguagePanel selectedTab={selectedTab()} />

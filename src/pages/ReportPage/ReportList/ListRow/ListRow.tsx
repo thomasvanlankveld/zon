@@ -9,6 +9,7 @@ type ListRowProps = {
   colors: Colors;
   isDeemphasized?: boolean;
   rowContainerClassList?: { [k: string]: boolean | undefined };
+  hasBottomSpacing?: boolean;
   rowTextComponent?: ValidComponent;
   name: JSX.Element;
   nameBeforeContent?: string;
@@ -40,6 +41,7 @@ export default function ListRow(props: ListRowProps) {
         "--color-row-active": props.colors.active,
         "--color-row-deemphasize": props.colors.deemphasize,
       }}
+      data-has-bottom-spacing={props.hasBottomSpacing ?? true}
       data-deemphasized={props.isDeemphasized ?? false}
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
