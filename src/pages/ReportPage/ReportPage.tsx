@@ -40,7 +40,7 @@ function ReportPageContent() {
             class={`${styles["report-page__header-title"]} app-heading block`}
             href={Routes.Home.Matcher}
           >
-            {/* TODO: screen-reader only text "back to overview"? */}
+            {/* TODO: screen-reader only text "back to home page"? */}
             <Logo size={32} />
             {t("app.title")}
           </A>
