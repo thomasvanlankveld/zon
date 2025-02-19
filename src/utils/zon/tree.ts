@@ -8,7 +8,12 @@ import {
   type Node,
   NODE_TYPE,
 } from "./types.ts";
-import { getLastSegment, getPathString, getParentPath } from "./path.ts";
+import {
+  getLastSegment,
+  getPathArray,
+  getPathString,
+  getParentPath,
+} from "./path.ts";
 import {
   getNumberOfLines,
   sumLineTypeCounts as sumLineTypeCounts,
@@ -33,7 +38,7 @@ export function createTree(
   reportPath: string,
   languages: Languages,
   lineTypes: LINE_TYPE[],
-) {
+): Node {
   const reportName = getLastSegment(reportPath);
   const numberOfCharactersToRemove = reportPath.length - reportName.length;
 
@@ -46,12 +51,12 @@ export function createTree(
   for (const [languageName, language] of languageEntries) {
     // For every file
     for (const tokeiReport of language.reports) {
-      const filePath = tokeiReport.name.slice(numberOfCharactersToRemove);
-      const filePathSegments = filePath.split("/");
+      const filePathStr = tokeiReport.name.slice(numberOfCharactersToRemove);
+      const filePath = getPathArray(filePathStr);
 
       // Create or update all parent folders, then create the file
-      for (let i = 0; i < filePathSegments.length; i++) {
-        const nodePath = filePathSegments.slice(0, i + 1);
+      for (let i = 0; i < filePath.length; i++) {
+        const nodePath = filePath.slice(0, i + 1);
         const nodePathStr = getPathString(nodePath);
 
         if (nodePathStr in nodes) {
@@ -62,7 +67,7 @@ export function createTree(
           node.lineTypes.code.numberOfLines += tokeiReport.stats.code;
           node.lineTypes.comments.numberOfLines += tokeiReport.stats.comments;
           node.numberOfLines += numberOfLines;
-          node.height = Math.max(node.height, filePathSegments.length - i - 1);
+          node.height = Math.max(node.height, filePath.length - i - 1);
 
           addLanguageCount(
             node.languages,
@@ -81,7 +86,7 @@ export function createTree(
             },
             languages: { [languageName]: createCounted(numberOfLines) },
             path: nodePath,
-            name: filePathSegments[i],
+            name: filePath[i],
             numberOfLines,
             depth: i,
             // Actual values of `firstLine` and `color` can only be determined after sorting
@@ -89,7 +94,7 @@ export function createTree(
             colorValue: 0,
           };
 
-          const isFile = i === filePathSegments.length - 1;
+          const isFile = i === filePath.length - 1;
           const newNode: Node = isFile
             ? {
                 ...nodeBase,
@@ -101,7 +106,7 @@ export function createTree(
                 type: NODE_TYPE.FOLDER,
                 children: [],
                 // `children` updated as we build the tree
-                height: filePathSegments.length - i - 1,
+                height: filePath.length - i - 1,
               };
 
           nodes[nodePathStr] = newNode;

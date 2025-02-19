@@ -61,7 +61,7 @@ export default function LandingPage(props: LandingPageProps) {
             // Min height to prevent most layout jumps when the text changes to "counting lines in <long-path>"
             "min-height": "calc(3 * var(--line-height-regular))",
             display: "flex",
-            "place-items": "center",
+            "align-items": "center",
             "text-align": "center",
             "text-wrap": "balance",
           }}
