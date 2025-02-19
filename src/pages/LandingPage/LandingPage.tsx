@@ -31,7 +31,7 @@ export default function LandingPage(props: LandingPageProps) {
       <div
         style={{
           // TODO: introduce a css prop for card border-radius and use that instead
-          "--glimmer-border-radius": "var(--spacing-xl)",
+          "--glimmer-border-radius": "var(--spacing-card-border-radius)",
           height: "min(var(--container-s), 100%)",
           width: "min(var(--container-l), 100%)",
           display: "flex",

@@ -113,6 +113,9 @@
     --spacing-3xl: 3rem; /* 48px */
     --spacing-4xl: 4.5rem; /* 72px */
 
+    --spacing-card-border-radius: var(--spacing-xl);
+    --spacing-card-padding: var(--spacing-xxl);
+
     --spacing-page-padding: var(--spacing-xxl);
     --spacing-page-gap: var(--spacing-l);
 

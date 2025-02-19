@@ -1,8 +1,8 @@
 @layer component {
   .card {
     background: var(--color-background);
-    border-radius: var(--spacing-xl);
-    padding: var(--spacing-xxl);
+    border-radius: var(--spacing-card-border-radius);
+    padding: var(--spacing-card-padding);
   }
 
   .page {
