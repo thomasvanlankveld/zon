@@ -43,56 +43,45 @@ export default function HomePage(props: HomePageProps) {
       <div
         style={{
           flex: "1 1 auto",
-          // TODO: Fix glow wrapper and content height into a single variable
           height: "min(var(--container-l), 100%)",
           width: "min(var(--container-3xl), 100%)",
+          display: "flex",
+          "flex-direction": "column",
+          "align-items": "center",
+          "justify-content": "space-evenly",
         }}
-        class="glow"
+        class="card glow"
       >
-        <div
+        <h1
+          class="heading-xxl"
           style={{
-            height: "min(var(--container-l), 100%)",
-            overflow: "auto",
             display: "flex",
-            "flex-direction": "column",
+            gap: "var(--spacing-xl)",
             "align-items": "center",
-            "justify-content": "space-evenly",
           }}
-          class="card"
         >
-          <h1
-            class="heading-xxl"
-            style={{
-              display: "flex",
-              gap: "var(--spacing-xl)",
-              "align-items": "center",
-            }}
-          >
-            <Logo size={70} />
-            {t("app.title")}
-          </h1>
+          <Logo size={70} />
+          {t("app.title")}
+        </h1>
 
-          <div>
-            <For each={Object.entries(props.reports)}>
-              {([path, root]) => (
-                <div class={styles["home-page__report-row"]}>
-                  <A href={Routes.Report.getLocation(path)}>{path}</A>
-                  <NumberOfLines numberOfLines={root.numberOfLines} />
-                  <button onClick={() => props.removeReport(path)}>
-                    Remove
-                  </button>
-                </div>
-              )}
-            </For>
-          </div>
-          <div>
-            <UploadButton
-              countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-            />
-            <Show when={props.countingPath}>
-              {(definedPath) => <CountingLines path={definedPath()} />}
-            </Show>
-          </div>
+        <div>
+          <For each={Object.entries(props.reports)}>
+            {([path, root]) => (
+              <div class={styles["home-page__report-row"]}>
+                <A href={Routes.Report.getLocation(path)}>{path}</A>
+                <NumberOfLines numberOfLines={root.numberOfLines} />
+                <button onClick={() => props.removeReport(path)}>Remove</button>
+              </div>
+            )}
+          </For>
+        </div>
+        <div>
+          <UploadButton
+            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+          />
+          <Show when={props.countingPath}>
+            {(definedPath) => <CountingLines path={definedPath()} />}
+          </Show>
         </div>
       </div>
     </main>
