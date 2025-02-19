@@ -53,7 +53,7 @@ export default function ReportList(props: ReportListProps) {
       })}
     >
       {/* <div style={{ display: "grid", padding: "var(--spacing-xs)" }}> */}
-      <ListHeading hasBottomSpacing={listRootHasContent()} />
+      <ListHeading hasBottomMargin={listRootHasContent()} />
       {/* </div> */}
       <Show when={listRootHasContent()}>
         <ReportTabList

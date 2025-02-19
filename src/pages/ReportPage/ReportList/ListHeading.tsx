@@ -11,7 +11,7 @@ import { ARROW } from "../../../styles/arrow";
 import ContentName from "./Content/ContentName";
 
 type ListHeadingProps = {
-  hasBottomSpacing: boolean;
+  hasBottomMargin: boolean;
 };
 
 export default function ListHeading(props: ListHeadingProps) {
@@ -68,9 +68,9 @@ export default function ListHeading(props: ListHeadingProps) {
       colors={getNodeTextColors(listRoot())}
       rowContainerClassList={{
         "heading-regular": true,
-        [styles["report-list__heading"]]: true,
+        [styles["report-list__heading--bottom-margin"]]: props.hasBottomMargin,
       }}
-      hasBottomSpacing={props.hasBottomSpacing}
+      hasPadding={false}
       rowTextComponent={"h2"}
       name={<ContentName node={listRoot()} />}
       nameBeforeContent={nameBeforeContent()}

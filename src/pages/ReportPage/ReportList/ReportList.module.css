@@ -12,14 +12,8 @@
   }
 }
 
-.report-list__heading {
-  &[data-has-bottom-spacing="true"] {
-    margin-bottom: var(--spacing-xl);
-  }
-  /* Extra class to win specificity */
-  &.report-list__row-wrapper[data-has-bottom-spacing="false"] {
-    padding: 0;
-  }
+.report-list__heading--bottom-margin {
+  margin-bottom: var(--spacing-xl);
 }
 
 .report-list__row-text {
@@ -50,12 +44,14 @@
 }
 
 .report-list__row-wrapper {
-  &:not(:first-child) {
-    padding-top: var(--spacing-xxs);
-  }
+  &[data-has-padding="true"] {
+    &:not(:first-child) {
+      padding-top: var(--spacing-xxs);
+    }
 
-  &:not(:last-child) {
-    padding-bottom: var(--spacing-xxs);
+    &:not(:last-child) {
+      padding-bottom: var(--spacing-xxs);
+    }
   }
 
   &:hover {
