@@ -30,7 +30,6 @@ export default function LandingPage(props: LandingPageProps) {
       <BackgroundConfig opacity={0.01} />
       <div
         style={{
-          // TODO: introduce a css prop for card border-radius and use that instead
           "--glimmer-border-radius": "var(--spacing-card-border-radius)",
           height: "min(var(--container-s), 100%)",
           width: "min(var(--container-l), 100%)",
