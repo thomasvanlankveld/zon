@@ -72,6 +72,30 @@
     --clr-text-regular: var(--clr-grey-800);
     --clr-text-muted: var(--clr-grey-600);
     --clr-text-extra-muted: var(--clr-grey-450);
+
+    --gdt-conic-rainbow: conic-gradient(
+      oklch(82% 0.307 287.621),
+      oklch(82% 0.303 311.851),
+      oklch(82% 0.297 336.653),
+      oklch(82% 0.287 0),
+      oklch(82% 0.277 14.4),
+      oklch(82% 0.267 28.8),
+      oklch(82% 0.26 43.2),
+      oklch(82% 0.257 57.6),
+      oklch(82% 0.26 72),
+      oklch(82% 0.267 86.4),
+      oklch(82% 0.277 101.059),
+      oklch(82% 0.287 118.186),
+      oklch(82% 0.289 134.126),
+      oklch(82% 0.276 143.4),
+      oklch(82% 0.265 152.213),
+      oklch(82% 0.264 173.496),
+      oklch(82% 0.273 206.098),
+      oklch(82% 0.287 237.686),
+      oklch(82% 0.299 258),
+      oklch(82% 0.306 269.866),
+      oklch(82% 0.307 287.621)
+    );
   }
 
   /* Semantic properties */
@@ -140,7 +164,6 @@
     --color-text-deemphasize: var(--clr-text-extra-muted);
 
     --color-cloudy-default: var(--color-white);
-    --color-glow-default: var(--color-white);
     --color-background: var(--clr-black);
 
     --color-diagram-root-regular: var(--clr-grey-260);
@@ -155,6 +178,9 @@
     --color-diagram-arc-group-regular: var(--clr-grey-500);
     --color-diagram-arc-group-active: var(--clr-grey-450);
     --color-diagram-arc-group-deemphasize: var(--clr-grey-220);
+
+    --gradient-glimmer-default: var(--gdt-conic-rainbow);
+    --gradient-glow-default: var(--gdt-conic-rainbow);
 
     /* Content */
     --content-arrow-before-left: "<-\00a0";

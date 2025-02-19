@@ -6,7 +6,6 @@ import UploadButton from "../../components/UploadButton/UploadButton";
 import CountingLines from "../../components/CountingLines";
 import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
-import { conicGradient } from "../../utils/zon";
 import Logo from "../../components/Logo";
 
 type LandingPageProps = {
@@ -26,9 +25,6 @@ export default function LandingPage(props: LandingPageProps) {
     }
   }
 
-  // TODO: Add a default value to "glow" class, so we can remove this setting
-  const gradient = conicGradient();
-
   return (
     <main
       style={{
@@ -45,10 +41,9 @@ export default function LandingPage(props: LandingPageProps) {
           // TODO: Fix glow wrapper and content height into a single variable
           height: "min(var(--container-s), 100%)",
           width: "min(var(--container-l), 100%)",
-          "--glow-background": gradient,
-          "--glow-border-radius": "var(--spacing-xl)",
+          "--glimmer-border-radius": "var(--spacing-xl)",
         }}
-        class="glow"
+        class="glimmer glow"
       >
         <div
           style={{

@@ -177,50 +177,50 @@
     }
   }
 
-  @property --glow-mask-position {
+  @property --glimmer-mask-position {
     syntax: "<percentage>";
     inherits: true;
     initial-value: 0%;
   }
 
-  @property --glow-mask-lightness {
+  @property --glimmer-mask-lightness {
     syntax: "<percentage>";
     inherits: true;
     initial-value: 0%;
   }
 
-  @keyframes glow-mask-flyby {
+  @keyframes glimmer-mask-flyby {
     0% {
-      --glow-mask-position: 0%;
-      --glow-mask-lightness: 0%;
+      --glimmer-mask-position: 0%;
+      --glimmer-mask-lightness: 0%;
     }
     50% {
-      --glow-mask-lightness: 100%;
+      --glimmer-mask-lightness: 100%;
     }
     100% {
-      --glow-mask-position: 100%;
-      --glow-mask-lightness: 0%;
+      --glimmer-mask-position: 100%;
+      --glimmer-mask-lightness: 0%;
     }
   }
 
-  .glow {
-    --glow-background: var(--color-glow-default);
-    --glow-edge-width: var(--spacing-3xs);
-    --glow-opacity: 0.6;
-    --glow-blur: 4rem;
-    --glow-border-radius: 0;
+  .glimmer {
+    --glimmer-background: var(--gradient-glimmer-default);
+    --glimmer-edge-width: var(--spacing-3xs);
+    --glimmer-opacity: 0.6;
+    --glimmer-blur: 4rem;
+    --glimmer-border-radius: 0;
 
-    --glow-mask: linear-gradient(
+    --glimmer-mask: linear-gradient(
       110deg in oklab,
-      black calc(var(--glow-mask-position) - 20%),
-      hsl(0 0 var(--glow-mask-lightness)) var(--glow-mask-position),
-      black calc(var(--glow-mask-position) + 20%)
+      black calc(var(--glimmer-mask-position) - 20%),
+      hsl(0 0 var(--glimmer-mask-lightness)) var(--glimmer-mask-position),
+      black calc(var(--glimmer-mask-position) + 20%)
     );
-    animation: glow-mask-flyby 0.5s normal forwards ease-in-out 1s;
+    animation: glimmer-mask-flyby 0.5s normal forwards ease-in-out 1s;
 
     /* animation: none;
     &:hover {
-      animation: glow-mask-flyby 0.5s normal forwards ease-in-out;
+      animation: glimmer-mask-flyby 0.5s normal forwards ease-in-out;
     } */
 
     position: relative;
@@ -230,24 +230,32 @@
       transform: translate3d(0, 0, 1px);
     }
 
-    /* TODO: Split glimmer into separate class */
     &::before {
       content: "";
       position: absolute;
-      border-radius: var(--glow-border-radius);
-      inset: calc(-1 * var(--glow-edge-width));
-      background: var(--glow-background);
+      border-radius: var(--glimmer-border-radius);
+      inset: calc(-1 * var(--glimmer-edge-width));
+      background: var(--glimmer-background);
       transform: translate3d(0, 0, -1px);
       pointer-events: none;
       opacity: 0.8;
-      mask-image: var(--glow-mask);
+      mask-image: var(--glimmer-mask);
       mask-mode: luminance;
-      mask-position: var(--glow-mask-position) var(--glow-mask-position);
+      mask-position: var(--glimmer-mask-position) var(--glimmer-mask-position);
     }
 
-    &.glow-hover:hover::before {
+    &.glimmer-hover:hover::before {
       mask-image: none;
     }
+  }
+
+  .glow {
+    --glow-background: var(--gradient-glow-default);
+    --glow-opacity: 0.6;
+    --glow-blur: 4rem;
+
+    position: relative;
+    transform-style: preserve-3d;
 
     &::after {
       content: "";
@@ -258,7 +266,6 @@
       pointer-events: none;
       opacity: var(--glow-opacity);
       filter: blur(var(--glow-blur));
-      /* mask: var(--glow-mask); */
     }
   }
 }
