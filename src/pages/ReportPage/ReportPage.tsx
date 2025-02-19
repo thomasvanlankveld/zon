@@ -8,6 +8,7 @@ import ReportList from "./ReportList/ReportList.tsx";
 import Breadcrumbs from "./Breadcrumbs/Breadcrumbs.tsx";
 import styles from "./ReportPage.module.css";
 import { ReportStoreProvider, useReportState } from "./ReportPage.state.tsx";
+import Logo from "../../components/Logo.tsx";
 
 type ReportPageProps = {
   root: Node;
@@ -42,10 +43,11 @@ function ReportPageContent() {
               "padding-block": "var(--spacing-m)",
               "padding-inline": "var(--spacing-l)",
             }}
-            class={styles["report-page__header-title"]}
+            class={`${styles["report-page__header-title"]} app-heading`}
             href={Routes.Home.Matcher}
           >
-            {/* Back */}
+            {/* TODO: screen-reader only text "back to overview"? */}
+            <Logo size={32} />
             {t("app.title")}
           </A>
         </h1>

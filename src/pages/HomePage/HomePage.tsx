@@ -44,14 +44,7 @@ export default function HomePage(props: HomePageProps) {
         }}
         class="card glow"
       >
-        <h1
-          class="heading-xxl"
-          style={{
-            display: "flex",
-            gap: "var(--spacing-xl)",
-            "align-items": "center",
-          }}
-        >
+        <h1 class="app-heading heading-xxl">
           <Logo size={70} />
           {t("app.title")}
         </h1>

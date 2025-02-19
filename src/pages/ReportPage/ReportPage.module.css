@@ -6,7 +6,7 @@
 .report-page__header-title {
   &:hover {
     &::before {
-      content: var(--content-arrow-before-left);
+      content: var(--content-arrow-left);
     }
   }
 }

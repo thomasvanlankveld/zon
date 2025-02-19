@@ -35,14 +35,7 @@ export default function LandingPage(props: LandingPageProps) {
         }}
         class={`${styles["landing-page__card"]} card glimmer glow`}
       >
-        <h1
-          class="heading-xxl"
-          style={{
-            display: "flex",
-            gap: "var(--spacing-xl)",
-            "align-items": "center",
-          }}
-        >
+        <h1 class="app-heading heading-xxl">
           <Logo size={70} />
           {t("app.title")}
         </h1>

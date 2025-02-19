@@ -186,6 +186,7 @@
     --gradient-glow-default: var(--gdt-conic-rainbow);
 
     /* Content */
+    --content-arrow-left: "<-";
     --content-arrow-before-left: "<-\00a0";
     --content-arrow-before-right: "->\00a0";
     --content-arrow-after-down: "\00a0↓";
