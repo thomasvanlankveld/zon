@@ -27,34 +27,38 @@ export default function LandingPage(props: LandingPageProps) {
   }
 
   return (
-    <main class="page" data-page-items="center">
+    <div class="page" data-page-items="center">
       <BackgroundConfig opacity={0.01} />
       <div
         style={{
           "--glimmer-border-radius": "var(--spacing-card-border-radius)",
         }}
-        class={`${styles["landing-page__card"]} card glimmer glow`}
+        class={`${styles["landing-page__card"]} ${styles["landing-page__wrapper"]} card glimmer glow`}
       >
-        <h1 class="app-heading heading-xxl">
-          <Logo size={70} />
-          {t("app.title")}
-        </h1>
+        <header>
+          <h1 class="app-heading heading-xxl">
+            <Logo size={70} />
+            {t("app.title")}
+          </h1>
+        </header>
 
-        <span class={styles["landing-page__welcome-text"]}>
-          <Show
-            when={props.countingPath}
-            fallback={t("landing-page.welcome-message")}
-          >
-            {(definedPath) => <CountingLines path={definedPath()} />}
-          </Show>
-        </span>
+        <main class={styles["landing-page__wrapper"]}>
+          <span class={styles["landing-page__welcome-text"]}>
+            <Show
+              when={props.countingPath}
+              fallback={t("landing-page.welcome-message")}
+            >
+              {(definedPath) => <CountingLines path={definedPath()} />}
+            </Show>
+          </span>
 
-        <div>
-          <UploadButton
-            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-          />
-        </div>
+          <div>
+            <UploadButton
+              countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+            />
+          </div>
+        </main>
       </div>
-    </main>
+    </div>
   );
 }
