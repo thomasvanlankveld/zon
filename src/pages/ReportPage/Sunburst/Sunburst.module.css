@@ -1,7 +1,7 @@
 .sunburst__arc {
   cursor: pointer;
-  stroke: rgba(0, 0, 0, 0.3);
-  stroke-width: var(--spacing-4xs);
+  stroke: var(--color-background);
+  stroke-width: 1px;
   fill-rule: evenodd;
   fill: var(--color-arc-regular);
 
