@@ -1,6 +1,7 @@
 import { A } from "@solidjs/router";
 import Routes from "../../routes.ts";
 import { BackgroundConfig } from "../../components/Background/Background.tsx";
+import Logo from "../../components/Logo.tsx";
 import { type Node } from "../../utils/zon";
 import { useI18n } from "../../utils/i18n.tsx";
 import Sunburst from "./Sunburst/Sunburst.tsx";
@@ -8,7 +9,6 @@ import ReportList from "./ReportList/ReportList.tsx";
 import Breadcrumbs from "./Breadcrumbs/Breadcrumbs.tsx";
 import styles from "./ReportPage.module.css";
 import { ReportStoreProvider, useReportState } from "./ReportPage.state.tsx";
-import Logo from "../../components/Logo.tsx";
 
 type ReportPageProps = {
   root: Node;
