@@ -1,3 +1,31 @@
+/* Can't put padding and background here, because then it would cover the entire min-height */
+.breadcrumbs__space {
+  display: inline-grid;
+  align-content: start;
+  justify-content: start;
+
+  /* `min-height` prevents layout shifts when hovering arc segments  */
+  min-height: calc(2 * var(--line-height-regular) + 2 * var(--spacing-m));
+}
+
+/* TODO: Maybe move this into a generic util? */
+.breadcrumbs__wrapper {
+  border-radius: var(--spacing-m);
+  padding-block: var(--spacing-m);
+  padding-inline: var(--spacing-l);
+  background: var(--color-background);
+}
+
+/* Can't put padding and background here, because then you'd see the text spill out after ellipsis */
+.breadcrumbs__content {
+  display: -webkit-box;
+  max-height: calc(2 * var(--line-height-regular));
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .breadcrumbs__breadcrumb-button {
   cursor: pointer;
   color: var(--color-breadcrumb-regular);
