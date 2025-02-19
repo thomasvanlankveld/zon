@@ -31,34 +31,40 @@ export default function HomePage(props: HomePageProps) {
   }
 
   return (
-    <main class="page" data-page-items="center">
+    <div class="page" data-page-items="center">
       <BackgroundConfig opacity={0.01} />
-      <div class={`${styles["home-page__card"]} card glow`}>
-        <h1 class="app-heading heading-xxl">
+      <div
+        class={`${styles["home-page__card"]} ${styles["home-page__wrapper"]} card glow`}
+      >
+        <header class="app-heading heading-xxl">
           <Logo size={70} />
-          {t("app.title")}
-        </h1>
+          <h1>{t("app.title")}</h1>
+        </header>
 
-        <div>
-          <For each={Object.entries(props.reports)}>
-            {([path, root]) => (
-              <div class={styles["home-page__report-row"]}>
-                <A href={Routes.Report.getLocation(path)}>{path}</A>
-                <NumberOfLines numberOfLines={root.numberOfLines} />
-                <button onClick={() => props.removeReport(path)}>Remove</button>
-              </div>
-            )}
-          </For>
-        </div>
-        <div>
-          <UploadButton
-            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-          />
-          <Show when={props.countingPath}>
-            {(definedPath) => <CountingLines path={definedPath()} />}
-          </Show>
-        </div>
+        <main class={styles["home-page__wrapper"]}>
+          <div>
+            <For each={Object.entries(props.reports)}>
+              {([path, root]) => (
+                <div class={styles["home-page__report-row"]}>
+                  <A href={Routes.Report.getLocation(path)}>{path}</A>
+                  <NumberOfLines numberOfLines={root.numberOfLines} />
+                  <button onClick={() => props.removeReport(path)}>
+                    Remove
+                  </button>
+                </div>
+              )}
+            </For>
+          </div>
+          <div>
+            <UploadButton
+              countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+            />
+            <Show when={props.countingPath}>
+              {(definedPath) => <CountingLines path={definedPath()} />}
+            </Show>
+          </div>
+        </main>
       </div>
-    </main>
+    </div>
   );
 }
