@@ -33,17 +33,7 @@ export default function HomePage(props: HomePageProps) {
   return (
     <main class="page" data-page-items="center">
       <BackgroundConfig opacity={0.01} />
-      <div
-        style={{
-          height: "min(var(--container-l), 100%)",
-          width: "min(var(--container-3xl), 100%)",
-          display: "flex",
-          "flex-direction": "column",
-          "align-items": "center",
-          "justify-content": "space-evenly",
-        }}
-        class="card glow"
-      >
+      <div class={`${styles["home-page__card"]} card glow`}>
         <h1 class="app-heading heading-xxl">
           <Logo size={70} />
           {t("app.title")}
