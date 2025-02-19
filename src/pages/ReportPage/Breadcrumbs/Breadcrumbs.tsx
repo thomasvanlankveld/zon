@@ -71,10 +71,12 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
 
   return (
     <nav
+      // Can't block class on breadcrumbs__space element, because then it would cover the entire min-height
       class={`${styles["breadcrumbs__space"]} ${props.class}`}
       aria-label={t("breadcrumbs.label")}
     >
       <div class="block">
+        {/* Can't put block class on breadcrumbs__content element, because you'd see the text spill out after ellipsis */}
         <div class={styles["breadcrumbs__content"]}>
           {/* <A
           style={{ color: "var(--color-text-group-regular)" }}
