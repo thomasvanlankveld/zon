@@ -1,5 +1,3 @@
-// import { A } from "@solidjs/router";
-// import Routes from "../../../routes.ts";
 import { createMemo, createSignal, For, Show } from "solid-js";
 import {
   getNodesAlongPath,
@@ -78,14 +76,6 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
       <div class="block">
         {/* Can't put block class on breadcrumbs__content element, because you'd see the text spill out after ellipsis */}
         <div class={styles["breadcrumbs__content"]}>
-          {/* <A
-          style={{ color: "var(--color-text-group-regular)" }}
-          href={Routes.Home.Matcher}
-        >
-          back
-        </A> */}
-
-          {/* <div> */}
           <For each={nodes()}>
             {(node, i) => {
               const colors = getNodeTextColors(node);
@@ -116,7 +106,6 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
               );
             }}
           </For>
-          {/* </div> */}
         </div>
       </div>
     </nav>

@@ -3,8 +3,6 @@
   margin-bottom: var(--spacing-s);
   column-gap: var(--spacing-l);
 
-  /* column-gap: var(--spacing-xs); */
-
   justify-content: end;
   flex-direction: row-reverse;
   flex-wrap: wrap;
@@ -14,10 +12,6 @@
   color: var(--color-text-deemphasize);
   padding-block: var(--spacing-xxs);
   border-bottom: 0.5px solid transparent;
-
-  /* margin-inline: var(--spacing-xs);
-  padding-inline: var(--spacing-m);
-  padding-block: var(--spacing-s); */
 
   &:hover {
     color: var(--color-text-hover-focus);
@@ -30,10 +24,6 @@
   &[data-selected="true"] {
     color: var(--color-text-regular);
     border-bottom-color: var(--color-text-active);
-
-    /* outline: 1px solid var(--clr-grey-150);
-    border-radius: var(--spacing-s);
-    background-color: var(--clr-grey-060); */
 
     &:hover {
       color: var(--color-text-hover-focus);
@@ -48,12 +38,6 @@
 }
 
 .tabpanel {
-  /* border: 1px solid var(--clr-grey-150);
-  padding-block: var(--spacing-m);
-  padding-inline: var(--spacing-l);
-  border-radius: var(--spacing-m);
-  background-color: var(--clr-grey-060); */
-
   &[data-selected="false"] {
     display: none;
   }

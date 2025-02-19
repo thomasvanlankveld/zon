@@ -83,100 +83,6 @@
   }
 
   /* Decoration */
-  /* @property --cloudy-opacity {
-    syntax: "<number>";
-    inherits: true;
-    initial-value: 0.01;
-  }
-
-  @keyframes cloudy-opacity-pulse {
-    0%,
-    100% {
-      --cloudy-opacity: 0.02;
-    }
-    50% {
-      --cloudy-opacity: 0.12;
-    }
-  }
-
-  @property --cloudy-mask-position-horizontal {
-    syntax: "<percentage>";
-    inherits: true;
-    initial-value: 50%;
-  }
-  @property --cloudy-mask-position-vertical {
-    syntax: "<percentage>";
-    inherits: true;
-    initial-value: 50%;
-  }
-
-  @keyframes cloudy-mask-rotation {
-    0%,
-    100% {
-      --cloudy-mask-position-horizontal: 50%;
-      --cloudy-mask-position-vertical: 25%;
-    }
-    25% {
-      --cloudy-mask-position-horizontal: 75%;
-      --cloudy-mask-position-vertical: 50%;
-    }
-    50% {
-      --cloudy-mask-position-horizontal: 50%;
-      --cloudy-mask-position-vertical: 75%;
-    }
-    75% {
-      --cloudy-mask-position-horizontal: 25%;
-      --cloudy-mask-position-vertical: 50%;
-    }
-  } */
-
-  /* @property --cloudy-blur {
-    syntax: "<length>";
-    inherits: true;
-    initial-value: 0;
-  } */
-
-  /* TODO: Perhaps we can get rid of "cloudy" altogether?  */
-  .cloudy {
-    --cloudy-background: var(--color-cloudy-default);
-    --cloudy-blur: 4rem;
-    --cloudy-opacity: 0.1;
-
-    /* --cloudy-mask: radial-gradient(
-      circle at var(--cloudy-mask-position-horizontal)
-        var(--cloudy-mask-position-vertical),
-      rgba(0, 0, 0, 0.6),
-      rgba(0, 0, 0, 0.4),
-      rgba(0, 0, 0, 0.2),
-      rgba(0, 0, 0, 0.1),
-      rgba(0, 0, 0, 0.05) 100%
-    ); */
-
-    /* TODO: Animation part should probably be enabled with another class, so only the landing page uses it */
-    /* animation:
-      cloudy-mask-rotation linear 60s infinite,
-      cloudy-opacity-pulse ease-in-out 21s infinite; */
-
-    position: relative;
-    transform-style: preserve-3d;
-
-    & > * {
-      transform: translate3d(0, 0, 1px);
-    }
-
-    &::before {
-      content: "";
-      position: absolute;
-      pointer-events: none;
-      transform: translate3d(0, 0, -1px);
-      inset: 0;
-      background: var(--cloudy-background);
-      opacity: var(--cloudy-opacity);
-      filter: blur(var(--cloudy-blur));
-      /* mask: var(--cloudy-mask); */
-    }
-  }
-
   @property --glimmer-mask-position {
     syntax: "<percentage>";
     inherits: true;
@@ -217,11 +123,6 @@
       black calc(var(--glimmer-mask-position) + 20%)
     );
     animation: glimmer-mask-flyby 0.5s normal forwards ease-in-out 1s;
-
-    /* animation: none;
-    &:hover {
-      animation: glimmer-mask-flyby 0.5s normal forwards ease-in-out;
-    } */
 
     position: relative;
     transform-style: preserve-3d;

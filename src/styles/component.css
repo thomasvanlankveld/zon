@@ -39,30 +39,4 @@
       gap: var(--spacing-page-gap);
     }
   }
-
-  /* .glow-inset {
-    position: relative;
-    transform-style: preserve-3d;
-  } */
-
-  /* .glow-inset::before {
-    content: "";
-    position: absolute;
-    inset: -10rem;
-    background: var(--glow-background);
-    filter: blur(1rem);
-    transform: translate3d(0, 0, -1px);
-    pointer-events: none;
-  } */
-
-  /* .glow-inset::after {
-    content: "";
-    position: absolute;
-    inset: -8rem; */
-  /* TODO: See if this can be transparent, or otherwise promote this glow to something at the app level */
-  /* background: black;
-    filter: blur(6rem);
-    transform: translate3d(0, 0, -1px);
-    pointer-events: none;
-  } */
 }

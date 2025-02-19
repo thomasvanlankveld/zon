@@ -1,9 +1,5 @@
 import { createMemo, createSignal, Show } from "solid-js";
-import {
-  getDisplayName,
-  isFile,
-  // rainbow
-} from "../../../utils/zon";
+import { getDisplayName, isFile } from "../../../utils/zon";
 import { useI18n } from "../../../utils/i18n";
 import { useReportState } from "../ReportPage.state";
 import styles from "./ReportList.module.css";
@@ -20,28 +16,10 @@ type ReportListProps = {
 
 export default function ReportList(props: ReportListProps) {
   const { t } = useI18n();
-  const {
-    // reportRoot,
-    listRoot,
-  } = useReportState();
+  const { listRoot } = useReportState();
   const [selectedTab, setSelectedTab] = createSignal<TabKey>(TabKey.Content);
 
   const listRootHasContent = createMemo(() => !isFile(listRoot()));
-
-  // const numberOfColors = 16;
-  // const step = () =>
-  //   listRoot().numberOfLines / reportRoot().numberOfLines / numberOfColors;
-
-  // function getPosition(i: number) {
-  //   return listRoot().firstLine / reportRoot().numberOfLines + i * step();
-  // }
-
-  // const colors = () =>
-  //   // Add one so that the first color is the same as the last
-  //   Array.from({ length: numberOfColors + 1 })
-  //     .fill(null)
-  //     .map((_, i) => rainbow(getPosition(i)).regular);
-  // const linearGradient = () => `linear-gradient(${colors().join(", ")})`;
 
   // TODO: Maybe this shouldn't be a nav? Check https://a11y-style-guide.com/style-guide/section-navigation.html
   return (
@@ -52,9 +30,7 @@ export default function ReportList(props: ReportListProps) {
         name: getDisplayName(listRoot().name, t("group-name")),
       })}
     >
-      {/* <div style={{ display: "grid", padding: "var(--spacing-xs)" }}> */}
       <ListHeading hasBottomMargin={listRootHasContent()} />
-      {/* </div> */}
       <Show when={listRootHasContent()}>
         <ReportTabList
           selectedTab={selectedTab()}
