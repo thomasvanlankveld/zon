@@ -26,17 +26,11 @@ export default function LandingPage(props: LandingPageProps) {
   }
 
   return (
-    <main
-      style={{
-        "min-height": "100dvh",
-        display: "grid",
-        "place-items": "center",
-        padding: "var(--spacing-xxl)",
-      }}
-    >
+    <main class="page" data-page-items="center">
       <BackgroundConfig opacity={0.01} />
       <div
         style={{
+          // TODO: introduce a css prop for card border-radius and use that instead
           "--glimmer-border-radius": "var(--spacing-xl)",
           height: "min(var(--container-s), 100%)",
           width: "min(var(--container-l), 100%)",

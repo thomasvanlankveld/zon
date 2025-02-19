@@ -27,7 +27,7 @@ function ReportPageContent() {
   const { reportRoot, diagramRoot } = useReportState();
 
   return (
-    <main class={`${styles["report-page"]} page`}>
+    <main class={`${styles["report-page"]} page`} data-page-items="stretch">
       <BackgroundConfig
         opacity={0.2}
         startPosition={diagramRoot().firstLine / reportRoot().numberOfLines}

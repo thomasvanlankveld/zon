@@ -31,14 +31,7 @@ export default function HomePage(props: HomePageProps) {
   }
 
   return (
-    <main
-      style={{
-        "min-height": "100dvh",
-        display: "grid",
-        "place-items": "center",
-        padding: "var(--spacing-xxl)",
-      }}
-    >
+    <main class="page" data-page-items="center">
       <BackgroundConfig opacity={0.01} />
       <div
         style={{

@@ -5,14 +5,21 @@
     padding: var(--spacing-xxl);
   }
 
-  /* TODO: Get rid of this? Clean it up? */
   .page {
     height: 100dvh;
     padding: var(--spacing-page-padding);
+
     display: grid;
-    gap: var(--spacing-page-gap);
-    align-items: stretch;
-    justify-items: stretch;
+    overflow: hidden;
+
+    &[data-page-items="center"] {
+      place-items: center;
+    }
+
+    &[data-page-items="stretch"] {
+      place-items: stretch;
+      gap: var(--spacing-page-gap);
+    }
   }
 
   /* .glow-inset {
