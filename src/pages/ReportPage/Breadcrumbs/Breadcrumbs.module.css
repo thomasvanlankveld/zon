@@ -1,9 +1,28 @@
+.breadcrumbs__space {
+  display: inline-grid;
+  align-content: start;
+  justify-content: start;
+
+  /* `min-height` prevents layout shifts when hovering arc segments  */
+  min-height: calc(2 * var(--line-height-regular) + 2 * var(--spacing-m));
+}
+
+/* Cut off after two lines to prevent layout shifts when hovering arc segments */
+.breadcrumbs__content {
+  display: -webkit-box;
+  max-height: calc(2 * var(--line-height-regular));
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .breadcrumbs__breadcrumb-button {
   cursor: pointer;
   color: var(--color-breadcrumb-regular);
 
-  &:not(:first-child) {
-    padding-left: var(--spacing-s);
+  &:not(:last-child) {
+    padding-right: var(--spacing-s);
   }
 
   .breadcrumbs__breadcrumb-separator {

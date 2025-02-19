@@ -10,7 +10,11 @@ import ListRow from "./ListRow/ListRow";
 import { ARROW } from "../../../styles/arrow";
 import ContentName from "./Content/ContentName";
 
-export default function ListHeading() {
+type ListHeadingProps = {
+  hasBottomMargin: boolean;
+};
+
+export default function ListHeading(props: ListHeadingProps) {
   const {
     reportRoot,
     navigate,
@@ -64,8 +68,9 @@ export default function ListHeading() {
       colors={getNodeTextColors(listRoot())}
       rowContainerClassList={{
         "heading-regular": true,
-        [styles["report-list__heading"]]: true,
+        [styles["report-list__heading--bottom-margin"]]: props.hasBottomMargin,
       }}
+      hasPadding={false}
       rowTextComponent={"h2"}
       name={<ContentName node={listRoot()} />}
       nameBeforeContent={nameBeforeContent()}

@@ -1,5 +1,19 @@
-.report-list__heading {
-  margin-bottom: var(--spacing-l);
+.report-list__card {
+  display: grid;
+  grid-template-rows: min-content min-content 1fr;
+  gap: var(--spacing-xs);
+
+  &[data-heading-only="true"] {
+    grid-template-rows: min-content;
+  }
+
+  &:hover .report-list__item-underline {
+    opacity: 1;
+  }
+}
+
+.report-list__heading--bottom-margin {
+  margin-bottom: var(--spacing-xl);
 }
 
 .report-list__row-text {
@@ -15,7 +29,7 @@
 
 .report-list__item-underline {
   background-color: var(--color-row-regular);
-  height: var(--spacing-4xs);
+  height: 1px;
   opacity: 0.4;
 }
 
@@ -23,21 +37,21 @@
   content: var(--before-content);
 }
 
-.report-list__list {
+.report-list__tab-panel {
   display: grid;
-
-  &:hover .report-list__item-underline {
-    opacity: 1;
-  }
+  grid-auto-rows: min-content;
+  overflow-y: auto;
 }
 
 .report-list__row-wrapper {
-  &:not(:first-child) {
-    padding-top: var(--spacing-3xs);
-  }
+  &[data-has-padding="true"] {
+    &:not(:first-child) {
+      padding-top: var(--spacing-xxs);
+    }
 
-  &:not(:last-child) {
-    padding-bottom: var(--spacing-3xs);
+    &:not(:last-child) {
+      padding-bottom: var(--spacing-xxs);
+    }
   }
 
   &:hover {

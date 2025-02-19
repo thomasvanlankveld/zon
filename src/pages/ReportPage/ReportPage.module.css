@@ -1,24 +1,21 @@
 .report-page {
   grid-template-rows: min-content min-content 1fr;
   grid-template-columns: 7fr 5fr;
-  overflow: hidden;
 }
 
 .report-page__header-title {
   &:hover {
     &::before {
-      content: var(--content-arrow-before-left);
+      content: var(--content-arrow-left);
     }
   }
 }
 
 .report-page__breadcrumbs {
   grid-column: span 2;
-  min-height: calc(2 * var(--line-height-regular));
-  max-height: calc(2 * var(--line-height-regular));
-  overflow: hidden;
-  display: -webkit-box;
-  line-clamp: 2;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+}
+
+.report-page__report-list {
+  align-self: start;
+  max-height: 100%;
 }

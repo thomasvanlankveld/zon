@@ -33,7 +33,7 @@ export default function ContentPanel(props: ContentPanelProps) {
 
   return (
     <ReportTabPanel
-      class={styles["report-list__list"]}
+      class={styles["report-list__tab-panel"]}
       tab={TabKey.Content}
       selectedTab={props.selectedTab}
     >

@@ -1,5 +1,10 @@
-.home-page {
-  grid-template-rows: min-content min-content 1fr;
+.home-page__card {
+  height: min(var(--container-l), 100%);
+  width: min(var(--container-3xl), 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 .home-page__report-row {

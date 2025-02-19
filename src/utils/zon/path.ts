@@ -4,7 +4,7 @@ import { GROUP_SEGMENT, type Path, type SegmentName } from "./types.ts";
  * Get the last segment
  */
 export function getLastSegment(reportPath: string): string {
-  const reportPathSegments = reportPath.split("/");
+  const reportPathSegments = getPathArray(reportPath);
 
   return reportPathSegments[reportPathSegments.length - 1];
 }
@@ -18,6 +18,13 @@ export function getDisplayName(name: SegmentName, groupName: string): string {
   }
 
   return name;
+}
+
+/**
+ * Parse a path string into a path array
+ */
+export function getPathArray(pathStr: string): string[] {
+  return pathStr.split("/");
 }
 
 /**

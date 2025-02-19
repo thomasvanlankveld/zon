@@ -33,7 +33,7 @@
     --fw-m: 400;
 
     --fs-l: 1.25rem; /* 20px */
-    --lh-l: 1.5rem;
+    --lh-l: 1.75rem;
     --fw-l: 400;
 
     --fs-xl: 1.5rem; /* 24px */
@@ -62,6 +62,7 @@
     --clr-grey-220: hsl(75, 4%, 22%);
     --clr-grey-150: hsl(75, 4%, 15%);
     --clr-grey-100: hsl(75, 4%, 10%);
+    --clr-grey-060: hsl(75, 4%, 06%);
 
     --clr-blue-700: hsl(221, 67%, 70%);
     --clr-blue-500: hsl(221, 67%, 54%);
@@ -71,6 +72,30 @@
     --clr-text-regular: var(--clr-grey-800);
     --clr-text-muted: var(--clr-grey-600);
     --clr-text-extra-muted: var(--clr-grey-450);
+
+    --gdt-conic-rainbow: conic-gradient(
+      oklch(82% 0.307 287.621),
+      oklch(82% 0.303 311.851),
+      oklch(82% 0.297 336.653),
+      oklch(82% 0.287 0),
+      oklch(82% 0.277 14.4),
+      oklch(82% 0.267 28.8),
+      oklch(82% 0.26 43.2),
+      oklch(82% 0.257 57.6),
+      oklch(82% 0.26 72),
+      oklch(82% 0.267 86.4),
+      oklch(82% 0.277 101.059),
+      oklch(82% 0.287 118.186),
+      oklch(82% 0.289 134.126),
+      oklch(82% 0.276 143.4),
+      oklch(82% 0.265 152.213),
+      oklch(82% 0.264 173.496),
+      oklch(82% 0.273 206.098),
+      oklch(82% 0.287 237.686),
+      oklch(82% 0.299 258),
+      oklch(82% 0.306 269.866),
+      oklch(82% 0.307 287.621)
+    );
   }
 
   /* Semantic properties */
@@ -83,12 +108,35 @@
     --spacing-s: 0.5rem; /* 8px */
     --spacing-m: 0.75rem; /* 12px */
     --spacing-l: 1rem; /* 16px */
-    --spacing-xl: 1.5rem; /* 20px */
-    --spacing-xxl: 2rem; /* 24px */
-    --spacing-3xl: 3rem; /* 36px */
+    --spacing-xl: 1.5rem; /* 24px */
+    --spacing-xxl: 2rem; /* 32px */
+    --spacing-3xl: 3rem; /* 48px */
+    --spacing-4xl: 4.5rem; /* 72px */
+
+    --spacing-block-border-radius: var(--spacing-m);
+    --spacing-block-padding-block: var(--spacing-m);
+    --spacing-block-padding-inline: var(--spacing-l);
+
+    --spacing-card-border-radius: var(--spacing-xl);
+    --spacing-card-padding: var(--spacing-xxl);
 
     --spacing-page-padding: var(--spacing-xxl);
     --spacing-page-gap: var(--spacing-l);
+
+    /* Sizing */
+    --container-3xs: 16rem; /* (256px) */
+    --container-2xs: 18rem; /* (288px) */
+    --container-xs: 20rem; /* (320px) */
+    --container-s: 24rem; /* (384px) */
+    --container-m: 28rem; /* (448px) */
+    --container-l: 32rem; /* (512px) */
+    --container-xl: 36rem; /* (576px) */
+    --container-2xl: 42rem; /* (672px) */
+    --container-3xl: 48rem; /* (768px) */
+    --container-3xl: 48rem; /* (768px) */
+    --container-4xl: 56rem; /* (896px) */
+    --container-5xl: 64rem; /* (1024px) */
+    --container-6xl: 72rem; /* (1152px) */
 
     /* Typography */
     --font-family-regular: "Fira Code";
@@ -137,7 +185,11 @@
     --color-diagram-arc-group-active: var(--clr-grey-450);
     --color-diagram-arc-group-deemphasize: var(--clr-grey-220);
 
+    --gradient-glimmer-default: var(--gdt-conic-rainbow);
+    --gradient-glow-default: var(--gdt-conic-rainbow);
+
     /* Content */
+    --content-arrow-left: "<-";
     --content-arrow-before-left: "<-\00a0";
     --content-arrow-before-right: "->\00a0";
     --content-arrow-after-down: "\00a0↓";

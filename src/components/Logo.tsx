@@ -1,5 +1,5 @@
 import { createMemo, Setter } from "solid-js";
-import { rainbow } from "../utils/zon";
+import { conicGradient } from "../utils/zon";
 
 export type Dimensions = {
   x0: number;
@@ -14,7 +14,6 @@ type LogoProps = {
 
 export default function Logo(props: LogoProps) {
   const size = () => props.size ?? 38;
-  const numberOfColors = 20;
 
   const canvasSize = () => size();
   const circleSize = createMemo(() => size() * (props.circleSizeRatio ?? 1));
@@ -24,19 +23,6 @@ export default function Logo(props: LogoProps) {
   const innerRadius = createMemo(() => outerRadius() / 2);
 
   const thickness = createMemo(() => outerRadius() - innerRadius());
-
-  const step = 1 / numberOfColors;
-
-  function getPosition(i: number) {
-    return i * step;
-  }
-
-  const colors = () =>
-    // Add one so that the first color is the same as the last
-    Array.from({ length: numberOfColors + 1 })
-      .fill(null)
-      .map((_, i) => rainbow(getPosition(i)).regular);
-  const conicGradient = () => `conic-gradient(${colors().join(", ")})`;
 
   const d = () => {
     const firstMove = `M 0 ${-outerRadius()}`;
@@ -56,7 +42,7 @@ export default function Logo(props: LogoProps) {
       height={canvasSize()}
       ref={props.setSvg}
     >
-      <clipPath id="clip">
+      <clipPath id="logo-clip-path">
         <path d={d()} />
       </clipPath>
 
@@ -65,14 +51,13 @@ export default function Logo(props: LogoProps) {
         y={-0.5 * canvasSize()}
         width={canvasSize()}
         height={canvasSize()}
-        clip-path="url(#clip)"
+        clip-path="url(#logo-clip-path)"
       >
         <div
           style={{
             width: `${canvasSize()}px`,
             height: `${canvasSize()}px`,
-            // background: "conic-gradient(red, orange, yellow, green, blue)",
-            background: conicGradient(),
+            background: conicGradient({ numberOfColors: 20 }),
           }}
           xmlns="http://www.w3.org/1999/xhtml"
         />

@@ -81,4 +81,92 @@
     white-space: nowrap;
     width: 1px;
   }
+
+  /* Decoration */
+  @property --glimmer-mask-position {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 0%;
+  }
+
+  @property --glimmer-mask-lightness {
+    syntax: "<percentage>";
+    inherits: true;
+    initial-value: 0%;
+  }
+
+  @keyframes glimmer-mask-flyby {
+    0% {
+      --glimmer-mask-position: 0%;
+      --glimmer-mask-lightness: 0%;
+    }
+    50% {
+      --glimmer-mask-lightness: 100%;
+    }
+    100% {
+      --glimmer-mask-position: 100%;
+      --glimmer-mask-lightness: 0%;
+    }
+  }
+
+  .glimmer {
+    --glimmer-background: var(--gradient-glimmer-default);
+    --glimmer-edge-width: var(--spacing-3xs);
+    --glimmer-opacity: 0.6;
+    --glimmer-blur: 4rem;
+    --glimmer-border-radius: 0;
+
+    --glimmer-mask: linear-gradient(
+      110deg in oklab,
+      black calc(var(--glimmer-mask-position) - 20%),
+      hsl(0 0 var(--glimmer-mask-lightness)) var(--glimmer-mask-position),
+      black calc(var(--glimmer-mask-position) + 20%)
+    );
+    animation: glimmer-mask-flyby 0.5s normal forwards ease-in-out 1s;
+
+    position: relative;
+    transform-style: preserve-3d;
+
+    & > * {
+      transform: translate3d(0, 0, 1px);
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      border-radius: var(--glimmer-border-radius);
+      inset: calc(-1 * var(--glimmer-edge-width));
+      background: var(--glimmer-background);
+      transform: translate3d(0, 0, -1px);
+      pointer-events: none;
+      opacity: 0.8;
+      mask-image: var(--glimmer-mask);
+      mask-mode: luminance;
+      mask-position: var(--glimmer-mask-position) var(--glimmer-mask-position);
+    }
+
+    &.glimmer-hover:hover::before {
+      mask-image: none;
+    }
+  }
+
+  .glow {
+    --glow-background: var(--gradient-glow-default);
+    --glow-opacity: 0.6;
+    --glow-blur: 4rem;
+
+    position: relative;
+    transform-style: preserve-3d;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0rem;
+      background: var(--glow-background);
+      transform: translate3d(0, 0, -1px);
+      pointer-events: none;
+      opacity: var(--glow-opacity);
+      filter: blur(var(--glow-blur));
+    }
+  }
 }

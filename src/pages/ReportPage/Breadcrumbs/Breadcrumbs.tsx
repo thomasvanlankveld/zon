@@ -68,35 +68,46 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
   }
 
   return (
-    <nav class={props.class} aria-label={t("breadcrumbs.label")}>
-      <For each={nodes()}>
-        {(node, i) => {
-          const colors = getNodeTextColors(node);
+    <nav
+      // Can't block class on breadcrumbs__space element, because then it would cover the entire min-height
+      class={`${styles["breadcrumbs__space"]} ${props.class}`}
+      aria-label={t("breadcrumbs.label")}
+    >
+      <div class="block">
+        {/* Can't put block class on breadcrumbs__content element, because you'd see the text spill out after ellipsis */}
+        <div class={styles["breadcrumbs__content"]}>
+          <For each={nodes()}>
+            {(node, i) => {
+              const colors = getNodeTextColors(node);
 
-          return (
-            <button
-              {...(i() === lastNodeIndex() ? { "aria-current": "page" } : {})}
-              style={{
-                "--color-breadcrumb-regular": colors.regular,
-                "--color-breadcrumb-active": colors.active,
-                "--color-breadcrumb-deemphasize": colors.deemphasize,
-              }}
-              class={styles["breadcrumbs__breadcrumb-button"]}
-              data-deemphasize={deemphasize(node)}
-              onMouseEnter={[setHoverPath, node.path]}
-              onMouseLeave={[setHoverPath, null]}
-              onClick={[navigate, node.targetPath]}
-            >
-              <span>{getDisplayName(node.name, t("group-name"))}</span>
-              <Show when={isFolder(node)}>
-                <span class={styles["breadcrumbs__breadcrumb-separator"]}>
-                  /
-                </span>
-              </Show>
-            </button>
-          );
-        }}
-      </For>
+              return (
+                <button
+                  {...(i() === lastNodeIndex()
+                    ? { "aria-current": "page" }
+                    : {})}
+                  style={{
+                    "--color-breadcrumb-regular": colors.regular,
+                    "--color-breadcrumb-active": colors.active,
+                    "--color-breadcrumb-deemphasize": colors.deemphasize,
+                  }}
+                  class={styles["breadcrumbs__breadcrumb-button"]}
+                  data-deemphasize={deemphasize(node)}
+                  onMouseEnter={[setHoverPath, node.path]}
+                  onMouseLeave={[setHoverPath, null]}
+                  onClick={[navigate, node.targetPath]}
+                >
+                  <span>{getDisplayName(node.name, t("group-name"))}</span>
+                  <Show when={isFolder(node)}>
+                    <span class={styles["breadcrumbs__breadcrumb-separator"]}>
+                      /
+                    </span>
+                  </Show>
+                </button>
+              );
+            }}
+          </For>
+        </div>
+      </div>
     </nav>
   );
 }

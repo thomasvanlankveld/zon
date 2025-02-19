@@ -14,9 +14,9 @@
   outline: none;
 }
 
-.upload-button:hover {
+/* .upload-button:hover {
   border-color: #396cd8;
-}
+} */
 
 .upload-button:active {
   border-color: #396cd8;
@@ -26,7 +26,7 @@
 @media (prefers-color-scheme: dark) {
   .upload-button {
     color: #ffffff;
-    background-color: #0f0f0f98;
+    background-color: hsla(0, 0%, 6%, 0.8);
   }
 
   .upload-button:active {

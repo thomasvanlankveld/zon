@@ -1,11 +1,42 @@
 @layer component {
+  .app-heading {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-l);
+
+    &.heading-xxl {
+      gap: var(--spacing-xl);
+    }
+  }
+
+  /* Bit like a card, but much smaller */
+  .block {
+    background: var(--color-background);
+    border-radius: var(--spacing-block-border-radius);
+    padding-block: var(--spacing-block-padding-block);
+    padding-inline: var(--spacing-block-padding-inline);
+  }
+
+  .card {
+    background: var(--color-background);
+    border-radius: var(--spacing-card-border-radius);
+    padding: var(--spacing-card-padding);
+  }
+
   .page {
     height: 100dvh;
-    box-sizing: border-box;
     padding: var(--spacing-page-padding);
+
     display: grid;
-    gap: var(--spacing-page-gap);
-    align-items: stretch;
-    justify-items: stretch;
+    overflow: hidden;
+
+    &[data-page-items="center"] {
+      place-items: center;
+    }
+
+    &[data-page-items="stretch"] {
+      place-items: stretch;
+      gap: var(--spacing-page-gap);
+    }
   }
 }

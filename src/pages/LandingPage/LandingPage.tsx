@@ -1,24 +1,20 @@
-import { For, Show } from "solid-js";
-import { A, useNavigate } from "@solidjs/router";
+import { Show } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 import Routes from "../../routes";
 import { BackgroundConfig } from "../../components/Background/Background";
 import UploadButton from "../../components/UploadButton/UploadButton";
 import CountingLines from "../../components/CountingLines";
 import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
-import { type Node } from "../../utils/zon";
 import Logo from "../../components/Logo";
-import NumberOfLines from "../../components/NumberOfLines";
-import styles from "./HomePage.module.css";
+import styles from "./LandingPage.module.css";
 
-type HomePageProps = {
-  reports: Record<string, Node>;
+type LandingPageProps = {
   countLinesInFolder: () => Promise<string | null>;
   countingPath: string | null;
-  removeReport: (path: string) => void;
 };
 
-export default function HomePage(props: HomePageProps) {
+export default function LandingPage(props: LandingPageProps) {
   const navigate = useNavigate();
   const { t } = useI18n();
 
@@ -33,30 +29,30 @@ export default function HomePage(props: HomePageProps) {
   return (
     <main class="page" data-page-items="center">
       <BackgroundConfig opacity={0.01} />
-      <div class={`${styles["home-page__card"]} card glow`}>
+      <div
+        style={{
+          "--glimmer-border-radius": "var(--spacing-card-border-radius)",
+        }}
+        class={`${styles["landing-page__card"]} card glimmer glow`}
+      >
         <h1 class="app-heading heading-xxl">
           <Logo size={70} />
           {t("app.title")}
         </h1>
 
-        <div>
-          <For each={Object.entries(props.reports)}>
-            {([path, root]) => (
-              <div class={styles["home-page__report-row"]}>
-                <A href={Routes.Report.getLocation(path)}>{path}</A>
-                <NumberOfLines numberOfLines={root.numberOfLines} />
-                <button onClick={() => props.removeReport(path)}>Remove</button>
-              </div>
-            )}
-          </For>
-        </div>
+        <span class={styles["landing-page__welcome-text"]}>
+          <Show
+            when={props.countingPath}
+            fallback={t("landing-page.welcome-message")}
+          >
+            {(definedPath) => <CountingLines path={definedPath()} />}
+          </Show>
+        </span>
+
         <div>
           <UploadButton
             countLinesInFolder={logAsyncErrors(countLinesInFolder)}
           />
-          <Show when={props.countingPath}>
-            {(definedPath) => <CountingLines path={definedPath()} />}
-          </Show>
         </div>
       </div>
     </main>
