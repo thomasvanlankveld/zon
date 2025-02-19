@@ -28,14 +28,14 @@ function ReportPageContent() {
   const { reportRoot, diagramRoot } = useReportState();
 
   return (
-    <main class={`${styles["report-page"]} page`} data-page-items="stretch">
+    <div class={`${styles["report-page"]} page`} data-page-items="stretch">
       <BackgroundConfig
         opacity={0.2}
         startPosition={diagramRoot().firstLine / reportRoot().numberOfLines}
         span={diagramRoot().numberOfLines / reportRoot().numberOfLines}
       />
-      <div style={{ display: "flex" }} class="col-span-2">
-        <h1 style={{ display: "flex" }} class="heading-regular">
+      <header class={styles["report-page__header"]}>
+        <h1 class="heading-regular">
           <A
             class={`${styles["report-page__header-title"]} app-heading block`}
             href={Routes.Home.Matcher}
@@ -45,12 +45,14 @@ function ReportPageContent() {
             {t("app.title")}
           </A>
         </h1>
-      </div>
-      <Breadcrumbs class={styles["report-page__breadcrumbs"]} />
-      <Sunburst />
-      <ReportList class={styles["report-page__report-list"]} />
+        <Breadcrumbs class={styles["report-page__breadcrumbs"]} />
+      </header>
+      <main class={styles["report-page__main"]}>
+        <Sunburst />
+        <ReportList class={styles["report-page__report-list"]} />
+      </main>
       {/* For debugging: */}
       {/* <pre>{JSON.stringify(props.root, null, 2)}</pre> */}
-    </main>
+    </div>
   );
 }

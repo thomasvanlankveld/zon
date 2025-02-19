@@ -1,6 +1,11 @@
 .report-page {
-  grid-template-rows: min-content min-content 1fr;
-  grid-template-columns: 7fr 5fr;
+  grid-template-rows: min-content 1fr;
+}
+
+.report-page__header {
+  display: grid;
+  justify-items: start;
+  gap: var(--spacing-page-gap);
 }
 
 .report-page__header-title {
@@ -9,6 +14,14 @@
       content: var(--content-arrow-left);
     }
   }
+}
+
+.report-page__main {
+  display: grid;
+  overflow: hidden;
+  grid-template-columns: 7fr 5fr;
+  place-items: stretch;
+  gap: var(--spacing-page-gap);
 }
 
 .report-page__breadcrumbs {
