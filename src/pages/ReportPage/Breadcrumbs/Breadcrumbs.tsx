@@ -74,7 +74,7 @@ export default function Breadcrumbs(props: BreadcrumbsProps) {
       class={`${styles["breadcrumbs__space"]} ${props.class}`}
       aria-label={t("breadcrumbs.label")}
     >
-      <div class={styles["breadcrumbs__wrapper"]}>
+      <div class="block">
         <div class={styles["breadcrumbs__content"]}>
           {/* <A
           style={{ color: "var(--color-text-group-regular)" }}

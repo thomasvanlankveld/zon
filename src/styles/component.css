@@ -9,6 +9,14 @@
     }
   }
 
+  /* Bit like a card, but much smaller */
+  .block {
+    background: var(--color-background);
+    border-radius: var(--spacing-block-border-radius);
+    padding-block: var(--spacing-block-padding-block);
+    padding-inline: var(--spacing-block-padding-inline);
+  }
+
   .card {
     background: var(--color-background);
     border-radius: var(--spacing-card-border-radius);

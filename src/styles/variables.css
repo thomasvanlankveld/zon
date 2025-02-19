@@ -113,6 +113,10 @@
     --spacing-3xl: 3rem; /* 48px */
     --spacing-4xl: 4.5rem; /* 72px */
 
+    --spacing-block-border-radius: var(--spacing-m);
+    --spacing-block-padding-block: var(--spacing-m);
+    --spacing-block-padding-inline: var(--spacing-l);
+
     --spacing-card-border-radius: var(--spacing-xl);
     --spacing-card-padding: var(--spacing-xxl);
 

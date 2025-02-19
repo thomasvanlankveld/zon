@@ -8,14 +8,6 @@
   min-height: calc(2 * var(--line-height-regular) + 2 * var(--spacing-m));
 }
 
-/* TODO: Maybe move this into a generic util? */
-.breadcrumbs__wrapper {
-  border-radius: var(--spacing-m);
-  padding-block: var(--spacing-m);
-  padding-inline: var(--spacing-l);
-  background: var(--color-background);
-}
-
 /* Can't put padding and background here, because then you'd see the text spill out after ellipsis */
 .breadcrumbs__content {
   display: -webkit-box;
