@@ -42,7 +42,6 @@ export default function HomePage(props: HomePageProps) {
       <BackgroundConfig opacity={0.01} />
       <div
         style={{
-          flex: "1 1 auto",
           height: "min(var(--container-l), 100%)",
           width: "min(var(--container-3xl), 100%)",
           display: "flex",
