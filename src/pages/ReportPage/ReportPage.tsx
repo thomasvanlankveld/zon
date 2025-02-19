@@ -37,13 +37,7 @@ function ReportPageContent() {
       <div style={{ display: "flex" }} class="col-span-2">
         <h1 style={{ display: "flex" }} class="heading-regular">
           <A
-            style={{
-              background: "var(--color-background)",
-              "border-radius": "var(--spacing-m)",
-              "padding-block": "var(--spacing-m)",
-              "padding-inline": "var(--spacing-l)",
-            }}
-            class={`${styles["report-page__header-title"]} app-heading`}
+            class={`${styles["report-page__header-title"]} app-heading block`}
             href={Routes.Home.Matcher}
           >
             {/* TODO: screen-reader only text "back to overview"? */}
