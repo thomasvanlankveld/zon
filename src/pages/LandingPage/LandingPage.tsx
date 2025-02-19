@@ -7,6 +7,7 @@ import CountingLines from "../../components/CountingLines";
 import { useI18n } from "../../utils/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
 import Logo from "../../components/Logo";
+import styles from "./LandingPage.module.css";
 
 type LandingPageProps = {
   countLinesInFolder: () => Promise<string | null>;
@@ -31,18 +32,8 @@ export default function LandingPage(props: LandingPageProps) {
       <div
         style={{
           "--glimmer-border-radius": "var(--spacing-card-border-radius)",
-          height: "min(var(--container-s), 100%)",
-          width: "min(var(--container-l), 100%)",
-          // Padding increase balance layout despite the span's `min-height`
-          "padding-block":
-            "calc(var(--spacing-card-padding) + var(--line-height-regular))",
-          display: "flex",
-          "flex-direction": "column",
-          "align-items": "center",
-          "justify-content": "space-evenly",
-          gap: "var(--spacing-xl)",
         }}
-        class="card glimmer glow"
+        class={`${styles["landing-page__card"]} card glimmer glow`}
       >
         <h1
           class="heading-xxl"
@@ -56,16 +47,7 @@ export default function LandingPage(props: LandingPageProps) {
           {t("app.title")}
         </h1>
 
-        <span
-          style={{
-            // Min height to prevent most layout jumps when the text changes to "counting lines in <long-path>"
-            "min-height": "calc(3 * var(--line-height-regular))",
-            display: "flex",
-            "align-items": "center",
-            "text-align": "center",
-            "text-wrap": "balance",
-          }}
-        >
+        <span class={styles["landing-page__welcome-text"]}>
           <Show
             when={props.countingPath}
             fallback={t("landing-page.welcome-message")}

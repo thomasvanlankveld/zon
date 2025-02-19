@@ -1,0 +1,21 @@
+.landing-page__card {
+  height: min(var(--container-s), 100%);
+  width: min(var(--container-l), 100%);
+  /* Padding increase balance layout despite the span's `min-height` */
+  padding-block: calc(var(--spacing-card-padding) + var(--line-height-regular));
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: var(--spacing-xl);
+}
+
+.landing-page__welcome-text {
+  /* Min height to prevent most layout jumps when the text changes to "counting lines in <long-path>" */
+  min-height: calc(3 * var(--line-height-regular));
+  display: flex;
+  align-items: center;
+  text-align: center;
+  text-wrap: balance;
+}
