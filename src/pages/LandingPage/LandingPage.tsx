@@ -33,10 +33,14 @@ export default function LandingPage(props: LandingPageProps) {
           "--glimmer-border-radius": "var(--spacing-card-border-radius)",
           height: "min(var(--container-s), 100%)",
           width: "min(var(--container-l), 100%)",
+          // Padding increase balance layout despite the span's `min-height`
+          "padding-block":
+            "calc(var(--spacing-card-padding) + var(--line-height-regular))",
           display: "flex",
           "flex-direction": "column",
           "align-items": "center",
           "justify-content": "space-evenly",
+          gap: "var(--spacing-xl)",
         }}
         class="card glimmer glow"
       >
@@ -52,30 +56,28 @@ export default function LandingPage(props: LandingPageProps) {
           {t("app.title")}
         </h1>
 
-        <div
+        <span
           style={{
-            display: "grid",
+            // Min height to prevent most layout jumps when the text changes to "counting lines in <long-path>"
+            "min-height": "calc(3 * var(--line-height-regular))",
+            display: "flex",
             "place-items": "center",
-            gap: "var(--spacing-xl)",
             "text-align": "center",
             "text-wrap": "balance",
           }}
         >
-          <span
-            style={{ "min-height": "calc(2 * var(--line-height-regular))" }}
+          <Show
+            when={props.countingPath}
+            fallback={t("landing-page.welcome-message")}
           >
-            <Show
-              when={props.countingPath}
-              fallback={t("landing-page.welcome-message")}
-            >
-              {(definedPath) => <CountingLines path={definedPath()} />}
-            </Show>
-          </span>
-          <div>
-            <UploadButton
-              countLinesInFolder={logAsyncErrors(countLinesInFolder)}
-            />
-          </div>
+            {(definedPath) => <CountingLines path={definedPath()} />}
+          </Show>
+        </span>
+
+        <div>
+          <UploadButton
+            countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+          />
         </div>
       </div>
     </main>
