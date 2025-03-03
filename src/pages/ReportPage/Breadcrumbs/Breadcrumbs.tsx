@@ -9,7 +9,7 @@ import {
   isChildPath,
   GetNodeError,
 } from "../../../utils/zon";
-import { useI18n } from "../../../utils/i18n";
+import { useI18n } from "../../../contexts/i18n";
 import styles from "./Breadcrumbs.module.css";
 import { useReportState } from "../ReportPage.state";
 

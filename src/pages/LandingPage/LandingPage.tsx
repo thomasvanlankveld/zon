@@ -4,7 +4,7 @@ import Routes from "../../routes";
 import { BackgroundConfig } from "../../components/Background/Background";
 import UploadButton from "../../components/UploadButton/UploadButton";
 import CountingLines from "../../components/CountingLines";
-import { useI18n } from "../../utils/i18n";
+import { useI18n } from "../../contexts/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
 import Logo from "../../components/Logo";
 import styles from "./LandingPage.module.css";

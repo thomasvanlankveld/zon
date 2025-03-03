@@ -1,4 +1,4 @@
-import { useI18n } from "../utils/i18n";
+import { useI18n } from "../contexts/i18n";
 
 type NumberOfLinesProps = {
   class?: string;

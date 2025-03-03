@@ -5,7 +5,7 @@ import ListRow from "../ListRow/ListRow";
 import { TabKey } from "../Tabs/report-tabs";
 import { LINE_TYPE, rainbow } from "../../../../utils/zon";
 import { useReportState } from "../../ReportPage.state";
-import { useI18n } from "../../../../utils/i18n";
+import { useI18n } from "../../../../contexts/i18n";
 
 type LineTypePanelProps = {
   selectedTab: TabKey;

@@ -1,5 +1,5 @@
 import styles from "./UploadButton.module.css";
-import { useI18n } from "../../utils/i18n";
+import { useI18n } from "../../contexts/i18n";
 
 type UploadButtonProps = {
   countLinesInFolder: () => void;

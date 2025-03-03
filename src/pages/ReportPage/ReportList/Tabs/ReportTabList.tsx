@@ -1,5 +1,5 @@
 import { For, Setter } from "solid-js";
-import { useI18n } from "../../../../utils/i18n";
+import { useI18n } from "../../../../contexts/i18n";
 import Tab from "../../../../components/Tabs/Tab";
 import TabList from "../../../../components/Tabs/TabList";
 import { TabKey, Tabs } from "./report-tabs";

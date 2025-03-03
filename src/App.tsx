@@ -10,7 +10,7 @@ import { createTree, LINE_TYPE, type Node } from "./utils/zon";
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
 import { Languages } from "./utils/tokei.ts";
-import { I18nProvider } from "./utils/i18n.tsx";
+import { I18nProvider } from "./contexts/i18n.tsx";
 import Routes from "./routes.ts";
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 

@@ -1,6 +1,6 @@
 import { createMemo, createSignal, Show } from "solid-js";
 import { getDisplayName, isFile } from "../../../utils/zon";
-import { useI18n } from "../../../utils/i18n";
+import { useI18n } from "../../../contexts/i18n";
 import { useReportState } from "../ReportPage.state";
 import styles from "./ReportList.module.css";
 import ListHeading from "./ListHeading";

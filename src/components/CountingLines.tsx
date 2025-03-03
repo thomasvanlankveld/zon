@@ -1,5 +1,5 @@
 import { For } from "solid-js";
-import { useI18n } from "../utils/i18n";
+import { useI18n } from "../contexts/i18n";
 import { getPathArray } from "../utils/zon";
 
 type CountingLinesProps = {

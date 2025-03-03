@@ -1,7 +1,7 @@
 import { Show } from "solid-js";
 import styles from "../ReportList.module.css";
 import { getDisplayName, isFolder, type Node } from "../../../../utils/zon";
-import { useI18n } from "../../../../utils/i18n";
+import { useI18n } from "../../../../contexts/i18n";
 
 type ContentNameProps = {
   node: Node;
