@@ -3,7 +3,8 @@ import { Translations } from "./types";
 const enGBTranslations: Translations = {
   "app.title": "Zon",
   "landing-page.welcome-message": "Select a folder to count its lines",
-  "landing-page.welcome-message.web": "Paste tokei output below",
+  "landing-page.welcome-message.web": "Paste Tokei JSON output below",
+  "show-report-button.label": "Show report",
   "upload-button.label": "Select folder",
   "counting-lines.text": `Counting lines in`,
   "group-name": "Smaller items",
