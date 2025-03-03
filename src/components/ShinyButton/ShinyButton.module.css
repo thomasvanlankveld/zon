@@ -1,5 +1,5 @@
 /* TODO: Remove Tauri starter styles */
-.upload-button {
+.shiny-button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -14,22 +14,22 @@
   outline: none;
 }
 
-/* .upload-button:hover {
+/* .shiny-button:hover {
   border-color: #396cd8;
 } */
 
-.upload-button:active {
+.shiny-button:active {
   border-color: #396cd8;
   background-color: #e8e8e8;
 }
 
 @media (prefers-color-scheme: dark) {
-  .upload-button {
+  .shiny-button {
     color: #ffffff;
     background-color: hsla(0, 0%, 6%, 0.8);
   }
 
-  .upload-button:active {
+  .shiny-button:active {
     background-color: #0f0f0f69;
   }
 }
