@@ -3,7 +3,7 @@ import styles from "./ShinyButton.module.css";
 
 type ShinyButtonProps = {
   onClick?: () => void;
-  type?: "submit";
+  type?: "submit" | "reset" | "button";
   children: JSX.Element;
 };
 
@@ -12,7 +12,7 @@ export default function ShinyButton(props: ShinyButtonProps) {
     <button
       style={{ "--glimmer-border-radius": "8px" }}
       class={`${styles["shiny-button"]} glimmer glimmer-hover glow`}
-      type={props.type}
+      type={props.type ?? "button"}
       onClick={() => props.onClick?.()}
     >
       {props.children}
