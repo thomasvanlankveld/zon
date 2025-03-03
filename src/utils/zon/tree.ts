@@ -32,6 +32,36 @@ import {
 } from "./counted.ts";
 
 /**
+ * Deduce a report path from Tokei output
+ *
+ * We do this by finding the shared part among all report's names
+ */
+export function getReportPath(languages: Languages) {
+  const languageValues = Object.values(languages);
+
+  const lastLanguage = languageValues[languageValues.length - 1];
+  const lastReport = lastLanguage.reports[lastLanguage.reports.length - 1];
+
+  // Initialize to last report, so that we find differences as soon as possible
+  let shared = lastReport.name;
+
+  for (const language of languageValues) {
+    checkReports: for (const report of language.reports) {
+      for (let i = 0; i < shared.length; i++) {
+        if (shared[i] !== report.name[i]) {
+          // Skip slash
+          const cutoff = i >= 1 && shared[i - 1] === "/" ? i - 1 : i;
+          shared = shared.slice(0, cutoff);
+          continue checkReports;
+        }
+      }
+    }
+  }
+
+  return shared;
+}
+
+/**
  * Create a "zon" tree from Tokei output
  */
 export function createTree(
