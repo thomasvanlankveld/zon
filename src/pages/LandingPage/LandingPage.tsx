@@ -6,6 +6,7 @@ import { useI18n } from "../../contexts/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
 import Logo from "../../components/Logo";
 import { TARGET, useTarget } from "../../contexts/target";
+import { type Node } from "../../utils/zon";
 import LandingPageMainDesktop from "./LandingPageMainDesktop";
 import LandingPageMainWeb from "./LandingPageMainWeb";
 import styles from "./LandingPage.module.css";
@@ -13,6 +14,7 @@ import styles from "./LandingPage.module.css";
 type LandingPageProps = {
   countLinesInFolder: () => Promise<string | null>;
   countingPath: string | null;
+  setReport: (path: string, root: Node) => void;
 };
 
 export default function LandingPage(props: LandingPageProps) {
@@ -26,6 +28,12 @@ export default function LandingPage(props: LandingPageProps) {
     if (path != null) {
       navigate(Routes.Report.getLocation(path));
     }
+  }
+
+  function setReport(path: string, root: Node) {
+    props.setReport(path, root);
+
+    navigate(Routes.Report.getLocation(path));
   }
 
   return (
@@ -45,7 +53,7 @@ export default function LandingPage(props: LandingPageProps) {
         <main class={styles["landing-page__wrapper"]}>
           <Show
             when={target === TARGET.DESKTOP}
-            fallback={<LandingPageMainWeb />}
+            fallback={<LandingPageMainWeb setReport={setReport} />}
           >
             <LandingPageMainDesktop
               countLinesInFolder={logAsyncErrors(countLinesInFolder)}

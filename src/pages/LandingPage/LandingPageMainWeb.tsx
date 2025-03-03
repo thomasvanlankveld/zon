@@ -2,9 +2,18 @@ import { createSignal, type JSX } from "solid-js";
 import ShinyButton from "../../components/ShinyButton/ShinyButton";
 import { useI18n } from "../../contexts/i18n";
 import { Languages } from "../../utils/tokei";
-import { getReportPath } from "../../utils/zon";
+import {
+  createTree,
+  getReportPath,
+  LINE_TYPE,
+  type Node,
+} from "../../utils/zon";
 
-export default function LandingPageMainWeb() {
+type LandingPageMainWebProps = {
+  setReport: (path: string, root: Node) => void;
+};
+
+export default function LandingPageMainWeb(props: LandingPageMainWebProps) {
   const { t } = useI18n();
   const [text, setText] = createSignal("");
 
@@ -15,8 +24,13 @@ export default function LandingPageMainWeb() {
 
       const languages = notValidated as Languages;
       const reportPath = getReportPath(languages);
+      const reportRoot = createTree(reportPath, languages, [
+        LINE_TYPE.BLANKS,
+        LINE_TYPE.CODE,
+        LINE_TYPE.COMMENTS,
+      ]);
 
-      console.log({ reportPath, languages });
+      props.setReport(reportPath, reportRoot);
     };
 
   return (

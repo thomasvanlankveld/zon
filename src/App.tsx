@@ -70,6 +70,7 @@ function App() {
                     <LandingPage
                       countLinesInFolder={countLinesInFolder}
                       countingPath={countingPath()}
+                      setReport={setReport}
                     />
                   }
                 >
