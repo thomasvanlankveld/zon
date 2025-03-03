@@ -49,7 +49,7 @@ export function getReportPath(languages: Languages) {
     checkReports: for (const report of language.reports) {
       for (let i = 0; i < shared.length; i++) {
         if (shared[i] !== report.name[i]) {
-          // Skip slash
+          // Cut off trailing slash
           const cutoff = i >= 1 && shared[i - 1] === "/" ? i - 1 : i;
           shared = shared.slice(0, cutoff);
           continue checkReports;
