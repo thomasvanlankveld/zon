@@ -2,8 +2,12 @@ import { createSignal, type JSX } from "solid-js";
 import ShinyButton from "../../components/ShinyButton/ShinyButton";
 import { useI18n } from "../../contexts/i18n";
 import { Languages } from "../../utils/tokei";
-import { LINE_TYPE, type Node } from "../../utils/zon";
-import { createTree, getReportPath } from "../../utils/zon/tokei-adapter";
+import {
+  LINE_TYPE,
+  type Node,
+  createTree,
+  getReportPath,
+} from "../../utils/zon";
 
 type LandingPageMainWebProps = {
   setReport: (path: string, root: Node) => void;
