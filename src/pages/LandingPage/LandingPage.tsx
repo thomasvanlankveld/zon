@@ -2,21 +2,25 @@ import { Show } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import Routes from "../../routes";
 import { BackgroundConfig } from "../../components/Background/Background";
-import UploadButton from "../../components/UploadButton/UploadButton";
-import CountingLines from "../../components/CountingLines";
 import { useI18n } from "../../contexts/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
 import Logo from "../../components/Logo";
+import { TARGET, useTarget } from "../../contexts/target";
+import { type Node } from "../../utils/zon";
+import LandingPageMainDesktop from "./LandingPageMainDesktop";
+import LandingPageMainWeb from "./LandingPageMainWeb";
 import styles from "./LandingPage.module.css";
 
 type LandingPageProps = {
   countLinesInFolder: () => Promise<string | null>;
   countingPath: string | null;
+  setReport: (path: string, root: Node) => void;
 };
 
 export default function LandingPage(props: LandingPageProps) {
   const navigate = useNavigate();
   const { t } = useI18n();
+  const target = useTarget();
 
   async function countLinesInFolder() {
     const path = await props.countLinesInFolder();
@@ -24,6 +28,12 @@ export default function LandingPage(props: LandingPageProps) {
     if (path != null) {
       navigate(Routes.Report.getLocation(path));
     }
+  }
+
+  function setReport(path: string, root: Node) {
+    props.setReport(path, root);
+
+    navigate(Routes.Report.getLocation(path));
   }
 
   return (
@@ -41,20 +51,15 @@ export default function LandingPage(props: LandingPageProps) {
         </header>
 
         <main class={styles["landing-page__wrapper"]}>
-          <span class={styles["landing-page__welcome-text"]}>
-            <Show
-              when={props.countingPath}
-              fallback={t("landing-page.welcome-message")}
-            >
-              {(definedPath) => <CountingLines path={definedPath()} />}
-            </Show>
-          </span>
-
-          <div>
-            <UploadButton
+          <Show
+            when={target === TARGET.DESKTOP}
+            fallback={<LandingPageMainWeb setReport={setReport} />}
+          >
+            <LandingPageMainDesktop
               countLinesInFolder={logAsyncErrors(countLinesInFolder)}
+              countingPath={props.countingPath}
             />
-          </div>
+          </Show>
         </main>
       </div>
     </div>

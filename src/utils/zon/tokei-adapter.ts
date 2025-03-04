@@ -1,7 +1,6 @@
 import { Languages, LanguageType } from "../tokei.ts";
 import {
   Counted,
-  GROUP_SEGMENT,
   isFile,
   isFolder,
   type LINE_TYPE,
@@ -14,22 +13,39 @@ import {
   getPathString,
   getParentPath,
 } from "./path.ts";
-import {
-  getNumberOfLines,
-  sumLineTypeCounts as sumLineTypeCounts,
-  subtractLineTypeCounts,
-} from "./lineType.ts";
-import {
-  addLanguageCount,
-  subtractLanguageCounts,
-  sumLanguageCounts,
-} from "./language.ts";
-import {
-  addChildColorValue,
-  createCounted,
-  subtractChild,
-  sumCounted,
-} from "./counted.ts";
+import { getNumberOfLines } from "./lineType.ts";
+import { addLanguageCount } from "./language.ts";
+import { addChildColorValue, createCounted } from "./counted.ts";
+
+/**
+ * Deduce a report path from Tokei output
+ *
+ * We do this by finding the shared part among all report's names
+ */
+export function getReportPath(languages: Languages) {
+  const languageValues = Object.values(languages);
+
+  const lastLanguage = languageValues[languageValues.length - 1];
+  const lastReport = lastLanguage.reports[lastLanguage.reports.length - 1];
+
+  // Initialize to last report, so that we find differences as soon as possible
+  let shared = lastReport.name;
+
+  for (const language of languageValues) {
+    checkReports: for (const report of language.reports) {
+      for (let i = 0; i < shared.length; i++) {
+        if (shared[i] !== report.name[i]) {
+          // Cut off trailing slash
+          const cutoff = i >= 1 && shared[i - 1] === "/" ? i - 1 : i;
+          shared = shared.slice(0, cutoff);
+          continue checkReports;
+        }
+      }
+    }
+  }
+
+  return shared;
+}
 
 /**
  * Create a "zon" tree from Tokei output
@@ -202,98 +218,4 @@ function addDeduced(
     // Update loop position
     lineNumber += child.numberOfLines;
   }
-}
-
-type GroupOptions = {
-  minLines: number;
-  maxChildren: number;
-  ignoreMinLinesForRoot: boolean;
-};
-
-/**
- * Determines the height of a node based on its children
- */
-function getHeight(children: Node[]): number {
-  return Math.max(...children.map((child) => child.height)) + 1;
-}
-
-/**
- * Travels down the root and recursively replaces the smallest nodes with a group of the same size
- * @param node
- * @param options
- * @returns The root node
- */
-export function groupSmallestNodes(node: Node, options: GroupOptions): Node {
-  if (!isFolder(node)) {
-    return node;
-  }
-
-  const minLines = options.ignoreMinLinesForRoot ? 0 : options.minLines;
-
-  const visibleChildren = node.children
-    .slice(0, options.maxChildren)
-    .filter((child) => child.numberOfLines >= minLines)
-    .map((child) =>
-      groupSmallestNodes(child, { ...options, ignoreMinLinesForRoot: false }),
-    );
-
-  if (visibleChildren.length === node.children.length) {
-    return {
-      ...node,
-      children: visibleChildren,
-      height: getHeight(visibleChildren),
-    };
-  }
-
-  const hiddenChildren = node.children.slice(visibleChildren.length);
-
-  // The number of hidden nodes may be much larger than the number of visible ones, so we calculate the hidden line type
-  // and language counts by subtracting the visible totals from the parent's total
-  // TODO: Pick hidden-first or visible-first strategy based on whether the number of visible children is more or less
-  // than half the parent's total number of children
-  const visibleCounted = sumCounted(visibleChildren);
-  const hiddenCounted = subtractChild(node, visibleCounted);
-  const visibleLineTypeCounts = sumLineTypeCounts(
-    visibleChildren.map((child) => child.lineTypes),
-  );
-  const hiddenLineTypeCounts = subtractLineTypeCounts(
-    node.lineTypes,
-    visibleLineTypeCounts,
-    hiddenCounted.colorValue,
-  );
-  const visibleLanguageCounts = sumLanguageCounts(
-    visibleChildren.map((child) => child.languages),
-  );
-  const hiddenLanguageCounts = subtractLanguageCounts(
-    node.languages,
-    visibleLanguageCounts,
-  );
-
-  const lastVisibleChild = visibleChildren.at(-1);
-  const firstHiddenLine =
-    lastVisibleChild != null
-      ? lastVisibleChild.firstLine + lastVisibleChild.numberOfLines
-      : node.firstLine;
-
-  const group: Node = {
-    type: NODE_TYPE.GROUP,
-    lineTypes: hiddenLineTypeCounts,
-    languages: hiddenLanguageCounts,
-    path: [...node.path, GROUP_SEGMENT],
-    name: GROUP_SEGMENT,
-    numberOfLines: hiddenCounted.numberOfLines,
-    colorValue: hiddenCounted.colorValue,
-    firstLine: firstHiddenLine,
-    depth: node.depth + 1,
-    height: 0,
-    groupedChildren: hiddenChildren,
-  };
-
-  const newChildren = [...visibleChildren, group];
-
-  return {
-    ...node,
-    children: newChildren,
-    height: getHeight(newChildren),
-  };
 }
