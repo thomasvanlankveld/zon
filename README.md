@@ -2,6 +2,6 @@
 
 Explore your line counts.
 
-![Zon demo](./docs/assets/demo-0.0.0.gif)
+![Zon example](./docs/assets/example-0.2.0.png)
 
-This project is in a pre-release state. Feedback and ideas are appreciated!
+This is a work in progress. Currently, only an early version of a macOS desktop app is available (You might be able to build a working Linux or Windows version from the source code, I haven't tried it).
