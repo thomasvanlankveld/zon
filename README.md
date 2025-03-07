@@ -1,6 +1,6 @@
 # Zon
 
-Counts your lines.
+Explore your line counts.
 
 ![Zon demo](./docs/assets/demo-0.0.0.gif)
 
