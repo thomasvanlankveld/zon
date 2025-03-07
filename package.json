@@ -18,7 +18,9 @@
     "prettier-format": "deno run --no-prompt --allow-env=TERM --allow-sys=cpus,uid --allow-read=. --allow-write=./node_modules/.cache/prettier,src npm:prettier --ignore-unknown --write src",
     "eslint": "deno run --allow-env --allow-sys=cpus --allow-read=. --deny-read=/uSERS --allow-write=.eslintcache npm:eslint src",
     "test": "deno run --allow-env --allow-sys=cpus,uid,homedir --allow-read --allow-write --allow-run --allow-ffi=. --allow-net npm:vitest run",
-    "lint-staged": "deno run --allow-env --allow-read --allow-run=git,deno --allow-write=.git npm:lint-staged"
+    "lint-staged": "deno run --allow-env --allow-read --allow-run=git,deno --allow-write=.git npm:lint-staged",
+    "bundle-mac-silicon": "tauri build --target aarch64-apple-darwin --bundles dmg",
+    "bundle-mac-intel": "tauri build --target x86_64-apple-darwin --bundles dmg"
   },
   "dependencies": {
     "@solidjs/router": "^0.15.3",
