@@ -24,7 +24,8 @@
   }
 
   .page {
-    height: 100dvh;
+    /* 100dvh is too big in Safari 13 */
+    height: 100vh;
     padding: var(--spacing-page-padding);
 
     display: grid;
