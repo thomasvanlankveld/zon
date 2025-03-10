@@ -44,6 +44,9 @@ export default defineConfig(() => ({
   },
 
   build: {
-    target: ["es2021", "safari13"],
+    // Disable minification to prevent Vite from crashing on the Terser plugin because it's trying to use require
+    minify: false,
+    // Commented out target because these will be overridden by @vitejs/plugin-legacy
+    // target: ["es2021", "safari13"],
   },
 }));
