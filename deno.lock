@@ -1,6 +1,8 @@
 {
   "version": "4",
   "specifiers": {
+    "npm:@csstools/postcss-bundler@^2.0.6": "2.0.6_postcss@8.5.3_@csstools+css-tokenizer@3.0.3",
+    "npm:@csstools/postcss-cascade-layers@^5.0.1": "5.0.1_postcss@8.5.3_postcss-selector-parser@7.1.0",
     "npm:@eslint/js@^9.22.0": "9.22.0",
     "npm:@solidjs/router@~0.15.3": "0.15.3_solid-js@1.9.5__seroval@1.2.1",
     "npm:@tauri-apps/api@^2.3.0": "2.3.0",
@@ -833,6 +835,31 @@
     },
     "@csstools/css-tokenizer@3.0.3": {
       "integrity": "sha512-UJnjoFsmxfKUdNYdWgOB0mWUypuLvAfQPH1+pyvRJs6euowbFkFC6P13w1l8mJyi3vxYMxc9kld5jZEGRQs6bw=="
+    },
+    "@csstools/postcss-bundler@2.0.6_postcss@8.5.3_@csstools+css-tokenizer@3.0.3": {
+      "integrity": "sha512-Gpfm8++IZYCm1TGj2DBDMFfbU4g3VFP6QCtS+Xaoads+p41eeMb47mcfZK3V1TZrimb+3AVHrCN/4ykCmca1kw==",
+      "dependencies": [
+        "@csstools/css-parser-algorithms",
+        "@csstools/css-tokenizer",
+        "@csstools/postcss-rebase-url",
+        "postcss"
+      ]
+    },
+    "@csstools/postcss-cascade-layers@5.0.1_postcss@8.5.3_postcss-selector-parser@7.1.0": {
+      "integrity": "sha512-XOfhI7GShVcKiKwmPAnWSqd2tBR0uxt+runAxttbSp/LY2U16yAVPmAf7e9q4JJ0d+xMNmpwNDLBXnmRCl3HMQ==",
+      "dependencies": [
+        "@csstools/selector-specificity",
+        "postcss",
+        "postcss-selector-parser"
+      ]
+    },
+    "@csstools/postcss-rebase-url@2.0.4_postcss@8.5.3_@csstools+css-tokenizer@3.0.3": {
+      "integrity": "sha512-ZbOyv3BfKALtmeh9IblrACErrS92Jj7BQ+EOyWea50HCxlQhX+YIq0grMwoGFQ4ZVbb5xJhnlDpRcqYo8o5seg==",
+      "dependencies": [
+        "@csstools/css-parser-algorithms",
+        "@csstools/css-tokenizer",
+        "postcss"
+      ]
     },
     "@csstools/selector-resolve-nested@3.0.0_postcss-selector-parser@7.1.0": {
       "integrity": "sha512-ZoK24Yku6VJU1gS79a5PFmC8yn3wIapiKmPgun0hZgEI5AOqgH2kiPRsPz1qkGv4HL+wuDLH83yQyk6inMYrJQ==",
@@ -3643,6 +3670,8 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
+        "npm:@csstools/postcss-bundler@^2.0.6",
+        "npm:@csstools/postcss-cascade-layers@^5.0.1",
         "npm:@eslint/js@^9.22.0",
         "npm:@solidjs/router@~0.15.3",
         "npm:@tauri-apps/api@^2.3.0",
