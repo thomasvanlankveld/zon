@@ -7,7 +7,7 @@
     "npm:@tauri-apps/cli@^2.3.1": "2.3.1",
     "npm:@tauri-apps/plugin-dialog@^2.2.0": "2.2.0",
     "npm:@tauri-apps/plugin-shell@^2.2.0": "2.2.0",
-    "npm:@types/eslint__js@^9.14.0": "9.14.0",
+    "npm:@types/eslint__js@^8.42.3": "8.42.3",
     "npm:@vitejs/plugin-legacy@^6.0.2": "6.0.2_terser@5.39.0_vite@6.2.1_@babel+core@7.26.9_browserslist@4.24.4",
     "npm:@vitest/eslint-plugin@^1.1.36": "1.1.36_@typescript-eslint+utils@8.26.0__eslint@9.22.0__typescript@5.8.2_eslint@9.22.0_typescript@5.8.2_vitest@3.0.8__jsdom@26.0.0__vite@6.2.1_jsdom@26.0.0",
     "npm:eslint-config-prettier@^10.1.1": "10.1.1_eslint@9.22.0",
@@ -1180,10 +1180,17 @@
         "@babel/types"
       ]
     },
-    "@types/eslint__js@9.14.0": {
-      "integrity": "sha512-s0jepCjOJWB/GKcuba4jISaVpBudw3ClXJ3fUK4tugChUMQsp6kSwuA8Dcx6wFd/JsJqcY8n4rEpa5RTHs5ypA==",
+    "@types/eslint@9.6.1": {
+      "integrity": "sha512-FXx2pKgId/WyYo2jXw63kk7/+TY7u7AziEJxJAnSFzHlqTAS3Ync6SvgYAN/k4/PQpnnVuzoMuVnByKK2qp0ag==",
       "dependencies": [
-        "@eslint/js"
+        "@types/estree",
+        "@types/json-schema"
+      ]
+    },
+    "@types/eslint__js@8.42.3": {
+      "integrity": "sha512-alfG737uhmPdnvkrLdZLcEKJ/B8s9Y4hrZ+YAdzUeoArBlSUERA2E87ROfOaS4jd/C45fzOoZzidLc1IPwLqOw==",
+      "dependencies": [
+        "@types/eslint"
       ]
     },
     "@types/estree@1.0.6": {
@@ -3585,7 +3592,7 @@
         "npm:@tauri-apps/cli@^2.3.1",
         "npm:@tauri-apps/plugin-dialog@^2.2.0",
         "npm:@tauri-apps/plugin-shell@^2.2.0",
-        "npm:@types/eslint__js@^9.14.0",
+        "npm:@types/eslint__js@^8.42.3",
         "npm:@vitejs/plugin-legacy@^6.0.2",
         "npm:@vitest/eslint-plugin@^1.1.36",
         "npm:eslint-config-prettier@^10.1.1",
