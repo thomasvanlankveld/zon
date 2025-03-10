@@ -12,7 +12,7 @@
 ### Install steps
 
 1. Clone the repo and `cd` into it.
-2. `deno install`
+2. `deno install --allow-scripts=npm:core-js@3.41.0`
 
 ## How to run for development
 

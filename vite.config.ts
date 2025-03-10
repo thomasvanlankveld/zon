@@ -1,12 +1,25 @@
 import { defineConfig } from "vite";
 import solid from "vite-plugin-solid";
+import legacy from "@vitejs/plugin-legacy";
+
+// We target Safari 13 to support Apple hardware as far back as 2012/2013, as long as they updated
+// their OS to 10.15 Catalina or later. Some relevant links:
+// https://v1.tauri.app/v1/guides/faq/#recommended-browserlist
+// https://developer.apple.com/documentation/safari-release-notes/safari-13-release-notes
+// https://en.wikipedia.org/wiki/MacOS_Catalina#System_requirements
 
 // @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [solid()],
+  plugins: [
+    solid(),
+    legacy({
+      targets: ["safari >= 13"],
+      modernPolyfills: true, // This automatically includes needed ES syntax polyfills
+    }),
+  ],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
@@ -28,5 +41,9 @@ export default defineConfig(async () => ({
       // 3. tell vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
+  },
+
+  build: {
+    target: ["es2021", "safari13"],
   },
 }));
