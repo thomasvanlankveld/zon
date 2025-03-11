@@ -15,6 +15,9 @@ import { I18nProvider } from "./contexts/i18n.tsx";
 import Routes from "./routes.ts";
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 
+// Development mode check - true in development, false in production
+const isHomePageEnabled = import.meta.env.MODE === "development";
+
 const target = isTauri() ? TARGET.DESKTOP : TARGET.WEB;
 
 function App() {
@@ -65,7 +68,7 @@ function App() {
               path={Routes.Home.Matcher}
               component={() => (
                 <Show
-                  when={Object.values(reports).length > 0}
+                  when={Object.values(reports).length > 0 && isHomePageEnabled}
                   fallback={
                     <LandingPage
                       countLinesInFolder={countLinesInFolder}
