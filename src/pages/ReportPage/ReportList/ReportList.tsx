@@ -20,18 +20,21 @@ export default function ReportList(props: ReportListProps) {
   const [selectedTab, setSelectedTab] = createSignal<TabKey>(TabKey.Content);
 
   const listRootHasContent = createMemo(() => !isFile(listRoot()));
+  const isPanelVisible = createMemo(
+    () => listRootHasContent() || selectedTab() !== TabKey.Content,
+  );
 
   // TODO: Maybe this shouldn't be a nav? Check https://a11y-style-guide.com/style-guide/section-navigation.html
   return (
     <nav
       class={`${styles["report-list__card"]} card overflow-x-hidden ${props.class}`}
-      data-heading-only={!listRootHasContent()}
+      data-heading-only={!isPanelVisible()}
       aria-label={t("report-list.nav.label", {
         name: getDisplayName(listRoot().name, t("group-name")),
       })}
     >
-      <ListHeading hasBottomMargin={listRootHasContent()} />
-      <Show when={listRootHasContent()}>
+      <ListHeading hasBottomMargin={isPanelVisible()} />
+      <Show when={isPanelVisible()}>
         <ReportTabList
           selectedTab={selectedTab()}
           setSelectedTab={setSelectedTab}
