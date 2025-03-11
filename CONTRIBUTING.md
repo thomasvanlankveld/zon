@@ -19,3 +19,14 @@
 ```
 deno task tauri dev
 ```
+
+## How to build releases
+
+These are the commands to build for Apple silicon and for Intel:
+
+```
+deno task bundle-mac-silicon
+deno task bundle-mac-intel
+```
+
+For a [debug](https://v2.tauri.app/develop/debug/) version, add the argument `--debug`.
