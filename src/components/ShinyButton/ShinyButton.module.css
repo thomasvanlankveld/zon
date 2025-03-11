@@ -2,7 +2,10 @@
 
 /* TODO: Remove Tauri starter styles */
 .shiny-button {
+  --glimmer-border-radius: 8px;
   border-radius: 8px;
+  /* The border covers the glimmer, so setting glimmer edge width to 2px makes it look like 1px */
+  --glimmer-edge-width: 2px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
@@ -28,10 +31,17 @@
 @media (prefers-color-scheme: dark) {
   .shiny-button {
     color: #ffffff;
-    background-color: hsla(0, 0%, 6%, 0.8);
-  }
+    background-color: hsla(0, 0%, 6%, 0.9);
 
-  .shiny-button:active {
-    background-color: #0f0f0f69;
+    &:hover,
+    &:focus {
+      background-color: hsla(0, 0%, 6%, 0.85);
+      --glimmer-opacity: 0.8;
+    }
+
+    &:active {
+      background-color: hsla(0, 0%, 6%, 0.85);
+      --glimmer-opacity: 0.35;
+    }
   }
 }
