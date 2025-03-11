@@ -43,7 +43,7 @@ export default function LandingPage(props: LandingPageProps) {
         style={{
           "--glimmer-border-radius": "var(--spacing-card-border-radius)",
         }}
-        class={`${styles["landing-page__card"]} ${styles["landing-page__wrapper"]} card glimmer glow`}
+        class={`${styles["landing-page__card"]} ${styles["landing-page__wrapper"]} card glow`}
       >
         <header class="app-heading heading-xxl">
           <Logo size={70} />
