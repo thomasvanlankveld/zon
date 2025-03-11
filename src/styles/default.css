@@ -19,6 +19,12 @@
     );
   }
 
+  /* Prevent scroll bouncing / rubber banding */
+  html,
+  body {
+    overscroll-behavior: none;
+  }
+
   h1,
   h2,
   h3,
