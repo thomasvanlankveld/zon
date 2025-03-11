@@ -1,3 +1,5 @@
+@import "../../../styles/setup.css";
+
 .report-list__card {
   display: grid;
   grid-template-rows: min-content min-content 1fr;

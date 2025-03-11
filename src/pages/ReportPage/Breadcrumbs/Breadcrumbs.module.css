@@ -1,3 +1,5 @@
+@import "../../../styles/setup.css";
+
 .breadcrumbs__space {
   display: inline-grid;
   align-content: start;
