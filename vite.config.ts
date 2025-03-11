@@ -17,7 +17,7 @@ export default defineConfig(() => ({
     solid(),
     legacy({
       targets: ["safari >= 13"],
-      modernPolyfills: true, // This automatically includes needed ES syntax polyfills
+      modernPolyfills: true,
     }),
   ],
 
@@ -44,7 +44,7 @@ export default defineConfig(() => ({
   },
 
   build: {
-    // Disable minification to prevent Vite from crashing on the Terser plugin because it's trying to use require
+    // Disable minification to prevent Vite from crashing on the Terser plugin because it's trying to use `require()`
     minify: false,
     // Commented out `target` because these will be overridden by @vitejs/plugin-legacy
     // target: ["es2021", "safari13"],
