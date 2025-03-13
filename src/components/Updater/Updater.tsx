@@ -89,7 +89,6 @@ export default function Updater() {
           }}
           class="card glow"
           data-card-size="extra-small"
-          // data-card-background="muted"
         >
           <button
             onClick={() => setIsVisible(false)}
