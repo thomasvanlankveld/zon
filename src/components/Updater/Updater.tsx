@@ -15,8 +15,7 @@ export default function Updater() {
   async function checkForUpdates() {
     try {
       setError(null);
-      const result = await check();
-      return result;
+      return await check();
     } catch (err) {
       setError({
         type: "check",
