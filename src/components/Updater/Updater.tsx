@@ -19,6 +19,7 @@ export default function Updater() {
       setError(null);
       return await check();
     } catch (err) {
+      // Custom error handling because the app was crashing through `createResource`
       setError({
         type: "check",
         error: err instanceof Error ? err : new Error(String(err)),
