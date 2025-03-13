@@ -35,3 +35,6 @@ lto = true
 opt-level = "s"   # Experiment to find the best result
 panic = "abort"
 strip = true      # Ensures debug symbols are removed.
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"
