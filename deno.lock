@@ -8,6 +8,7 @@
     "npm:@tauri-apps/api@^2.3.0": "2.3.0",
     "npm:@tauri-apps/cli@^2.3.1": "2.3.1",
     "npm:@tauri-apps/plugin-dialog@^2.2.0": "2.2.0",
+    "npm:@tauri-apps/plugin-process@2.2": "2.2.0",
     "npm:@tauri-apps/plugin-shell@^2.2.0": "2.2.0",
     "npm:@tauri-apps/plugin-updater@2.6": "2.6.0",
     "npm:@types/eslint__js@^8.42.3": "8.42.3",
@@ -1183,6 +1184,12 @@
     },
     "@tauri-apps/plugin-dialog@2.2.0": {
       "integrity": "sha512-6bLkYK68zyK31418AK5fNccCdVuRnNpbxquCl8IqgFByOgWFivbiIlvb79wpSXi0O+8k8RCSsIpOquebusRVSg==",
+      "dependencies": [
+        "@tauri-apps/api"
+      ]
+    },
+    "@tauri-apps/plugin-process@2.2.0": {
+      "integrity": "sha512-uypN2Crmyop9z+KRJr3zl71OyVFgTuvHFjsJ0UxxQ/J5212jVa5w4nPEYjIewcn8bUEXacRebwE6F7owgrbhSw==",
       "dependencies": [
         "@tauri-apps/api"
       ]
@@ -3684,6 +3691,7 @@
         "npm:@tauri-apps/api@^2.3.0",
         "npm:@tauri-apps/cli@^2.3.1",
         "npm:@tauri-apps/plugin-dialog@^2.2.0",
+        "npm:@tauri-apps/plugin-process@2.2",
         "npm:@tauri-apps/plugin-shell@^2.2.0",
         "npm:@tauri-apps/plugin-updater@2.6",
         "npm:@types/eslint__js@^8.42.3",

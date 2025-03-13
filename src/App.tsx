@@ -6,6 +6,7 @@ import { createStore } from "solid-js/store";
 
 import "./styles/setup.css";
 import { Background } from "./components/Background/Background.tsx";
+import Updater from "./components/Updater/Updater.tsx";
 import { TARGET, TargetProvider } from "./contexts/target.tsx";
 import { LINE_TYPE, type Node, createTree } from "./utils/zon";
 import HomePage from "./pages/HomePage/HomePage.tsx";
@@ -104,6 +105,7 @@ function App() {
               }}
             />
           </MemoryRouter>
+          <Updater />
         </I18nProvider>
       </Background>
     </TargetProvider>

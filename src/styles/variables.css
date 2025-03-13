@@ -73,28 +73,49 @@
     --clr-text-muted: var(--clr-grey-600);
     --clr-text-extra-muted: var(--clr-grey-450);
 
+    --clr-rainbow-0: oklch(82% 0.307 287.621);
+    --clr-rainbow-1: oklch(82% 0.303 311.851);
+    --clr-rainbow-2: oklch(82% 0.297 336.653);
+    --clr-rainbow-3: oklch(82% 0.287 0);
+    --clr-rainbow-4: oklch(82% 0.277 14.4);
+    --clr-rainbow-5: oklch(82% 0.267 28.8);
+    --clr-rainbow-6: oklch(82% 0.26 43.2);
+    --clr-rainbow-7: oklch(82% 0.257 57.6);
+    --clr-rainbow-8: oklch(82% 0.26 72);
+    --clr-rainbow-9: oklch(82% 0.267 86.4);
+    --clr-rainbow-10: oklch(82% 0.277 101.059);
+    --clr-rainbow-11: oklch(82% 0.287 118.186);
+    --clr-rainbow-12: oklch(82% 0.289 134.126);
+    --clr-rainbow-13: oklch(82% 0.276 143.4);
+    --clr-rainbow-14: oklch(82% 0.265 152.213);
+    --clr-rainbow-15: oklch(82% 0.264 173.496);
+    --clr-rainbow-16: oklch(82% 0.273 206.098);
+    --clr-rainbow-17: oklch(82% 0.287 237.686);
+    --clr-rainbow-18: oklch(82% 0.299 258);
+    --clr-rainbow-19: oklch(82% 0.306 269.866);
+
     --gdt-conic-rainbow: conic-gradient(
-      oklch(82% 0.307 287.621),
-      oklch(82% 0.303 311.851),
-      oklch(82% 0.297 336.653),
-      oklch(82% 0.287 0),
-      oklch(82% 0.277 14.4),
-      oklch(82% 0.267 28.8),
-      oklch(82% 0.26 43.2),
-      oklch(82% 0.257 57.6),
-      oklch(82% 0.26 72),
-      oklch(82% 0.267 86.4),
-      oklch(82% 0.277 101.059),
-      oklch(82% 0.287 118.186),
-      oklch(82% 0.289 134.126),
-      oklch(82% 0.276 143.4),
-      oklch(82% 0.265 152.213),
-      oklch(82% 0.264 173.496),
-      oklch(82% 0.273 206.098),
-      oklch(82% 0.287 237.686),
-      oklch(82% 0.299 258),
-      oklch(82% 0.306 269.866),
-      oklch(82% 0.307 287.621)
+      var(--clr-rainbow-0),
+      var(--clr-rainbow-1),
+      var(--clr-rainbow-2),
+      var(--clr-rainbow-3),
+      var(--clr-rainbow-4),
+      var(--clr-rainbow-5),
+      var(--clr-rainbow-6),
+      var(--clr-rainbow-7),
+      var(--clr-rainbow-8),
+      var(--clr-rainbow-9),
+      var(--clr-rainbow-10),
+      var(--clr-rainbow-11),
+      var(--clr-rainbow-12),
+      var(--clr-rainbow-13),
+      var(--clr-rainbow-14),
+      var(--clr-rainbow-15),
+      var(--clr-rainbow-16),
+      var(--clr-rainbow-17),
+      var(--clr-rainbow-18),
+      var(--clr-rainbow-19),
+      var(--clr-rainbow-0)
     );
   }
 
@@ -119,6 +140,10 @@
 
     --spacing-card-border-radius: var(--spacing-xl);
     --spacing-card-padding: var(--spacing-xxl);
+    --spacing-card-border-radius-small: var(--spacing-l);
+    --spacing-card-padding-small: var(--spacing-xl);
+    --spacing-card-border-radius-extra-small: var(--spacing-m);
+    --spacing-card-padding-extra-small: var(--spacing-l);
 
     --spacing-page-padding: var(--spacing-xxl);
     --spacing-page-gap: var(--spacing-l);
