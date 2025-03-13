@@ -2,6 +2,7 @@ import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { createResource, Show, createSignal } from "solid-js";
 import { Portal } from "solid-js/web";
+import { useBackgroundState } from "../Background/Background";
 
 type UpdateError = {
   type: "check" | "download" | "install";
@@ -9,6 +10,7 @@ type UpdateError = {
 };
 
 export default function Updater() {
+  const backgroundState = useBackgroundState();
   const [isVisible, setIsVisible] = createSignal(true);
   const [error, setError] = createSignal<UpdateError | null>(null);
 
@@ -83,7 +85,8 @@ export default function Updater() {
             right: "1rem",
             "max-width": "20rem",
             width: "100%",
-            "--glow-background": "var(--clr-rainbow-7)",
+            // 0.375 gets us the rainbow color at the bottom right corner of the screen
+            "--glow-background": backgroundState.getColor(0.375),
             "--glow-opacity": "0.25",
             "--glow-blur": "3rem",
           }}

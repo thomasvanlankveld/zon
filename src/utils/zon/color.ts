@@ -55,6 +55,25 @@ export function rainbow(value: number): Colors {
 }
 
 /**
+ * Get a color from a given span of the rainbow, based on a value between 0 and 1. `startPosition + span` should
+ * not exceed `1`.
+ * @param value Fraction between 0 and 1, the position along the rainbow's colors
+ * @param [options.startPosition] Fraction between 0 and 1, default 0, position along the rainbow's colors
+ * @param [options.span] Fraction between 0 and 1, default 1, the distance to span along the rainbow's colors
+ */
+export function colorInRange(
+  value: number,
+  options: { startPosition?: number; span?: number } = {},
+): string {
+  const startPosition = options.startPosition ?? 0;
+  const span = options.span ?? 1;
+
+  const position = startPosition + value * span;
+
+  return rainbow(position).regular;
+}
+
+/**
  * Get an array of colors spanning a specified section of the rainbow (usually to make a gradient).
  * `startPosition + span` should not exceed `1`. If you set either of these values, you might want
  * to add a `filter: blur(...)`.

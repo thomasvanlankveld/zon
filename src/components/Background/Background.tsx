@@ -7,7 +7,7 @@ import {
   JSX,
   useContext,
 } from "solid-js";
-import { colorRange } from "../../utils/zon";
+import { colorInRange, colorRange } from "../../utils/zon";
 import styles from "./Background.module.css";
 
 const DEFAULT_START_POSITION = 0;
@@ -44,7 +44,14 @@ function createBackgroundState() {
     }),
   );
 
-  return { colors, opacity, updateBackground };
+  function getColor(value: number) {
+    return colorInRange(value, {
+      startPosition: startPosition(),
+      span: span(),
+    });
+  }
+
+  return { colors, getColor, opacity, updateBackground };
 }
 
 const BackgroundContext = createContext();
@@ -95,7 +102,7 @@ export function Background(props: BackgroundProps) {
 
 type BackgroundState = ReturnType<typeof createBackgroundState>;
 
-function useBackgroundState(): BackgroundState {
+export function useBackgroundState(): BackgroundState {
   return useContext(BackgroundContext) as BackgroundState;
 }
 
