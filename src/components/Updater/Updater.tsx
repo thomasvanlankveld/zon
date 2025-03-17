@@ -39,12 +39,12 @@ export default function Updater() {
           "--glow-opacity": "0.25",
           "--glow-blur": "3rem",
         }}
-        class="card glow"
+        class="card text-extra-small glow"
         data-card-size="extra-small"
       >
         <Switch>
           <Match when={update.state === "errored"}>
-            {copies.error}
+            <p>{copies.error}</p>
             <button onClick={() => void retryCheckForUpdates()}>
               {copies.retry}
             </button>

@@ -24,8 +24,12 @@
   /* DO NOT USE DIRECTLY */
   :root {
     /* Typography */
+    --fs-xs: 0.75rem; /* 12px */
+    --lh-xs: calc(1 / 0.75);
+    --fw-xs: 400;
+
     --fs-s: 0.875rem; /* 14px */
-    --lh-s: 1rem; /* 16px */
+    --lh-s: calc(1.25 / 0.875);
     --fw-s: 400;
 
     --fs-m: 1rem; /* 16px */
@@ -165,6 +169,11 @@
 
     /* Typography */
     --font-family-regular: "Fira Code";
+
+    --font-size-extra-small: var(--fs-xs);
+    --line-height-extra-small: var(--lh-xs);
+    --font-weight-extra-small: var(--fw-xs);
+
     --font-size-small: var(--fs-s);
     --line-height-small: var(--lh-s);
     --font-weight-small: var(--fw-s);

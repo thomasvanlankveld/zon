@@ -1,5 +1,12 @@
 @layer utility {
   /* Typography */
+  .text-extra-small,
+  .text-extra-small * {
+    font-size: var(--font-size-extra-small);
+    line-height: var(--line-height-extra-small);
+    font-weight: var(--font-weight-extra-small);
+  }
+
   .text-small,
   .text-small * {
     font-size: var(--font-size-small);
