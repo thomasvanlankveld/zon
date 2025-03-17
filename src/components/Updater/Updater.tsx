@@ -1,6 +1,7 @@
 import { check } from "@tauri-apps/plugin-updater";
 import { createResource, Match, Switch } from "solid-js";
 import { Portal } from "solid-js/web";
+import { useBackgroundState } from "../Background/Background";
 
 const copies = {
   loading: "Checking for updates...",
@@ -15,11 +16,14 @@ const copies = {
 };
 
 export default function Updater() {
+  const backgroundState = useBackgroundState();
+
   async function checkForUpdates() {
     return await check();
   }
 
-  const [update, { refetch: refetchUpdate }] = createResource(checkForUpdates);
+  const [update, { refetch: retryCheckForUpdates }] =
+    createResource(checkForUpdates);
 
   return (
     <Portal>
@@ -31,7 +35,7 @@ export default function Updater() {
           "max-width": "20rem",
           width: "100%",
           // 0.375 gets us the rainbow color at the bottom right corner of the screen
-          // "--glow-background": backgroundState.getColor(0.375),
+          "--glow-background": backgroundState.getColor(0.375),
           "--glow-opacity": "0.25",
           "--glow-blur": "3rem",
         }}
@@ -41,7 +45,9 @@ export default function Updater() {
         <Switch>
           <Match when={update.state === "errored"}>
             {copies.error}
-            <button onClick={() => void refetchUpdate()}>{copies.retry}</button>
+            <button onClick={() => void retryCheckForUpdates()}>
+              {copies.retry}
+            </button>
           </Match>
           <Match when={update.loading}>{copies.loading}</Match>
           <Match when={update()}>{copies.updatesAvailable}</Match>
