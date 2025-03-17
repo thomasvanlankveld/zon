@@ -1,14 +1,14 @@
 import { check } from "@tauri-apps/plugin-updater";
-import { createResource, createSignal, Match, Switch } from "solid-js";
+import { relaunch } from "@tauri-apps/plugin-process";
+import { createResource, createSignal, Match, Show, Switch } from "solid-js";
 import { Portal } from "solid-js/web";
 import { useBackgroundState } from "../Background/Background";
-import { relaunch } from "@tauri-apps/plugin-process";
 
 const copies = {
   "check.in-progress": "Checking for updates...",
   "check.no-updates": "No updates found",
   "check.error":
-    "Unable to check for updates. Please check your internet connection and try again.",
+    "Unable to find updates. Please check your internet connection and try again.",
   "download.in-progress": "Downloading updates...",
   "download.error": "Failed to download the update. Please try again later.",
   "install.in-progress": "Installing updates...",
@@ -16,11 +16,6 @@ const copies = {
   "relaunch.in-progress": "Restarting application...",
   "relaunch.error":
     "Failed to restart the application. Please try again later.",
-  noUpdates: "No updates found",
-  updatesAvailable: "Updates available!",
-  downloading: "Downloading updates...",
-  installing: "Installing updates...",
-  restart: "Restarting application...",
   "retry.check": "Retry check updates",
   "retry.download": "Retry download update",
   "retry.install": "Retry install update",
@@ -31,6 +26,7 @@ const copies = {
 
 export default function Updater() {
   const backgroundState = useBackgroundState();
+  const [isDismissed, setIsDismissed] = createSignal(false);
 
   async function checkForUpdates() {
     return await check();
@@ -103,66 +99,77 @@ export default function Updater() {
   );
 
   return (
-    <Portal>
-      <div
-        style={{
-          position: "fixed",
-          bottom: "1rem",
-          right: "1rem",
-          "max-width": "20rem",
-          width: "100%",
-          // 0.375 gets us the rainbow color at the bottom right corner of the screen
-          "--glow-background": backgroundState.getColor(0.375),
-          "--glow-opacity": "0.25",
-          "--glow-blur": "3rem",
-        }}
-        class="card text-extra-small glow"
-        data-card-size="extra-small"
-      >
-        <Switch>
-          <Match when={update.state === "errored"}>
-            <p>{copies["check.error"]}</p>
-            <button onClick={() => void retryCheckForUpdates()}>
-              {copies["retry.check"]}
-            </button>
-          </Match>
-          <Match when={hasDownloaded.state === "errored"}>
-            <p>{copies["download.error"]}</p>
-            <button onClick={() => void retryDownloadUpdate()}>
-              {copies["retry.download"]}
-            </button>
-          </Match>
-          <Match when={hasInstalled.state === "errored"}>
-            <p>{copies["install.error"]}</p>
-            <button onClick={() => void retryInstallUpdate()}>
-              {copies["retry.install"]}
-            </button>
-          </Match>
-          <Match when={hasRelaunched.state === "errored"}>
-            <p>{copies["relaunch.error"]}</p>
-            <button onClick={() => void retryRelaunch()}>
-              {copies["retry.relaunch"]}
-            </button>
-          </Match>
-          <Match when={update.loading}>{copies["check.in-progress"]}</Match>
-          <Match when={hasDownloaded.loading}>
-            {copies["download.in-progress"]}
-          </Match>
-          <Match when={hasInstalled.loading}>
-            {copies["install.in-progress"]}
-          </Match>
-          <Match when={hasRelaunched.loading}>
-            {copies["relaunch.in-progress"]}
-          </Match>
-          <Match when={update() == null}>{copies["check.no-updates"]}</Match>
-          <Match when={update()}>
-            <p>{copies.hasDownloaded}</p>
-            <button onClick={() => setShouldInstall(true)}>
-              {copies.install}
-            </button>
-          </Match>
-        </Switch>
-      </div>
-    </Portal>
+    <Show when={!isDismissed()}>
+      <Portal>
+        <div
+          style={{
+            position: "fixed",
+            bottom: "1rem",
+            right: "1rem",
+            "max-width": "22rem",
+            width: "100%",
+            display: "flex",
+            "justify-content": "space-between",
+            "align-items": "start",
+            gap: "0.5rem",
+            // 0.375 gets us the rainbow color at the bottom right corner of the screen
+            "--glow-background": backgroundState.getColor(0.375),
+            "--glow-opacity": "0.25",
+            "--glow-blur": "3rem",
+          }}
+          class="card text-extra-small glow"
+          data-card-size="extra-small"
+        >
+          <div>
+            <Switch>
+              <Match when={update.state === "errored"}>
+                <p>{copies["check.error"]}</p>
+                <button onClick={() => void retryCheckForUpdates()}>
+                  {copies["retry.check"]}
+                </button>
+              </Match>
+              <Match when={hasDownloaded.state === "errored"}>
+                <p>{copies["download.error"]}</p>
+                <button onClick={() => void retryDownloadUpdate()}>
+                  {copies["retry.download"]}
+                </button>
+              </Match>
+              <Match when={hasInstalled.state === "errored"}>
+                <p>{copies["install.error"]}</p>
+                <button onClick={() => void retryInstallUpdate()}>
+                  {copies["retry.install"]}
+                </button>
+              </Match>
+              <Match when={hasRelaunched.state === "errored"}>
+                <p>{copies["relaunch.error"]}</p>
+                <button onClick={() => void retryRelaunch()}>
+                  {copies["retry.relaunch"]}
+                </button>
+              </Match>
+              <Match when={update.loading}>{copies["check.in-progress"]}</Match>
+              <Match when={hasDownloaded.loading}>
+                {copies["download.in-progress"]}
+              </Match>
+              <Match when={hasInstalled.loading}>
+                {copies["install.in-progress"]}
+              </Match>
+              <Match when={hasRelaunched.loading}>
+                {copies["relaunch.in-progress"]}
+              </Match>
+              <Match when={update() == null}>
+                {copies["check.no-updates"]}
+              </Match>
+              <Match when={update()}>
+                <p>{copies.hasDownloaded}</p>
+                <button onClick={() => setShouldInstall(true)}>
+                  {copies.install}
+                </button>
+              </Match>
+            </Switch>
+          </div>
+          <button onClick={() => setIsDismissed(true)}>X</button>
+        </div>
+      </Portal>
+    </Show>
   );
 }
