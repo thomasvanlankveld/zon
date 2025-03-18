@@ -101,23 +101,15 @@ export default function Updater() {
       return {
         message: copies["check.error"],
         actions: (
-          <>
-            <Button
-              size="small"
-              variant="primary"
-              onClick={() => void retryCheckForUpdates()}
-            >
-              {copies["check.retry"]}
-            </Button>
-            <Button
-              onClick={() => void retryCheckForUpdates()}
-              variant="secondary"
-              size="small"
-            >
-              {copies["dismiss"]}
-            </Button>
-          </>
+          <Button
+            size="small"
+            variant="primary"
+            onClick={() => void retryCheckForUpdates()}
+          >
+            {copies["check.retry"]}
+          </Button>
         ),
+        dismissButton: true,
       };
     }
     if (hasDownloaded.state === "errored") {
@@ -126,32 +118,43 @@ export default function Updater() {
         actions: (
           <Button
             size="small"
-            variant="secondary"
+            variant="primary"
             onClick={() => void retryDownloadUpdate()}
           >
             {copies["download.retry"]}
           </Button>
         ),
+        dismissButton: true,
       };
     }
     if (hasInstalled.state === "errored") {
       return {
         message: copies["install.error"],
         actions: (
-          <Button onClick={() => void retryInstallUpdate()}>
+          <Button
+            size="small"
+            variant="primary"
+            onClick={() => void retryInstallUpdate()}
+          >
             {copies["install.retry"]}
           </Button>
         ),
+        dismissButton: true,
       };
     }
     if (hasRelaunched.state === "errored") {
       return {
         message: copies["relaunch.error"],
         actions: (
-          <Button onClick={() => void retryRelaunch()}>
+          <Button
+            size="small"
+            variant="primary"
+            onClick={() => void retryRelaunch()}
+          >
             {copies["relaunch.retry"]}
           </Button>
         ),
+        dismissButton: true,
       };
     }
     if (update.loading) {
@@ -193,5 +196,5 @@ export default function Updater() {
     throw new Error("Invalid updater state");
   };
 
-  return <Toast {...toastProps()} />;
+  return <Toast closeButton {...toastProps()} />;
 }

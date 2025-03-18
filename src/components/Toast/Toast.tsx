@@ -1,10 +1,19 @@
 import { createSignal, JSX, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import { useBackgroundState } from "../Background/Background";
+import Button from "../Button/Button";
+
+const copies = {
+  // TODO: use this copy with sr-only
+  close: "Close",
+  dismiss: "Dismiss",
+};
 
 type ToastProps = {
   message: string;
   actions?: JSX.Element;
+  closeButton?: boolean;
+  dismissButton?: boolean;
 };
 
 export default function Toast(props: ToastProps) {
@@ -35,7 +44,9 @@ export default function Toast(props: ToastProps) {
           data-card-size="extra-small"
         >
           <span>{props.message}</span>
-          <button onClick={() => setIsDismissed(true)}>X</button>
+          {props.closeButton && (
+            <button onClick={() => setIsDismissed(true)}>X</button>
+          )}
           <div
             style={{
               "grid-column": "span 2",
@@ -45,6 +56,15 @@ export default function Toast(props: ToastProps) {
             }}
           >
             {props.actions}
+            {props.dismissButton && (
+              <Button
+                variant="secondary"
+                size="small"
+                onClick={() => setIsDismissed(true)}
+              >
+                {copies.dismiss}
+              </Button>
+            )}
           </div>
         </div>
       </Portal>
