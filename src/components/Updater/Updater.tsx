@@ -1,9 +1,8 @@
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
-import { createResource, createSignal, Match, Show, Switch } from "solid-js";
-import { Portal } from "solid-js/web";
-import { useBackgroundState } from "../Background/Background";
+import { createResource, createSignal, Match, Switch } from "solid-js";
 import Button from "../Button/Button";
+import Toast from "../Toast/Toast";
 
 const copies = {
   "check.in-progress": "Checking for updates...",
@@ -27,9 +26,6 @@ const copies = {
 };
 
 export default function Updater() {
-  const backgroundState = useBackgroundState();
-  const [isDismissed, setIsDismissed] = createSignal(false);
-
   async function checkForUpdates() {
     return await check();
   }
@@ -101,88 +97,61 @@ export default function Updater() {
   );
 
   return (
-    <Show when={!isDismissed()}>
-      <Portal>
-        <div
-          style={{
-            position: "fixed",
-            bottom: "1rem",
-            right: "1rem",
-            "max-width": "22rem",
-            width: "100%",
-            display: "flex",
-            "justify-content": "space-between",
-            "align-items": "start",
-            gap: "0.5rem",
-            // 0.375 gets us the rainbow color at the bottom right corner of the screen
-            "--glow-background": backgroundState.getColor(0.375),
-            "--glow-opacity": "0.25",
-            "--glow-blur": "3rem",
-          }}
-          class="card text-extra-small glow"
-          data-card-size="extra-small"
-        >
-          <div>
-            <Switch>
-              <Match when={update.state === "errored"}>
-                <p>{copies["check.error"]}</p>
-                <Button
-                  onClick={() => void retryCheckForUpdates()}
-                  variant="primary"
-                  size="small"
-                >
-                  {copies["check.retry"]}
-                </Button>
-                <Button
-                  onClick={() => void retryCheckForUpdates()}
-                  variant="secondary"
-                  size="small"
-                >
-                  {copies["dismiss"]}
-                </Button>
-              </Match>
-              <Match when={hasDownloaded.state === "errored"}>
-                <p>{copies["download.error"]}</p>
-                <Button onClick={() => void retryDownloadUpdate()}>
-                  {copies["download.retry"]}
-                </Button>
-              </Match>
-              <Match when={hasInstalled.state === "errored"}>
-                <p>{copies["install.error"]}</p>
-                <Button onClick={() => void retryInstallUpdate()}>
-                  {copies["install.retry"]}
-                </Button>
-              </Match>
-              <Match when={hasRelaunched.state === "errored"}>
-                <p>{copies["relaunch.error"]}</p>
-                <Button onClick={() => void retryRelaunch()}>
-                  {copies["relaunch.retry"]}
-                </Button>
-              </Match>
-              <Match when={update.loading}>{copies["check.in-progress"]}</Match>
-              <Match when={hasDownloaded.loading}>
-                {copies["download.in-progress"]}
-              </Match>
-              <Match when={hasInstalled.loading}>
-                {copies["install.in-progress"]}
-              </Match>
-              <Match when={hasRelaunched.loading}>
-                {copies["relaunch.in-progress"]}
-              </Match>
-              <Match when={update() == null}>
-                {copies["check.no-updates"]}
-              </Match>
-              <Match when={update()}>
-                <p>{copies["download.success"]}</p>
-                <Button onClick={() => setShouldInstall(true)}>
-                  {copies["install.action"]}
-                </Button>
-              </Match>
-            </Switch>
-          </div>
-          <button onClick={() => setIsDismissed(true)}>X</button>
-        </div>
-      </Portal>
-    </Show>
+    <Toast>
+      <Switch>
+        <Match when={update.state === "errored"}>
+          <p>{copies["check.error"]}</p>
+          <Button
+            onClick={() => void retryCheckForUpdates()}
+            variant="primary"
+            size="small"
+          >
+            {copies["check.retry"]}
+          </Button>
+          <Button
+            onClick={() => void retryCheckForUpdates()}
+            variant="secondary"
+            size="small"
+          >
+            {copies["dismiss"]}
+          </Button>
+        </Match>
+        <Match when={hasDownloaded.state === "errored"}>
+          <p>{copies["download.error"]}</p>
+          <Button onClick={() => void retryDownloadUpdate()}>
+            {copies["download.retry"]}
+          </Button>
+        </Match>
+        <Match when={hasInstalled.state === "errored"}>
+          <p>{copies["install.error"]}</p>
+          <Button onClick={() => void retryInstallUpdate()}>
+            {copies["install.retry"]}
+          </Button>
+        </Match>
+        <Match when={hasRelaunched.state === "errored"}>
+          <p>{copies["relaunch.error"]}</p>
+          <Button onClick={() => void retryRelaunch()}>
+            {copies["relaunch.retry"]}
+          </Button>
+        </Match>
+        <Match when={update.loading}>{copies["check.in-progress"]}</Match>
+        <Match when={hasDownloaded.loading}>
+          {copies["download.in-progress"]}
+        </Match>
+        <Match when={hasInstalled.loading}>
+          {copies["install.in-progress"]}
+        </Match>
+        <Match when={hasRelaunched.loading}>
+          {copies["relaunch.in-progress"]}
+        </Match>
+        <Match when={update() == null}>{copies["check.no-updates"]}</Match>
+        <Match when={update()}>
+          <p>{copies["download.success"]}</p>
+          <Button onClick={() => setShouldInstall(true)}>
+            {copies["install.action"]}
+          </Button>
+        </Match>
+      </Switch>
+    </Toast>
   );
 }
