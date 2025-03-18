@@ -96,7 +96,7 @@ export default function Updater() {
     { initialValue: false },
   );
 
-  const toastProps = () => {
+  function toastProps() {
     if (update.state === "errored") {
       return {
         message: copies["check.error"],
@@ -112,6 +112,7 @@ export default function Updater() {
         dismissButton: true,
       };
     }
+
     if (hasDownloaded.state === "errored") {
       return {
         message: copies["download.error"],
@@ -127,6 +128,7 @@ export default function Updater() {
         dismissButton: true,
       };
     }
+
     if (hasInstalled.state === "errored") {
       return {
         message: copies["install.error"],
@@ -142,6 +144,7 @@ export default function Updater() {
         dismissButton: true,
       };
     }
+
     if (hasRelaunched.state === "errored") {
       return {
         message: copies["relaunch.error"],
@@ -157,31 +160,37 @@ export default function Updater() {
         dismissButton: true,
       };
     }
+
     if (update.loading) {
       return {
         message: copies["check.in-progress"],
       };
     }
+
     if (hasDownloaded.loading) {
       return {
         message: copies["download.in-progress"],
       };
     }
+
     if (hasInstalled.loading) {
       return {
         message: copies["install.in-progress"],
       };
     }
+
     if (hasRelaunched.loading) {
       return {
         message: copies["relaunch.in-progress"],
       };
     }
+
     if (update() == null) {
       return {
         message: copies["check.no-updates"],
       };
     }
+
     if (update()) {
       return {
         message: copies["download.success"],
@@ -194,7 +203,7 @@ export default function Updater() {
     }
 
     throw new Error("Invalid updater state");
-  };
+  }
 
   return <Toast closeButton {...toastProps()} />;
 }
