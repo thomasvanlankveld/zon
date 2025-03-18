@@ -34,7 +34,7 @@ export default function Toast(props: ToastProps) {
             "grid-template-columns": "1fr auto",
             "justify-content": "space-between",
             "align-items": "start",
-            gap: "0.5rem",
+            gap: "1rem",
             // 0.375 gets us the rainbow color at the bottom right corner of the screen
             "--glow-background": backgroundState.getColor(0.375),
             "--glow-opacity": "0.25",
