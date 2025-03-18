@@ -1,6 +1,5 @@
 import { createSignal, JSX, Show } from "solid-js";
 import { Portal } from "solid-js/web";
-import { useBackgroundState } from "../Background/Background";
 import ToastAction from "./ToastAction";
 
 const copies = {
@@ -17,7 +16,6 @@ type ToastProps = {
 };
 
 export default function Toast(props: ToastProps) {
-  const backgroundState = useBackgroundState();
   const [isDismissed, setIsDismissed] = createSignal(false);
 
   return (
@@ -36,9 +34,9 @@ export default function Toast(props: ToastProps) {
             "align-items": "start",
             gap: "1rem",
             // 0.375 gets us the rainbow color at the bottom right corner of the screen
-            "--glow-background": backgroundState.getColor(0.375),
+            "--glow-background": "var(--clr-white)",
             "--glow-opacity": "0.25",
-            "--glow-blur": "3rem",
+            "--glow-blur": "2rem",
             background: "var(--clr-grey-060)",
             border: "1px solid var(--clr-grey-100)",
           }}
