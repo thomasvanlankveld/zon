@@ -1,7 +1,7 @@
 import { createSignal, JSX, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import { useBackgroundState } from "../Background/Background";
-import Button from "../Button/Button";
+import ToastAction from "./ToastAction";
 
 const copies = {
   // TODO: use this copy with sr-only
@@ -57,13 +57,12 @@ export default function Toast(props: ToastProps) {
           >
             {props.actions}
             {props.dismissButton && (
-              <Button
+              <ToastAction
                 variant="secondary"
-                size="small"
                 onClick={() => setIsDismissed(true)}
               >
                 {copies.dismiss}
-              </Button>
+              </ToastAction>
             )}
           </div>
         </div>
