@@ -1,5 +1,5 @@
 import { createSignal, type JSX } from "solid-js";
-import ShinyButton from "../../components/ShinyButton/ShinyButton";
+import Button from "../../components/Button/Button";
 import { useI18n } from "../../contexts/i18n";
 import { Languages } from "../../utils/tokei";
 import {
@@ -41,7 +41,9 @@ export default function LandingPageMainWeb(props: LandingPageMainWebProps) {
       <form onSubmit={onSubmit}>
         {/* TODO: Validate input on paste */}
         <input type="text" onInput={(e) => setText(e.target.value)} />
-        <ShinyButton type="submit">{t("show-report-button.label")}</ShinyButton>
+        <Button variant="shiny" type="submit">
+          {t("show-report-button.label")}
+        </Button>
       </form>
     </>
   );

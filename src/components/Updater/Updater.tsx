@@ -3,13 +3,14 @@ import { relaunch } from "@tauri-apps/plugin-process";
 import { createResource, createSignal, Match, Show, Switch } from "solid-js";
 import { Portal } from "solid-js/web";
 import { useBackgroundState } from "../Background/Background";
+import Button from "../Button/Button";
 
 const copies = {
   "check.in-progress": "Checking for updates...",
   "check.no-updates": "No updates found",
   "check.error":
     "Unable to find updates. Please check your internet connection and try again.",
-  "check.retry": "Retry check updates",
+  "check.retry": "Retry check for updates",
   "download.in-progress": "Downloading updates...",
   "download.error": "Failed to download the update. Please try again later.",
   "download.retry": "Retry download update",
@@ -22,6 +23,7 @@ const copies = {
     "Failed to restart the application. Please try again later.",
   "relaunch.retry": "Retry relaunch application",
   "install.action": "Install update",
+  dismiss: "Dismiss",
 };
 
 export default function Updater() {
@@ -124,27 +126,38 @@ export default function Updater() {
             <Switch>
               <Match when={update.state === "errored"}>
                 <p>{copies["check.error"]}</p>
-                <button onClick={() => void retryCheckForUpdates()}>
+                <Button
+                  onClick={() => void retryCheckForUpdates()}
+                  variant="primary"
+                  size="small"
+                >
                   {copies["check.retry"]}
-                </button>
+                </Button>
+                <Button
+                  onClick={() => void retryCheckForUpdates()}
+                  variant="secondary"
+                  size="small"
+                >
+                  {copies["dismiss"]}
+                </Button>
               </Match>
               <Match when={hasDownloaded.state === "errored"}>
                 <p>{copies["download.error"]}</p>
-                <button onClick={() => void retryDownloadUpdate()}>
+                <Button onClick={() => void retryDownloadUpdate()}>
                   {copies["download.retry"]}
-                </button>
+                </Button>
               </Match>
               <Match when={hasInstalled.state === "errored"}>
                 <p>{copies["install.error"]}</p>
-                <button onClick={() => void retryInstallUpdate()}>
+                <Button onClick={() => void retryInstallUpdate()}>
                   {copies["install.retry"]}
-                </button>
+                </Button>
               </Match>
               <Match when={hasRelaunched.state === "errored"}>
                 <p>{copies["relaunch.error"]}</p>
-                <button onClick={() => void retryRelaunch()}>
+                <Button onClick={() => void retryRelaunch()}>
                   {copies["relaunch.retry"]}
-                </button>
+                </Button>
               </Match>
               <Match when={update.loading}>{copies["check.in-progress"]}</Match>
               <Match when={hasDownloaded.loading}>
@@ -161,9 +174,9 @@ export default function Updater() {
               </Match>
               <Match when={update()}>
                 <p>{copies["download.success"]}</p>
-                <button onClick={() => setShouldInstall(true)}>
+                <Button onClick={() => setShouldInstall(true)}>
                   {copies["install.action"]}
-                </button>
+                </Button>
               </Match>
             </Switch>
           </div>
