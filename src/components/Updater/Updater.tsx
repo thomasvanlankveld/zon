@@ -96,80 +96,102 @@ export default function Updater() {
     { initialValue: false },
   );
 
-  const toastContent = () => {
+  const toastProps = () => {
     if (update.state === "errored") {
-      return (
-        <>
-          <p>{copies["check.error"]}</p>
-          <Button onClick={() => void retryCheckForUpdates()}>
-            {copies["check.retry"]}
-          </Button>
-          <Button
-            onClick={() => void retryCheckForUpdates()}
-            variant="secondary"
-            size="small"
-          >
-            {copies["dismiss"]}
-          </Button>
-        </>
-      );
+      return {
+        message: copies["check.error"],
+        actions: (
+          <>
+            <Button
+              size="small"
+              variant="primary"
+              onClick={() => void retryCheckForUpdates()}
+            >
+              {copies["check.retry"]}
+            </Button>
+            <Button
+              onClick={() => void retryCheckForUpdates()}
+              variant="secondary"
+              size="small"
+            >
+              {copies["dismiss"]}
+            </Button>
+          </>
+        ),
+      };
     }
     if (hasDownloaded.state === "errored") {
-      return (
-        <>
-          <p>{copies["download.error"]}</p>
-          <Button onClick={() => void retryDownloadUpdate()}>
+      return {
+        message: copies["download.error"],
+        actions: (
+          <Button
+            size="small"
+            variant="secondary"
+            onClick={() => void retryDownloadUpdate()}
+          >
             {copies["download.retry"]}
           </Button>
-        </>
-      );
+        ),
+      };
     }
     if (hasInstalled.state === "errored") {
-      return (
-        <>
-          <p>{copies["install.error"]}</p>
+      return {
+        message: copies["install.error"],
+        actions: (
           <Button onClick={() => void retryInstallUpdate()}>
             {copies["install.retry"]}
           </Button>
-        </>
-      );
+        ),
+      };
     }
     if (hasRelaunched.state === "errored") {
-      return (
-        <>
-          <p>{copies["relaunch.error"]}</p>
+      return {
+        message: copies["relaunch.error"],
+        actions: (
           <Button onClick={() => void retryRelaunch()}>
             {copies["relaunch.retry"]}
           </Button>
-        </>
-      );
+        ),
+      };
     }
     if (update.loading) {
-      return <p>{copies["check.in-progress"]}</p>;
+      return {
+        message: copies["check.in-progress"],
+      };
     }
     if (hasDownloaded.loading) {
-      return <p>{copies["download.in-progress"]}</p>;
+      return {
+        message: copies["download.in-progress"],
+      };
     }
     if (hasInstalled.loading) {
-      return <p>{copies["install.in-progress"]}</p>;
+      return {
+        message: copies["install.in-progress"],
+      };
     }
     if (hasRelaunched.loading) {
-      return <p>{copies["relaunch.in-progress"]}</p>;
+      return {
+        message: copies["relaunch.in-progress"],
+      };
     }
     if (update() == null) {
-      return <p>{copies["check.no-updates"]}</p>;
+      return {
+        message: copies["check.no-updates"],
+      };
     }
     if (update()) {
-      return (
-        <>
-          <p>{copies["download.success"]}</p>
+      return {
+        message: copies["download.success"],
+        actions: (
           <Button onClick={() => setShouldInstall(true)}>
             {copies["install.action"]}
           </Button>
-        </>
-      );
+        ),
+      };
     }
+
+    throw new Error("Invalid updater state");
   };
 
-  return <Toast>{toastContent()}</Toast>;
+  return <Toast {...toastProps()} />;
 }

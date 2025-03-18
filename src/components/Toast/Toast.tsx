@@ -3,7 +3,8 @@ import { Portal } from "solid-js/web";
 import { useBackgroundState } from "../Background/Background";
 
 type ToastProps = {
-  children: JSX.Element;
+  message: string;
+  actions?: JSX.Element;
 };
 
 export default function Toast(props: ToastProps) {
@@ -33,8 +34,18 @@ export default function Toast(props: ToastProps) {
           class="card text-extra-small glow"
           data-card-size="extra-small"
         >
-          <div>{props.children}</div>
+          <span>{props.message}</span>
           <button onClick={() => setIsDismissed(true)}>X</button>
+          <div
+            style={{
+              "grid-column": "span 2",
+              "justify-self": "end",
+              display: "flex",
+              gap: "0.5rem",
+            }}
+          >
+            {props.actions}
+          </div>
         </div>
       </Portal>
     </Show>
