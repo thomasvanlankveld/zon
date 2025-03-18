@@ -9,19 +9,19 @@ const copies = {
   "check.no-updates": "No updates found",
   "check.error":
     "Unable to find updates. Please check your internet connection and try again.",
+  "check.retry": "Retry check updates",
   "download.in-progress": "Downloading updates...",
   "download.error": "Failed to download the update. Please try again later.",
+  "download.retry": "Retry download update",
+  "download.success": "Update downloaded",
   "install.in-progress": "Installing updates...",
   "install.error": "Failed to install the update. Please try again later.",
+  "install.retry": "Retry install update",
   "relaunch.in-progress": "Restarting application...",
   "relaunch.error":
     "Failed to restart the application. Please try again later.",
-  "retry.check": "Retry check updates",
-  "retry.download": "Retry download update",
-  "retry.install": "Retry install update",
-  "retry.relaunch": "Retry relaunch application",
-  hasDownloaded: "Update downloaded",
-  install: "Install update",
+  "relaunch.retry": "Retry relaunch application",
+  "install.action": "Install update",
 };
 
 export default function Updater() {
@@ -125,25 +125,25 @@ export default function Updater() {
               <Match when={update.state === "errored"}>
                 <p>{copies["check.error"]}</p>
                 <button onClick={() => void retryCheckForUpdates()}>
-                  {copies["retry.check"]}
+                  {copies["check.retry"]}
                 </button>
               </Match>
               <Match when={hasDownloaded.state === "errored"}>
                 <p>{copies["download.error"]}</p>
                 <button onClick={() => void retryDownloadUpdate()}>
-                  {copies["retry.download"]}
+                  {copies["download.retry"]}
                 </button>
               </Match>
               <Match when={hasInstalled.state === "errored"}>
                 <p>{copies["install.error"]}</p>
                 <button onClick={() => void retryInstallUpdate()}>
-                  {copies["retry.install"]}
+                  {copies["install.retry"]}
                 </button>
               </Match>
               <Match when={hasRelaunched.state === "errored"}>
                 <p>{copies["relaunch.error"]}</p>
                 <button onClick={() => void retryRelaunch()}>
-                  {copies["retry.relaunch"]}
+                  {copies["relaunch.retry"]}
                 </button>
               </Match>
               <Match when={update.loading}>{copies["check.in-progress"]}</Match>
@@ -160,9 +160,9 @@ export default function Updater() {
                 {copies["check.no-updates"]}
               </Match>
               <Match when={update()}>
-                <p>{copies.hasDownloaded}</p>
+                <p>{copies["download.success"]}</p>
                 <button onClick={() => setShouldInstall(true)}>
-                  {copies.install}
+                  {copies["install.action"]}
                 </button>
               </Match>
             </Switch>
