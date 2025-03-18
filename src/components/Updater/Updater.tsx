@@ -7,6 +7,7 @@ import ToastAction from "../Toast/ToastAction";
 const copies = {
   "check.in-progress": "Checking for updates...",
   "check.no-updates": "No updates found",
+  // TODO: check with `navigator.onLine`: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/onLine
   "check.error":
     "Unable to find updates. Please check your internet connection and try again.",
   "download.in-progress": "Downloading updates...",
