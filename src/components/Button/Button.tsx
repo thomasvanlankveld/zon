@@ -5,6 +5,7 @@ export type ButtonProps = {
   children: JSX.Element;
   onClick?: () => void;
   type?: "submit" | "reset" | "button";
+  // TODO: 'text' and 'destructive' variants
   variant?: "primary" | "secondary" | "shiny";
   size?: "small" | "medium" | "large";
 };
