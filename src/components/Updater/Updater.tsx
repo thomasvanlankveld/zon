@@ -1,8 +1,8 @@
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { createResource, createSignal } from "solid-js";
-import Button from "../Button/Button";
 import Toast from "../Toast/Toast";
+import ToastAction from "../Toast/ToastAction";
 
 const copies = {
   "check.in-progress": "Checking for updates...",
@@ -97,13 +97,9 @@ export default function Updater() {
       return {
         message: copies["check.error"],
         actions: (
-          <Button
-            size="small"
-            variant="primary"
-            onClick={() => void retryCheckForUpdates()}
-          >
+          <ToastAction onClick={() => void retryCheckForUpdates()}>
             {copies["retry"]}
-          </Button>
+          </ToastAction>
         ),
         dismissButton: true,
       };
@@ -113,13 +109,9 @@ export default function Updater() {
       return {
         message: copies["download.error"],
         actions: (
-          <Button
-            size="small"
-            variant="primary"
-            onClick={() => void retryDownloadUpdate()}
-          >
+          <ToastAction onClick={() => void retryDownloadUpdate()}>
             {copies["retry"]}
-          </Button>
+          </ToastAction>
         ),
         dismissButton: true,
       };
@@ -129,13 +121,9 @@ export default function Updater() {
       return {
         message: copies["install.error"],
         actions: (
-          <Button
-            size="small"
-            variant="primary"
-            onClick={() => void retryInstallUpdate()}
-          >
+          <ToastAction onClick={() => void retryInstallUpdate()}>
             {copies["retry"]}
-          </Button>
+          </ToastAction>
         ),
         dismissButton: true,
       };
@@ -145,13 +133,9 @@ export default function Updater() {
       return {
         message: copies["relaunch.error"],
         actions: (
-          <Button
-            size="small"
-            variant="primary"
-            onClick={() => void retryRelaunch()}
-          >
+          <ToastAction onClick={() => void retryRelaunch()}>
             {copies["retry"]}
-          </Button>
+          </ToastAction>
         ),
         dismissButton: true,
       };
@@ -191,9 +175,9 @@ export default function Updater() {
       return {
         message: copies["download.success"],
         actions: (
-          <Button onClick={() => setShouldInstall(true)}>
+          <ToastAction onClick={() => setShouldInstall(true)}>
             {copies["install.action"]}
-          </Button>
+          </ToastAction>
         ),
       };
     }

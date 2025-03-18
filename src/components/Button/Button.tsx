@@ -1,7 +1,7 @@
 import { JSX } from "solid-js";
 import styles from "./Button.module.css";
 
-type ButtonProps = {
+export type ButtonProps = {
   children: JSX.Element;
   onClick?: () => void;
   type?: "submit" | "reset" | "button";
