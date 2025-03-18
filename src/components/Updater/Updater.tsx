@@ -1,6 +1,6 @@
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
-import { createResource, createSignal, Match, Switch } from "solid-js";
+import { createResource, createSignal } from "solid-js";
 import Button from "../Button/Button";
 import Toast from "../Toast/Toast";
 
@@ -96,16 +96,12 @@ export default function Updater() {
     { initialValue: false },
   );
 
-  return (
-    <Toast>
-      <Switch>
-        <Match when={update.state === "errored"}>
+  const toastContent = () => {
+    if (update.state === "errored") {
+      return (
+        <>
           <p>{copies["check.error"]}</p>
-          <Button
-            onClick={() => void retryCheckForUpdates()}
-            variant="primary"
-            size="small"
-          >
+          <Button onClick={() => void retryCheckForUpdates()}>
             {copies["check.retry"]}
           </Button>
           <Button
@@ -115,43 +111,65 @@ export default function Updater() {
           >
             {copies["dismiss"]}
           </Button>
-        </Match>
-        <Match when={hasDownloaded.state === "errored"}>
+        </>
+      );
+    }
+    if (hasDownloaded.state === "errored") {
+      return (
+        <>
           <p>{copies["download.error"]}</p>
           <Button onClick={() => void retryDownloadUpdate()}>
             {copies["download.retry"]}
           </Button>
-        </Match>
-        <Match when={hasInstalled.state === "errored"}>
+        </>
+      );
+    }
+    if (hasInstalled.state === "errored") {
+      return (
+        <>
           <p>{copies["install.error"]}</p>
           <Button onClick={() => void retryInstallUpdate()}>
             {copies["install.retry"]}
           </Button>
-        </Match>
-        <Match when={hasRelaunched.state === "errored"}>
+        </>
+      );
+    }
+    if (hasRelaunched.state === "errored") {
+      return (
+        <>
           <p>{copies["relaunch.error"]}</p>
           <Button onClick={() => void retryRelaunch()}>
             {copies["relaunch.retry"]}
           </Button>
-        </Match>
-        <Match when={update.loading}>{copies["check.in-progress"]}</Match>
-        <Match when={hasDownloaded.loading}>
-          {copies["download.in-progress"]}
-        </Match>
-        <Match when={hasInstalled.loading}>
-          {copies["install.in-progress"]}
-        </Match>
-        <Match when={hasRelaunched.loading}>
-          {copies["relaunch.in-progress"]}
-        </Match>
-        <Match when={update() == null}>{copies["check.no-updates"]}</Match>
-        <Match when={update()}>
+        </>
+      );
+    }
+    if (update.loading) {
+      return <p>{copies["check.in-progress"]}</p>;
+    }
+    if (hasDownloaded.loading) {
+      return <p>{copies["download.in-progress"]}</p>;
+    }
+    if (hasInstalled.loading) {
+      return <p>{copies["install.in-progress"]}</p>;
+    }
+    if (hasRelaunched.loading) {
+      return <p>{copies["relaunch.in-progress"]}</p>;
+    }
+    if (update() == null) {
+      return <p>{copies["check.no-updates"]}</p>;
+    }
+    if (update()) {
+      return (
+        <>
           <p>{copies["download.success"]}</p>
           <Button onClick={() => setShouldInstall(true)}>
             {copies["install.action"]}
           </Button>
-        </Match>
-      </Switch>
-    </Toast>
-  );
+        </>
+      );
+    }
+  };
+
+  return <Toast>{toastContent()}</Toast>;
 }
