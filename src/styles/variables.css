@@ -67,11 +67,11 @@
     --clr-grey-100: hsl(75, 4%, 10%);
     --clr-grey-060: hsl(75, 4%, 06%);
 
-    --clr-blue-450: hsl(221, 67%, 45%);
-    --clr-blue-300: hsl(221, 67%, 30%);
-    --clr-blue-250: hsl(221, 67%, 25%);
-    --clr-blue-200: hsl(221, 67%, 20%);
-    --clr-blue-150: hsl(221, 67%, 15%);
+    --clr-blue-450: oklch(45% 0.3 197);
+    --clr-blue-300: oklch(30% 0.3 197);
+    --clr-blue-250: oklch(25% 0.3 197);
+    --clr-blue-200: oklch(20% 0.3 197);
+    --clr-blue-150: oklch(15% 0.3 197);
 
     --clr-text-highlight: var(--clr-white);
     --clr-text-regular: var(--clr-grey-800);
