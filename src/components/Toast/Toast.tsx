@@ -39,6 +39,8 @@ export default function Toast(props: ToastProps) {
             "--glow-background": backgroundState.getColor(0.375),
             "--glow-opacity": "0.25",
             "--glow-blur": "3rem",
+            background: "var(--clr-grey-060)",
+            border: "1px solid var(--clr-grey-100)",
           }}
           class="card text-extra-small glow"
           data-card-size="extra-small"
