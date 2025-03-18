@@ -9,20 +9,16 @@ const copies = {
   "check.no-updates": "No updates found",
   "check.error":
     "Unable to find updates. Please check your internet connection and try again.",
-  "check.retry": "Retry check for updates",
   "download.in-progress": "Downloading updates...",
   "download.error": "Failed to download the update. Please try again later.",
-  "download.retry": "Retry download update",
   "download.success": "Update downloaded",
   "install.in-progress": "Installing updates...",
-  "install.error": "Failed to install the update. Please try again later.",
-  "install.retry": "Retry install update",
+  "install.error": "Failed to install the update",
   "relaunch.in-progress": "Restarting application...",
-  "relaunch.error":
-    "Failed to restart the application. Please try again later.",
-  "relaunch.retry": "Retry relaunch application",
+  "relaunch.error": "Failed to restart the application",
   "install.action": "Install update",
   dismiss: "Dismiss",
+  retry: "Retry",
 };
 
 export default function Updater() {
@@ -106,7 +102,7 @@ export default function Updater() {
             variant="primary"
             onClick={() => void retryCheckForUpdates()}
           >
-            {copies["check.retry"]}
+            {copies["retry"]}
           </Button>
         ),
         dismissButton: true,
@@ -122,7 +118,7 @@ export default function Updater() {
             variant="primary"
             onClick={() => void retryDownloadUpdate()}
           >
-            {copies["download.retry"]}
+            {copies["retry"]}
           </Button>
         ),
         dismissButton: true,
@@ -138,7 +134,7 @@ export default function Updater() {
             variant="primary"
             onClick={() => void retryInstallUpdate()}
           >
-            {copies["install.retry"]}
+            {copies["retry"]}
           </Button>
         ),
         dismissButton: true,
@@ -154,7 +150,7 @@ export default function Updater() {
             variant="primary"
             onClick={() => void retryRelaunch()}
           >
-            {copies["relaunch.retry"]}
+            {copies["retry"]}
           </Button>
         ),
         dismissButton: true,
