@@ -14,8 +14,8 @@
     color: var(--color-text-regular);
     background: radial-gradient(
       circle at 35% -30%,
-      var(--clr-grey-060),
-      var(--clr-black)
+      var(--clr-grey-100),
+      var(--clr-grey-060)
     );
   }
 
