@@ -91,10 +91,14 @@ export default function Toast(props: ToastProps) {
             </span>
           </div>
           {props.closeButton && (
-            <Button onClick={() => setIsDismissed(true)}>
-              {/* <button onClick={() => setIsDismissed(true)}> */}
+            <Button
+              variant="tertiary"
+              onClick={() => setIsDismissed(true)}
+              style={{
+                "line-height": "var(--spacing-s)",
+              }}
+            >
               <X size={16} />
-              {/* </button> */}
             </Button>
           )}
           <div

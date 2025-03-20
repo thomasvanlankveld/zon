@@ -242,6 +242,9 @@
     --color-button-secondary-hover-focus-border: var(--clr-grey-450);
     --color-button-secondary-active-background: var(--clr-grey-130);
 
+    --color-button-tertiary-focus-border: var(--clr-grey-450);
+    --color-button-tertiary-active-text: var(--color-text-active);
+
     /* Background colors */
     --color-background: var(--clr-black);
 

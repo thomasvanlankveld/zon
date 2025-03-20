@@ -67,6 +67,21 @@
       }
     }
 
+    &[data-variant="tertiary"] {
+      --padding-inline: 0;
+      --padding-block: 0;
+      --border-radius: 25%;
+      border: 1px solid transparent;
+
+      &:focus {
+        border-color: var(--color-button-tertiary-focus-border);
+      }
+
+      &:active {
+        color: var(--color-button-tertiary-active-text);
+      }
+    }
+
     &[data-size="small"] {
       --padding-inline: var(--spacing-button-small-padding-inline);
       --padding-block: var(--spacing-button-small-padding-block);

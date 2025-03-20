@@ -5,9 +5,10 @@ export type ButtonProps = {
   children: JSX.Element;
   onClick?: () => void;
   type?: "submit" | "reset" | "button";
-  // TODO: 'text' and 'destructive' variants
-  variant?: "primary" | "secondary" | "shiny";
+  // TODO: 'destructive' variant
+  variant?: "primary" | "secondary" | "tertiary" | "shiny";
   size?: "small" | "medium" | "large";
+  style?: JSX.CSSProperties;
 };
 
 export default function Button(props: ButtonProps) {
@@ -17,6 +18,7 @@ export default function Button(props: ButtonProps) {
 
   return (
     <button
+      style={props.style}
       classList={{
         [styles.button]: true,
         glimmer: variant() === "shiny",
