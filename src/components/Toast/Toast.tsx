@@ -33,14 +33,11 @@ export default function Toast(props: ToastProps) {
             "justify-content": "space-between",
             "align-items": "start",
             gap: "1rem",
-            // 0.375 gets us the rainbow color at the bottom right corner of the screen
-            "--glow-background": "var(--clr-white)",
-            "--glow-opacity": "0.25",
-            "--glow-blur": "2rem",
             background: "var(--clr-grey-060)",
-            border: "1px solid var(--clr-grey-100)",
+            border: "1px solid var(--clr-grey-150)",
+            "box-shadow": "0 0 1rem var(--clr-black)",
           }}
-          class="card text-extra-small glow"
+          class="card text-extra-small"
           data-card-size="extra-small"
         >
           <span>{props.message}</span>
