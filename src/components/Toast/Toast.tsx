@@ -30,23 +30,19 @@ type ToastProps = {
 const TypeProps = {
   [ToastType.Info]: {
     icon: Info,
-    iconColor: "var(--clr-blue-450)",
-    // borderColor: "var(--clr-blue-300)",
+    color: "var(--color-info)",
   },
   [ToastType.Success]: {
     icon: Check,
-    iconColor: "var(--clr-green-450)",
-    // borderColor: "var(--clr-green-300)",
+    color: "var(--color-success)",
   },
   [ToastType.Warning]: {
     icon: TriangleAlert,
-    iconColor: "var(--clr-orange-450)",
-    // borderColor: "var(--clr-orange-300)",
+    color: "var(--color-warning)",
   },
   [ToastType.Error]: {
     icon: OctagonX,
-    iconColor: "var(--clr-red-450)",
-    // borderColor: "var(--clr-red-300)",
+    color: "var(--color-error)",
   },
 };
 
@@ -67,12 +63,11 @@ export default function Toast(props: ToastProps) {
             "max-width": "22rem",
             width: "100%",
             display: "grid",
-            // "grid-template-columns": "1fr auto",
+            "grid-template-columns": "1fr auto",
             "justify-content": "space-between",
             "align-items": "start",
             gap: "1rem",
             background: "var(--clr-grey-060)",
-            // border: `1px solid ${TypeProps[type()].borderColor}`,
             border: "1px solid var(--clr-grey-150)",
             "box-shadow": "0 0 1rem var(--clr-black)",
           }}
@@ -88,11 +83,9 @@ export default function Toast(props: ToastProps) {
           >
             <Dynamic
               component={TypeProps[type()].icon}
-              color={TypeProps[type()].iconColor}
+              color={TypeProps[type()].color}
               size={20}
-              // size={16}
             />
-            {/* <span> */}
             <span style={{ "margin-top": "var(--spacing-3xs)" }}>
               {props.message}
             </span>

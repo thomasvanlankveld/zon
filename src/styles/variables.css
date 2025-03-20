@@ -74,17 +74,10 @@
     --clr-blue-150: oklch(15% 0.27 200);
 
     --clr-green-450: oklch(45% 0.265 160);
-    /* --clr-green-300: oklch(20% 0.265 160); */
 
     --clr-orange-450: oklch(45% 0.276 98);
-    /* --clr-orange-300: oklch(30% 0.276 98); */
 
-    /* --clr-red-450: oklch(45% 0.26 80);
-    --clr-red-300: oklch(30% 0.26 80); */
-    /* --clr-red-450: oklch(45% 0.26 355);
-    --clr-red-300: oklch(30% 0.26 355); */
     --clr-red-450: oklch(45% 0.26 40);
-    /* --clr-red-300: oklch(30% 0.26 40); */
 
     --clr-text-highlight: var(--clr-white);
     --clr-text-regular: var(--clr-grey-800);
@@ -221,6 +214,12 @@
     --font-weight-button: var(--fw-semibold);
 
     /* Colors */
+    /* Semantic colors */
+    --color-info: var(--clr-blue-450);
+    --color-success: var(--clr-green-450);
+    --color-warning: var(--clr-orange-450);
+    --color-error: var(--clr-red-450);
+
     /* Text colors */
     --color-text-hover-focus: var(--clr-text-highlight);
     --color-text-regular: var(--clr-text-regular);
