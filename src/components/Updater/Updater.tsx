@@ -1,7 +1,7 @@
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { createResource, createSignal } from "solid-js";
-import Toast from "../Toast/Toast";
+import Toast, { ToastType } from "../Toast/Toast";
 import ToastAction from "../Toast/ToastAction";
 
 const copies = {
@@ -96,6 +96,7 @@ export default function Updater() {
   function toastProps() {
     if (update.state === "errored") {
       return {
+        type: ToastType.Error,
         message: copies["check.error"],
         actions: (
           <ToastAction onClick={() => void retryCheckForUpdates()}>
@@ -108,6 +109,7 @@ export default function Updater() {
 
     if (hasDownloaded.state === "errored") {
       return {
+        type: ToastType.Error,
         message: copies["download.error"],
         actions: (
           <ToastAction onClick={() => void retryDownloadUpdate()}>
@@ -120,6 +122,7 @@ export default function Updater() {
 
     if (hasInstalled.state === "errored") {
       return {
+        type: ToastType.Error,
         message: copies["install.error"],
         actions: (
           <ToastAction onClick={() => void retryInstallUpdate()}>
@@ -132,6 +135,7 @@ export default function Updater() {
 
     if (hasRelaunched.state === "errored") {
       return {
+        type: ToastType.Error,
         message: copies["relaunch.error"],
         actions: (
           <ToastAction onClick={() => void retryRelaunch()}>
@@ -144,36 +148,42 @@ export default function Updater() {
 
     if (update.loading) {
       return {
+        type: ToastType.Info,
         message: copies["check.in-progress"],
       };
     }
 
     if (hasDownloaded.loading) {
       return {
+        type: ToastType.Info,
         message: copies["download.in-progress"],
       };
     }
 
     if (hasInstalled.loading) {
       return {
+        type: ToastType.Info,
         message: copies["install.in-progress"],
       };
     }
 
     if (hasRelaunched.loading) {
       return {
+        type: ToastType.Info,
         message: copies["relaunch.in-progress"],
       };
     }
 
     if (update() == null) {
       return {
+        type: ToastType.Success,
         message: copies["check.no-updates"],
       };
     }
 
     if (update()) {
       return {
+        type: ToastType.Success,
         message: copies["download.success"],
         actions: (
           <ToastAction onClick={() => setShouldInstall(true)}>

@@ -28,6 +28,7 @@
     "@tauri-apps/plugin-process": "~2.2.0",
     "@tauri-apps/plugin-updater": "~2.6.0",
     "@vitejs/plugin-legacy": "^6.0.2",
+    "lucide-solid": "^0.483.0",
     "solid-js": "^1.9.5",
     "@tauri-apps/api": "^2.3.0",
     "@tauri-apps/plugin-shell": "^2.2.0"

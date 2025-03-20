@@ -1,5 +1,8 @@
 import { createSignal, JSX, Show } from "solid-js";
-import { Portal } from "solid-js/web";
+import { Dynamic, Portal } from "solid-js/web";
+import { Check, Info, OctagonX, TriangleAlert, X } from "lucide-solid";
+import { ValueOf } from "../../utils/type";
+import Button from "../Button/Button";
 import ToastAction from "./ToastAction";
 
 const copies = {
@@ -8,15 +11,50 @@ const copies = {
   dismiss: "Dismiss",
 };
 
+export const ToastType = {
+  Info: "info",
+  Success: "success",
+  Warning: "warning",
+  Error: "error",
+} as const;
+export type ToastType = ValueOf<typeof ToastType>;
+
 type ToastProps = {
+  type: ToastType;
   message: string;
   actions?: JSX.Element;
   closeButton?: boolean;
   dismissButton?: boolean;
 };
 
+const TypeProps = {
+  [ToastType.Info]: {
+    icon: Info,
+    iconColor: "var(--clr-blue-450)",
+    // borderColor: "var(--clr-blue-300)",
+  },
+  [ToastType.Success]: {
+    icon: Check,
+    iconColor: "var(--clr-green-450)",
+    // borderColor: "var(--clr-green-300)",
+  },
+  [ToastType.Warning]: {
+    icon: TriangleAlert,
+    iconColor: "var(--clr-orange-450)",
+    // borderColor: "var(--clr-orange-300)",
+  },
+  [ToastType.Error]: {
+    icon: OctagonX,
+    iconColor: "var(--clr-red-450)",
+    // borderColor: "var(--clr-red-300)",
+  },
+};
+
 export default function Toast(props: ToastProps) {
   const [isDismissed, setIsDismissed] = createSignal(false);
+
+  const type = () => props.type;
+  // const type = () => ToastType.Error;
 
   return (
     <Show when={!isDismissed()}>
@@ -29,20 +67,42 @@ export default function Toast(props: ToastProps) {
             "max-width": "22rem",
             width: "100%",
             display: "grid",
-            "grid-template-columns": "1fr auto",
+            // "grid-template-columns": "1fr auto",
             "justify-content": "space-between",
             "align-items": "start",
             gap: "1rem",
             background: "var(--clr-grey-060)",
+            // border: `1px solid ${TypeProps[type()].borderColor}`,
             border: "1px solid var(--clr-grey-150)",
             "box-shadow": "0 0 1rem var(--clr-black)",
           }}
           class="card text-extra-small"
           data-card-size="extra-small"
         >
-          <span>{props.message}</span>
+          <div
+            style={{
+              display: "grid",
+              "grid-template-columns": "auto 1fr",
+              gap: "var(--spacing-m)",
+            }}
+          >
+            <Dynamic
+              component={TypeProps[type()].icon}
+              color={TypeProps[type()].iconColor}
+              size={20}
+              // size={16}
+            />
+            {/* <span> */}
+            <span style={{ "margin-top": "var(--spacing-3xs)" }}>
+              {props.message}
+            </span>
+          </div>
           {props.closeButton && (
-            <button onClick={() => setIsDismissed(true)}>X</button>
+            <Button onClick={() => setIsDismissed(true)}>
+              {/* <button onClick={() => setIsDismissed(true)}> */}
+              <X size={16} />
+              {/* </button> */}
+            </Button>
           )}
           <div
             style={{
