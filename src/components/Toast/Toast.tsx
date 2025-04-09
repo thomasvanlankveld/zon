@@ -96,7 +96,7 @@ export default function Toast(props: ToastProps) {
               {props.message}
             </span>
           </div>
-          {props.closeButton && (
+          <Show when={props.closeButton}>
             <Button
               variant="tertiary"
               onClick={() => setIsDismissed(true)}
@@ -106,9 +106,8 @@ export default function Toast(props: ToastProps) {
             >
               <X size={16} />
             </Button>
-          )}
-          {props.actions}
-          {props.dismissButton && (
+          </Show>
+          <Show when={props.actions || props.dismissButton}>
             <div
               style={{
                 "grid-column": "span 2",
@@ -117,14 +116,17 @@ export default function Toast(props: ToastProps) {
                 gap: "0.5rem",
               }}
             >
-              <ToastAction
-                variant="secondary"
-                onClick={() => setIsDismissed(true)}
-              >
-                {copies.dismiss}
-              </ToastAction>
+              {props.actions}
+              {props.dismissButton && (
+                <ToastAction
+                  variant="secondary"
+                  onClick={() => setIsDismissed(true)}
+                >
+                  {copies.dismiss}
+                </ToastAction>
+              )}
             </div>
-          )}
+          </Show>
         </div>
       </Portal>
     </Show>
