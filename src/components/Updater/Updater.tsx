@@ -32,7 +32,7 @@ export default function Updater() {
 
   const [hasDownloaded, { refetch: retryDownloadUpdate }] = createResource(
     () => update.state !== "errored" && update(),
-    async (updateVal) => {
+    async function maybeDownloadUpdates(updateVal) {
       if (typeof updateVal !== "object" || updateVal == null) {
         return false;
       }
@@ -47,7 +47,7 @@ export default function Updater() {
 
   const [hasInstalled, { refetch: retryInstallUpdate }] = createResource(
     shouldInstall,
-    async (shouldInstallVal) => {
+    async function maybeInstallUpdate(shouldInstallVal) {
       if (!shouldInstallVal) {
         return false;
       }
@@ -70,7 +70,7 @@ export default function Updater() {
 
   const [hasRelaunched, { refetch: retryRelaunch }] = createResource(
     () => hasInstalled(),
-    async (hasInstalledVal) => {
+    async function maybeRelaunch(hasInstalledVal) {
       if (!hasInstalledVal) {
         return false;
       }
