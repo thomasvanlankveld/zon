@@ -12,6 +12,7 @@ const copies = {
 };
 
 export const ToastType = {
+  Neutral: "neutral",
   Info: "info",
   Success: "success",
   Warning: "warning",
@@ -27,21 +28,22 @@ type ToastProps = {
   dismissButton?: boolean;
 };
 
-const TypeProps = {
+const TypeIconProps = {
+  [ToastType.Neutral]: null,
   [ToastType.Info]: {
-    icon: Info,
+    component: Info,
     color: "var(--color-info)",
   },
   [ToastType.Success]: {
-    icon: Check,
+    component: Check,
     color: "var(--color-success)",
   },
   [ToastType.Warning]: {
-    icon: TriangleAlert,
+    component: TriangleAlert,
     color: "var(--color-warning)",
   },
   [ToastType.Error]: {
-    icon: OctagonX,
+    component: OctagonX,
     color: "var(--color-error)",
   },
 };
@@ -50,7 +52,7 @@ export default function Toast(props: ToastProps) {
   const [isDismissed, setIsDismissed] = createSignal(false);
 
   const type = () => props.type;
-  // const type = () => ToastType.Error;
+  // const type = () => ToastType.Neutral;
 
   return (
     <Show when={!isDismissed()}>
@@ -81,11 +83,15 @@ export default function Toast(props: ToastProps) {
               gap: "var(--spacing-m)",
             }}
           >
-            <Dynamic
-              component={TypeProps[type()].icon}
-              color={TypeProps[type()].color}
-              size={20}
-            />
+            <Show when={TypeIconProps[type()]}>
+              {(iconProps) => (
+                <Dynamic
+                  component={iconProps().component}
+                  color={iconProps().color}
+                  size={20}
+                />
+              )}
+            </Show>
             <span style={{ "margin-top": "var(--spacing-3xs)" }}>
               {props.message}
             </span>
