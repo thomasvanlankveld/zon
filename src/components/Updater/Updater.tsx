@@ -1,6 +1,6 @@
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
-import { createResource, createSignal } from "solid-js";
+import { createResource, createSignal, Show } from "solid-js";
 import Toast, { ToastType } from "../Toast/Toast";
 import ToastAction from "../Toast/ToastAction";
 
@@ -8,8 +8,10 @@ const copies = {
   "check.in-progress": "Checking for updates...",
   "check.no-updates": "No updates found",
   // TODO: check with `navigator.onLine`: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/onLine
-  "check.error":
-    "Unable to find updates. Please check your internet connection and try again.",
+  "check.error.offline":
+    "To check for updates, restart the app while connected to the internet.",
+  "check.error.online": (link: string, message: string) =>
+    `Something went wrong while checking for updates. Please submit an issue at "${link}" mentioning the cause "${message}"`,
   "download.in-progress": "Downloading updates...",
   "download.error": "Failed to download the update. Please try again later.",
   "download.success": "Update downloaded",
@@ -94,10 +96,22 @@ export default function Updater() {
   );
 
   function toastProps() {
-    if (update.state === "errored") {
+    if (update.state === "errored" && navigator.onLine) {
+      // TODO: change message to link button
       return {
         type: ToastType.Error,
-        message: copies["check.error"],
+        message: copies["check.error.online"](
+          "https://github.com/thomasvanlankveld/zon/issues/new",
+          (update.error as Error).message,
+        ),
+      };
+    }
+
+    if (update.state === "errored" && !navigator.onLine) {
+      // TODO: Automatically dismiss after 5 seconds
+      return {
+        type: ToastType.Warning,
+        message: copies["check.error.offline"],
         actions: (
           <ToastAction onClick={() => void retryCheckForUpdates()}>
             {copies["retry"]}
@@ -147,17 +161,11 @@ export default function Updater() {
     }
 
     if (update.loading) {
-      return {
-        type: ToastType.Info,
-        message: copies["check.in-progress"],
-      };
+      return null;
     }
 
     if (hasDownloaded.loading) {
-      return {
-        type: ToastType.Info,
-        message: copies["download.in-progress"],
-      };
+      return null;
     }
 
     if (hasInstalled.loading) {
@@ -196,5 +204,9 @@ export default function Updater() {
     throw new Error("Invalid updater state");
   }
 
-  return <Toast closeButton {...toastProps()} />;
+  return (
+    <Show when={toastProps()}>
+      {(toastPropsVal) => <Toast closeButton {...toastPropsVal()} />}
+    </Show>
+  );
 }
