@@ -92,7 +92,7 @@ export default function Toast(props: ToastProps) {
                 />
               )}
             </Show>
-            <span style={{ "margin-top": "var(--spacing-3xs)" }}>
+            <span style={{ "margin-block": "var(--spacing-3xs)" }}>
               {props.message}
             </span>
           </div>
@@ -107,24 +107,24 @@ export default function Toast(props: ToastProps) {
               <X size={16} />
             </Button>
           )}
-          <div
-            style={{
-              "grid-column": "span 2",
-              "justify-self": "end",
-              display: "flex",
-              gap: "0.5rem",
-            }}
-          >
-            {props.actions}
-            {props.dismissButton && (
+          {props.actions}
+          {props.dismissButton && (
+            <div
+              style={{
+                "grid-column": "span 2",
+                "justify-self": "end",
+                display: "flex",
+                gap: "0.5rem",
+              }}
+            >
               <ToastAction
                 variant="secondary"
                 onClick={() => setIsDismissed(true)}
               >
                 {copies.dismiss}
               </ToastAction>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </Portal>
     </Show>
