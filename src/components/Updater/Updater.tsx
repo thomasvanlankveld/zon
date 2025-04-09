@@ -98,6 +98,8 @@ export default function Updater() {
   function toastProps() {
     if (update.state === "errored" && navigator.onLine) {
       // TODO: change message to link button
+      // On desktop: https://v2.tauri.app/reference/javascript/shell/#open
+      // On web use an anchor action
       return {
         type: ToastType.Error,
         message: copies["check.error.online"](
