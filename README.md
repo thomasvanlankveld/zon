@@ -8,4 +8,4 @@ Example visualizing the [esbuild](https://github.com/evanw/esbuild) source code:
 
 ![Zon example](./docs/assets/example-0.2.0.png)
 
-We use [Tokei](https://github.com/XAMPPRocky/tokei) under the hood.
+Zon uses [Tokei](https://github.com/XAMPPRocky/tokei) under the hood.
