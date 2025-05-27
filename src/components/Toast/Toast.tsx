@@ -62,7 +62,7 @@ export default function Toast(props: ToastProps) {
             position: "fixed",
             bottom: "1rem",
             right: "1rem",
-            "max-width": "22rem",
+            "max-width": "24rem",
             width: "100%",
             display: "grid",
             "grid-template-columns": "1fr auto",
@@ -92,7 +92,12 @@ export default function Toast(props: ToastProps) {
                 />
               )}
             </Show>
-            <span style={{ "margin-block": "var(--spacing-3xs)" }}>
+            <span
+              style={{
+                "margin-block": "var(--spacing-3xs)",
+                "overflow-wrap": "anywhere",
+              }}
+            >
               {props.message}
             </span>
           </div>
