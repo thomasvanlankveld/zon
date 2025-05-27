@@ -1,6 +1,7 @@
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { createResource, createSignal, Show } from "solid-js";
+import createNavigatorOnline from "../../primitives/createNavigatorOnline";
 import Toast, { ToastType } from "../Toast/Toast";
 import ToastAction from "../Toast/ToastAction";
 
@@ -8,8 +9,7 @@ const copies = {
   "check.in-progress": "Checking for updates...",
   "check.no-updates": "No updates found",
   // TODO: check with `navigator.onLine`: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/onLine
-  "check.error.offline":
-    "To check for updates, restart the app while connected to the internet.",
+  "check.error.offline": "To check for updates, connect to the internet",
   "check.error.online": (link: string, message: string) =>
     `Something went wrong while checking for updates. Please submit an issue at "${link}" mentioning the cause "${message}"`,
   "download.in-progress": "Downloading updates...",
@@ -25,12 +25,14 @@ const copies = {
 };
 
 export default function Updater() {
-  async function checkForUpdates() {
-    return await check();
-  }
+  const isOnline = createNavigatorOnline();
 
-  const [update, { refetch: retryCheckForUpdates }] =
-    createResource(checkForUpdates);
+  const [update, { refetch: retryCheckForUpdates }] = createResource(
+    () => isOnline(),
+    async function checkForUpdates() {
+      return await check();
+    },
+  );
 
   const [hasDownloaded, { refetch: retryDownloadUpdate }] = createResource(
     () => update.state !== "errored" && update(),
@@ -96,7 +98,22 @@ export default function Updater() {
   );
 
   function toastProps() {
-    if (update.state === "errored" && navigator.onLine) {
+    if (!isOnline()) {
+      // TODO: Automatically dismiss after 5 seconds
+      return {
+        type: ToastType.Warning,
+        message: copies["check.error.offline"],
+        actions: (
+          <ToastAction onClick={() => void retryCheckForUpdates()}>
+            {copies["retry"]}
+          </ToastAction>
+        ),
+        dismissButton: true,
+        autoDismiss: true,
+      };
+    }
+
+    if (update.state === "errored") {
       // TODO: change message to link button
       // On desktop: https://v2.tauri.app/reference/javascript/shell/#open
       // On web use an anchor action
@@ -110,20 +127,6 @@ export default function Updater() {
       };
     }
 
-    if (update.state === "errored" && !navigator.onLine) {
-      // TODO: Automatically dismiss after 5 seconds
-      return {
-        type: ToastType.Warning,
-        message: copies["check.error.offline"],
-        actions: (
-          <ToastAction onClick={() => void retryCheckForUpdates()}>
-            {copies["retry"]}
-          </ToastAction>
-        ),
-        dismissButton: true,
-      };
-    }
-
     if (hasDownloaded.state === "errored") {
       return {
         type: ToastType.Error,
@@ -134,6 +137,7 @@ export default function Updater() {
           </ToastAction>
         ),
         dismissButton: true,
+        autoDismiss: true,
       };
     }
 
@@ -147,6 +151,7 @@ export default function Updater() {
           </ToastAction>
         ),
         dismissButton: true,
+        autoDismiss: true,
       };
     }
 
@@ -160,6 +165,7 @@ export default function Updater() {
           </ToastAction>
         ),
         dismissButton: true,
+        autoDismiss: true,
       };
     }
 
@@ -175,6 +181,7 @@ export default function Updater() {
       return {
         type: ToastType.Info,
         message: copies["install.in-progress"],
+        autoDismiss: true,
       };
     }
 
@@ -182,6 +189,7 @@ export default function Updater() {
       return {
         type: ToastType.Info,
         message: copies["relaunch.in-progress"],
+        autoDismiss: true,
       };
     }
 
@@ -189,6 +197,7 @@ export default function Updater() {
       return {
         type: ToastType.Success,
         message: copies["check.no-updates"],
+        autoDismiss: true,
       };
     }
 
