@@ -63,10 +63,10 @@ const ToastTypeConfig: Record<ToastType, ToastTypeConfig> = {
 
 // Constants for toast timing
 const TOAST_TIMING = {
-  MIN_DURATION: 3000, // Minimum duration in ms
+  MIN_DURATION: 4000, // Minimum duration in ms
   MAX_DURATION: 8000, // Maximum duration in ms
-  BASE_DURATION: 3000, // Base duration in ms
-  CHARS_PER_SECOND: 20, // Reading speed in characters per second
+  BASE_DURATION: 4000, // Base duration in ms
+  CHARS_PER_SECOND: 14, // Reading speed in characters per second
   PROGRESS_HEIGHT: "3px", // Height of the progress bar
 } as const;
 
