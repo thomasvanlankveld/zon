@@ -96,6 +96,7 @@ type ToastProps = {
 
 export default function Toast(props: ToastProps) {
   const [isDismissed, setIsDismissed] = createSignal(false);
+  const [wasHovered, setWasHovered] = createSignal(false);
   let timeoutId: number | undefined;
 
   const type = () => props.type;
@@ -114,7 +115,7 @@ export default function Toast(props: ToastProps) {
   });
 
   onMount(() => {
-    if (props.autoDismiss) {
+    if (props.autoDismiss && !wasHovered()) {
       timeoutId = window.setTimeout(() => {
         setIsDismissed(true);
       }, duration());
@@ -126,6 +127,14 @@ export default function Toast(props: ToastProps) {
       window.clearTimeout(timeoutId);
     }
   });
+
+  const handleMouseEnter = () => {
+    if (timeoutId) {
+      window.clearTimeout(timeoutId);
+      timeoutId = undefined;
+    }
+    setWasHovered(true);
+  };
 
   return (
     <Show when={!isDismissed()}>
@@ -148,8 +157,9 @@ export default function Toast(props: ToastProps) {
           }}
           class={`card text-extra-small ${styles.toast}`}
           data-card-size="extra-small"
+          onMouseEnter={handleMouseEnter}
         >
-          <Show when={props.autoDismiss}>
+          <Show when={props.autoDismiss && !wasHovered()}>
             <div class={styles.progressTrack}>
               <div
                 class={styles.progressBar}
