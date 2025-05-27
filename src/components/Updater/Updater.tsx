@@ -28,6 +28,7 @@ export default function Updater() {
   const isOnline = createNavigatorOnline();
 
   const [update, { refetch: retryCheckForUpdates }] = createResource(
+    // TODO: Don't flicker the "check.error.offline" warning when the user has a flaky internet connection
     () => isOnline(),
     async function checkForUpdates() {
       return await check();
