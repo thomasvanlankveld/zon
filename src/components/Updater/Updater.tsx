@@ -106,6 +106,7 @@ export default function Updater() {
           "https://github.com/thomasvanlankveld/zon/issues/new",
           (update.error as Error).message,
         ),
+        autoDismiss: true,
       };
     }
 

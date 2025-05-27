@@ -215,6 +215,7 @@
 
     /* Colors */
     /* Semantic colors */
+    --color-neutral: var(--clr-grey-450);
     --color-info: var(--clr-blue-450);
     --color-success: var(--clr-green-450);
     --color-warning: var(--clr-orange-450);
