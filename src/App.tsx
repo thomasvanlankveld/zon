@@ -15,7 +15,6 @@ import { Languages } from "./utils/tokei.ts";
 import { I18nProvider } from "./contexts/i18n.tsx";
 import Routes from "./routes.ts";
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
-import getMeta from "./utils/meta.ts";
 
 // Development mode check - true in development, false in production
 const isHomePageEnabled = import.meta.env.MODE === "development";
@@ -60,7 +59,7 @@ function App() {
   }
 
   return (
-    <MetaProvider meta={getMeta()}>
+    <MetaProvider>
       <Background>
         <I18nProvider>
           <MemoryRouter>

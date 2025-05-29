@@ -1,4 +1,5 @@
-import { type Platform } from "@tauri-apps/plugin-os";
+import { isTauri } from "@tauri-apps/api/core";
+import { platform, type Platform } from "@tauri-apps/plugin-os";
 import { createContext, type JSX, useContext } from "solid-js";
 import { ValueOf } from "../utils/type";
 
@@ -17,20 +18,32 @@ export type Meta =
       platform: Platform;
     };
 
+export default function getMeta(): Meta {
+  if (!isTauri()) {
+    return {
+      target: TARGET.WEB,
+    };
+  }
+
+  return {
+    target: TARGET.DESKTOP,
+    platform: platform(),
+  };
+}
+
 const MetaContext = createContext();
 
 type MetaProviderProps = {
-  meta: Meta;
   children: JSX.Element;
 };
 
 export function MetaProvider(props: MetaProviderProps) {
+  const meta = getMeta();
+
   return (
     // Ignoring lint warning. This value is not meant to be reactive
     // eslint-disable-next-line solid/reactivity
-    <MetaContext.Provider value={props.meta}>
-      {props.children}
-    </MetaContext.Provider>
+    <MetaContext.Provider value={meta}>{props.children}</MetaContext.Provider>
   );
 }
 
