@@ -42,7 +42,6 @@ export function MetaProvider(props: MetaProviderProps) {
 
   return (
     // Ignoring lint warning. This value is not meant to be reactive
-    // eslint-disable-next-line solid/reactivity
     <MetaContext.Provider value={meta}>{props.children}</MetaContext.Provider>
   );
 }
