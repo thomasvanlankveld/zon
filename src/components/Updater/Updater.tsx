@@ -188,15 +188,8 @@ export default function Updater() {
       };
     }
 
-    if (update.loading) {
-      return null;
-    }
-
-    if (hasDownloaded.loading) {
-      return null;
-    }
-
-    if (hasInstalled.loading) {
+    // Only show this after explicit user action (i.e. clicking "install.action" on Windows)
+    if (!installImmediately && hasInstalled.loading) {
       return {
         type: ToastType.Info,
         message: copies["install.in-progress"],
@@ -248,7 +241,7 @@ export default function Updater() {
       };
     }
 
-    throw new Error("Invalid updater state");
+    return null;
   }
 
   return (
