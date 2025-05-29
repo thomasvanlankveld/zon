@@ -115,7 +115,6 @@ export default function Updater() {
           </ToastAction>
         ),
         dismissButton: true,
-        autoDismiss: true,
       };
     }
 
@@ -135,7 +134,6 @@ export default function Updater() {
           </ToastAction>
         ),
         dismissButton: true,
-        autoDismiss: true,
       };
     }
 
@@ -149,7 +147,6 @@ export default function Updater() {
           </ToastAction>
         ),
         dismissButton: true,
-        autoDismiss: true,
       };
     }
 
@@ -163,7 +160,6 @@ export default function Updater() {
           </ToastAction>
         ),
         dismissButton: true,
-        autoDismiss: true,
       };
     }
 
@@ -177,7 +173,6 @@ export default function Updater() {
           </ToastAction>
         ),
         dismissButton: true,
-        autoDismiss: true,
       };
     }
 
@@ -193,7 +188,6 @@ export default function Updater() {
       return {
         type: ToastType.Info,
         message: copies["install.in-progress"],
-        autoDismiss: true,
       };
     }
 
@@ -201,7 +195,6 @@ export default function Updater() {
       return {
         type: ToastType.Info,
         message: copies["relaunch.in-progress"],
-        autoDismiss: true,
       };
     }
 
@@ -209,7 +202,6 @@ export default function Updater() {
       return {
         type: ToastType.Success,
         message: copies["check.no-updates"],
-        autoDismiss: true,
       };
     }
 
@@ -230,7 +222,9 @@ export default function Updater() {
 
   return (
     <Show when={toastProps()}>
-      {(toastPropsVal) => <Toast closeButton {...toastPropsVal()} />}
+      {(toastPropsVal) => (
+        <Toast closeButton autoDismiss {...toastPropsVal()} />
+      )}
     </Show>
   );
 }
