@@ -129,6 +129,12 @@ export default function Updater() {
           "https://github.com/thomasvanlankveld/zon/issues/new",
           (update.error as Error).message,
         ),
+        actions: (
+          <ToastAction onClick={() => void retryCheckForUpdates()}>
+            {copies["retry"]}
+          </ToastAction>
+        ),
+        dismissButton: true,
         autoDismiss: true,
       };
     }
