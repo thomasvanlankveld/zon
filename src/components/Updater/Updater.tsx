@@ -188,6 +188,14 @@ export default function Updater() {
       };
     }
 
+    if (update.state === "refreshing") {
+      return {
+        type: ToastType.Info,
+        message: copies["check.in-progress"],
+        autoDismiss: false,
+      };
+    }
+
     // Only show this after explicit user action (i.e. clicking "install.action" on Windows)
     if (!installImmediately && hasInstalled.loading) {
       return {
@@ -205,7 +213,7 @@ export default function Updater() {
       };
     }
 
-    if (update() == null) {
+    if (update.state === "ready" && update() == null) {
       return {
         type: ToastType.Success,
         message: copies["check.no-updates"],
