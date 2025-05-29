@@ -7,7 +7,7 @@ import ToastAction from "../Toast/ToastAction";
 
 const copies = {
   "check.in-progress": "Checking for updates...",
-  "check.no-updates": "No updates found",
+  "check.no-updates": "You're on the latest version of Zon",
   // TODO: check with `navigator.onLine`: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/onLine
   "check.error.offline": "To check for updates, connect to the internet",
   "check.error.online": (link: string, message: string) =>
@@ -19,7 +19,7 @@ const copies = {
   "install.error": "Failed to install the update",
   "relaunch.in-progress": "Restarting application...",
   "relaunch.error": "Failed to restart the application",
-  "install.action": "Install update",
+  "install.action": "Install and restart",
   dismiss: "Dismiss",
   retry: "Retry",
 };
@@ -203,6 +203,8 @@ export default function Updater() {
         type: ToastType.Success,
         message: copies["check.no-updates"],
       };
+      // console.log(copies["check.no-updates"]);
+      // return null;
     }
 
     if (update()) {
@@ -214,6 +216,7 @@ export default function Updater() {
             {copies["install.action"]}
           </ToastAction>
         ),
+        autoDismiss: false,
       };
     }
 
