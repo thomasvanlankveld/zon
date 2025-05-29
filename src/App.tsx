@@ -1,6 +1,5 @@
-import { invoke, isTauri } from "@tauri-apps/api/core";
+import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
-import { platform } from "@tauri-apps/plugin-os";
 import { createSignal, Show } from "solid-js";
 import { Route, MemoryRouter, useSearchParams } from "@solidjs/router";
 import { createStore } from "solid-js/store";
@@ -8,7 +7,7 @@ import { createStore } from "solid-js/store";
 import "./styles/setup.css";
 import { Background } from "./components/Background/Background.tsx";
 import Updater from "./components/Updater/Updater.tsx";
-import { TARGET, MetaProvider, Meta } from "./contexts/meta.tsx";
+import { MetaProvider } from "./contexts/meta.tsx";
 import { LINE_TYPE, type Node, createTree } from "./utils/zon";
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
@@ -16,22 +15,10 @@ import { Languages } from "./utils/tokei.ts";
 import { I18nProvider } from "./contexts/i18n.tsx";
 import Routes from "./routes.ts";
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
+import getMeta from "./utils/meta.ts";
 
 // Development mode check - true in development, false in production
 const isHomePageEnabled = import.meta.env.MODE === "development";
-
-const meta: Meta = (() => {
-  if (!isTauri()) {
-    return {
-      target: TARGET.WEB,
-    };
-  }
-
-  return {
-    target: TARGET.DESKTOP,
-    platform: platform(),
-  };
-})();
 
 function App() {
   // TODO: Move some of this stuff into a context
@@ -73,7 +60,7 @@ function App() {
   }
 
   return (
-    <MetaProvider meta={meta}>
+    <MetaProvider meta={getMeta()}>
       <Background>
         <I18nProvider>
           <MemoryRouter>
