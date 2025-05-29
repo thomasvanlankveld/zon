@@ -26,12 +26,17 @@ const copies = {
 
 export default function Updater() {
   const isOnline = createNavigatorOnline();
+  const [wasOfflineDuringUpdateCheck, setWasOfflineDuringUpdateCheck] =
+    createSignal(false);
 
   const [update, { refetch: retryCheckForUpdates }] = createResource(
-    // TODO: Don't flicker the "check.error.offline" warning when the user has a flaky internet connection
-    () => isOnline(),
     async function checkForUpdates() {
-      return await check();
+      try {
+        return await check();
+      } catch (error) {
+        setWasOfflineDuringUpdateCheck(!isOnline());
+        throw error;
+      }
     },
   );
 
@@ -99,7 +104,7 @@ export default function Updater() {
   );
 
   function toastProps() {
-    if (!isOnline()) {
+    if (update.state === "errored" && wasOfflineDuringUpdateCheck()) {
       // TODO: Automatically dismiss after 5 seconds
       return {
         type: ToastType.Warning,
