@@ -53,6 +53,14 @@ export default function Updater() {
     },
   );
 
+  const [hasClickedRetryCheckForUpdates, setHasClickedRetryCheckForUpdates] =
+    createSignal(false);
+
+  function onRetryCheckForUpdatesClick() {
+    setHasClickedRetryCheckForUpdates(true);
+    void retryCheckForUpdates();
+  }
+
   const [hasDownloaded, { refetch: retryDownloadUpdate }] = createResource(
     () => update.state !== "errored" && update(),
     async function maybeDownloadUpdates(updateVal) {
@@ -122,7 +130,7 @@ export default function Updater() {
         type: ToastType.Warning,
         message: copies["check.error.offline"],
         actions: (
-          <ToastAction onClick={() => void retryCheckForUpdates()}>
+          <ToastAction onClick={onRetryCheckForUpdatesClick}>
             {copies["retry"]}
           </ToastAction>
         ),
@@ -196,8 +204,21 @@ export default function Updater() {
       };
     }
 
+    // Only show this after explicit user action (i.e. clicking "retry" on after internet was down)
+    // TODO: Maybe make this into a more semantic `userHasClicked` variable or something?
+    if (hasClickedRetryCheckForUpdates() && hasDownloaded.loading) {
+      return {
+        type: ToastType.Info,
+        message: copies["download.in-progress"],
+        autoDismiss: false,
+      };
+    }
+
     // Only show this after explicit user action (i.e. clicking "install.action" on Windows)
-    if (!installImmediately && hasInstalled.loading) {
+    if (
+      (!installImmediately || hasClickedRetryCheckForUpdates()) &&
+      hasInstalled.loading
+    ) {
       return {
         type: ToastType.Info,
         message: copies["install.in-progress"],
