@@ -1,6 +1,7 @@
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { createResource, createSignal, Show } from "solid-js";
+import { TARGET, useMeta } from "../../contexts/meta";
 import createNavigatorOnline from "../../primitives/createNavigatorOnline";
 import Toast, { ToastType } from "../Toast/Toast";
 import ToastAction from "../Toast/ToastAction";
@@ -17,14 +18,26 @@ const copies = {
   "download.success": "Update downloaded",
   "install.in-progress": "Installing updates...",
   "install.error": "Failed to install the update",
+  "install.success": "Update installed",
   "relaunch.in-progress": "Restarting application...",
   "relaunch.error": "Failed to restart the application",
   "install.action": "Install and restart",
+  "relaunch.action": "Restart now",
   dismiss: "Dismiss",
   retry: "Retry",
 };
 
 export default function Updater() {
+  const meta = useMeta();
+
+  if (meta.target !== TARGET.DESKTOP) {
+    throw new Error("Updater is only available on desktop");
+  }
+
+  // On Windows, installing an update will close the application, so we prompt the user first. On other platforms, we
+  // can install immediately. See https://v2.tauri.app/plugin/updater/#checking-for-updates
+  const installImmediately = meta.platform !== "windows";
+
   const isOnline = createNavigatorOnline();
   const [wasOfflineDuringUpdateCheck, setWasOfflineDuringUpdateCheck] =
     createSignal(false);
@@ -53,12 +66,12 @@ export default function Updater() {
     { initialValue: false },
   );
 
-  const [shouldInstall, setShouldInstall] = createSignal(false);
+  const [shouldInstall, setShouldInstall] = createSignal(installImmediately);
 
   const [hasInstalled, { refetch: retryInstallUpdate }] = createResource(
-    shouldInstall,
-    async function maybeInstallUpdate(shouldInstallVal) {
-      if (!shouldInstallVal) {
+    () => hasDownloaded() && shouldInstall(),
+    async function maybeInstallUpdate(hasDownloadedAndShouldInstall) {
+      if (!hasDownloadedAndShouldInstall) {
         return false;
       }
 
@@ -68,20 +81,19 @@ export default function Updater() {
         throw new Error("No update to install");
       }
 
-      if (!hasDownloaded()) {
-        throw new Error("Cannot install update that has not been downloaded");
-      }
-
       await updateVal.install();
       return true;
     },
     { initialValue: false },
   );
 
+  // If we installed the update immediately, we need to prompt the user to relaunch the application.
+  const [shouldRelaunch, setShouldRelaunch] = createSignal(!installImmediately);
+
   const [hasRelaunched, { refetch: retryRelaunch }] = createResource(
-    () => hasInstalled(),
-    async function maybeRelaunch(hasInstalledVal) {
-      if (!hasInstalledVal) {
+    () => hasInstalled() && shouldRelaunch(),
+    async function maybeRelaunch(hasInstalledAndShouldRelaunch) {
+      if (!hasInstalledAndShouldRelaunch) {
         return false;
       }
 
@@ -188,6 +200,7 @@ export default function Updater() {
       return {
         type: ToastType.Info,
         message: copies["install.in-progress"],
+        autoDismiss: false,
       };
     }
 
@@ -195,6 +208,7 @@ export default function Updater() {
       return {
         type: ToastType.Info,
         message: copies["relaunch.in-progress"],
+        autoDismiss: false,
       };
     }
 
@@ -207,7 +221,7 @@ export default function Updater() {
       // return null;
     }
 
-    if (update()) {
+    if (!installImmediately && update()) {
       return {
         type: ToastType.Success,
         message: copies["download.success"],
@@ -216,6 +230,20 @@ export default function Updater() {
             {copies["install.action"]}
           </ToastAction>
         ),
+        autoDismiss: false,
+      };
+    }
+
+    if (installImmediately && hasInstalled()) {
+      return {
+        type: ToastType.Success,
+        message: copies["install.success"],
+        actions: (
+          <ToastAction onClick={() => setShouldRelaunch(true)}>
+            {copies["relaunch.action"]}
+          </ToastAction>
+        ),
+        dismissButton: true,
         autoDismiss: false,
       };
     }

@@ -25,6 +25,7 @@
   "dependencies": {
     "@solidjs/router": "^0.15.3",
     "@tauri-apps/plugin-dialog": "^2.2.0",
+    "@tauri-apps/plugin-os": "~2.2.1",
     "@tauri-apps/plugin-process": "~2.2.0",
     "@tauri-apps/plugin-updater": "~2.6.0",
     "@vitejs/plugin-legacy": "^6.0.2",

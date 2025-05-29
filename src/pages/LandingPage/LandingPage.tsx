@@ -5,7 +5,7 @@ import { BackgroundConfig } from "../../components/Background/Background";
 import { useI18n } from "../../contexts/i18n";
 import logAsyncErrors from "../../utils/async/logErrors";
 import Logo from "../../components/Logo";
-import { TARGET, useTarget } from "../../contexts/target";
+import { TARGET, useMeta } from "../../contexts/meta";
 import { type Node } from "../../utils/zon";
 import LandingPageMainDesktop from "./LandingPageMainDesktop";
 import LandingPageMainWeb from "./LandingPageMainWeb";
@@ -20,7 +20,7 @@ type LandingPageProps = {
 export default function LandingPage(props: LandingPageProps) {
   const navigate = useNavigate();
   const { t } = useI18n();
-  const target = useTarget();
+  const meta = useMeta();
 
   async function countLinesInFolder() {
     const path = await props.countLinesInFolder();
@@ -52,7 +52,7 @@ export default function LandingPage(props: LandingPageProps) {
 
         <main class={styles["landing-page__wrapper"]}>
           <Show
-            when={target === TARGET.DESKTOP}
+            when={meta.target === TARGET.DESKTOP}
             fallback={<LandingPageMainWeb setReport={setReport} />}
           >
             <LandingPageMainDesktop
