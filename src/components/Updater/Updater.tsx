@@ -29,9 +29,9 @@ const copies = {
   "updater.relaunch.error.issue": "Application restart failed",
   "updater.install.action": "Install and restart",
   "updater.relaunch.action": "Restart now",
-  dismiss: "Dismiss",
-  retry: "Retry",
-  report: "Report issue",
+  "dismiss.action": "Dismiss",
+  "retry.action": "Retry",
+  "report.action": "Report issue",
 };
 
 let i = 0;
@@ -286,7 +286,9 @@ function offlineToastProps(toastMessage: string, onRetry: () => void) {
   return {
     type: ToastType.Warning,
     message: toastMessage,
-    actions: <ToastAction onClick={onRetry}>{copies["retry"]}</ToastAction>,
+    actions: (
+      <ToastAction onClick={onRetry}>{copies["retry.action"]}</ToastAction>
+    ),
     dismissButton: true,
   };
 }
@@ -324,11 +326,11 @@ function errorToastProps(
     message: toastMessage,
     actions: (
       <>
-        <ToastAction onClick={onRetry}>{copies["retry"]}</ToastAction>
+        <ToastAction onClick={onRetry}>{copies["retry.action"]}</ToastAction>
         <ToastAction
           onClick={() => void open(getIssueLink(meta, error, issueTitle))}
         >
-          {copies["report"]}
+          {copies["report.action"]}
         </ToastAction>
       </>
     ),
