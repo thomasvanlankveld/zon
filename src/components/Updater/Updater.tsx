@@ -15,8 +15,9 @@ const copies = {
   "check.error.online": "Failed to check for updates",
   "check.error.online.issue": "Update check failed",
   "download.in-progress": "Downloading updates...",
-  "download.error": "Failed to download the update",
-  "download.error.issue": "Update download failed",
+  "download.error.offline": "To download the update, connect to the internet",
+  "download.error.online": "Failed to download the update",
+  "download.error.online.issue": "Update download failed",
   "download.success": "Update downloaded",
   "install.in-progress": "Installing updates...",
   "install.error": "Failed to install the update",
@@ -65,6 +66,9 @@ export default function Updater() {
     },
   );
 
+  const [wasOfflineDuringDownload, setWasOfflineDuringDownload] =
+    createSignal(false);
+
   const [hasDownloaded, { refetch: retryDownloadUpdate }] = createResource(
     () => update.state !== "errored" && update(),
     async function maybeDownloadUpdates(updateVal) {
@@ -72,13 +76,18 @@ export default function Updater() {
         return false;
       }
 
-      i++;
-      if (i === 3) {
-        throw new Error("test download");
-      }
+      try {
+        i++;
+        if (i === 3) {
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          throw new Error("test download");
+        }
 
-      // TODO: add warning if download fails due to going offline
-      await updateVal.download();
+        await updateVal.download();
+      } catch (error) {
+        setWasOfflineDuringDownload(!isOnline());
+        throw error;
+      }
       return true;
     },
     { initialValue: false },
@@ -155,18 +164,10 @@ export default function Updater() {
   function toastProps() {
     if (update.state === "errored" && wasOfflineDuringUpdateCheck()) {
       // TODO: Automatically dismiss after 5 seconds
-      return {
-        type: ToastType.Warning,
-        message: copies["check.error.offline"],
-        actions: (
-          <ToastAction
-            onClick={toastCallback(() => void retryCheckForUpdates())}
-          >
-            {copies["retry"]}
-          </ToastAction>
-        ),
-        dismissButton: true,
-      };
+      return offlineToastProps(
+        copies["check.error.offline"],
+        () => void retryCheckForUpdates(),
+      );
     }
 
     if (update.state === "errored") {
@@ -179,10 +180,17 @@ export default function Updater() {
       );
     }
 
+    if (hasDownloaded.state === "errored" && wasOfflineDuringDownload()) {
+      return offlineToastProps(
+        copies["download.error.offline"],
+        () => void retryDownloadUpdate(),
+      );
+    }
+
     if (hasDownloaded.state === "errored") {
       return errorToastProps(
-        copies["download.error"],
-        copies["download.error.issue"],
+        copies["download.error.online"],
+        copies["download.error.online.issue"],
         meta,
         hasDownloaded.error as Error,
         toastCallback(() => void retryDownloadUpdate()),
@@ -271,6 +279,15 @@ export default function Updater() {
       )}
     </Show>
   );
+}
+
+function offlineToastProps(toastMessage: string, onRetry: () => void) {
+  return {
+    type: ToastType.Warning,
+    message: toastMessage,
+    actions: <ToastAction onClick={onRetry}>{copies["retry"]}</ToastAction>,
+    dismissButton: true,
+  };
 }
 
 function getIssueLink(meta: Meta, error: Error, issueTitle: string) {
