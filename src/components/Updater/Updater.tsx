@@ -8,25 +8,27 @@ import Toast, { ToastType } from "../Toast/Toast";
 import ToastAction from "../Toast/ToastAction";
 
 const copies = {
-  "check.in-progress": "Checking for updates...",
-  "check.no-updates": "You're on the latest version of Zon",
-  "check.error.offline": "To check for updates, connect to the internet",
-  "check.error.online": "Failed to check for updates",
-  "check.error.online.issue": "Update check failed",
-  "download.in-progress": "Downloading updates...",
-  "download.error.offline": "To download the update, connect to the internet",
-  "download.error.online": "Failed to download the update",
-  "download.error.online.issue": "Update download failed",
-  "download.success": "Update downloaded",
-  "install.in-progress": "Installing updates...",
-  "install.error": "Failed to install the update",
-  "install.error.issue": "Update installation failed",
-  "install.success": "Update installed",
-  "relaunch.in-progress": "Restarting application...",
-  "relaunch.error": "Failed to restart the application",
-  "relaunch.error.issue": "Application restart failed",
-  "install.action": "Install and restart",
-  "relaunch.action": "Restart now",
+  "updater.check.in-progress": "Checking for updates...",
+  "updater.check.no-updates": "You're on the latest version of Zon",
+  "updater.check.error.offline":
+    "To check for updates, connect to the internet",
+  "updater.check.error.online": "Failed to check for updates",
+  "updater.check.error.online.issue": "Update check failed",
+  "updater.download.in-progress": "Downloading updates...",
+  "updater.download.error.offline":
+    "To download the update, connect to the internet",
+  "updater.download.error.online": "Failed to download the update",
+  "updater.download.error.online.issue": "Update download failed",
+  "updater.download.success": "Update downloaded",
+  "updater.install.in-progress": "Installing updates...",
+  "updater.install.error": "Failed to install the update",
+  "updater.install.error.issue": "Update installation failed",
+  "updater.install.success": "Update installed",
+  "updater.relaunch.in-progress": "Restarting application...",
+  "updater.relaunch.error": "Failed to restart the application",
+  "updater.relaunch.error.issue": "Application restart failed",
+  "updater.install.action": "Install and restart",
+  "updater.relaunch.action": "Restart now",
   dismiss: "Dismiss",
   retry: "Retry",
   report: "Report issue",
@@ -164,15 +166,15 @@ export default function Updater() {
   function toastProps() {
     if (update.state === "errored" && wasOfflineDuringUpdateCheck()) {
       return offlineToastProps(
-        copies["check.error.offline"],
+        copies["updater.check.error.offline"],
         () => void retryCheckForUpdates(),
       );
     }
 
     if (update.state === "errored") {
       return errorToastProps(
-        copies["check.error.online"],
-        copies["check.error.online.issue"],
+        copies["updater.check.error.online"],
+        copies["updater.check.error.online.issue"],
         meta,
         update.error as Error,
         toastCallback(() => void retryCheckForUpdates()),
@@ -181,15 +183,15 @@ export default function Updater() {
 
     if (hasDownloaded.state === "errored" && wasOfflineDuringDownload()) {
       return offlineToastProps(
-        copies["download.error.offline"],
+        copies["updater.download.error.offline"],
         () => void retryDownloadUpdate(),
       );
     }
 
     if (hasDownloaded.state === "errored") {
       return errorToastProps(
-        copies["download.error.online"],
-        copies["download.error.online.issue"],
+        copies["updater.download.error.online"],
+        copies["updater.download.error.online.issue"],
         meta,
         hasDownloaded.error as Error,
         toastCallback(() => void retryDownloadUpdate()),
@@ -198,8 +200,8 @@ export default function Updater() {
 
     if (hasInstalled.state === "errored") {
       return errorToastProps(
-        copies["install.error"],
-        copies["install.error.issue"],
+        copies["updater.install.error"],
+        copies["updater.install.error.issue"],
         meta,
         hasInstalled.error as Error,
         toastCallback(() => void retryInstallUpdate()),
@@ -208,8 +210,8 @@ export default function Updater() {
 
     if (hasRelaunched.state === "errored") {
       return errorToastProps(
-        copies["relaunch.error"],
-        copies["relaunch.error.issue"],
+        copies["updater.relaunch.error"],
+        copies["updater.relaunch.error.issue"],
         meta,
         hasRelaunched.error as Error,
         toastCallback(() => void retryRelaunch()),
@@ -217,25 +219,25 @@ export default function Updater() {
     }
 
     if (hasUserClickedToastAction() && update.loading) {
-      return loadingToastProps(copies["check.in-progress"]);
+      return loadingToastProps(copies["updater.check.in-progress"]);
     }
 
     if (hasUserClickedToastAction() && hasDownloaded.loading) {
-      return loadingToastProps(copies["download.in-progress"]);
+      return loadingToastProps(copies["updater.download.in-progress"]);
     }
 
     if (hasUserClickedToastAction() && hasInstalled.loading) {
-      return loadingToastProps(copies["install.in-progress"]);
+      return loadingToastProps(copies["updater.install.in-progress"]);
     }
 
     if (hasUserClickedToastAction() && hasRelaunched.loading) {
-      return loadingToastProps(copies["relaunch.in-progress"]);
+      return loadingToastProps(copies["updater.relaunch.in-progress"]);
     }
 
     if (update.state === "ready" && update() == null) {
       return {
         type: ToastType.Success,
-        message: copies["check.no-updates"],
+        message: copies["updater.check.no-updates"],
       };
       // console.log(copies["check.no-updates"]);
       // return null;
@@ -244,10 +246,10 @@ export default function Updater() {
     if (!installImmediately && update()) {
       return {
         type: ToastType.Success,
-        message: copies["download.success"],
+        message: copies["updater.download.success"],
         actions: (
           <ToastAction onClick={toastCallback(() => setShouldInstall(true))}>
-            {copies["install.action"]}
+            {copies["updater.install.action"]}
           </ToastAction>
         ),
         autoDismiss: false,
@@ -257,10 +259,10 @@ export default function Updater() {
     if (installImmediately && hasInstalled()) {
       return {
         type: ToastType.Success,
-        message: copies["install.success"],
+        message: copies["updater.install.success"],
         actions: (
           <ToastAction onClick={toastCallback(() => setShouldRelaunch(true))}>
-            {copies["relaunch.action"]}
+            {copies["updater.relaunch.action"]}
           </ToastAction>
         ),
         dismissButton: true,
