@@ -1,7 +1,8 @@
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
+import { open } from "@tauri-apps/plugin-shell";
 import { createResource, createSignal, Show } from "solid-js";
-import { TARGET, useMeta } from "../../contexts/meta";
+import { Meta, TARGET, useMeta } from "../../contexts/meta";
 import createNavigatorOnline from "../../primitives/createNavigatorOnline";
 import Toast, { ToastType } from "../Toast/Toast";
 import ToastAction from "../Toast/ToastAction";
@@ -11,21 +12,24 @@ const copies = {
   "check.no-updates": "You're on the latest version of Zon",
   // TODO: check with `navigator.onLine`: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/onLine
   "check.error.offline": "To check for updates, connect to the internet",
-  "check.error.online": (link: string, message: string) =>
-    `Something went wrong while checking for updates. Please submit an issue at "${link}" mentioning the cause "${message}"`,
-  // `Failed to check for updates, please submit an issue at "${link}" mentioning the cause "${message}"`,
+  "check.error.online": "Failed to check for updates",
+  "check.error.online.issue": "Update check failed",
   "download.in-progress": "Downloading updates...",
-  "download.error": "Failed to download the update. Please try again later.",
+  "download.error": "Failed to download the update",
+  "download.error.issue": "Update download failed",
   "download.success": "Update downloaded",
   "install.in-progress": "Installing updates...",
   "install.error": "Failed to install the update",
+  "install.error.issue": "Update installation failed",
   "install.success": "Update installed",
   "relaunch.in-progress": "Restarting application...",
   "relaunch.error": "Failed to restart the application",
+  "relaunch.error.issue": "Application restart failed",
   "install.action": "Install and restart",
   "relaunch.action": "Restart now",
   dismiss: "Dismiss",
   retry: "Retry",
+  report: "Report issue",
 };
 
 let i = 0;
@@ -73,6 +77,7 @@ export default function Updater() {
         throw new Error("test download");
       }
 
+      // TODO: add warning if download fails due to going offline
       await updateVal.download();
       return true;
     },
@@ -165,97 +170,59 @@ export default function Updater() {
     }
 
     if (update.state === "errored") {
-      // TODO: change message to link button
-      // On desktop: https://v2.tauri.app/reference/javascript/shell/#open
-      // On web use an anchor action
-      return {
-        type: ToastType.Error,
-        message: copies["check.error.online"](
-          "https://github.com/thomasvanlankveld/zon/issues/new",
-          (update.error as Error).message,
-        ),
-        actions: (
-          <ToastAction
-            onClick={toastCallback(() => void retryCheckForUpdates())}
-          >
-            {copies["retry"]}
-          </ToastAction>
-        ),
-        dismissButton: true,
-      };
+      return errorToastProps(
+        copies["check.error.online"],
+        copies["check.error.online.issue"],
+        meta,
+        update.error as Error,
+        toastCallback(() => void retryCheckForUpdates()),
+      );
     }
 
     if (hasDownloaded.state === "errored") {
-      return {
-        type: ToastType.Error,
-        message: copies["download.error"],
-        actions: (
-          <ToastAction
-            onClick={toastCallback(() => void retryDownloadUpdate())}
-          >
-            {copies["retry"]}
-          </ToastAction>
-        ),
-        dismissButton: true,
-      };
+      return errorToastProps(
+        copies["download.error"],
+        copies["download.error.issue"],
+        meta,
+        hasDownloaded.error as Error,
+        toastCallback(() => void retryDownloadUpdate()),
+      );
     }
 
     if (hasInstalled.state === "errored") {
-      return {
-        type: ToastType.Error,
-        message: copies["install.error"],
-        actions: (
-          <ToastAction onClick={toastCallback(() => void retryInstallUpdate())}>
-            {copies["retry"]}
-          </ToastAction>
-        ),
-        dismissButton: true,
-      };
+      return errorToastProps(
+        copies["install.error"],
+        copies["install.error.issue"],
+        meta,
+        hasInstalled.error as Error,
+        toastCallback(() => void retryInstallUpdate()),
+      );
     }
 
     if (hasRelaunched.state === "errored") {
-      return {
-        type: ToastType.Error,
-        message: copies["relaunch.error"],
-        actions: (
-          <ToastAction onClick={toastCallback(() => void retryRelaunch())}>
-            {copies["retry"]}
-          </ToastAction>
-        ),
-        dismissButton: true,
-      };
+      return errorToastProps(
+        copies["relaunch.error"],
+        copies["relaunch.error.issue"],
+        meta,
+        hasRelaunched.error as Error,
+        toastCallback(() => void retryRelaunch()),
+      );
     }
 
     if (hasUserClickedToastAction() && update.loading) {
-      return {
-        type: ToastType.Info,
-        message: copies["check.in-progress"],
-        autoDismiss: false,
-      };
+      return loadingToastProps(copies["check.in-progress"]);
     }
 
     if (hasUserClickedToastAction() && hasDownloaded.loading) {
-      return {
-        type: ToastType.Info,
-        message: copies["download.in-progress"],
-        autoDismiss: false,
-      };
+      return loadingToastProps(copies["download.in-progress"]);
     }
 
     if (hasUserClickedToastAction() && hasInstalled.loading) {
-      return {
-        type: ToastType.Info,
-        message: copies["install.in-progress"],
-        autoDismiss: false,
-      };
+      return loadingToastProps(copies["install.in-progress"]);
     }
 
     if (hasUserClickedToastAction() && hasRelaunched.loading) {
-      return {
-        type: ToastType.Info,
-        message: copies["relaunch.in-progress"],
-        autoDismiss: false,
-      };
+      return loadingToastProps(copies["relaunch.in-progress"]);
     }
 
     if (update.state === "ready" && update() == null) {
@@ -304,4 +271,57 @@ export default function Updater() {
       )}
     </Show>
   );
+}
+
+function getIssueLink(meta: Meta, error: Error, issueTitle: string) {
+  const title = `[${meta.version()}]: ${issueTitle}`;
+  const body = [
+    "## Technical info",
+    "",
+    `- Zon version: \`${meta.version()}\``,
+    `- OS: \`${meta.target === TARGET.DESKTOP && meta.platform}\``,
+    `- Error message: \`${error.message}\``,
+    `- Error stack:`,
+    `\`\`\`\n${error.stack}\n\`\`\``,
+    "",
+    "## Additional info",
+    "",
+    "...",
+    "",
+  ].join("\n");
+
+  return `https://github.com/thomasvanlankveld/zon/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+}
+
+function errorToastProps(
+  toastMessage: string,
+  issueTitle: string,
+  meta: Meta,
+  error: Error,
+  onRetry: () => void,
+) {
+  return {
+    type: ToastType.Error,
+    message: toastMessage,
+    actions: (
+      <>
+        <ToastAction onClick={onRetry}>{copies["retry"]}</ToastAction>
+        <ToastAction
+          onClick={() => void open(getIssueLink(meta, error, issueTitle))}
+        >
+          {copies["report"]}
+        </ToastAction>
+      </>
+    ),
+    autoDismiss: true,
+    dismissButton: true,
+  };
+}
+
+function loadingToastProps(toastMessage: string) {
+  return {
+    type: ToastType.Info,
+    message: toastMessage,
+    autoDismiss: false,
+  };
 }

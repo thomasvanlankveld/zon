@@ -1,6 +1,13 @@
+import { getVersion } from "@tauri-apps/api/app";
 import { isTauri } from "@tauri-apps/api/core";
 import { platform, type Platform } from "@tauri-apps/plugin-os";
-import { createContext, type JSX, useContext } from "solid-js";
+import {
+  createContext,
+  createResource,
+  type JSX,
+  Resource,
+  useContext,
+} from "solid-js";
 import { ValueOf } from "../utils/type";
 
 export const TARGET = {
@@ -9,23 +16,30 @@ export const TARGET = {
 } as const;
 export type TARGET = ValueOf<typeof TARGET>;
 
-export type Meta =
+export type Meta = {
+  version: Resource<string>;
+} & (
   | {
       target: typeof TARGET.WEB;
     }
   | {
       target: typeof TARGET.DESKTOP;
       platform: Platform;
-    };
+    }
+);
 
 export default function getMeta(): Meta {
+  const [version] = createResource(getVersion);
+
   if (!isTauri()) {
     return {
+      version,
       target: TARGET.WEB,
     };
   }
 
   return {
+    version,
     target: TARGET.DESKTOP,
     platform: platform(),
   };
