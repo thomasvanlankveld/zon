@@ -13,6 +13,7 @@ const copies = {
   "check.error.offline": "To check for updates, connect to the internet",
   "check.error.online": (link: string, message: string) =>
     `Something went wrong while checking for updates. Please submit an issue at "${link}" mentioning the cause "${message}"`,
+  // `Failed to check for updates, please submit an issue at "${link}" mentioning the cause "${message}"`,
   "download.in-progress": "Downloading updates...",
   "download.error": "Failed to download the update. Please try again later.",
   "download.success": "Update downloaded",
@@ -26,6 +27,8 @@ const copies = {
   dismiss: "Dismiss",
   retry: "Retry",
 };
+
+let i = 0;
 
 export default function Updater() {
   const meta = useMeta();
@@ -45,6 +48,11 @@ export default function Updater() {
   const [update, { refetch: retryCheckForUpdates }] = createResource(
     async function checkForUpdates() {
       try {
+        i++;
+        if (i === 1) {
+          throw new Error("test update");
+        }
+
         return await check();
       } catch (error) {
         setWasOfflineDuringUpdateCheck(!isOnline());
@@ -53,19 +61,16 @@ export default function Updater() {
     },
   );
 
-  const [hasClickedRetryCheckForUpdates, setHasClickedRetryCheckForUpdates] =
-    createSignal(false);
-
-  function onRetryCheckForUpdatesClick() {
-    setHasClickedRetryCheckForUpdates(true);
-    void retryCheckForUpdates();
-  }
-
   const [hasDownloaded, { refetch: retryDownloadUpdate }] = createResource(
     () => update.state !== "errored" && update(),
     async function maybeDownloadUpdates(updateVal) {
       if (typeof updateVal !== "object" || updateVal == null) {
         return false;
+      }
+
+      i++;
+      if (i === 3) {
+        throw new Error("test download");
       }
 
       await updateVal.download();
@@ -77,10 +82,16 @@ export default function Updater() {
   const [shouldInstall, setShouldInstall] = createSignal(installImmediately);
 
   const [hasInstalled, { refetch: retryInstallUpdate }] = createResource(
-    () => hasDownloaded() && shouldInstall(),
+    () =>
+      hasDownloaded.state !== "errored" && hasDownloaded() && shouldInstall(),
     async function maybeInstallUpdate(hasDownloadedAndShouldInstall) {
       if (!hasDownloadedAndShouldInstall) {
         return false;
+      }
+
+      i++;
+      if (i === 5) {
+        throw new Error("test install");
       }
 
       const updateVal = update();
@@ -99,7 +110,8 @@ export default function Updater() {
   const [shouldRelaunch, setShouldRelaunch] = createSignal(!installImmediately);
 
   const [hasRelaunched, { refetch: retryRelaunch }] = createResource(
-    () => hasInstalled() && shouldRelaunch(),
+    () =>
+      hasInstalled.state !== "errored" && hasInstalled() && shouldRelaunch(),
     async function maybeRelaunch(hasInstalledAndShouldRelaunch) {
       if (!hasInstalledAndShouldRelaunch) {
         return false;
@@ -123,6 +135,18 @@ export default function Updater() {
     { initialValue: false },
   );
 
+  const [hasUserClickedToastAction, setHasUserClickedToastAction] =
+    createSignal(false);
+
+  // We want to hide the update process as much as possible. This means the related loading states are hidden until the
+  // user explicitly clicks one of the toast actions.
+  function toastCallback(callback: () => void) {
+    return function onToastActionClick() {
+      setHasUserClickedToastAction(true);
+      callback();
+    };
+  }
+
   function toastProps() {
     if (update.state === "errored" && wasOfflineDuringUpdateCheck()) {
       // TODO: Automatically dismiss after 5 seconds
@@ -130,7 +154,9 @@ export default function Updater() {
         type: ToastType.Warning,
         message: copies["check.error.offline"],
         actions: (
-          <ToastAction onClick={onRetryCheckForUpdatesClick}>
+          <ToastAction
+            onClick={toastCallback(() => void retryCheckForUpdates())}
+          >
             {copies["retry"]}
           </ToastAction>
         ),
@@ -149,7 +175,9 @@ export default function Updater() {
           (update.error as Error).message,
         ),
         actions: (
-          <ToastAction onClick={() => void retryCheckForUpdates()}>
+          <ToastAction
+            onClick={toastCallback(() => void retryCheckForUpdates())}
+          >
             {copies["retry"]}
           </ToastAction>
         ),
@@ -162,7 +190,9 @@ export default function Updater() {
         type: ToastType.Error,
         message: copies["download.error"],
         actions: (
-          <ToastAction onClick={() => void retryDownloadUpdate()}>
+          <ToastAction
+            onClick={toastCallback(() => void retryDownloadUpdate())}
+          >
             {copies["retry"]}
           </ToastAction>
         ),
@@ -175,7 +205,7 @@ export default function Updater() {
         type: ToastType.Error,
         message: copies["install.error"],
         actions: (
-          <ToastAction onClick={() => void retryInstallUpdate()}>
+          <ToastAction onClick={toastCallback(() => void retryInstallUpdate())}>
             {copies["retry"]}
           </ToastAction>
         ),
@@ -188,7 +218,7 @@ export default function Updater() {
         type: ToastType.Error,
         message: copies["relaunch.error"],
         actions: (
-          <ToastAction onClick={() => void retryRelaunch()}>
+          <ToastAction onClick={toastCallback(() => void retryRelaunch())}>
             {copies["retry"]}
           </ToastAction>
         ),
@@ -196,7 +226,7 @@ export default function Updater() {
       };
     }
 
-    if (update.state === "refreshing") {
+    if (hasUserClickedToastAction() && update.loading) {
       return {
         type: ToastType.Info,
         message: copies["check.in-progress"],
@@ -204,9 +234,7 @@ export default function Updater() {
       };
     }
 
-    // Only show this after explicit user action (i.e. clicking "retry" on after internet was down)
-    // TODO: Maybe make this into a more semantic `userHasClicked` variable or something?
-    if (hasClickedRetryCheckForUpdates() && hasDownloaded.loading) {
+    if (hasUserClickedToastAction() && hasDownloaded.loading) {
       return {
         type: ToastType.Info,
         message: copies["download.in-progress"],
@@ -214,11 +242,7 @@ export default function Updater() {
       };
     }
 
-    // Only show this after explicit user action (i.e. clicking "install.action" on Windows)
-    if (
-      (!installImmediately || hasClickedRetryCheckForUpdates()) &&
-      hasInstalled.loading
-    ) {
+    if (hasUserClickedToastAction() && hasInstalled.loading) {
       return {
         type: ToastType.Info,
         message: copies["install.in-progress"],
@@ -226,7 +250,7 @@ export default function Updater() {
       };
     }
 
-    if (hasRelaunched.loading) {
+    if (hasUserClickedToastAction() && hasRelaunched.loading) {
       return {
         type: ToastType.Info,
         message: copies["relaunch.in-progress"],
@@ -248,7 +272,7 @@ export default function Updater() {
         type: ToastType.Success,
         message: copies["download.success"],
         actions: (
-          <ToastAction onClick={() => setShouldInstall(true)}>
+          <ToastAction onClick={toastCallback(() => setShouldInstall(true))}>
             {copies["install.action"]}
           </ToastAction>
         ),
@@ -261,7 +285,7 @@ export default function Updater() {
         type: ToastType.Success,
         message: copies["install.success"],
         actions: (
-          <ToastAction onClick={() => setShouldRelaunch(true)}>
+          <ToastAction onClick={toastCallback(() => setShouldRelaunch(true))}>
             {copies["relaunch.action"]}
           </ToastAction>
         ),
