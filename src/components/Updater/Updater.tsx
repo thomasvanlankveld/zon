@@ -292,6 +292,7 @@ function offlineToastProps(toastMessage: string, onRetry: () => void) {
 
 function getIssueLink(meta: Meta, error: Error, issueTitle: string) {
   const title = `[${meta.version()}]: ${issueTitle}`;
+  // Not internationalized because I need to be able to read this
   const body = [
     "## Technical info",
     "",
