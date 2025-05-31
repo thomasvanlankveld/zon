@@ -10,7 +10,6 @@ import ToastAction from "../Toast/ToastAction";
 const copies = {
   "check.in-progress": "Checking for updates...",
   "check.no-updates": "You're on the latest version of Zon",
-  // TODO: check with `navigator.onLine`: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/onLine
   "check.error.offline": "To check for updates, connect to the internet",
   "check.error.online": "Failed to check for updates",
   "check.error.online.issue": "Update check failed",
@@ -120,7 +119,8 @@ export default function Updater() {
     { initialValue: false },
   );
 
-  // If we installed the update immediately, we need to prompt the user to relaunch the application.
+  // If we installed the update immediately, we need ask the user if they want to relaunch the application. If the
+  // update was not installed immediately, they already confirmed the relaunch when they clicked "Install and restart".
   const [shouldRelaunch, setShouldRelaunch] = createSignal(!installImmediately);
 
   const [hasRelaunched, { refetch: retryRelaunch }] = createResource(
@@ -163,7 +163,6 @@ export default function Updater() {
 
   function toastProps() {
     if (update.state === "errored" && wasOfflineDuringUpdateCheck()) {
-      // TODO: Automatically dismiss after 5 seconds
       return offlineToastProps(
         copies["check.error.offline"],
         () => void retryCheckForUpdates(),
