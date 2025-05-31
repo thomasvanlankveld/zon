@@ -1,6 +1,4 @@
-import { Translations } from "./types";
-
-const enGBTranslations: Translations = {
+const enGBTranslations = {
   "app.title": "Zon",
   "dismiss.action": "Dismiss",
   "retry.action": "Retry",
@@ -9,12 +7,16 @@ const enGBTranslations: Translations = {
   "landing-page.welcome-message.web": "Paste Tokei JSON output below",
   "show-report-button.label": "Show report",
   "upload-button.label": "Select folder",
-  "counting-lines.text": `Counting lines in`,
+  "counting-lines.text": "Counting lines in",
   "group-name": "Smaller items",
   "breadcrumbs.label": "Breadcrumbs",
-  "report-list.nav.label": ({ name }) => `${name} content list`,
-  "report-list.number-of-lines": ({ numberOfLines }) =>
-    `${numberOfLines} lines`,
+  "report-list.nav.label": ({ name }: { name: string }) =>
+    `${name} content list`,
+  "report-list.number-of-lines": ({
+    numberOfLines,
+  }: {
+    numberOfLines: string;
+  }) => `${numberOfLines} lines`,
   "content.label": "Content",
   "types.label": "Types",
   "languages.label": "Languages",
@@ -42,6 +44,6 @@ const enGBTranslations: Translations = {
   "updater.relaunch.error.issue": "Application restart failed",
   "updater.install.action": "Install and restart",
   "updater.relaunch.action": "Restart now",
-};
+} as const;
 
 export default enGBTranslations;

@@ -1,6 +1,10 @@
 import { createContext, createSignal, type JSX, useContext } from "solid-js";
-import { Translations } from "../translations/types";
 import enGB from "../translations/en-GB";
+import {
+  Translations,
+  TranslationKey,
+  TranslationArgs,
+} from "../translations/types";
 
 type Locale = "en-GB";
 
@@ -11,7 +15,10 @@ const mapping: Record<Locale, Translations> = {
 function createI18n() {
   const [locale, setLocale] = createSignal<Locale>("en-GB");
 
-  function t(key: string, args?: Record<string, string>) {
+  function t<K extends TranslationKey>(
+    key: K,
+    args?: TranslationArgs[K],
+  ): string {
     const dictionary = mapping[locale()];
     const entry = dictionary[key];
 
@@ -20,7 +27,14 @@ function createI18n() {
     }
 
     if (typeof entry === "function") {
-      return entry(args ?? {});
+      if (args == null) {
+        throw new Error(`Translation ${key} requires arguments`);
+      }
+      return (entry as (args: TranslationArgs[K]) => string)(args);
+    }
+
+    if (args != null) {
+      throw new Error(`Translation ${key} does not accept arguments`);
     }
 
     return entry;
