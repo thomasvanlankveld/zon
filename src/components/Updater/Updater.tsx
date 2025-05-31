@@ -8,7 +8,7 @@ import createNavigatorOnline from "../../primitives/createNavigatorOnline";
 import Toast, { ToastType } from "../Toast/Toast";
 import ToastAction from "../Toast/ToastAction";
 
-let i = 0;
+// let i = 0;
 
 export default function Updater() {
   const meta = useMeta();
@@ -29,10 +29,10 @@ export default function Updater() {
   const [update, { refetch: retryCheckForUpdates }] = createResource(
     async function checkForUpdates() {
       try {
-        i++;
-        if (i === 1) {
-          throw new Error("test update");
-        }
+        // i++;
+        // if (i === 1) {
+        //   throw new Error("test update");
+        // }
 
         return await check();
       } catch (error) {
@@ -53,11 +53,11 @@ export default function Updater() {
       }
 
       try {
-        i++;
-        if (i === 3) {
-          await new Promise((resolve) => setTimeout(resolve, 5000));
-          throw new Error("test download");
-        }
+        // i++;
+        // if (i === 3) {
+        //   await new Promise((resolve) => setTimeout(resolve, 5000));
+        //   throw new Error("test download");
+        // }
 
         await updateVal.download();
       } catch (error) {
@@ -79,10 +79,10 @@ export default function Updater() {
         return false;
       }
 
-      i++;
-      if (i === 5) {
-        throw new Error("test install");
-      }
+      // i++;
+      // if (i === 5) {
+      //   throw new Error("test install");
+      // }
 
       const updateVal = update();
 
@@ -268,6 +268,16 @@ function offlineToastProps(toastMessage: string, onRetry: () => void) {
   };
 }
 
+/**
+ * Creates a link to a new GitHub issue with the error details.
+ *
+ * Docs: https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue#creating-an-issue-from-a-url-query
+ *
+ * @param meta - The meta object containing version and target information
+ * @param error - The error object containing the error message and stack trace
+ * @param issueTitle - The title of the issue to create on GitHub
+ * @returns A URL for creating a new GitHub issue with the error details
+ */
 function getIssueLink(meta: Meta, error: Error, issueTitle: string) {
   const title = `[${meta.version()}]: ${issueTitle}`;
   // Not internationalized because I need to be able to read this
@@ -275,6 +285,7 @@ function getIssueLink(meta: Meta, error: Error, issueTitle: string) {
     "## Technical info",
     "",
     `- Zon version: \`${meta.version()}\``,
+    // TODO: Should be a target assertion instead of a target check
     `- OS: \`${meta.target === TARGET.DESKTOP && meta.platform}\``,
     `- Error message: \`${error.message}\``,
     `- Error stack:`,
