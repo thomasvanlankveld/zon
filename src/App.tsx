@@ -5,22 +5,24 @@ import { Route, MemoryRouter, useSearchParams } from "@solidjs/router";
 import { createStore } from "solid-js/store";
 
 import "./styles/setup.css";
-import { Background } from "./components/Background/Background.tsx";
 import Updater from "./components/Updater/Updater.tsx";
-import { MetaProvider } from "./contexts/meta.tsx";
-import { MouseProvider } from "./contexts/mouse.tsx";
 import { LINE_TYPE, type Node, createTree } from "./utils/zon";
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
 import { Languages } from "./utils/tokei.ts";
-import { I18nProvider } from "./contexts/i18n.tsx";
+import AppProviders from "./contexts/app.tsx";
 import Routes from "./routes.ts";
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 
 // Development mode check - true in development, false in production
 const isHomePageEnabled = import.meta.env.MODE === "development";
 
-function App() {
+/**
+ * The main zon app component.
+ *
+ * @returns The app
+ */
+export default function App() {
   // TODO: Move some of this stuff into a context
   const [reports, setReports] = createStore<Record<string, Node>>({});
 
@@ -60,59 +62,49 @@ function App() {
   }
 
   return (
-    <MetaProvider>
-      <MouseProvider>
-        <Background>
-          <I18nProvider>
-            <MemoryRouter>
-              <Route
-                path={Routes.Home.Matcher}
-                component={() => (
-                  <Show
-                    when={
-                      Object.values(reports).length > 0 && isHomePageEnabled
-                    }
-                    fallback={
-                      <LandingPage
-                        countLinesInFolder={countLinesInFolder}
-                        countingPath={countingPath()}
-                        setReport={setReport}
-                      />
-                    }
-                  >
-                    <HomePage
-                      reports={reports}
-                      countLinesInFolder={countLinesInFolder}
-                      countingPath={countingPath()}
-                      removeReport={removeReport}
-                    />
-                  </Show>
-                )}
+    <AppProviders>
+      <MemoryRouter>
+        <Route
+          path={Routes.Home.Matcher}
+          component={() => (
+            <Show
+              when={Object.values(reports).length > 0 && isHomePageEnabled}
+              fallback={
+                <LandingPage
+                  countLinesInFolder={countLinesInFolder}
+                  countingPath={countingPath()}
+                  setReport={setReport}
+                />
+              }
+            >
+              <HomePage
+                reports={reports}
+                countLinesInFolder={countLinesInFolder}
+                countingPath={countingPath()}
+                removeReport={removeReport}
               />
-              <Route
-                path={Routes.Report.Matcher}
-                component={() => {
-                  const [searchParams] = useSearchParams();
-                  const rootPath = searchParams.rootPath;
+            </Show>
+          )}
+        />
+        <Route
+          path={Routes.Report.Matcher}
+          component={() => {
+            const [searchParams] = useSearchParams();
+            const rootPath = searchParams.rootPath;
 
-                  if (typeof rootPath !== "string") {
-                    throw new Error(
-                      `Can't display report for root path ${rootPath?.toString()}`,
-                    );
-                  }
+            if (typeof rootPath !== "string") {
+              throw new Error(
+                `Can't display report for root path ${rootPath?.toString()}`,
+              );
+            }
 
-                  const reportRoot = reports[rootPath];
+            const reportRoot = reports[rootPath];
 
-                  return <ReportPage root={reportRoot} />;
-                }}
-              />
-              <Updater />
-            </MemoryRouter>
-          </I18nProvider>
-        </Background>
-      </MouseProvider>
-    </MetaProvider>
+            return <ReportPage root={reportRoot} />;
+          }}
+        />
+        <Updater />
+      </MemoryRouter>
+    </AppProviders>
   );
 }
-
-export default App;
