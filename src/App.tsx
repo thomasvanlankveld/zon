@@ -106,8 +106,8 @@ function App() {
                   return <ReportPage root={reportRoot} />;
                 }}
               />
+              <Updater />
             </MemoryRouter>
-            <Updater />
           </I18nProvider>
         </Background>
       </MouseProvider>
