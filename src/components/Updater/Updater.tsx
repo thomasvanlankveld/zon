@@ -142,7 +142,7 @@ export default function Updater() {
     if (update.state === "errored" && wasOfflineDuringUpdateCheck()) {
       return offlineToastProps(
         t("updater.check.error.offline"),
-        () => void retryCheckForUpdates(),
+        toastCallback(() => void retryCheckForUpdates()),
       );
     }
 
@@ -159,7 +159,7 @@ export default function Updater() {
     if (hasDownloaded.state === "errored" && wasOfflineDuringDownload()) {
       return offlineToastProps(
         t("updater.download.error.offline"),
-        () => void retryDownloadUpdate(),
+        toastCallback(() => void retryDownloadUpdate()),
       );
     }
 
