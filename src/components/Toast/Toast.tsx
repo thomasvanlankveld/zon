@@ -191,6 +191,7 @@ export default function Toast(props: ToastProps) {
           }}
           class={`card text-extra-small ${styles.toast}`}
           data-card-size="extra-small"
+          // TODO: Add a click handler to dismiss the toast
           onMouseEnter={onToastMouseEnter}
         >
           <Show when={props.autoDismiss && !wasToastHovered()}>
