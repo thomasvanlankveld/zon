@@ -8,6 +8,7 @@ import {
 } from "solid-js";
 import { Dynamic, Portal } from "solid-js/web";
 import { Check, Info, OctagonX, TriangleAlert, X } from "lucide-solid";
+import { useMouse } from "../../contexts/mouse";
 import { ValueOf } from "../../utils/type";
 import Button from "../Button/Button";
 import ToastAction from "./ToastAction";
@@ -91,13 +92,27 @@ type ToastProps = {
   actions?: JSX.Element;
   closeButton?: boolean;
   dismissButton?: boolean;
-  autoDismiss?: boolean | number; // Can be boolean to use standardized timing, or number for custom duration
+  autoDismiss?: boolean | number;
 };
 
+/**
+ * A toast is a small notification that appears at the bottom of the screen. It can be used to display messages to the user.
+ *
+ * This component expects the mouse position to be provided by the `MouseProvider` component.
+ *
+ * @param props.type The type of toast to display
+ * @param props.message The message to display in the toast
+ * @param props.actions The actions to display in the toast
+ * @param [props.closeButton] Default `false`. Whether to display a close button in the toast
+ * @param [props.dismissButton] Default `false`. Whether to display a dismiss button in the toast
+ * @param [props.autoDismiss] Default `false`. Use `false` to disable, and `true` to use automatic timing based on message length. Use a number for custom duration.
+ */
 export default function Toast(props: ToastProps) {
   const [isDismissed, setIsDismissed] = createSignal(false);
-  const [wasHovered, setWasHovered] = createSignal(false);
-  let timeoutId: number | undefined;
+  const [wasToastHovered, setWasToastHovered] = createSignal(false);
+  const mousePosition = useMouse();
+  let toastElement: HTMLDivElement | undefined;
+  let autoDismissTimeoutId: number | undefined;
 
   const type = () => props.type;
   // const type = () => ToastType.Neutral;
@@ -107,39 +122,58 @@ export default function Toast(props: ToastProps) {
   // const type = () => ToastType.Error;
   const typeConfig = () => ToastTypeConfig[type()];
 
-  const duration = createMemo(() => {
+  const autoDismissDuration = createMemo(() => {
     if (!props.autoDismiss) return 0;
     return typeof props.autoDismiss === "number"
       ? props.autoDismiss
       : calculateDismissDuration(props.message);
   });
 
-  onMount(() => {
-    if (props.autoDismiss && !wasHovered()) {
-      timeoutId = window.setTimeout(() => {
-        setIsDismissed(true);
-      }, duration());
-    }
-  });
+  function maybeStartAutoDismiss() {
+    // Only start auto-dismiss if it's enabled
+    if (!props.autoDismiss) return;
 
-  onCleanup(() => {
-    if (timeoutId) {
-      window.clearTimeout(timeoutId);
-    }
-  });
+    const rect = toastElement?.getBoundingClientRect();
+    const pos = mousePosition();
 
-  const handleMouseEnter = () => {
-    if (timeoutId) {
-      window.clearTimeout(timeoutId);
-      timeoutId = undefined;
+    // Only start auto-dismiss if the mouse is outside the toast
+    if (
+      rect &&
+      pos.x >= rect.left &&
+      pos.x <= rect.right &&
+      pos.y >= rect.top &&
+      pos.y <= rect.bottom
+    ) {
+      setWasToastHovered(true);
+      return;
     }
-    setWasHovered(true);
-  };
+
+    // Start auto-dismiss
+    autoDismissTimeoutId = window.setTimeout(() => {
+      setIsDismissed(true);
+    }, autoDismissDuration());
+  }
+
+  function cancelAutoDismiss() {
+    if (autoDismissTimeoutId) {
+      window.clearTimeout(autoDismissTimeoutId);
+      autoDismissTimeoutId = undefined;
+    }
+  }
+
+  onMount(maybeStartAutoDismiss);
+  onCleanup(cancelAutoDismiss);
+
+  function onToastMouseEnter() {
+    cancelAutoDismiss();
+    setWasToastHovered(true);
+  }
 
   return (
     <Show when={!isDismissed()}>
       <Portal>
         <div
+          ref={toastElement}
           style={{
             position: "fixed",
             bottom: "1rem",
@@ -157,15 +191,15 @@ export default function Toast(props: ToastProps) {
           }}
           class={`card text-extra-small ${styles.toast}`}
           data-card-size="extra-small"
-          onMouseEnter={handleMouseEnter}
+          onMouseEnter={onToastMouseEnter}
         >
-          <Show when={props.autoDismiss && !wasHovered()}>
+          <Show when={props.autoDismiss && !wasToastHovered()}>
             <div class={styles.progressTrack}>
               <div
                 class={styles.progressBar}
                 data-animating="true"
                 style={{
-                  "animation-duration": `${duration()}ms`,
+                  "animation-duration": `${autoDismissDuration()}ms`,
                   background: typeConfig().color,
                 }}
               />

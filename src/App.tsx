@@ -8,6 +8,7 @@ import "./styles/setup.css";
 import { Background } from "./components/Background/Background.tsx";
 import Updater from "./components/Updater/Updater.tsx";
 import { MetaProvider } from "./contexts/meta.tsx";
+import { MouseProvider } from "./contexts/mouse.tsx";
 import { LINE_TYPE, type Node, createTree } from "./utils/zon";
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
@@ -60,52 +61,56 @@ function App() {
 
   return (
     <MetaProvider>
-      <Background>
-        <I18nProvider>
-          <MemoryRouter>
-            <Route
-              path={Routes.Home.Matcher}
-              component={() => (
-                <Show
-                  when={Object.values(reports).length > 0 && isHomePageEnabled}
-                  fallback={
-                    <LandingPage
+      <MouseProvider>
+        <Background>
+          <I18nProvider>
+            <MemoryRouter>
+              <Route
+                path={Routes.Home.Matcher}
+                component={() => (
+                  <Show
+                    when={
+                      Object.values(reports).length > 0 && isHomePageEnabled
+                    }
+                    fallback={
+                      <LandingPage
+                        countLinesInFolder={countLinesInFolder}
+                        countingPath={countingPath()}
+                        setReport={setReport}
+                      />
+                    }
+                  >
+                    <HomePage
+                      reports={reports}
                       countLinesInFolder={countLinesInFolder}
                       countingPath={countingPath()}
-                      setReport={setReport}
+                      removeReport={removeReport}
                     />
+                  </Show>
+                )}
+              />
+              <Route
+                path={Routes.Report.Matcher}
+                component={() => {
+                  const [searchParams] = useSearchParams();
+                  const rootPath = searchParams.rootPath;
+
+                  if (typeof rootPath !== "string") {
+                    throw new Error(
+                      `Can't display report for root path ${rootPath?.toString()}`,
+                    );
                   }
-                >
-                  <HomePage
-                    reports={reports}
-                    countLinesInFolder={countLinesInFolder}
-                    countingPath={countingPath()}
-                    removeReport={removeReport}
-                  />
-                </Show>
-              )}
-            />
-            <Route
-              path={Routes.Report.Matcher}
-              component={() => {
-                const [searchParams] = useSearchParams();
-                const rootPath = searchParams.rootPath;
 
-                if (typeof rootPath !== "string") {
-                  throw new Error(
-                    `Can't display report for root path ${rootPath?.toString()}`,
-                  );
-                }
+                  const reportRoot = reports[rootPath];
 
-                const reportRoot = reports[rootPath];
-
-                return <ReportPage root={reportRoot} />;
-              }}
-            />
-          </MemoryRouter>
-          <Updater />
-        </I18nProvider>
-      </Background>
+                  return <ReportPage root={reportRoot} />;
+                }}
+              />
+            </MemoryRouter>
+            <Updater />
+          </I18nProvider>
+        </Background>
+      </MouseProvider>
     </MetaProvider>
   );
 }
