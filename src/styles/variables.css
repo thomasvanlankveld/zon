@@ -251,6 +251,11 @@
     --color-button-shiny-regular-background: var(--clr-black-a800);
     --color-button-shiny-active-background: var(--clr-black-a900);
 
+    /* Toast colors */
+    --color-toast-background: var(--clr-grey-060);
+    --color-toast-border: var(--clr-grey-150);
+    --color-toast-progress-track: var(--clr-grey-150);
+
     /* Background colors */
     --color-background: var(--clr-black);
 
@@ -267,6 +272,9 @@
     --color-diagram-arc-group-regular: var(--clr-grey-500);
     --color-diagram-arc-group-active: var(--clr-grey-450);
     --color-diagram-arc-group-deemphasize: var(--clr-grey-220);
+
+    /* Shadows */
+    --shadow-toast: 0 0 var(--spacing-l) var(--clr-black);
 
     /* Gradients */
     --gradient-glimmer-default: var(--gdt-conic-rainbow);

@@ -177,21 +177,6 @@ export default function Toast(props: ToastProps) {
       <Portal>
         <div
           ref={toastElement}
-          style={{
-            position: "fixed",
-            bottom: "1rem",
-            right: "1rem",
-            "max-width": "24rem",
-            width: "100%",
-            display: "grid",
-            "grid-template-columns": "1fr auto",
-            "justify-content": "space-between",
-            "align-items": "start",
-            gap: "1rem",
-            background: "var(--clr-grey-060)",
-            border: "1px solid var(--clr-grey-150)",
-            "box-shadow": "0 0 1rem var(--clr-black)",
-          }}
           class={`card text-extra-small ${styles.toast}`}
           data-card-size="extra-small"
           // TODO: Add a click handler to dismiss the toast
