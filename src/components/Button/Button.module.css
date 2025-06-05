@@ -22,7 +22,7 @@
 
     &[data-variant="shiny"] {
       --glimmer-border-radius: var(--border-radius);
-      background-color: hsla(0, 0%, 6%, 0.8);
+      background-color: var(--color-button-shiny-regular-background);
 
       &:hover,
       &:focus,
@@ -31,7 +31,7 @@
       }
 
       &:active {
-        background-color: hsla(0, 0%, 6%, 0.9);
+        background-color: var(--color-button-shiny-active-background);
       }
     }
 

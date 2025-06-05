@@ -52,7 +52,9 @@
 
     /* Colors */
     --clr-white: hsl(0, 0%, 96%);
-    --clr-black: hsl(75, 100%, 1%);
+    --clr-black: hsl(75, 4%, 1%);
+    --clr-black-a800: hsla(75, 4%, 1%, 0.8);
+    --clr-black-a900: hsla(75, 4%, 1%, 0.9);
 
     --clr-grey-800: hsl(75, 4%, 80%);
     --clr-grey-700: hsl(75, 4%, 70%);
@@ -245,6 +247,9 @@
 
     --color-button-tertiary-focus-border: var(--clr-grey-450);
     --color-button-tertiary-active-text: var(--color-text-active);
+
+    --color-button-shiny-regular-background: var(--clr-black-a800);
+    --color-button-shiny-active-background: var(--clr-black-a900);
 
     /* Background colors */
     --color-background: var(--clr-black);
