@@ -22,7 +22,6 @@ export default function Button(props: ButtonProps) {
       classList={{
         [styles.button]: true,
         glimmer: variant() === "shiny",
-        "glimmer-hover": variant() === "shiny",
         glow: variant() === "shiny",
       }}
       type={type()}

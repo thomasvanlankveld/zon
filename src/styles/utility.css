@@ -113,10 +113,6 @@
       pointer-events: none;
       opacity: var(--glimmer-opacity);
     }
-
-    &.glimmer-hover:hover::before {
-      mask-image: none;
-    }
   }
 
   .glow {
