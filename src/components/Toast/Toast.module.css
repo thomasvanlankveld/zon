@@ -33,6 +33,7 @@
   height: 100%;
   width: 100%;
   transform: translateX(0);
+  background: var(--progress-bar-color);
 }
 
 .toast__progress-bar[data-animating="true"] {

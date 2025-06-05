@@ -189,7 +189,7 @@ export default function Toast(props: ToastProps) {
                 data-animating="true"
                 style={{
                   "animation-duration": `${autoDismissDuration()}ms`,
-                  background: typeConfig().color,
+                  "--progress-bar-color": typeConfig().color,
                 }}
               />
             </div>
