@@ -15,12 +15,6 @@ import Button from "../Button/Button";
 import ToastAction from "./ToastAction";
 import styles from "./Toast.module.css";
 
-const copies = {
-  // TODO: use this copy with sr-only
-  close: "Close",
-  dismiss: "Dismiss",
-};
-
 export const ToastType = {
   Neutral: "neutral",
   Info: "info",
@@ -226,7 +220,7 @@ export default function Toast(props: ToastProps) {
                   variant="secondary"
                   onClick={() => setIsDismissed(true)}
                 >
-                  {copies.dismiss}
+                  {t("dismiss.action")}
                 </ToastAction>
               )}
             </div>
