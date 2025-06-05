@@ -1,5 +1,6 @@
 const enGBTranslations = {
   "app.title": "Zon",
+  "close.action": "Close",
   "dismiss.action": "Dismiss",
   "retry.action": "Retry",
   "report.action": "Report issue",

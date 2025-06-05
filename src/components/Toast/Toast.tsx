@@ -8,6 +8,7 @@ import {
 } from "solid-js";
 import { Dynamic, Portal } from "solid-js/web";
 import { Check, Info, OctagonX, TriangleAlert, X } from "lucide-solid";
+import { useI18n } from "../../contexts/i18n";
 import { useMouse } from "../../contexts/mouse";
 import { ValueOf } from "../../utils/type";
 import Button from "../Button/Button";
@@ -108,6 +109,8 @@ type ToastProps = {
  * @param [props.autoDismiss] Default `false`. Use `false` to disable, and `true` to use automatic timing based on message length. Use a number for custom duration.
  */
 export default function Toast(props: ToastProps) {
+  const { t } = useI18n();
+
   const [isDismissed, setIsDismissed] = createSignal(false);
   const [wasToastHovered, setWasToastHovered] = createSignal(false);
   const mousePosition = useMouse();
@@ -239,6 +242,7 @@ export default function Toast(props: ToastProps) {
                 "line-height": "var(--spacing-s)",
               }}
             >
+              <span class="screen-reader-only">{t("close.action")}</span>
               <X size={16} />
             </Button>
           </Show>
