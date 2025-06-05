@@ -183,9 +183,9 @@ export default function Toast(props: ToastProps) {
           onMouseEnter={onToastMouseEnter}
         >
           <Show when={props.autoDismiss && !wasToastHovered()}>
-            <div class={styles.progressTrack}>
+            <div class={styles["toast__progress-track"]}>
               <div
-                class={styles.progressBar}
+                class={styles["toast__progress-bar"]}
                 data-animating="true"
                 style={{
                   "animation-duration": `${autoDismissDuration()}ms`,

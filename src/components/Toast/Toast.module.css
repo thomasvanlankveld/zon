@@ -17,7 +17,7 @@
   box-shadow: var(--shadow-toast);
 }
 
-.progressTrack {
+.toast__progress-track {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -26,7 +26,7 @@
   background: var(--color-toast-progress-track);
 }
 
-.progressBar {
+.toast__progress-bar {
   position: absolute;
   top: 0;
   right: 0;
@@ -35,7 +35,7 @@
   transform: translateX(0);
 }
 
-.progressBar[data-animating="true"] {
+.toast__progress-bar[data-animating="true"] {
   animation: toast-progress linear forwards;
 }
 
