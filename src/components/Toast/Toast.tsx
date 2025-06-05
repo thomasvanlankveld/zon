@@ -194,13 +194,7 @@ export default function Toast(props: ToastProps) {
               />
             </div>
           </Show>
-          <div
-            style={{
-              display: "grid",
-              "grid-template-columns": "auto 1fr",
-              gap: "var(--spacing-m)",
-            }}
-          >
+          <div class={styles["toast__content"]}>
             <Show when={typeConfig().icon}>
               {(icon) => (
                 <Dynamic
@@ -210,21 +204,14 @@ export default function Toast(props: ToastProps) {
                 />
               )}
             </Show>
-            <span
-              style={{
-                "margin-block": "var(--spacing-3xs)",
-                "overflow-wrap": "anywhere",
-              }}
-            >
-              {props.message}
-            </span>
+            <span class={styles["toast__message"]}>{props.message}</span>
           </div>
           <Show when={props.closeButton}>
             <Button
               variant="tertiary"
               onClick={() => setIsDismissed(true)}
-              style={{
-                "line-height": "var(--spacing-s)",
+              classList={{
+                [styles["toast__close-button"]]: true,
               }}
             >
               <span class="screen-reader-only">{t("close.action")}</span>
@@ -232,14 +219,7 @@ export default function Toast(props: ToastProps) {
             </Button>
           </Show>
           <Show when={props.actions || props.dismissButton}>
-            <div
-              style={{
-                "grid-column": "span 2",
-                "justify-self": "end",
-                display: "flex",
-                gap: "0.5rem",
-              }}
-            >
+            <div class={styles["toast__actions"]}>
               {props.actions}
               {props.dismissButton && (
                 <ToastAction

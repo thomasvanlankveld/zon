@@ -9,6 +9,7 @@ export type ButtonProps = {
   variant?: "primary" | "secondary" | "tertiary" | "shiny";
   size?: "small" | "medium" | "large";
   style?: JSX.CSSProperties;
+  classList?: Record<string, boolean>;
 };
 
 export default function Button(props: ButtonProps) {
@@ -23,6 +24,7 @@ export default function Button(props: ButtonProps) {
         [styles.button]: true,
         glimmer: variant() === "shiny",
         glow: variant() === "shiny",
+        ...props.classList,
       }}
       type={type()}
       onClick={() => props.onClick?.()}

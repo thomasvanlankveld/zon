@@ -17,6 +17,28 @@
   box-shadow: var(--shadow-toast);
 }
 
+.toast__content {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--spacing-m);
+}
+
+.toast__message {
+  margin-block: var(--spacing-3xs);
+  overflow-wrap: anywhere;
+}
+
+.toast__close-button {
+  line-height: var(--spacing-s);
+}
+
+.toast__actions {
+  grid-column: span 2;
+  justify-self: end;
+  display: flex;
+  gap: var(--spacing-s);
+}
+
 .toast__progress-track {
   position: absolute;
   bottom: 0;
