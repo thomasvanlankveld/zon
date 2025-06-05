@@ -5,7 +5,7 @@ import { Route, MemoryRouter, useSearchParams } from "@solidjs/router";
 import { createStore } from "solid-js/store";
 
 import "./styles/setup.css";
-import Updater from "./components/Updater/Updater.tsx";
+import MaybeUpdater from "./components/Updater/MaybeUpdater.tsx";
 import { LINE_TYPE, type Node, createTree } from "./utils/zon";
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
@@ -103,7 +103,7 @@ export default function App() {
             return <ReportPage root={reportRoot} />;
           }}
         />
-        <Updater />
+        <MaybeUpdater />
       </MemoryRouter>
     </AppProviders>
   );
