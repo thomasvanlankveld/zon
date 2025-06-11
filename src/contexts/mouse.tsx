@@ -17,6 +17,11 @@ const MouseContext = createContext<MouseContextType>();
 
 /**
  * Provider component that tracks mouse position globally
+ *
+ * The main reason this exists as a context, is so that we can access the mouse position from a component as it is
+ * rendered for the first time. Other methods generally run into a race condition, where they need the mouse position
+ * before we get a value from the `mousemove` event listener.
+ *
  * @param props.children Child components that will have access to mouse position
  */
 export function MouseProvider(props: { children: JSX.Element }) {
