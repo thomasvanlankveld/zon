@@ -16,6 +16,13 @@ export const TARGET = {
 } as const;
 export type TARGET = ValueOf<typeof TARGET>;
 
+/**
+ * Meta information about the current environment.
+ *
+ * @property {Resource<string>} version - The version of the application
+ * @property {TARGET} target - The target of the application: `web` or `desktop`
+ * @property {Platform} [platform] - The platform of the application (only available on desktop): `windows`, `macos`, `linux`, etc.
+ */
 export type Meta = {
   version: Resource<string>;
 } & (
@@ -28,7 +35,12 @@ export type Meta = {
     }
 );
 
-export default function getMeta(): Meta {
+/**
+ * Ask Tauri for meta information about the current environment.
+ *
+ * @returns {Meta} The meta information
+ */
+function getMeta(): Meta {
   const [version] = createResource(getVersion);
 
   if (!isTauri()) {
@@ -51,15 +63,22 @@ type MetaProviderProps = {
   children: JSX.Element;
 };
 
+/**
+ * Provide meta information about the current environment.
+ */
 export function MetaProvider(props: MetaProviderProps) {
   const meta = getMeta();
 
   return (
-    // Ignoring lint warning. This value is not meant to be reactive
     <MetaContext.Provider value={meta}>{props.children}</MetaContext.Provider>
   );
 }
 
+/**
+ * Get information about the current environment.
+ *
+ * @returns {Meta} The meta information
+ */
 export function useMeta(): Meta {
   return useContext(MetaContext) as Meta;
 }
