@@ -1,19 +1,12 @@
-import {
-  createSignal,
-  JSX,
-  Show,
-  createMemo,
-  onMount,
-  onCleanup,
-} from "solid-js";
+import { createSignal, JSX, Show } from "solid-js";
 import { Dynamic, Portal } from "solid-js/web";
 import { Check, Info, OctagonX, TriangleAlert, X } from "lucide-solid";
 import { useI18n } from "../../contexts/i18n";
-import { useMouse } from "../../contexts/mouse";
 import { ValueOf } from "../../utils/type";
 import Button from "../Button/Button";
 import ToastAction from "./ToastAction";
 import styles from "./Toast.module.css";
+import useAutoDismiss from "./useAutoDismiss";
 
 export const ToastType = {
   Neutral: "neutral",
@@ -57,30 +50,6 @@ const ToastTypeConfig: Record<ToastType, ToastTypeConfig> = {
   },
 };
 
-// Constants for toast timing
-const TOAST_TIMING = {
-  MIN_DURATION: 4000, // Minimum duration in ms
-  MAX_DURATION: 8000, // Maximum duration in ms
-  BASE_DURATION: 4000, // Base duration in ms
-  CHARS_PER_SECOND: 14, // Reading speed in characters per second
-  PROGRESS_HEIGHT: "3px", // Height of the progress bar
-} as const;
-
-/**
- * Calculates standardized dismiss duration based on message length
- * @param message The toast message
- * @returns Duration in milliseconds
- */
-function calculateDismissDuration(message: string): number {
-  const readingTime = (message.length / TOAST_TIMING.CHARS_PER_SECOND) * 1000;
-  const totalDuration = TOAST_TIMING.BASE_DURATION + readingTime;
-
-  return Math.min(
-    Math.max(totalDuration, TOAST_TIMING.MIN_DURATION),
-    TOAST_TIMING.MAX_DURATION,
-  );
-}
-
 type ToastProps = {
   type: ToastType;
   message: string;
@@ -106,83 +75,36 @@ export default function Toast(props: ToastProps) {
   const { t } = useI18n();
 
   const [isDismissed, setIsDismissed] = createSignal(false);
-  const [wasToastHovered, setWasToastHovered] = createSignal(false);
-  const mousePosition = useMouse();
-  let toastElement: HTMLDivElement | undefined;
-  let autoDismissTimeoutId: number | undefined;
-
-  const type = () => props.type;
-  // const type = () => ToastType.Neutral;
-  // const type = () => ToastType.Info;
-  // const type = () => ToastType.Success;
-  // const type = () => ToastType.Warning;
-  // const type = () => ToastType.Error;
-  const typeConfig = () => ToastTypeConfig[type()];
-
-  const autoDismissDuration = createMemo(() => {
-    if (!props.autoDismiss) return 0;
-    return typeof props.autoDismiss === "number"
-      ? props.autoDismiss
-      : calculateDismissDuration(props.message);
+  const [toastElement, setToastElement] = createSignal<
+    HTMLDivElement | undefined
+  >(undefined);
+  const autoDismiss = useAutoDismiss({
+    autoDismiss: () => props.autoDismiss,
+    message: () => props.message,
+    element: toastElement,
+    setIsDismissed,
   });
 
-  function maybeStartAutoDismiss() {
-    // Only start auto-dismiss if it's enabled
-    if (!props.autoDismiss) return;
-
-    const rect = toastElement?.getBoundingClientRect();
-    const pos = mousePosition();
-
-    // Only start auto-dismiss if the mouse is outside the toast
-    if (
-      rect &&
-      pos.x >= rect.left &&
-      pos.x <= rect.right &&
-      pos.y >= rect.top &&
-      pos.y <= rect.bottom
-    ) {
-      setWasToastHovered(true);
-      return;
-    }
-
-    // Start auto-dismiss
-    autoDismissTimeoutId = window.setTimeout(() => {
-      setIsDismissed(true);
-    }, autoDismissDuration());
-  }
-
-  function cancelAutoDismiss() {
-    if (autoDismissTimeoutId) {
-      window.clearTimeout(autoDismissTimeoutId);
-      autoDismissTimeoutId = undefined;
-    }
-  }
-
-  onMount(maybeStartAutoDismiss);
-  onCleanup(cancelAutoDismiss);
-
-  function onToastMouseEnter() {
-    cancelAutoDismiss();
-    setWasToastHovered(true);
-  }
+  const type = () => props.type;
+  const typeConfig = () => ToastTypeConfig[type()];
 
   return (
     <Show when={!isDismissed()}>
       <Portal>
         <div
-          ref={toastElement}
+          ref={setToastElement}
           class={`card text-extra-small ${styles.toast}`}
           data-card-size="extra-small"
           // TODO: Add a click handler to dismiss the toast
-          onMouseEnter={onToastMouseEnter}
+          onMouseEnter={() => autoDismiss.cancelAutoDismiss()}
         >
-          <Show when={props.autoDismiss && !wasToastHovered()}>
+          <Show when={autoDismiss.shouldShowProgressTrack()}>
             <div class={styles["toast__progress-track"]}>
               <div
                 class={styles["toast__progress-bar"]}
                 data-animating="true"
                 style={{
-                  "animation-duration": `${autoDismissDuration()}ms`,
+                  "animation-duration": `${autoDismiss.autoDismissDuration()}ms`,
                   "--progress-bar-color": typeConfig().color,
                 }}
               />
