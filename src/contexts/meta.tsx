@@ -80,5 +80,9 @@ export function MetaProvider(props: MetaProviderProps) {
  * @returns {Meta} The meta information
  */
 export function useMeta(): Meta {
-  return useContext(MetaContext) as Meta;
+  const context = useContext(MetaContext);
+  if (!context) {
+    throw new Error("useMeta must be used within a MetaProvider");
+  }
+  return context as Meta;
 }

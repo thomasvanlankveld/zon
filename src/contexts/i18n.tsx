@@ -60,5 +60,9 @@ export function I18nProvider(props: { children: JSX.Element }) {
 type I18n = ReturnType<typeof createI18n>;
 
 export function useI18n(): I18n {
-  return useContext(I18nContext) as I18n;
+  const context = useContext(I18nContext);
+  if (!context) {
+    throw new Error("useI18n must be used within an I18nProvider");
+  }
+  return context as I18n;
 }
