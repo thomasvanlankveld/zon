@@ -6,13 +6,13 @@ import { createStore } from "solid-js/store";
 
 import "./styles/setup.css";
 import MaybeUpdater from "./components/Updater/MaybeUpdater.tsx";
+import AppProviders from "./contexts/app.tsx";
 import { LINE_TYPE, type Node, createTree } from "./utils/zon";
 import HomePage from "./pages/HomePage/HomePage.tsx";
+import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 import ReportPage from "./pages/ReportPage/ReportPage.tsx";
 import { Languages } from "./utils/tokei.ts";
-import AppProviders from "./contexts/app.tsx";
 import Routes from "./routes.ts";
-import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 
 // Development mode check - true in development, false in production
 const isHomePageEnabled = import.meta.env.MODE === "development";
