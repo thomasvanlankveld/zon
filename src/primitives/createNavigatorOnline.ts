@@ -1,8 +1,11 @@
 import { createSignal, onCleanup, type Accessor } from "solid-js";
 
 /**
- * Creates a readonly accessor that tracks whether the browser is online
- * @returns A readonly accessor that returns true when the browser is online, false when offline
+ * Creates a readonly accessor that tracks whether the browser is online according to the `navigator.onLine` property.
+ *
+ * See more: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/onLine
+ *
+ * @returns {Accessor<boolean>} A readonly accessor that returns true when the browser is online, false when offline
  * @example
  * const isOnline = createNavigatorOnline();
  *
