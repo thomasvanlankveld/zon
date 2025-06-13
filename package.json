@@ -1,6 +1,6 @@
 {
   "name": "zon",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Shed light on your codebase",
   "repository": "git@github.com:thomasvanlankveld/zon.git",
   "author": "Thomas van Lankveld <5240626+thomasvanlankveld@users.noreply.github.com>",
@@ -19,16 +19,20 @@
     "eslint": "deno run --allow-env --allow-sys=cpus --allow-read=. --deny-read=/uSERS --allow-write=.eslintcache npm:eslint src",
     "test": "deno run --allow-env --allow-sys=cpus,uid,homedir --allow-read --allow-write --allow-run --allow-ffi=. --allow-net npm:vitest run",
     "lint-staged": "deno run --allow-env --allow-read --allow-run=git,deno --allow-write=.git npm:lint-staged",
-    "bundle-mac-silicon": "tauri build --target aarch64-apple-darwin --bundles dmg",
-    "bundle-mac-intel": "tauri build --target x86_64-apple-darwin --bundles dmg"
+    "bundle-mac-silicon": "tauri build --target aarch64-apple-darwin",
+    "bundle-mac-intel": "tauri build --target x86_64-apple-darwin"
   },
   "dependencies": {
     "@solidjs/router": "^0.15.3",
     "@tauri-apps/plugin-dialog": "^2.2.0",
+    "@tauri-apps/plugin-os": "~2.2.1",
+    "@tauri-apps/plugin-process": "~2.2.0",
+    "@tauri-apps/plugin-updater": "~2.6.0",
     "@vitejs/plugin-legacy": "^6.0.2",
+    "lucide-solid": "^0.483.0",
     "solid-js": "^1.9.5",
     "@tauri-apps/api": "^2.3.0",
-    "@tauri-apps/plugin-shell": "^2.2.0"
+    "@tauri-apps/plugin-shell": "~2.2.1"
   },
   "devDependencies": {
     "@csstools/postcss-bundler": "^2.0.6",

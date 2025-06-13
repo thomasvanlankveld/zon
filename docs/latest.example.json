@@ -1,0 +1,15 @@
+{
+  "version": "v0.3.0",
+  "notes": "This is a test release to test the auto updater itself",
+  "pub_date": "2025-05-29T13:29:26.619Z",
+  "platforms": {
+    "darwin-aarch64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRVGFOSHZlcENpWlhiMHNLNjVaYml0VDRNSkFmTnNzZ1lEcUpsc0pOeU1iQlkrQVJ3VlZQajA1RUFuT0pSd1ZnbWlrcmpDSnordzYwbG9ud1NvQ0lWeEsxT3ZNVFJqaUFvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzQ4NTIzNjYzCWZpbGU6em9uLmFwcC50YXIuZ3oKdWY2cmd1Rk5POHVwUUpsWXhuZ2pBdXdYNm9DVFRvV0lucnBYN08rWnBQMzBlZFRGYm5ZQ0lSUHQ1Yk9FMUp5QmxwaU5nTXoxVjdYaGVDbjNMc2h6Q0E9PQo=",
+      "url": "https://github.com/thomasvanlankveld/zon/releases/download/v0.3.0/zon-aarch64.app.tar.gz"
+    },
+    "darwin-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRVGFOSHZlcENpWlVMYWRvU24yQnlxdVRmYVR1Mi9ZMEVDekMzbkN3VnlpRlg3SG80QUZjZG1PT0NHRnVWRjVYQWtTZVV2SVpTVURLQStGbkNZY0tZeUJnZjlDK3RoQVFzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzQ4NTI1MTAwCWZpbGU6em9uLmFwcC50YXIuZ3oKT2Z2emFiQTdka2pnbDJpU3VRM1h5aVYwMVZZQmVTK091Z202bVlMdGJ3YUlwMjJDYUdTcGdxVFFPSUFESnJyNTF0SWRVMjRvM1MrOUkxcXNGR1o2QkE9PQo=",
+      "url": "https://github.com/thomasvanlankveld/zon/releases/download/v0.3.0/zon-x86_64.app.tar.gz"
+    }
+  }
+}

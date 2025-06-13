@@ -21,6 +21,16 @@
     background: var(--color-background);
     border-radius: var(--spacing-card-border-radius);
     padding: var(--spacing-card-padding);
+
+    &[data-card-size="small"] {
+      border-radius: var(--spacing-card-border-radius-small);
+      padding: var(--spacing-card-padding-small);
+    }
+
+    &[data-card-size="extra-small"] {
+      border-radius: var(--spacing-card-border-radius-extra-small);
+      padding: var(--spacing-card-padding-extra-small);
+    }
   }
 
   .page {

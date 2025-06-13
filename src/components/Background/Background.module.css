@@ -10,102 +10,102 @@
 @property --background-color-0 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.307 287.621);
+  initial-value: var(--clr-rainbow-0);
 }
 @property --background-color-1 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.303 311.851);
+  initial-value: var(--clr-rainbow-1);
 }
 @property --background-color-2 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.297 336.653);
+  initial-value: var(--clr-rainbow-2);
 }
 @property --background-color-3 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.287 0);
+  initial-value: var(--clr-rainbow-3);
 }
 @property --background-color-4 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.277 14.4);
+  initial-value: var(--clr-rainbow-4);
 }
 @property --background-color-5 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.267 28.8);
+  initial-value: var(--clr-rainbow-5);
 }
 @property --background-color-6 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.26 43.2);
+  initial-value: var(--clr-rainbow-6);
 }
 @property --background-color-7 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.257 57.6);
+  initial-value: var(--clr-rainbow-7);
 }
 @property --background-color-8 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.26 72);
+  initial-value: var(--clr-rainbow-8);
 }
 @property --background-color-9 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.267 86.4);
+  initial-value: var(--clr-rainbow-9);
 }
 @property --background-color-10 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.277 101.059);
+  initial-value: var(--clr-rainbow-10);
 }
 @property --background-color-11 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.287 118.186);
+  initial-value: var(--clr-rainbow-11);
 }
 @property --background-color-12 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.289 134.126);
+  initial-value: var(--clr-rainbow-12);
 }
 @property --background-color-13 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.276 143.4);
+  initial-value: var(--clr-rainbow-13);
 }
 @property --background-color-14 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.265 152.213);
+  initial-value: var(--clr-rainbow-14);
 }
 @property --background-color-15 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.264 173.496);
+  initial-value: var(--clr-rainbow-15);
 }
 @property --background-color-16 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.273 206.098);
+  initial-value: var(--clr-rainbow-16);
 }
 @property --background-color-17 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.287 237.686);
+  initial-value: var(--clr-rainbow-17);
 }
 @property --background-color-18 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.299 258);
+  initial-value: var(--clr-rainbow-18);
 }
 @property --background-color-19 {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(82% 0.306 269.866);
+  initial-value: var(--clr-rainbow-19);
 }
 
 .background {

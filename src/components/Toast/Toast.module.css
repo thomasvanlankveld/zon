@@ -1,0 +1,72 @@
+@import "../../styles/setup.css";
+
+.toast {
+  position: fixed;
+  overflow: hidden;
+  bottom: var(--spacing-l);
+  right: var(--spacing-l);
+  max-width: var(--container-s);
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  justify-content: space-between;
+  align-items: start;
+  gap: var(--spacing-l);
+  background: var(--color-toast-background);
+  border: 1px solid var(--color-toast-border);
+  box-shadow: var(--shadow-toast);
+}
+
+.toast__content {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--spacing-m);
+}
+
+.toast__message {
+  margin-block: var(--spacing-3xs);
+  overflow-wrap: anywhere;
+}
+
+.toast__close-button {
+  line-height: var(--spacing-s);
+}
+
+.toast__actions {
+  grid-column: span 2;
+  justify-self: end;
+  display: flex;
+  gap: var(--spacing-s);
+}
+
+.toast__progress-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-toast-progress-track);
+}
+
+.toast__progress-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  transform: translateX(0);
+  background: var(--progress-bar-color);
+}
+
+.toast__progress-bar[data-animating="true"] {
+  animation: toast-progress linear forwards;
+}
+
+@keyframes toast-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
