@@ -1,5 +1,5 @@
-import { check } from "@tauri-apps/plugin-updater";
-import { relaunch } from "@tauri-apps/plugin-process";
+// import { check } from "@tauri-apps/plugin-updater";
+// import { relaunch } from "@tauri-apps/plugin-process";
 import { open } from "@tauri-apps/plugin-shell";
 import { createResource, createSignal, Show } from "solid-js";
 import { useI18n } from "../../contexts/i18n";
@@ -8,7 +8,8 @@ import createNavigatorOnline from "../../primitives/createNavigatorOnline";
 import Toast, { ToastType } from "../Toast/Toast";
 import ToastAction from "../Toast/ToastAction";
 
-// let i = 0;
+// Uncomment this to use a simulator of the updater plugin
+import { check, relaunch } from "./updaterSim";
 
 export default function Updater() {
   const meta = useMeta();
@@ -29,11 +30,6 @@ export default function Updater() {
   const [update, { refetch: retryCheckForUpdates }] = createResource(
     async function checkForUpdates() {
       try {
-        // i++;
-        // if (i === 1) {
-        //   throw new Error("test update");
-        // }
-
         return await check();
       } catch (error) {
         setWasOfflineDuringUpdateCheck(!isOnline());
@@ -53,12 +49,6 @@ export default function Updater() {
       }
 
       try {
-        // i++;
-        // if (i === 3) {
-        //   await new Promise((resolve) => setTimeout(resolve, 5000));
-        //   throw new Error("test download");
-        // }
-
         await updateVal.download();
       } catch (error) {
         setWasOfflineDuringDownload(!isOnline());
@@ -78,11 +68,6 @@ export default function Updater() {
       if (!hasDownloadedAndShouldInstall) {
         return false;
       }
-
-      // i++;
-      // if (i === 5) {
-      //   throw new Error("test install");
-      // }
 
       const updateVal = update();
 
