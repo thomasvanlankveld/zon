@@ -221,12 +221,8 @@ export default function Updater() {
     }
 
     if (update.state === "ready" && update() == null) {
-      return {
-        type: ToastType.Success,
-        message: t("updater.check.no-updates"),
-      };
-      // console.log(copies["check.no-updates"]);
-      // return null;
+      console.log(t("updater.check.no-updates"));
+      return null;
     }
 
     if (!installImmediately && update()) {
