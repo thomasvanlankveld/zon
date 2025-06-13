@@ -220,9 +220,15 @@ export default function Updater() {
       return loadingToastProps(t("updater.relaunch.in-progress"));
     }
 
-    if (update.state === "ready" && update() == null) {
-      console.log(t("updater.check.no-updates"));
-      return null;
+    if (
+      hasUserClickedToastAction() &&
+      update.state === "ready" &&
+      update() == null
+    ) {
+      return {
+        type: ToastType.Success,
+        message: t("updater.check.no-updates"),
+      };
     }
 
     if (!installImmediately && update()) {
