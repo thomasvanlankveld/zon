@@ -1,5 +1,5 @@
-// import { check } from "@tauri-apps/plugin-updater";
-// import { relaunch } from "@tauri-apps/plugin-process";
+import { check } from "@tauri-apps/plugin-updater";
+import { relaunch } from "@tauri-apps/plugin-process";
 import { open } from "@tauri-apps/plugin-shell";
 import { createResource, createSignal, Show } from "solid-js";
 import { useI18n } from "../../contexts/i18n";
@@ -8,8 +8,8 @@ import createNavigatorOnline from "../../primitives/createNavigatorOnline";
 import Toast, { ToastType } from "../Toast/Toast";
 import ToastAction from "../Toast/ToastAction";
 
-// Uncomment this to use a simulator of the updater plugin
-import { check, relaunch } from "./updaterSim";
+// // Uncomment this to use a simulator of the updater plugin
+// import { check, relaunch } from "./updaterSim";
 
 export default function Updater() {
   const meta = useMeta();
@@ -263,7 +263,7 @@ function offlineToastProps(toastMessage: string, onRetry: () => void) {
  * @param issueTitle - The title of the issue to create on GitHub
  * @returns A URL for creating a new GitHub issue with the error details
  */
-function getIssueLink(meta: Meta, error: Error, issueTitle: string) {
+function createIssueLink(meta: Meta, error: Error, issueTitle: string) {
   const title = `[${meta.version()}]: ${issueTitle}`;
   // Not internationalized because I need to be able to read this
   const body = [
@@ -301,7 +301,7 @@ function errorToastProps(
       <>
         <ToastAction onClick={onRetry}>{t("retry.action")}</ToastAction>
         <ToastAction
-          onClick={() => void open(getIssueLink(meta, error, issueTitle))}
+          onClick={() => void open(createIssueLink(meta, error, issueTitle))}
         >
           {t("report.action")}
         </ToastAction>
