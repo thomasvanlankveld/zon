@@ -12,6 +12,18 @@ import createIssueLink from "./createIssueLink";
 // // Uncomment this to use a simulator of the updater plugin
 // import { check, relaunch } from "./updaterSim";
 
+/**
+ * This component, when mounted, will automatically check for updates, download them, and (depending on the
+ * platform) install them.
+ *
+ * It will also show a toast to the user when necessary:
+ * - When there is a problem
+ * - When the user's permission is needed to proceed (notably before relaunching)
+ * - After any user interaction, to show the updater's progress
+ *
+ * What the Zon app does is very specific, so we don't want to bother the user with update-related stuff
+ * unless we really need to. Whenever we do show a message, it's usually dismissed automatically.
+ */
 export default function Updater() {
   const meta = useMeta();
   const { t } = useI18n();
@@ -28,6 +40,7 @@ export default function Updater() {
   const [wasOfflineDuringUpdateCheck, setWasOfflineDuringUpdateCheck] =
     createSignal(false);
 
+  // Check for updates
   const [update, { refetch: retryCheckForUpdates }] = createResource(
     async function checkForUpdates() {
       try {
@@ -42,6 +55,7 @@ export default function Updater() {
   const [wasOfflineDuringDownload, setWasOfflineDuringDownload] =
     createSignal(false);
 
+  // Download updates
   const [hasDownloaded, { refetch: retryDownloadUpdate }] = createResource(
     () => update.state !== "errored" && update(),
     async function maybeDownloadUpdates(updateVal) {
@@ -60,6 +74,7 @@ export default function Updater() {
     { initialValue: false },
   );
 
+  // Install updates (if the user has confirmed it, or if we're not on Windows)
   const [shouldInstall, setShouldInstall] = createSignal(installImmediately);
 
   const [hasInstalled, { refetch: retryInstallUpdate }] = createResource(
@@ -82,6 +97,7 @@ export default function Updater() {
     { initialValue: false },
   );
 
+  // Relaunch the application
   // If we installed the update immediately, we need ask the user if they want to relaunch the application. If the
   // update was not installed immediately, they already confirmed the relaunch when they clicked "Install and restart".
   const [shouldRelaunch, setShouldRelaunch] = createSignal(!installImmediately);
@@ -112,11 +128,11 @@ export default function Updater() {
     { initialValue: false },
   );
 
+  // We want to hide the update process as much as possible. This means the related loading states are hidden until the
+  // user explicitly clicks one of the toast actions.
   const [hasUserClickedToastAction, setHasUserClickedToastAction] =
     createSignal(false);
 
-  // We want to hide the update process as much as possible. This means the related loading states are hidden until the
-  // user explicitly clicks one of the toast actions.
   function toastCallback(callback: () => void) {
     return function onToastActionClick() {
       setHasUserClickedToastAction(true);
@@ -124,6 +140,15 @@ export default function Updater() {
     };
   }
 
+  /**
+   * Updater variable toast props
+   *
+   * Will choose the appropriate message etc. based on the current state of the updater.
+   *
+   * First priority is error messages, then loading messages, then requests for confirmation.
+   *
+   * If none of these apply, the updater will not show a toast.
+   */
   function toastProps() {
     if (update.state === "errored" && wasOfflineDuringUpdateCheck()) {
       return offlineToastProps(
@@ -243,6 +268,9 @@ export default function Updater() {
   );
 }
 
+/**
+ * Updater offline toast props
+ */
 function offlineToastProps(toastMessage: string, onRetry: () => void) {
   const { t } = useI18n();
 
@@ -254,6 +282,9 @@ function offlineToastProps(toastMessage: string, onRetry: () => void) {
   };
 }
 
+/**
+ * Updater error toast props
+ */
 function errorToastProps(
   toastMessage: string,
   issueTitle: string,
@@ -281,6 +312,9 @@ function errorToastProps(
   };
 }
 
+/**
+ * Updater loading toast props
+ */
 function loadingToastProps(toastMessage: string) {
   return {
     type: ToastType.Info,
