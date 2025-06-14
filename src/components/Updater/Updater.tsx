@@ -26,6 +26,8 @@ import createIssueLink from "./createIssueLink";
  */
 export default function Updater() {
   const meta = useMeta();
+  console.log("Zon app current version", meta.version);
+
   const { t } = useI18n();
 
   if (meta.target !== TARGET.DESKTOP) {
@@ -62,6 +64,8 @@ export default function Updater() {
       if (typeof updateVal !== "object" || updateVal == null) {
         return false;
       }
+
+      console.log("Zon app update found", updateVal.version);
 
       try {
         await updateVal.download();
