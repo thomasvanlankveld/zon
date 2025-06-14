@@ -11,6 +11,8 @@
    - `git tag vX.Y.Z`
    - `git push origin master --tags`
 3. Find the release on GitHub and finish it
+   - Add release notes
+   - Mark the release as "latest"
 
 ## Manual release (not recommended)
 
