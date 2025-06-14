@@ -2,6 +2,8 @@
 
 ## Semi-automated release
 
+The main way to trigger this is by tagging a commit with a version number. In case something went wrong, you can also trigger it manually (it will always use the version in `tauri.conf.json` as the release version).
+
 1. Bump version number and commit (and get it on the `master` branch)
    - `package.json`
    - `src-tauri/tauri.conf.json`
