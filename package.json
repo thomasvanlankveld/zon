@@ -1,7 +1,7 @@
 {
   "name": "zon",
-  "version": "0.3.0",
-  "description": "Shed light on your codebase",
+  "version": "0.4.0",
+  "description": "Explore your line counts",
   "repository": "git@github.com:thomasvanlankveld/zon.git",
   "author": "Thomas van Lankveld <5240626+thomasvanlankveld@users.noreply.github.com>",
   "license": "MIT",
