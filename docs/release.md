@@ -1,5 +1,19 @@
 # Release
 
+## Semi-automated release
+
+1. Bump version number and commit (and get it on the `master` branch)
+   - `package.json`
+   - `src-tauri/tauri.conf.json`
+   - `src-tauri/Cargo.toml`
+     - Build the project to also update `src-tauri/Cargo.lock`
+2. Tag the commit and push
+   - `git tag vX.Y.Z`
+   - `git push origin master --tags`
+3. Find the release on GitHub and finish it
+
+## Manual release (not recommended)
+
 1. Bump version number, commit and push
    - `package.json`
    - `src-tauri/tauri.conf.json`
