@@ -26,8 +26,8 @@
       - `deno task bundle-mac-intel`
    2. Test the binaries if needed
    3. Rename the updater bundles (in `src-tauri/target/<architecture-os>/release/bundle/macos/zon.app.tar.gz`) to include the version and architecture name:
-      - `zon-<version>-aarch64.app.tar.gz`
-      - `zon-<version>-x86_64.app.tar.gz`
+      - `zon_<version>_aarch64.app.tar.gz`
+      - `zon_<version>_x86_64.app.tar.gz`
    4. Upload the updater bundles as assets to the GitHub release.
 4. Create a [`latest.json` for updater](https://v2.tauri.app/plugin/updater/#static-json-file) and add it to the GitHub release assets
    - Set version
