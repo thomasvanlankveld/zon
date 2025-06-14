@@ -6,7 +6,9 @@
  * To change the behavior, just change the contents of this file.
  */
 
-// TODO: Maybe add a way to simulate createNavigatorOnline()
+// TODO:
+// - Maybe add a way to simulate createNavigatorOnline()
+// - Maybe adopt mock tauri apis: https://v2.tauri.app/develop/tests/mocking/
 
 import {
   check as tauriCheck,
