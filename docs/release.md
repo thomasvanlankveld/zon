@@ -11,7 +11,7 @@
       - `deno task bundle-mac-silicon`
       - `deno task bundle-mac-intel`
    2. Test the binaries if needed
-   3. Rename the updater bundles (in `target/<architecture-os>/release/bundle/macos/zon.app.tar.gz`) to include the architecture name:
+   3. Rename the updater bundles (in `src-tauri/target/<architecture-os>/release/bundle/macos/zon.app.tar.gz`) to include the architecture name:
       - `zon-aarch64.app.tar.gz`
       - `zon-x86_64.app.tar.gz`
    4. Upload the updater bundles as assets to the GitHub release.
