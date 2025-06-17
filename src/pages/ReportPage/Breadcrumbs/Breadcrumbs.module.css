@@ -9,13 +9,10 @@
   min-height: calc(2 * var(--line-height-regular) + 2 * var(--spacing-m));
 }
 
-/* Cut off after two lines to prevent layout shifts when hovering arc segments */
+/* Cut off after two lines to prevent layout shifts when hovering arc segments. This has to be a separate element that
+wraps the text exactly, otherwise you can still see the top of the third line inside the container. */
 .breadcrumbs__content {
-  display: -webkit-box;
   max-height: calc(2 * var(--line-height-regular));
-  line-clamp: 2;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
