@@ -1,6 +1,6 @@
 [package]
 name = "zon"
-version = "0.4.3"
+version = "0.4.4"
 description = "Explore your line counts"
 authors = ["Thomas van Lankveld <5240626+thomasvanlankveld@users.noreply.github.com>"]
 edition = "2021"
