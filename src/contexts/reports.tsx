@@ -4,6 +4,7 @@ import { createContext, createSignal, type JSX, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
 import { LINE_TYPE, type Node, createTree } from "../utils/zon";
 import type { Languages } from "../utils/tokei.ts";
+import { useUpdateContext } from "./update";
 
 export type ReportsContextValue = {
   reports: Record<string, Node>;
@@ -27,6 +28,7 @@ type ReportsProviderProps = {
  * countLinesInFolder can guard on isPendingRestart in step 3.
  */
 export function ReportsProvider(props: ReportsProviderProps) {
+  const updateCtx = useUpdateContext();
   const [reports, setReports] = createStore<Record<string, Node>>({});
   const [countingPath, setCountingPath] = createSignal<string | null>(null);
 
@@ -45,6 +47,10 @@ export function ReportsProvider(props: ReportsProviderProps) {
    * null if the user cancelled.
    */
   async function countLinesInFolder(): Promise<string | null> {
+    if (updateCtx.isPendingRestart()) {
+      throw new Error("countLinesInFolder must not be called while a restart is pending");
+    }
+
     const path = await open({
       multiple: false,
       directory: true,
