@@ -13,12 +13,12 @@ import createIssueLink from "./createIssueLink";
 // import { check, relaunch } from "./updaterSim";
 
 /**
- * This component, when mounted, will automatically check for updates, download them, and (depending on the
- * platform) install them.
+ * This component, when mounted, will automatically check for updates and download them. Install and restart
+ * happen only after the user confirms once (e.g. "Install and restart"); one click upgrades to the new version.
  *
  * It will also show a toast to the user when necessary:
  * - When there is a problem
- * - When the user's permission is needed to proceed (notably before relaunching)
+ * - When the user's permission is needed to proceed (before install and restart)
  * - After any user interaction, to show the updater's progress
  *
  * What the Zon app does is very specific, so we don't want to bother the user with update-related stuff
@@ -33,10 +33,6 @@ export default function Updater() {
   if (meta.target !== TARGET.DESKTOP) {
     throw new Error("Updater is only available on desktop");
   }
-
-  // On Windows, installing an update will close the application, so we prompt the user first. On other platforms, we
-  // can install immediately. See https://v2.tauri.app/plugin/updater/#checking-for-updates
-  const installImmediately = meta.platform !== "windows";
 
   const isOnline = createNavigatorOnline();
   const [wasOfflineDuringUpdateCheck, setWasOfflineDuringUpdateCheck] =
@@ -78,12 +74,15 @@ export default function Updater() {
     { initialValue: false },
   );
 
-  // Install updates (if the user has confirmed it, or if we're not on Windows)
-  const [shouldInstall, setShouldInstall] = createSignal(installImmediately);
+  // Install and relaunch only after the user confirms (one action for both).
+  const [shouldInstallAndRelaunch, setShouldInstallAndRelaunch] =
+    createSignal(false);
 
   const [hasInstalled, { refetch: retryInstallUpdate }] = createResource(
     () =>
-      hasDownloaded.state !== "errored" && hasDownloaded() && shouldInstall(),
+      hasDownloaded.state !== "errored" &&
+      hasDownloaded() &&
+      shouldInstallAndRelaunch(),
     async function maybeInstallUpdate(hasDownloadedAndShouldInstall) {
       if (!hasDownloadedAndShouldInstall) {
         return false;
@@ -101,14 +100,11 @@ export default function Updater() {
     { initialValue: false },
   );
 
-  // Relaunch the application
-  // If we installed the update immediately, we need ask the user if they want to relaunch the application. If the
-  // update was not installed immediately, they already confirmed the relaunch when they clicked "Install and restart".
-  const [shouldRelaunch, setShouldRelaunch] = createSignal(!installImmediately);
-
   const [hasRelaunched, { refetch: retryRelaunch }] = createResource(
     () =>
-      hasInstalled.state !== "errored" && hasInstalled() && shouldRelaunch(),
+      hasInstalled.state !== "errored" &&
+      hasInstalled() &&
+      shouldInstallAndRelaunch(),
     async function maybeRelaunch(hasInstalledAndShouldRelaunch) {
       if (!hasInstalledAndShouldRelaunch) {
         return false;
@@ -235,29 +231,17 @@ export default function Updater() {
       };
     }
 
-    if (!installImmediately && update()) {
+    if (update() && hasDownloaded() && !shouldInstallAndRelaunch()) {
       return {
         type: ToastType.Success,
         message: t("updater.download.success"),
         actions: (
-          <ToastAction onClick={toastCallback(() => setShouldInstall(true))}>
+          <ToastAction
+            onClick={toastCallback(() => setShouldInstallAndRelaunch(true))}
+          >
             {t("updater.install.action")}
           </ToastAction>
         ),
-        autoDismiss: false,
-      };
-    }
-
-    if (installImmediately && hasInstalled()) {
-      return {
-        type: ToastType.Success,
-        message: t("updater.install.success"),
-        actions: (
-          <ToastAction onClick={toastCallback(() => setShouldRelaunch(true))}>
-            {t("updater.relaunch.action")}
-          </ToastAction>
-        ),
-        dismissButton: true,
         autoDismiss: false,
       };
     }

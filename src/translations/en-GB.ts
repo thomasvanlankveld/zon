@@ -39,12 +39,10 @@ const enGBTranslations = {
   "updater.install.in-progress": "Installing updates...",
   "updater.install.error": "Failed to install the update",
   "updater.install.error.issue": "Update installation failed",
-  "updater.install.success": "Update installed",
   "updater.relaunch.in-progress": "Restarting application...",
   "updater.relaunch.error": "Failed to restart the application",
   "updater.relaunch.error.issue": "Application restart failed",
   "updater.install.action": "Install and restart",
-  "updater.relaunch.action": "Restart now",
 } as const;
 
 export default enGBTranslations;
