@@ -32,6 +32,7 @@ import createNavigatorOnline from "../primitives/createNavigatorOnline";
  * @property {() => void} retryDownloadUpdate - Retry downloading the update
  * @property {() => void} retryInstallUpdate - Retry installing the update
  * @property {() => void} retryRelaunch - Retry relaunching the app
+ * @property {() => void} startUpdateCheck - Start checking for updates (no-op until called; context is idle by default)
  */
 export type UpdateContextValue = {
   update: Resource<Update | null | undefined>;
@@ -43,6 +44,7 @@ export type UpdateContextValue = {
   shouldInstallAndRelaunch: () => boolean;
   isPendingRestart: () => boolean;
   requestInstallAndRelaunch: () => void;
+  startUpdateCheck: () => void;
   retryCheckForUpdates: () => void;
   retryDownloadUpdate: () => void;
   retryInstallUpdate: () => void;
@@ -58,15 +60,14 @@ type UpdateProviderProps = {
 /**
  * Provide update state and actions for the app update flow.
  *
- * On desktop, runs the full flow: check for updates, download, install, and relaunch (after user confirmation).
- * When not on desktop, provides a no-op value so consumers always have a valid context and never need to branch.
+ * Does nothing by default. On desktop, check/download/install/relaunch run only after something calls
+ * startUpdateCheck() (e.g. the Updater component on mount). When not on desktop, provides a no-op value
+ * so consumers always have a valid context and never need to branch.
  *
  * @param props.children Child components that will have access to the update context
  */
 export function UpdateProvider(props: UpdateProviderProps) {
   const meta = useMeta();
-
-  console.log("Zon app current version", meta.version);
 
   return (
     <Show
@@ -106,6 +107,7 @@ function UpdateProviderNoop(props: UpdateProviderProps) {
     shouldInstallAndRelaunch: () => false,
     isPendingRestart: () => false,
     requestInstallAndRelaunch: noop,
+    startUpdateCheck: noop,
     retryCheckForUpdates: noop,
     retryDownloadUpdate: noop,
     retryInstallUpdate: noop,
@@ -120,9 +122,12 @@ function UpdateProviderNoop(props: UpdateProviderProps) {
 
 /**
  * Desktop-only provider that runs the real update flow (check, download, install, relaunch).
+ * The check runs only when startUpdateCheck() is called; the context is idle by default.
  */
 function UpdateProviderDesktop(props: UpdateProviderProps) {
+  const meta = useMeta();
   const isOnline = createNavigatorOnline();
+  const [shouldCheckForUpdates, setShouldCheckForUpdates] = createSignal(false);
   const [wasOfflineDuringUpdateCheck, setWasOfflineDuringUpdateCheck] =
     createSignal(false);
   const [wasOfflineDuringDownload, setWasOfflineDuringDownload] =
@@ -130,9 +135,11 @@ function UpdateProviderDesktop(props: UpdateProviderProps) {
   const [shouldInstallAndRelaunch, setShouldInstallAndRelaunch] =
     createSignal(false);
 
-  // Check for updates
+  // Check for updates (only when shouldCheckForUpdates is true)
   const [update, { refetch: retryCheckForUpdates }] = createResource(
+    () => shouldCheckForUpdates(),
     async function checkForUpdates() {
+      console.log("Zon app current version", meta.version());
       try {
         return await check();
       } catch (error) {
@@ -225,6 +232,7 @@ function UpdateProviderDesktop(props: UpdateProviderProps) {
     shouldInstallAndRelaunch,
     isPendingRestart: shouldInstallAndRelaunch,
     requestInstallAndRelaunch: () => setShouldInstallAndRelaunch(true),
+    startUpdateCheck: () => setShouldCheckForUpdates(true),
     retryCheckForUpdates: () => void retryCheckForUpdates(),
     retryDownloadUpdate: () => void retryDownloadUpdate(),
     retryInstallUpdate: () => void retryInstallUpdate(),

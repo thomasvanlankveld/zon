@@ -1,5 +1,5 @@
 import { open } from "@tauri-apps/plugin-shell";
-import { createSignal, Show } from "solid-js";
+import { createSignal, onMount, Show } from "solid-js";
 import { useI18n } from "../../contexts/i18n";
 import { type Meta, TARGET, useMeta } from "../../contexts/meta";
 import { useUpdateContext } from "../../contexts/update";
@@ -28,6 +28,11 @@ export default function Updater() {
   if (meta.target !== TARGET.DESKTOP) {
     throw new Error("Updater is only available on desktop");
   }
+
+  // Start checking for updates when the updater mounts so updates are still automatic from the user's perspective.
+  onMount(() => {
+    ctx.startUpdateCheck();
+  });
 
   // We want to hide the update process as much as possible. This means the related loading states are hidden until the
   // user explicitly clicks one of the toast actions.
