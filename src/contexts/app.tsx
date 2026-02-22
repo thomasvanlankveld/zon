@@ -2,6 +2,7 @@ import { type JSX } from "solid-js";
 import { I18nProvider } from "./i18n";
 import { MetaProvider } from "./meta";
 import { MouseProvider } from "./mouse";
+import { UpdateProvider } from "./update";
 import { Background } from "../components/Background/Background";
 
 /**
@@ -15,7 +16,9 @@ export default function AppProviders(props: { children: JSX.Element }) {
     <MetaProvider>
       <MouseProvider>
         <Background>
-          <I18nProvider>{props.children}</I18nProvider>
+          <I18nProvider>
+            <UpdateProvider>{props.children}</UpdateProvider>
+          </I18nProvider>
         </Background>
       </MouseProvider>
     </MetaProvider>

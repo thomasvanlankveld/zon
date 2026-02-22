@@ -1,16 +1,11 @@
-import { check } from "@tauri-apps/plugin-updater";
-import { relaunch } from "@tauri-apps/plugin-process";
 import { open } from "@tauri-apps/plugin-shell";
-import { createResource, createSignal, Show } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import { useI18n } from "../../contexts/i18n";
-import { Meta, TARGET, useMeta } from "../../contexts/meta";
-import createNavigatorOnline from "../../primitives/createNavigatorOnline";
+import { type Meta, TARGET, useMeta } from "../../contexts/meta";
+import { useUpdateContext } from "../../contexts/update";
 import Toast, { ToastType } from "../Toast/Toast";
 import ToastAction from "../Toast/ToastAction";
 import createIssueLink from "./createIssueLink";
-
-// // Uncomment this to use a simulator of the updater plugin
-// import { check, relaunch } from "./updaterSim";
 
 /**
  * This component, when mounted, will automatically check for updates and download them. Install and restart
@@ -26,107 +21,13 @@ import createIssueLink from "./createIssueLink";
  */
 export default function Updater() {
   const meta = useMeta();
-  console.log("Zon app current version", meta.version);
+  const ctx = useUpdateContext();
 
   const { t } = useI18n();
 
   if (meta.target !== TARGET.DESKTOP) {
     throw new Error("Updater is only available on desktop");
   }
-
-  const isOnline = createNavigatorOnline();
-  const [wasOfflineDuringUpdateCheck, setWasOfflineDuringUpdateCheck] =
-    createSignal(false);
-
-  // Check for updates
-  const [update, { refetch: retryCheckForUpdates }] = createResource(
-    async function checkForUpdates() {
-      try {
-        return await check();
-      } catch (error) {
-        setWasOfflineDuringUpdateCheck(!isOnline());
-        throw error;
-      }
-    },
-  );
-
-  const [wasOfflineDuringDownload, setWasOfflineDuringDownload] =
-    createSignal(false);
-
-  // Download updates
-  const [hasDownloaded, { refetch: retryDownloadUpdate }] = createResource(
-    () => update.state !== "errored" && update(),
-    async function maybeDownloadUpdates(updateVal) {
-      if (typeof updateVal !== "object" || updateVal == null) {
-        return false;
-      }
-
-      console.log("Zon app update found", updateVal.version);
-
-      try {
-        await updateVal.download();
-      } catch (error) {
-        setWasOfflineDuringDownload(!isOnline());
-        throw error;
-      }
-      return true;
-    },
-    { initialValue: false },
-  );
-
-  // Install and relaunch only after the user confirms (one action for both).
-  const [shouldInstallAndRelaunch, setShouldInstallAndRelaunch] =
-    createSignal(false);
-
-  const [hasInstalled, { refetch: retryInstallUpdate }] = createResource(
-    () =>
-      hasDownloaded.state !== "errored" &&
-      hasDownloaded() &&
-      shouldInstallAndRelaunch(),
-    async function maybeInstallUpdate(hasDownloadedAndShouldInstall) {
-      if (!hasDownloadedAndShouldInstall) {
-        return false;
-      }
-
-      const updateVal = update();
-
-      if (updateVal == null) {
-        throw new Error("No update to install");
-      }
-
-      await updateVal.install();
-      return true;
-    },
-    { initialValue: false },
-  );
-
-  const [hasRelaunched, { refetch: retryRelaunch }] = createResource(
-    () =>
-      hasInstalled.state !== "errored" &&
-      hasInstalled() &&
-      shouldInstallAndRelaunch(),
-    async function maybeRelaunch(hasInstalledAndShouldRelaunch) {
-      if (!hasInstalledAndShouldRelaunch) {
-        return false;
-      }
-
-      if (update() == null) {
-        throw new Error(
-          "Should not be able to relaunch if no update is installed",
-        );
-      }
-
-      if (!hasDownloaded()) {
-        throw new Error(
-          "Should not be able to relaunch if update has not been downloaded",
-        );
-      }
-
-      await relaunch();
-      return true;
-    },
-    { initialValue: false },
-  );
 
   // We want to hide the update process as much as possible. This means the related loading states are hidden until the
   // user explicitly clicks one of the toast actions.
@@ -150,10 +51,12 @@ export default function Updater() {
    * If none of these apply, the updater will not show a toast.
    */
   function toastProps() {
-    if (update.state === "errored" && wasOfflineDuringUpdateCheck()) {
+    const { update, hasDownloaded, hasInstalled, hasRelaunched } = ctx;
+
+    if (update.state === "errored" && ctx.wasOfflineDuringUpdateCheck()) {
       return offlineToastProps(
         t("updater.check.error.offline"),
-        toastCallback(() => void retryCheckForUpdates()),
+        toastCallback(() => ctx.retryCheckForUpdates()),
       );
     }
 
@@ -163,14 +66,14 @@ export default function Updater() {
         t("updater.check.error.online.issue"),
         meta,
         update.error as Error,
-        toastCallback(() => void retryCheckForUpdates()),
+        toastCallback(() => ctx.retryCheckForUpdates()),
       );
     }
 
-    if (hasDownloaded.state === "errored" && wasOfflineDuringDownload()) {
+    if (hasDownloaded.state === "errored" && ctx.wasOfflineDuringDownload()) {
       return offlineToastProps(
         t("updater.download.error.offline"),
-        toastCallback(() => void retryDownloadUpdate()),
+        toastCallback(() => ctx.retryDownloadUpdate()),
       );
     }
 
@@ -180,7 +83,7 @@ export default function Updater() {
         t("updater.download.error.online.issue"),
         meta,
         hasDownloaded.error as Error,
-        toastCallback(() => void retryDownloadUpdate()),
+        toastCallback(() => ctx.retryDownloadUpdate()),
       );
     }
 
@@ -190,7 +93,7 @@ export default function Updater() {
         t("updater.install.error.issue"),
         meta,
         hasInstalled.error as Error,
-        toastCallback(() => void retryInstallUpdate()),
+        toastCallback(() => ctx.retryInstallUpdate()),
       );
     }
 
@@ -200,7 +103,7 @@ export default function Updater() {
         t("updater.relaunch.error.issue"),
         meta,
         hasRelaunched.error as Error,
-        toastCallback(() => void retryRelaunch()),
+        toastCallback(() => ctx.retryRelaunch()),
       );
     }
 
@@ -231,13 +134,13 @@ export default function Updater() {
       };
     }
 
-    if (update() && hasDownloaded() && !shouldInstallAndRelaunch()) {
+    if (update() && hasDownloaded() && !ctx.shouldInstallAndRelaunch()) {
       return {
         type: ToastType.Success,
         message: t("updater.download.success"),
         actions: (
           <ToastAction
-            onClick={toastCallback(() => setShouldInstallAndRelaunch(true))}
+            onClick={toastCallback(() => ctx.requestInstallAndRelaunch())}
           >
             {t("updater.install.action")}
           </ToastAction>
