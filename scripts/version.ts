@@ -96,7 +96,9 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((err) => {
-  console.error(err);
-  Deno.exit(1);
-});
+main()
+  .then(() => Deno.exit(0))
+  .catch((err) => {
+    console.error(err);
+    Deno.exit(1);
+  });
