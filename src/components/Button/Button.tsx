@@ -5,6 +5,7 @@ export type ButtonProps = {
   children: JSX.Element;
   onClick?: () => void;
   type?: "submit" | "reset" | "button";
+  disabled?: boolean;
   // TODO: 'destructive' variant
   variant?: "primary" | "secondary" | "tertiary" | "shiny";
   size?: "small" | "medium" | "large";
@@ -19,6 +20,7 @@ export default function Button(props: ButtonProps) {
 
   return (
     <button
+      disabled={props.disabled}
       style={props.style}
       classList={{
         [styles.button]: true,

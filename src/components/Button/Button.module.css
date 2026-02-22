@@ -20,6 +20,10 @@
       color: var(--color-button-hover-focus-text);
     }
 
+    &:disabled {
+      cursor: not-allowed;
+    }
+
     &[data-variant="shiny"] {
       --glimmer-border-radius: var(--border-radius);
       background-color: var(--color-button-shiny-regular-background);
