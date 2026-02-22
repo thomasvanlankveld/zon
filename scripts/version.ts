@@ -1,10 +1,11 @@
 /**
  * Version bump and sync: single source of truth is package.json.
- * Usage: deno run -A scripts/version.ts [sync|patch|minor]
+ * Usage: deno run -A scripts/version.ts [sync|patch|minor] [--no-build]
  * - sync: only sync package.json version to tauri.conf.json and Cargo.toml
  * - patch | minor: bump in package.json then sync
+ * - --no-build: skip running cargo build (default is to run it to refresh Cargo.lock)
  */
-import semver from "npm:semver";
+import semver from "npm:semver@^7.6.3";
 
 // Paths relative to repo root (cwd when run via npm scripts)
 const PACKAGE_JSON = "package.json";
@@ -13,10 +14,12 @@ const CARGO_TOML = "src-tauri/Cargo.toml";
 
 type Command = "sync" | "patch" | "minor";
 
-function parseArg(): Command {
-  const arg = Deno.args[0];
-  if (arg === "patch" || arg === "minor" || arg === "sync") return arg;
-  return "sync";
+function parseArgs(): { cmd: Command; noBuild: boolean } {
+  const args = Deno.args.filter((a) => a !== "--no-build");
+  const noBuild = Deno.args.includes("--no-build");
+  const arg = args[0];
+  const cmd: Command = arg === "patch" || arg === "minor" || arg === "sync" ? arg : "sync";
+  return { cmd, noBuild };
 }
 
 async function readVersion(): Promise<string> {
@@ -56,8 +59,22 @@ async function syncCargoToml(version: string): Promise<void> {
   await Deno.writeTextFile(CARGO_TOML, replaced);
 }
 
+async function runCargoBuild(): Promise<void> {
+  const command = new Deno.Command("cargo", {
+    args: ["build", "--manifest-path", "src-tauri/Cargo.toml"],
+    stdout: "piped",
+    stderr: "piped",
+  });
+  const { code, stdout, stderr } = await command.output();
+  if (code !== 0) {
+    console.error(new TextDecoder().decode(stderr));
+    console.error(new TextDecoder().decode(stdout));
+    throw new Error(`cargo build exited with ${code}`);
+  }
+}
+
 async function main(): Promise<void> {
-  const cmd = parseArg();
+  const { cmd, noBuild } = parseArgs();
   let version = await readVersion();
 
   if (cmd === "patch" || cmd === "minor") {
@@ -68,7 +85,15 @@ async function main(): Promise<void> {
   await syncTauriConf(version);
   await syncCargoToml(version);
 
-  console.log(`Version ${version} synced to package.json, tauri.conf.json, and Cargo.toml.`);
+  if (!noBuild) {
+    await runCargoBuild();
+  }
+
+  if (noBuild) {
+    console.log(`Version ${version} synced to package.json, tauri.conf.json, and Cargo.toml.`);
+  } else {
+    console.log(`Version ${version} synced and built.`);
+  }
 }
 
 main().catch((err) => {
