@@ -1,14 +1,14 @@
 # Release
 
+The version number is defined in `package.json` and synced to `src-tauri/tauri.conf.json` and `src-tauri/Cargo.toml` on install (prepare hook) and whenever you bump (see below).
+
 ## Semi-automated release
 
 The main way to trigger this is by tagging a commit with a version number. In case something went wrong, you can also trigger it manually (it will always use the version in `tauri.conf.json` as the release version).
 
 1. Bump version number and commit (and get it on the `master` branch)
-   - `package.json`
-   - `src-tauri/tauri.conf.json`
-   - `src-tauri/Cargo.toml`
-     - Build the project to also update `src-tauri/Cargo.lock`
+   - Run `deno task version:patch` or `deno task version:minor`. This updates `package.json`, `src-tauri/tauri.conf.json`, and `src-tauri/Cargo.toml`.
+   - Build the project so `src-tauri/Cargo.lock` is updated (e.g. `deno task tauri build` or your usual build).
 2. Tag the commit and push
    - `git tag vX.Y.Z`
    - `git push origin master --tags`
@@ -19,10 +19,7 @@ The main way to trigger this is by tagging a commit with a version number. In ca
 ## Manual release (not recommended)
 
 1. Bump version number, commit and push
-   - `package.json`
-   - `src-tauri/tauri.conf.json`
-   - `src-tauri/Cargo.toml`
-     - Build the project to also update `src-tauri/Cargo.lock`
+   - Run `deno task version:patch` or `deno task version:minor`, then build the project to also update `src-tauri/Cargo.lock`.
 2. Create a release on GitHub, add release notes. Mark it as "pre-release"!
 3. Build, bundle and upload the app:
    1. Make sure your environment has the [signing variables](https://v2.tauri.app/plugin/updater/#building), and build the binaries:

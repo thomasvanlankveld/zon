@@ -1,4 +1,5 @@
 {
   "cSpell.words": ["Tokei"],
-  "deno.enable": false
+  "deno.enable": false,
+  "deno.enablePaths": ["scripts"]
 }
