@@ -8,6 +8,7 @@ The main way to trigger this is by tagging a commit with a version number. In ca
 
 1. Bump version number and commit (and get it on the `master` branch)
    - Run `deno task version:patch` or `deno task version:minor`. This updates `package.json`, `src-tauri/tauri.conf.json`, and `src-tauri/Cargo.toml`, runs a Cargo build, and updates `src-tauri/Cargo.lock`.
+   - Commit
 2. Tag the commit and push
    - `git tag vX.Y.Z`
    - `git push origin master --tags`
