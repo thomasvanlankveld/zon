@@ -21,9 +21,8 @@
     "lint-staged": "deno run --allow-env --allow-read --allow-run=git,deno --allow-write=.git npm:lint-staged",
     "bundle-mac-silicon": "tauri build --target aarch64-apple-darwin",
     "bundle-mac-intel": "tauri build --target x86_64-apple-darwin",
-    "version:sync": "deno run -A scripts/version.ts sync",
-    "version:patch": "deno run -A scripts/version.ts patch",
-    "version:minor": "deno run -A scripts/version.ts minor"
+    "release:patch": "deno run -A scripts/release.ts patch",
+    "release:minor": "deno run -A scripts/release.ts minor"
   },
   "dependencies": {
     "@solidjs/router": "^0.15.3",

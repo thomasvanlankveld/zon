@@ -6,20 +6,18 @@ The version number is defined in `package.json` and synced to `src-tauri/tauri.c
 
 The main way to trigger this is by tagging a commit with a version number. In case something went wrong, you can also trigger it manually (it will always use the version in `tauri.conf.json` as the release version).
 
-1. Bump version number and commit (and get it on the `master` branch)
-   - Run `deno task version:patch` or `deno task version:minor`. This updates `package.json`, `src-tauri/tauri.conf.json`, and `src-tauri/Cargo.toml`, runs a Cargo build, and updates `src-tauri/Cargo.lock`.
-   - Commit
-2. Tag the commit and push
-   - `git tag vX.Y.Z`
-   - `git push origin master --tags`
-3. Find the release on GitHub and finish it
+1. Run the release script (from the `master` branch)
+   - `deno task release:patch` or `deno task release:minor`
+   - The script runs pre-flight checks (clean tree, branch, version sync, tests, lint), bumps the version, commits, tags, and pushes. Pushing the version tag triggers the "release" job in GitHub Actions.
+   - Options (pass after `--`): `--dry-run` (checks only), `--no-push` (tag locally but don't push), `--skip-tests`, `--skip-lint`. Example: `deno task release:patch -- --dry-run`
+2. Find the release on GitHub and finish it
    - Add release notes
    - Mark the release as "latest"
 
 ## Manual release (not recommended)
 
 1. Bump version number, commit and push
-   - Run `deno task version:patch` or `deno task version:minor` (this also runs a Cargo build and updates `src-tauri/Cargo.lock`).
+   - Run `deno run -A scripts/version.ts patch` or `deno run -A scripts/version.ts minor` (this also runs a Cargo build and updates `src-tauri/Cargo.lock`).
 2. Create a release on GitHub, add release notes. Mark it as "pre-release"!
 3. Build, bundle and upload the app:
    1. Make sure your environment has the [signing variables](https://v2.tauri.app/plugin/updater/#building), and build the binaries:
