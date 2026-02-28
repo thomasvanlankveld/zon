@@ -1,0 +1,8 @@
+---
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+1. Use TypeScript
+2. Use CSS modules for styling
+3. Add docstrings to components
