@@ -7,7 +7,43 @@ on:
       - "v*" # This will trigger on any tag that starts with 'v'
 
 jobs:
+  create-release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    outputs:
+      release_id: ${{ steps.create-release.outputs.result }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: create release
+        id: create-release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let tag;
+            let target_commitish;
+            if (context.ref.startsWith('refs/tags/')) {
+              tag = context.ref.replace('refs/tags/', '');
+            } else {
+              const pkg = require('./package.json');
+              tag = 'v' + pkg.version;
+              target_commitish = context.sha;
+            }
+            const { data } = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tag,
+              ...(target_commitish && { target_commitish }),
+              name: `Zon ${tag}`,
+              body: 'See the assets to download this version and install.',
+              draft: true,
+              prerelease: false,
+            });
+            return data.id;
+
   release:
+    needs: create-release
     name: Release
     permissions:
       contents: write # Needed for creating releases
@@ -64,10 +100,6 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
-          tagName: zon-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
-          releaseName: "Zon v__VERSION__"
-          releaseBody: "See the assets to download this version and install."
-          releaseDraft: true
-          prerelease: false
+          releaseId: ${{ needs.create-release.outputs.release_id }}
           tauriScript: "deno task tauri"
           args: ${{ matrix.tauri-action-args }}
