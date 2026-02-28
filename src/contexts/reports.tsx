@@ -48,7 +48,9 @@ export function ReportsProvider(props: ReportsProviderProps) {
    */
   async function countLinesInFolder(): Promise<string | null> {
     if (updateCtx.isPendingRestart()) {
-      throw new Error("countLinesInFolder must not be called while a restart is pending");
+      throw new Error(
+        "countLinesInFolder must not be called while a restart is pending",
+      );
     }
 
     const path = await open({

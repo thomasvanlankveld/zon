@@ -19,8 +19,8 @@ export default function AppProviders(props: { children: JSX.Element }) {
         <Background>
           <I18nProvider>
             <UpdateProvider>
-            <ReportsProvider>{props.children}</ReportsProvider>
-          </UpdateProvider>
+              <ReportsProvider>{props.children}</ReportsProvider>
+            </UpdateProvider>
           </I18nProvider>
         </Background>
       </MouseProvider>
