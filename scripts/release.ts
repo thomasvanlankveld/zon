@@ -343,6 +343,7 @@ async function main(): Promise<void> {
   console.log("");
 
   // 1. Git repository state
+  console.log("Running Git checks...");
   await check("Working tree clean", checkWorkingTreeClean);
   await check("Not detached HEAD", checkNotDetachedHead);
   await check("No merge/rebase in progress", checkNoMergeRebaseInProgress);
@@ -350,6 +351,7 @@ async function main(): Promise<void> {
     checkOnReleaseBranch(opts.releaseBranch),
   );
   await check("Git user configured", checkGitUserConfigured);
+  await check("Not shallow repository", checkNotShallow);
 
   // 2. Remote and sync
   await check("Remote origin exists", checkRemoteOriginExists);
@@ -365,6 +367,7 @@ async function main(): Promise<void> {
   await check("Can push", () => checkCanPush(opts.releaseBranch));
 
   // 3. Version consistency
+  console.log("Running version checks...");
   await check("Versions in sync", checkVersionsInSync);
   await check("Valid semver", () =>
     Promise.resolve(checkValidSemver(currentVersion)),
@@ -376,10 +379,7 @@ async function main(): Promise<void> {
     checkTagDoesNotExistOnRemote(tagName),
   );
 
-  // 4. Shallow clone
-  await check("Not shallow repository", checkNotShallow);
-
-  // 5. Build and quality
+  // 4. Build and quality
   if (!opts.skipTests) {
     console.log("Running tests...");
     await check("Tests pass", runTests);
