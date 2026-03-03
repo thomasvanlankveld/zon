@@ -62,9 +62,10 @@ export default function useAutoDismiss(props: UseAutoDismissProps) {
    * Returns the duration of the auto-dismiss. (computed)
    */
   const autoDismissDuration = createMemo(() => {
-    if (!props.autoDismiss) return 0;
-    return typeof props.autoDismiss === "number"
-      ? props.autoDismiss
+    const autoDismiss = props.autoDismiss();
+    if (!autoDismiss) return 0;
+    return typeof autoDismiss === "number"
+      ? autoDismiss
       : calculateDismissDuration(props.message());
   });
 
@@ -73,7 +74,7 @@ export default function useAutoDismiss(props: UseAutoDismissProps) {
    */
   function maybeStartAutoDismiss() {
     // Only start auto-dismiss if it's enabled
-    if (!props.autoDismiss) return;
+    if (!props.autoDismiss()) return;
 
     const element = props.element();
 
