@@ -2,6 +2,7 @@ import { Show } from "solid-js";
 import { Route, MemoryRouter, useSearchParams } from "@solidjs/router";
 
 import "./styles/setup.css";
+import VersionBadge from "./components/VersionBadge/VersionBadge.tsx";
 import MaybeUpdater from "./components/Updater/MaybeUpdater.tsx";
 import AppProviders from "./contexts/app.tsx";
 import { useReportsContext } from "./contexts/reports.tsx";
@@ -62,11 +63,14 @@ function ReportRoute() {
 export default function App() {
   return (
     <AppProviders>
-      <MemoryRouter>
-        <Route path={Routes.Home.Matcher} component={HomeRoute} />
-        <Route path={Routes.Report.Matcher} component={ReportRoute} />
-        <MaybeUpdater />
-      </MemoryRouter>
+      <>
+        <MemoryRouter>
+          <Route path={Routes.Home.Matcher} component={HomeRoute} />
+          <Route path={Routes.Report.Matcher} component={ReportRoute} />
+          <MaybeUpdater />
+        </MemoryRouter>
+        <VersionBadge />
+      </>
     </AppProviders>
   );
 }

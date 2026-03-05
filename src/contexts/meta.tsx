@@ -36,12 +36,22 @@ export type Meta = {
 );
 
 /**
+ * Resolve app version: from Tauri when on desktop, from build-time define when on web.
+ */
+async function resolveVersion(): Promise<string> {
+  if (isTauri()) {
+    return getVersion();
+  }
+  return __APP_VERSION__;
+}
+
+/**
  * Ask Tauri for meta information about the current environment.
  *
  * @returns {Meta} The meta information
  */
 function getMeta(): Meta {
-  const [version] = createResource(getVersion);
+  const [version] = createResource(resolveVersion);
 
   if (!isTauri()) {
     return {

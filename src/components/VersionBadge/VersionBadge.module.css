@@ -1,0 +1,12 @@
+@import "../../styles/setup.css";
+
+.version-badge {
+  position: fixed;
+  bottom: var(--spacing-l);
+  left: var(--spacing-l);
+  color: var(--color-text-deemphasize);
+  font-size: var(--font-size-extra-small);
+  line-height: var(--line-height-extra-small);
+  font-weight: var(--font-weight-extra-small);
+  pointer-events: none;
+}

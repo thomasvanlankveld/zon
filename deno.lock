@@ -13,8 +13,9 @@
     "npm:@tauri-apps/plugin-shell@~2.2.1": "2.2.1",
     "npm:@tauri-apps/plugin-updater@2.6": "2.6.0",
     "npm:@types/eslint__js@^8.42.3": "8.42.3",
-    "npm:@vitejs/plugin-legacy@^6.0.2": "6.0.2_terser@5.39.0_vite@6.2.1__terser@5.39.0_@babel+core@7.26.9_browserslist@4.24.4",
-    "npm:@vitest/eslint-plugin@^1.1.36": "1.1.36_@typescript-eslint+utils@8.26.0__eslint@9.22.0__typescript@5.8.2_eslint@9.22.0_typescript@5.8.2_vitest@3.0.8__jsdom@26.0.0__vite@6.2.1___terser@5.39.0_jsdom@26.0.0",
+    "npm:@types/node@^25.3.3": "25.3.3",
+    "npm:@vitejs/plugin-legacy@^6.0.2": "6.0.2_vite@6.2.1__@types+node@25.3.3__terser@5.39.0_@types+node@25.3.3",
+    "npm:@vitest/eslint-plugin@^1.1.36": "1.1.36_eslint@9.22.0_typescript@5.8.2_vitest@3.0.8__@types+node@25.3.3__jsdom@26.0.0_@types+node@25.3.3",
     "npm:eslint-config-prettier@^10.1.1": "10.1.1_eslint@9.22.0",
     "npm:eslint-plugin-jsx-a11y@^6.10.2": "6.10.2_eslint@9.22.0",
     "npm:eslint-plugin-solid@~0.14.5": "0.14.5_eslint@9.22.0_typescript@5.8.2",
@@ -30,9 +31,9 @@
     "npm:solid-js@^1.9.5": "1.9.5_seroval@1.2.1",
     "npm:typescript-eslint@^8.26.0": "8.26.0_eslint@9.22.0_typescript@5.8.2_@typescript-eslint+parser@8.26.0__eslint@9.22.0__typescript@5.8.2",
     "npm:typescript@^5.8.2": "5.8.2",
-    "npm:vite-plugin-solid@^2.11.6": "2.11.6_solid-js@1.9.5__seroval@1.2.1_vite@6.2.1__terser@5.39.0_@babel+core@7.26.9",
-    "npm:vite@^6.2.1": "6.2.1_terser@5.39.0",
-    "npm:vitest@^3.0.8": "3.0.8_jsdom@26.0.0_vite@6.2.1__terser@5.39.0"
+    "npm:vite-plugin-solid@^2.11.6": "2.11.6_solid-js@1.9.5__seroval@1.2.1_vite@6.2.1__@types+node@25.3.3__terser@5.39.0_@types+node@25.3.3",
+    "npm:vite@^6.2.1": "6.2.1_@types+node@25.3.3_terser@5.39.0",
+    "npm:vitest@^3.0.8": "3.0.8_@types+node@25.3.3_jsdom@26.0.0"
   },
   "npm": {
     "@ampproject/remapping@2.3.0": {
@@ -1373,6 +1374,12 @@
     "@types/json-schema@7.0.15": {
       "integrity": "sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA=="
     },
+    "@types/node@25.3.3": {
+      "integrity": "sha512-DpzbrH7wIcBaJibpKo9nnSQL0MTRdnWttGyE5haGwK86xgMOkFLp7vEyfQPGLOJh5wNYiJ3V9PmUMDhV9u8kkQ==",
+      "dependencies": [
+        "undici-types"
+      ]
+    },
     "@typescript-eslint/eslint-plugin@8.26.0_@typescript-eslint+parser@8.26.0__eslint@9.22.0__typescript@5.8.2_eslint@9.22.0_typescript@5.8.2": {
       "integrity": "sha512-cLr1J6pe56zjKYajK6SSSre6nl1Gj6xDp1TY0trpgPzjVbgDwd09v2Ws37LABxzkicmUjhEeg/fAUjPJJB1v5Q==",
       "dependencies": [
@@ -1455,7 +1462,7 @@
         "eslint-visitor-keys@4.2.0"
       ]
     },
-    "@vitejs/plugin-legacy@6.0.2_terser@5.39.0_vite@6.2.1__terser@5.39.0_@babel+core@7.26.9_browserslist@4.24.4": {
+    "@vitejs/plugin-legacy@6.0.2_vite@6.2.1__@types+node@25.3.3__terser@5.39.0_@types+node@25.3.3": {
       "integrity": "sha512-b/a6ARuJ1yCoIH/lSjpwPMyqo3NSCoqyxYtff7VCC6cnJfvBTzd7PthcrbomhLZnMsp/eW41b6TrbNSQvHW2lA==",
       "dependencies": [
         "@babel/core",
@@ -1470,7 +1477,7 @@
         "vite"
       ]
     },
-    "@vitest/eslint-plugin@1.1.36_@typescript-eslint+utils@8.26.0__eslint@9.22.0__typescript@5.8.2_eslint@9.22.0_typescript@5.8.2_vitest@3.0.8__jsdom@26.0.0__vite@6.2.1___terser@5.39.0_jsdom@26.0.0": {
+    "@vitest/eslint-plugin@1.1.36_eslint@9.22.0_typescript@5.8.2_vitest@3.0.8__@types+node@25.3.3__jsdom@26.0.0_@types+node@25.3.3": {
       "integrity": "sha512-IjBV/fcL9NJRxGw221ieaDsqKqj8qUo7rvSupDxMjTXyhsCusHC6M+jFUNqBp4PCkYFcf5bjrKxeZoCEWoPxig==",
       "dependencies": [
         "@typescript-eslint/utils",
@@ -1492,7 +1499,7 @@
         "tinyrainbow"
       ]
     },
-    "@vitest/mocker@3.0.8_vite@6.2.1__terser@5.39.0": {
+    "@vitest/mocker@3.0.8_vite@6.2.1__@types+node@25.3.3__terser@5.39.0_@types+node@25.3.3": {
       "integrity": "sha512-n3LjS7fcW1BCoF+zWZxG7/5XvuYH+lsFg+BDwwAz0arIwHQJFUEsKBQ0BLU49fCxuM/2HSeBPHQD8WjgrxMfow==",
       "dependencies": [
         "@vitest/spy",
@@ -3612,6 +3619,9 @@
         "which-boxed-primitive"
       ]
     },
+    "undici-types@7.18.2": {
+      "integrity": "sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w=="
+    },
     "unicode-canonical-property-names-ecmascript@2.0.1": {
       "integrity": "sha512-dA8WbNeb2a6oQzAQ55YlT5vQAWGV9WXOsi3SskE3bcCdM0P4SDd+24zS/OCacdRq5BkdsRj9q3Pg6YyQoxIGqg=="
     },
@@ -3649,7 +3659,7 @@
     "validate-html-nesting@1.2.2": {
       "integrity": "sha512-hGdgQozCsQJMyfK5urgFcWEqsSSrK63Awe0t/IMR0bZ0QMtnuaiHzThW81guu3qx9abLi99NEuiaN6P9gVYsNg=="
     },
-    "vite-node@3.0.8": {
+    "vite-node@3.0.8_@types+node@25.3.3": {
       "integrity": "sha512-6PhR4H9VGlcwXZ+KWCdMqbtG649xCPZqfI9j2PsK1FcXgEzro5bGHcVKFCTqPLaNKZES8Evqv4LwvZARsq5qlg==",
       "dependencies": [
         "cac",
@@ -3660,7 +3670,7 @@
       ],
       "bin": true
     },
-    "vite-plugin-solid@2.11.6_solid-js@1.9.5__seroval@1.2.1_vite@6.2.1__terser@5.39.0_@babel+core@7.26.9": {
+    "vite-plugin-solid@2.11.6_solid-js@1.9.5__seroval@1.2.1_vite@6.2.1__@types+node@25.3.3__terser@5.39.0_@types+node@25.3.3": {
       "integrity": "sha512-Sl5CTqJTGyEeOsmdH6BOgalIZlwH3t4/y0RQuFLMGnvWMBvxb4+lq7x3BSiAw6etf0QexfNJW7HSOO/Qf7pigg==",
       "dependencies": [
         "@babel/core",
@@ -3673,9 +3683,10 @@
         "vitefu"
       ]
     },
-    "vite@6.2.1_terser@5.39.0": {
+    "vite@6.2.1_@types+node@25.3.3_terser@5.39.0": {
       "integrity": "sha512-n2GnqDb6XPhlt9B8olZPrgMD/es/Nd1RdChF6CBD/fHW6pUyUTt2sQW2fPRX5GiD9XEa6+8A6A4f2vT6pSsE7Q==",
       "dependencies": [
+        "@types/node",
         "esbuild",
         "postcss",
         "rollup",
@@ -3685,11 +3696,12 @@
         "fsevents"
       ],
       "optionalPeers": [
+        "@types/node",
         "terser"
       ],
       "bin": true
     },
-    "vitefu@1.0.6_vite@6.2.1__terser@5.39.0": {
+    "vitefu@1.0.6_vite@6.2.1__@types+node@25.3.3__terser@5.39.0_@types+node@25.3.3": {
       "integrity": "sha512-+Rex1GlappUyNN6UfwbVZne/9cYC4+R2XDk9xkNXBKMw6HQagdX9PgZ8V2v1WUSK1wfBLp7qbI1+XSNIlB1xmA==",
       "dependencies": [
         "vite"
@@ -3698,9 +3710,10 @@
         "vite"
       ]
     },
-    "vitest@3.0.8_jsdom@26.0.0_vite@6.2.1__terser@5.39.0": {
+    "vitest@3.0.8_@types+node@25.3.3_jsdom@26.0.0": {
       "integrity": "sha512-dfqAsNqRGUc8hB9OVR2P0w8PZPEckti2+5rdZip0WIz9WW0MnImJ8XiR61QhqLa92EQzKP2uPkzenKOAHyEIbA==",
       "dependencies": [
+        "@types/node",
         "@vitest/expect",
         "@vitest/mocker",
         "@vitest/pretty-format",
@@ -3724,6 +3737,7 @@
         "why-is-node-running"
       ],
       "optionalPeers": [
+        "@types/node",
         "jsdom"
       ],
       "bin": true
@@ -3741,7 +3755,8 @@
       "integrity": "sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==",
       "dependencies": [
         "iconv-lite"
-      ]
+      ],
+      "deprecated": true
     },
     "whatwg-mimetype@4.0.0": {
       "integrity": "sha512-QaKxh0eNIi2mE9p2vEdzfagOKHCcj1pJ56EEHGQOVxp8r9/iszLUUV7v89x9O1p/T+NlTM5W7jW6+cz4Fq1YVg=="
@@ -3863,6 +3878,7 @@
         "npm:@tauri-apps/plugin-shell@~2.2.1",
         "npm:@tauri-apps/plugin-updater@2.6",
         "npm:@types/eslint__js@^8.42.3",
+        "npm:@types/node@^25.3.3",
         "npm:@vitejs/plugin-legacy@^6.0.2",
         "npm:@vitest/eslint-plugin@^1.1.36",
         "npm:eslint-config-prettier@^10.1.1",

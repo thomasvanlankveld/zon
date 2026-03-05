@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import solid from "vite-plugin-solid";
 import legacy from "@vitejs/plugin-legacy";
@@ -8,11 +10,20 @@ import legacy from "@vitejs/plugin-legacy";
 // https://developer.apple.com/documentation/safari-release-notes/safari-13-release-notes
 // https://en.wikipedia.org/wiki/MacOS_Catalina#System_requirements
 
-// @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST;
+
+const pkg = JSON.parse(
+  readFileSync(
+    fileURLToPath(new URL("./package.json", import.meta.url)),
+    "utf-8",
+  ),
+) as { version?: string };
 
 // https://vitejs.dev/config/
 export default defineConfig(() => ({
+  define: {
+    __APP_VERSION__: JSON.stringify(pkg.version ?? "unknown version"),
+  },
   plugins: [
     solid(),
     legacy({

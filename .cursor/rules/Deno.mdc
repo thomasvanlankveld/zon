@@ -1,0 +1,31 @@
+---
+description: Use Deno for CLI and scripts; project uses Deno with package.json for deps
+alwaysApply: true
+---
+
+# Deno for CLI and scripts
+
+This project uses **Deno** with **package.json** for dependency management. Use Deno (not Node.js or Bun) for running CLI commands and scripts.
+
+## Terminal / CLI commands
+
+When suggesting or running terminal commands (tests, lint, format, scripts, tooling):
+
+- Use **Deno** as the runtime. Prefer `deno run` or the project’s npm scripts (they already invoke Deno).
+- **Do not** use `node`, `npx`, or `bun` to run project tooling or scripts.
+- For npm packages, use `deno run` with `npm:<package>` (e.g. `deno run --allow-read npm:prettier ...`). Follow the patterns in `package.json` scripts for permissions.
+
+Examples: run tests with `npm run test` (which uses `deno run ... npm:vitest`), or run a script with `deno run -A scripts/version.ts sync`.
+
+## Scripts in scripts/
+
+When editing or creating `.ts` files in **scripts/** (files in `src/` run in the browser):
+
+- Use **Deno** as the runtime; do not use Node.js or Bun.
+- Use Deno-style imports (URLs or `npm:` specifiers as needed).
+- Prefer `Deno.*` APIs where they fit (e.g. `Deno.readFile`, `Deno.args`).
+- Run and test with `deno run` / `deno test`; do not use `node` or `bun`.
+
+## Dependencies
+
+`@types/node` is a devDependency for **Vite/Node tooling only** (e.g. `vite.config.ts`). Browser code in `src/` does not use Node types or APIs.
