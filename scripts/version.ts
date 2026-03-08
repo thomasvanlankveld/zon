@@ -5,7 +5,7 @@
  * - patch | minor: bump in package.json then sync
  * - --no-build: skip running cargo build (default is to run it to refresh Cargo.lock)
  */
-import semver from "npm:semver@^7.6.3";
+import semver from "npm:semver@7.7.1";
 
 // Paths relative to repo root (cwd when run via npm scripts)
 const PACKAGE_JSON = "package.json";

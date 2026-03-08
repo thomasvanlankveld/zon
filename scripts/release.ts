@@ -3,7 +3,7 @@
  * Usage: deno run -A scripts/release.ts patch|minor [--dry-run] [--no-push] [--skip-tests] [--skip-lint] [--yes]
  * When run interactively (TTY), you must type "release" or the version tag to confirm. Use --yes to skip (e.g. in CI or with yes release |).
  */
-import semver from "npm:semver@^7.6.3";
+import semver from "npm:semver@7.7.1";
 
 const PACKAGE_JSON = "package.json";
 const TAURI_CONF = "src-tauri/tauri.conf.json";
