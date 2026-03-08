@@ -1,11 +1,19 @@
 ---
-description: Use Deno for CLI and scripts; project uses Deno with package.json for deps
+description: Use Deno 2 for CLI and scripts; project uses Deno with package.json for deps; avoid deprecated APIs
 alwaysApply: true
 ---
 
 # Deno for CLI and scripts
 
 This project uses **Deno** with **package.json** for dependency management. Use Deno (not Node.js or Bun) for running CLI commands and scripts.
+
+## Deno 2
+
+This project targets **Deno 2**. When writing or editing scripts:
+
+- Use **Deno 2–compatible APIs** only. Avoid APIs that were deprecated or removed in Deno 2 (e.g. legacy `Deno.*` APIs that have been replaced).
+- Prefer the current stable APIs from the [Deno 2 manual](https://deno.land/manual) and avoid patterns that relied on Deno 1.x behavior.
+- If unsure whether an API exists in Deno 2, check the official docs or prefer well-documented, stable alternatives (e.g. `Deno.readFile` / `Deno.readTextFile`, `Deno.writeFile` / `Deno.writeTextFile`, `Deno.args`, `Deno.cwd()`).
 
 ## Terminal / CLI commands
 
