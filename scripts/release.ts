@@ -1,6 +1,7 @@
 /**
  * Release script: pre-flight checks, version bump, commit, tag, push.
- * Usage: deno run -A scripts/release.ts patch|minor [--dry-run] [--no-push] [--skip-tests] [--skip-lint]
+ * Usage: deno run -A scripts/release.ts patch|minor [--dry-run] [--no-push] [--skip-tests] [--skip-lint] [--yes]
+ * When run interactively (TTY), you must type "release" or the version tag to confirm. Use --yes to skip (e.g. in CI or with yes release |).
  */
 import semver from "npm:semver@^7.6.3";
 
@@ -16,6 +17,7 @@ interface Options {
   noPush: boolean;
   skipTests: boolean;
   skipLint: boolean;
+  yes: boolean;
   releaseBranch: string;
 }
 
@@ -32,6 +34,7 @@ function parseArgs(): Options {
     noPush: flags.has("--no-push"),
     skipTests: flags.has("--skip-tests"),
     skipLint: flags.has("--skip-lint"),
+    yes: flags.has("--yes"),
     releaseBranch,
   };
 }
@@ -96,6 +99,42 @@ async function getVersionFromCargoToml(): Promise<string> {
 function fail(message: string): never {
   console.error(message);
   Deno.exit(1);
+}
+
+/** Read one line from stdin (trimmed). */
+async function readLine(): Promise<string> {
+  const buf = new Uint8Array(1024);
+  let result = "";
+  while (true) {
+    const n = await Deno.stdin.read(buf);
+    if (n === null || n === 0) break;
+    const chunk = new TextDecoder().decode(buf.subarray(0, n));
+    result += chunk;
+    if (chunk.includes("\n")) break;
+  }
+  return result.split("\n")[0].trim();
+}
+
+/** Require confirmation before proceeding with the release. TTY: prompt for "release" or tag; non-TTY: require --yes. */
+async function confirmRelease(tagName: string, opts: Options): Promise<void> {
+  const isTty = Deno.stdin.isTerminal();
+  if (isTty) {
+    console.log(`About to release ${tagName}. Type "release" or "${tagName}" to continue, or Ctrl+C to cancel.`);
+    const input = await readLine();
+    const ok =
+      input.toLowerCase() === "release" || input === tagName;
+    if (!ok) {
+      fail(
+        `Confirmation failed (expected "release" or "${tagName}"). No changes made.`,
+      );
+    }
+    return;
+  }
+  if (!opts.yes) {
+    fail(
+      "Non-interactive (no TTY) and --yes not set. Run with --yes to confirm, or pipe the confirmation (e.g. echo release | deno task release:patch). No changes made.",
+    );
+  }
 }
 
 async function check(
@@ -338,6 +377,7 @@ async function main(): Promise<void> {
   console.log(`Release ${tagName} (${opts.bump} bump from ${currentVersion})`);
   if (opts.dryRun) console.log("Dry run: checks only, no changes");
   if (opts.noPush) console.log("No push: tag locally only");
+  if (opts.yes) console.log("Yes: skipping confirmation prompt");
   if (opts.skipTests) console.log("Skipping tests");
   if (opts.skipLint) console.log("Skipping lint");
   console.log("");
@@ -395,6 +435,8 @@ async function main(): Promise<void> {
     console.log("Dry run complete. No changes made.");
     Deno.exit(0);
   }
+
+  await confirmRelease(tagName, opts);
 
   // Version bump (includes cargo build)
   console.log(`Bumping version to ${nextVersion}...`);

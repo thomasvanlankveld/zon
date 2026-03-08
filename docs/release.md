@@ -8,8 +8,8 @@ The main way to trigger this is by tagging a commit with a version number. In ca
 
 1. Run the release script (from the `master` branch)
    - `deno task release:patch` or `deno task release:minor`
-   - The script runs pre-flight checks (clean tree, branch, version sync, tests, lint), bumps the version, commits, tags, and pushes. Pushing the version tag triggers the "release" job in GitHub Actions.
-   - Options (pass after `--`): `--dry-run` (checks only), `--no-push` (tag locally but don't push), `--skip-tests`, `--skip-lint`. Example: `deno task release:patch -- --dry-run`
+   - The script runs pre-flight checks (clean tree, branch, version sync, tests, lint), then asks you to type `release` or the version tag (e.g. `v0.4.8`) to confirm. After that it bumps the version, commits, tags, and pushes. Pushing the version tag triggers the "release" job in GitHub Actions.
+   - Options (pass after `--`): `--dry-run` (checks only), `--no-push` (tag locally but don't push), `--yes` (skip confirmation; use in CI or with `echo release |`), `--skip-tests`, `--skip-lint`. Example: `deno task release:patch -- --dry-run`
 2. Find the release on GitHub and finish it
    - Add release notes
    - Mark the release as "latest"
