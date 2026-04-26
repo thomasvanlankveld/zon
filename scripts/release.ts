@@ -23,6 +23,22 @@ interface Options {
 
 type CheckResult = { ok: boolean; message?: string };
 
+type NamedCheck = {
+  name: string;
+  fn: () => Promise<CheckResult>;
+};
+
+type FailedCheck = {
+  name: string;
+  message?: string;
+};
+
+function isFailedCheck(
+  value: { name: string; message?: string } | null,
+): value is FailedCheck {
+  return value !== null;
+}
+
 function parseArgs(): Options {
   const args = Deno.args.filter((a) => !a.startsWith("--"));
   const flags = new Set(Deno.args.filter((a) => a.startsWith("--")));
@@ -137,16 +153,45 @@ async function confirmRelease(tagName: string, opts: Options): Promise<void> {
   }
 }
 
-async function check(
-  name: string,
-  fn: () => Promise<CheckResult>,
-): Promise<void> {
-  const result = await fn();
-  if (!result.ok) {
-    fail(
-      `Check failed: ${name}${result.message ? ` — ${result.message}` : ""}`,
-    );
-  }
+function formatFailures(failures: FailedCheck[]): string {
+  const lines = failures.map((f) =>
+    `- ${f.name}${f.message ? ` — ${f.message}` : ""}`
+  );
+  return lines.join("\n");
+}
+
+async function runChecksParallel(checks: NamedCheck[]): Promise<FailedCheck[]> {
+  const results = await Promise.all(
+    checks.map(async (c) => {
+      try {
+        const r = await c.fn();
+        if (r.ok) return null;
+        return typeof r.message === "string"
+          ? { name: c.name, message: r.message }
+          : { name: c.name };
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        return { name: c.name, message };
+      }
+    }),
+  );
+  return results.filter(isFailedCheck);
+}
+
+async function runTasksParallel(
+  tasks: { name: string; taskName: string }[],
+): Promise<FailedCheck[]> {
+  const results = await Promise.all(
+    tasks.map(async (t) => {
+      const res = await runTask(t.taskName);
+      if (res.code === 0) return null;
+      const output = res.stderr || res.stdout || "";
+      return output
+        ? { name: t.name, message: `${t.taskName} failed:\n${output}` }
+        : { name: t.name };
+    }),
+  );
+  return results.filter(isFailedCheck);
 }
 
 // --- Git state checks ---
@@ -209,11 +254,18 @@ async function checkRemoteOriginExists(): Promise<CheckResult> {
 }
 
 async function checkRemoteHasBranch(branch: string): Promise<CheckResult> {
-  const { code } = await runGit(["ls-remote", "--heads", "origin", branch]);
+  const { code, stdout, stderr } = await runGit([
+    "ls-remote",
+    "--heads",
+    "origin",
+    branch,
+  ]);
   if (code !== 0) {
-    return { ok: false, message: `Could not check if origin/${branch} exists` };
+    return {
+      ok: false,
+      message: stderr || `Could not check if origin/${branch} exists`,
+    };
   }
-  const { stdout } = await runGit(["ls-remote", "--heads", "origin", branch]);
   if (!stdout.trim()) {
     return { ok: false, message: `Remote does not have branch ${branch}` };
   }
@@ -240,7 +292,6 @@ async function getRemoteLatestTag(): Promise<string | null> {
 async function checkLocalMatchesRemote(
   localVersion: string,
 ): Promise<CheckResult> {
-  await runGit(["fetch", "origin"]);
   const remoteTag = await getRemoteLatestTag();
   const expectedTag = `v${localVersion}`;
   if (!remoteTag) {
@@ -287,9 +338,11 @@ async function checkCanPush(branch: string): Promise<CheckResult> {
 // --- Version consistency checks ---
 
 async function checkVersionsInSync(): Promise<CheckResult> {
-  const pkg = await readPackageVersion();
-  const tauri = await getVersionFromTauriConf();
-  const cargo = await getVersionFromCargoToml();
+  const [pkg, tauri, cargo] = await Promise.all([
+    readPackageVersion(),
+    getVersionFromTauriConf(),
+    getVersionFromCargoToml(),
+  ]);
   if (pkg !== tauri || pkg !== cargo) {
     return {
       ok: false,
@@ -337,32 +390,6 @@ async function checkNotShallow(): Promise<CheckResult> {
 
 // --- Build and quality ---
 
-async function runTests(): Promise<CheckResult> {
-  const { code, stdout, stderr } = await runTask("test");
-  if (code !== 0) {
-    return { ok: false, message: `Tests failed:\n${stderr || stdout}` };
-  }
-  return { ok: true };
-}
-
-async function runLint(): Promise<CheckResult> {
-  const eslint = await runTask("eslint");
-  if (eslint.code !== 0) {
-    return {
-      ok: false,
-      message: `ESLint failed:\n${eslint.stderr || eslint.stdout}`,
-    };
-  }
-  const prettier = await runTask("prettier-lint");
-  if (prettier.code !== 0) {
-    return {
-      ok: false,
-      message: `Prettier check failed:\n${prettier.stderr || prettier.stdout}`,
-    };
-  }
-  return { ok: true };
-}
-
 // --- Main ---
 
 async function main(): Promise<void> {
@@ -382,51 +409,95 @@ async function main(): Promise<void> {
   if (opts.skipLint) console.log("Skipping lint");
   console.log("");
 
-  // 1. Git repository state
-  console.log("Running Git checks...");
-  await check("Working tree clean", checkWorkingTreeClean);
-  await check("Not detached HEAD", checkNotDetachedHead);
-  await check("No merge/rebase in progress", checkNoMergeRebaseInProgress);
-  await check("On release branch", () =>
-    checkOnReleaseBranch(opts.releaseBranch),
-  );
-  await check("Git user configured", checkGitUserConfigured);
-  await check("Not shallow repository", checkNotShallow);
+  const failures: FailedCheck[] = [];
 
-  // 2. Remote and sync
-  await check("Remote origin exists", checkRemoteOriginExists);
-  await check("Remote has release branch", () =>
-    checkRemoteHasBranch(opts.releaseBranch),
-  );
-  await check("Local matches remote", () =>
-    checkLocalMatchesRemote(currentVersion),
-  );
-  await check("Local not behind remote", () =>
-    checkLocalNotBehindRemote(opts.releaseBranch),
-  );
-  await check("Can push", () => checkCanPush(opts.releaseBranch));
-
-  // 3. Version consistency
-  console.log("Running version checks...");
-  await check("Versions in sync", checkVersionsInSync);
-  await check("Valid semver", () =>
-    Promise.resolve(checkValidSemver(currentVersion)),
-  );
-  await check("Target tag does not exist locally", () =>
-    checkTagDoesNotExistLocally(tagName),
-  );
-  await check("Target tag does not exist on remote", () =>
-    checkTagDoesNotExistOnRemote(tagName),
+  // 1) Local checks (parallel)
+  console.log("Running local checks...");
+  failures.push(
+    ...await runChecksParallel([
+      { name: "Working tree clean", fn: checkWorkingTreeClean },
+      { name: "Not detached HEAD", fn: checkNotDetachedHead },
+      { name: "No merge/rebase in progress", fn: checkNoMergeRebaseInProgress },
+      {
+        name: "On release branch",
+        fn: () => checkOnReleaseBranch(opts.releaseBranch),
+      },
+      { name: "Git user configured", fn: checkGitUserConfigured },
+      { name: "Not shallow repository", fn: checkNotShallow },
+      { name: "Versions in sync", fn: checkVersionsInSync },
+      {
+        name: "Valid semver",
+        fn: () => Promise.resolve(checkValidSemver(currentVersion)),
+      },
+      {
+        name: "Target tag does not exist locally",
+        fn: () => checkTagDoesNotExistLocally(tagName),
+      },
+    ]),
   );
 
-  // 4. Build and quality
-  if (!opts.skipTests) {
-    console.log("Running tests...");
-    await check("Tests pass", runTests);
+  // 2) Remote checks (fetch once, then parallel)
+  console.log("Running remote checks...");
+  failures.push(
+    ...await runChecksParallel([
+      { name: "Remote origin exists", fn: checkRemoteOriginExists },
+    ]),
+  );
+
+  if (failures.length === 0) {
+    const fetchRes = await runGit(["fetch", "origin"]);
+    if (fetchRes.code !== 0) {
+      failures.push({
+        name: "Fetch origin",
+        message: fetchRes.stderr || fetchRes.stdout || "git fetch origin failed",
+      });
+    }
   }
+
+  if (failures.length === 0) {
+    const remoteChecks: NamedCheck[] = [
+      {
+        name: "Remote has release branch",
+        fn: () => checkRemoteHasBranch(opts.releaseBranch),
+      },
+      {
+        name: "Local matches remote",
+        fn: () => checkLocalMatchesRemote(currentVersion),
+      },
+      {
+        name: "Local not behind remote",
+        fn: () => checkLocalNotBehindRemote(opts.releaseBranch),
+      },
+    ];
+    if (!opts.noPush) {
+      remoteChecks.push(
+        { name: "Can push", fn: () => checkCanPush(opts.releaseBranch) },
+        {
+          name: "Target tag does not exist on remote",
+          fn: () => checkTagDoesNotExistOnRemote(tagName),
+        },
+      );
+    }
+    failures.push(...await runChecksParallel(remoteChecks));
+  }
+
+  // 3) Quality tasks (parallel by default)
+  const qualityTasks: { name: string; taskName: string }[] = [];
+  if (!opts.skipTests) qualityTasks.push({ name: "Tests pass", taskName: "test" });
   if (!opts.skipLint) {
-    console.log("Running lint...");
-    await check("Lint passes", runLint);
+    qualityTasks.push(
+      { name: "ESLint passes", taskName: "eslint" },
+      { name: "Prettier check passes", taskName: "prettier-lint" },
+    );
+  }
+
+  if (qualityTasks.length) {
+    console.log("Running quality tasks...");
+    failures.push(...await runTasksParallel(qualityTasks));
+  }
+
+  if (failures.length) {
+    fail(`Checks failed:\n${formatFailures(failures)}`);
   }
 
   console.log("All checks passed.\n");
