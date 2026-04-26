@@ -132,7 +132,7 @@ async function confirmRelease(tagName: string, opts: Options): Promise<void> {
   }
   if (!opts.yes) {
     fail(
-      "Non-interactive (no TTY) and --yes not set. Run with --yes to confirm, or pipe the confirmation (e.g. echo release | deno task release:patch). No changes made.",
+      "Non-interactive (no TTY) and --yes not set. Run with --yes to proceed (e.g. in CI), or run in a TTY to be prompted. No changes made.",
     );
   }
 }
